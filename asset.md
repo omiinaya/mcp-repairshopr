@@ -1,21 +1,30 @@
-# RepairShopr API Documentation - Assets
+# RepairShopr API Documentation - Asset
 
-> **Note:** This file was split from the original docs/repairshoprapi.md file for better organization and maintainability.
+> **Note:** This file was automatically generated from the RepairShopr API swagger.json.
 
 ## API Endpoints
 
-### Assets
+### Asset
 
-#### Get Assets
+#### Get Customer Assets
 
-Returns a paginated list of Assets.
+
+Returns a paginated list of Assets
+
+
+Required permission: Assets - List/Search
+Single-Customer Users can only access own assets.
+
+
 
 **Endpoint:** `GET /customer_assets`
 
-**Required Permission:** Assets - List/Search  
-Single-Customer Users can only access own assets.
+
+**Required Permission:** Required permission: Assets - List/Search
+
 
 **Query Parameters:**
+
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
@@ -25,7 +34,12 @@ Single-Customer Users can only access own assets.
 | query | string | No | Search query |
 | page | integer | No | Returns provided page of results, each 'page' contains 25 results |
 
-**Response: 200 OK**
+
+**Response: 200**
+
+
+successful
+
 
 ```json
 {
@@ -128,27 +142,43 @@ Single-Customer Users can only access own assets.
 }
 ```
 
-#### Create Asset
 
-Creates an Asset.
+#### Create Customer Asset
+
+
+Creates an Asset
+
+
+Required permission: Assets - Create
+Single-Customer Users can only access own assets.
+
+
 
 **Endpoint:** `POST /customer_assets`
 
-**Required Permission:** Assets - Create  
-Single-Customer Users can only access own assets.
+
+**Required Permission:** Required permission: Assets - Create
+
 
 **Request Body:**
 
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| name | string | Yes | Asset name |
-| asset_type_name | string | No | Asset type name |
-| asset_type_id | integer | No | Asset type ID |
-| properties | object | No | Asset properties |
-| customer_id | integer | No | Customer ID |
-| asset_serial | string | No | Asset serial number |
+| asset_type_name | string | No |  |
+| asset_type_id | integer | No |  |
+| properties | object | No |  |
+| name | string | Yes |  |
+| customer_id | integer | No |  |
+| asset_serial | string | No |  |
 
-**Response: 200 OK**
+
+
+**Response: 200**
+
+
+successful
+
 
 ```json
 {
@@ -249,7 +279,12 @@ Single-Customer Users can only access own assets.
 }
 ```
 
-**Response: 422 Unprocessable Entity**
+
+**Response: 422**
+
+
+Invalid request
+
 
 ```json
 {
@@ -264,54 +299,136 @@ Single-Customer Users can only access own assets.
 }
 ```
 
-#### Get Asset by ID
 
-Retrieves an Asset by ID.
+#### Get Customer Asset by ID
+
+
+Retrieves an Asset by ID
+
+
+Required permission: Assets - View Details
+Single-Customer Users can only access own assets.
+
+
 
 **Endpoint:** `GET /customer_assets/{id}`
 
-**Required Permission:** Assets - View Details  
-Single-Customer Users can only access own assets.
+
+**Required Permission:** Required permission: Assets - View Details
+
 
 **Path Parameters:**
 
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| id | integer | Yes | Asset ID |
+| id | integer | Yes |  |
 
-**Response: 200 OK**
 
-**Response: 404 Not Found**
+**Response: 200**
 
-#### Update Asset
 
-Updates an existing Asset by ID.
+successful
+
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "id": 0,
+    "asset_id": 0,
+    "account_id": 0,
+    "type": "object",
+    "properties": null,
+    "created_at": "string",
+    "updated_at": "string",
+    "override_alert_agent_offline_mins": null,
+    "override_alert_agent_rearm_after_mins": null,
+    "override_low_hd_threshold": null,
+    "override_autoresolve_offline_alert": null,
+    "override_low_hd_thresholds": null
+  }
+}
+```
+
+
+**Response: 404**
+
+
+Invalid request
+
+
+#### Update Customer Asset
+
+
+Updates an existing Asset by ID
+
+
+Required permission: Assets - Edit
+Single-Customer Users can only access own assets.
+
+
 
 **Endpoint:** `PUT /customer_assets/{id}`
 
-**Required Permission:** Assets - Edit  
-Single-Customer Users can only access own assets.
+
+**Required Permission:** Required permission: Assets - Edit
+
 
 **Path Parameters:**
 
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| id | integer | Yes | Asset ID |
+| id | integer | Yes |  |
+
 
 **Request Body:**
 
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| name | string | Yes | Asset name |
-| asset_type_name | string | No | Asset type name |
-| asset_type_id | integer | No | Asset type ID |
-| properties | object | No | Asset properties |
-| customer_id | integer | No | Customer ID |
-| asset_serial | string | No | Asset serial number |
+| asset_type_name | string | No |  |
+| asset_type_id | integer | No |  |
+| properties | object | No |  |
+| name | string | Yes |  |
+| customer_id | integer | No |  |
+| asset_serial | string | No |  |
 
-**Response: 200 OK**
 
-**Response: 422 Unprocessable Entity**
+
+**Response: 200**
+
+
+successful
+
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "id": 0,
+    "asset_id": 0,
+    "account_id": 0,
+    "type": "object",
+    "properties": null,
+    "created_at": "string",
+    "updated_at": "string",
+    "override_alert_agent_offline_mins": null,
+    "override_alert_agent_rearm_after_mins": null,
+    "override_low_hd_threshold": null,
+    "override_autoresolve_offline_alert": null,
+    "override_low_hd_thresholds": null
+  }
+}
+```
+
+
+**Response: 422**
+
+
+Invalid request
+
 
 ```json
 {
@@ -321,3 +438,4 @@ Single-Customer Users can only access own assets.
   ]
 }
 ```
+

@@ -1,20 +1,29 @@
-# RepairShopr API Documentation - Estimates
+# RepairShopr API Documentation - Estimate
 
-> **Note:** This file was split from the original docs/repairshoprapi.md file for better organization and maintainability.
+> **Note:** This file was automatically generated from the RepairShopr API swagger.json.
 
 ## API Endpoints
 
-### Estimates
+### Estimate
 
 #### Get Estimates
 
-Returns a paginated list of Estimates.
+
+Returns a paginated list of Estimates
+
+
+Required permission: Estimates - List/Search
+
+
 
 **Endpoint:** `GET /estimates`
 
-**Required Permission:** Estimates - List/Search
+
+**Required Permission:** Required permission: Estimates - List/Search
+
 
 **Query Parameters:**
+
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
@@ -22,7 +31,12 @@ Returns a paginated list of Estimates.
 | status | string | No | Returns estimates with a given status. Possible values are 'approved' and 'declined'. |
 | page | integer | No | Returns provided page of results, each 'page' contains 50 results |
 
-**Response: 200 OK**
+
+**Response: 200**
+
+
+successful
+
 
 ```json
 {
@@ -54,39 +68,55 @@ Returns a paginated list of Estimates.
 }
 ```
 
+
 #### Create Estimate
 
-Creates an Estimate.
+
+Creates an Estimate
+
+
+Required permission: Estimates - Create
+
+
 
 **Endpoint:** `POST /estimates`
 
-**Required Permission:** Estimates - Create
+
+**Required Permission:** Required permission: Estimates - Create
+
 
 **Request Body:**
 
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| number | string | No | Estimate number |
-| name | string | No | Estimate name |
-| date | string (date-time) | No | Estimate date |
-| customer_id | integer | Yes | Customer ID |
-| note | string | No | Estimate note |
+| number | string | No |  |
+| name | string | No |  |
+| date | string | No |  |
+| customer_id | integer | No |  |
+| note | string | No |  |
 | status | string | No | Valid values are Fresh, Draft, Approved, Declined. |
-| ticket_id | integer | No | Ticket ID |
-| location_id | integer | No | Location ID |
-| line_items | array | No | Array of Line Items |
-| created_at | string (date-time) | No | Created at timestamp |
-| updated_at | string (date-time) | No | Updated at timestamp |
+| ticket_id | integer | No |  |
+| location_id | integer | No |  |
+| line_items | array | No | Array of Line Items. |
+| created_at | string | No |  |
+| updated_at | string | No |  |
 
-**Response: 200 OK**
+
+
+**Response: 200**
+
+
+successful
+
 
 ```json
 {
   "estimate": {
     "id": 1,
     "customer_id": 1,
-    "customer_business_then_name": "Walkin Customer",
     "name": "MyString",
+    "customer_business_then_name": "Walkin Customer",
     "number": "MyString",
     "status": "Fresh",
     "created_at": "2019-10-22T11:45:33.866Z",
@@ -104,7 +134,12 @@ Creates an Estimate.
 }
 ```
 
-**Response: 422 Unprocessable Entity**
+
+**Response: 422**
+
+
+Invalid request
+
 
 ```json
 {
@@ -117,27 +152,37 @@ Creates an Estimate.
 }
 ```
 
+
 #### Get Estimate by ID
 
-Retrieves an Estimate by ID or number.
+
+Retrieves an Estimate by ID or number
+
+
+Required permission: Estimates - View Details
+
+
 
 **Endpoint:** `GET /estimates/{id}`
 
-**Required Permission:** Estimates - View Details
+
+**Required Permission:** Required permission: Estimates - View Details
+
 
 **Path Parameters:**
+
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | id | integer | Yes | Estimate ID |
-
-**Query Parameters:**
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
 | number | string | No | Estimate number is used when the server cannot find an Estimate by ID |
 
-**Response: 200 OK**
+
+**Response: 200**
+
+
+successful
+
 
 ```json
 {
@@ -162,35 +207,53 @@ Retrieves an Estimate by ID or number.
   }
 }
 ```
+
 
 #### Update Estimate
 
-Updates an existing Estimate by ID.
+
+Updates an existing Estimate by ID
+
+
+Required permission: Estimates - Edit
+
+
 
 **Endpoint:** `PUT /estimates/{id}`
 
-**Required Permission:** Estimates - Edit
+
+**Required Permission:** Required permission: Estimates - Edit
+
 
 **Path Parameters:**
 
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| id | integer | Yes | Estimate ID |
+| id | integer | Yes |  |
+
 
 **Request Body:**
 
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| number | string | No | Estimate number |
-| name | string | No | Estimate name |
-| date | string (date-time) | No | Estimate date |
-| customer_id | integer | No | Customer ID |
-| note | string | No | Estimate note |
+| number | string | No |  |
+| name | string | No |  |
+| date | string | No |  |
+| customer_id | integer | No |  |
+| note | string | No |  |
 | status | string | No | Valid values are Fresh, Draft, Approved, Declined. |
-| ticket_id | integer | No | Ticket ID |
-| location_id | integer | No | Location ID |
+| ticket_id | integer | No |  |
+| location_id | integer | No |  |
 
-**Response: 200 OK**
+
+
+**Response: 200**
+
+
+successful
+
 
 ```json
 {
@@ -216,7 +279,12 @@ Updates an existing Estimate by ID.
 }
 ```
 
-**Response: 422 Unprocessable Entity**
+
+**Response: 422**
+
+
+Invalid request
+
 
 ```json
 {
@@ -226,21 +294,36 @@ Updates an existing Estimate by ID.
 }
 ```
 
+
 #### Delete Estimate
 
-Deletes an Estimate by ID.
+
+Deletes an Estimate by ID
+
+
+Required permission: Estimates - Delete
+
+
 
 **Endpoint:** `DELETE /estimates/{id}`
 
-**Required Permission:** Estimates - Delete
+
+**Required Permission:** Required permission: Estimates - Delete
+
 
 **Path Parameters:**
 
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| id | integer | Yes | Estimate ID |
+| id | integer | Yes |  |
 
-**Response: 200 OK**
+
+**Response: 200**
+
+
+successful
+
 
 ```json
 {
@@ -248,21 +331,36 @@ Deletes an Estimate by ID.
 }
 ```
 
-#### Print Estimate
 
-Queues a print job for an Estimate.
+#### Create Estimate
+
+
+Queues a print job for an Estimate
+
+
+Required permission: Estimates - View Details
+
+
 
 **Endpoint:** `POST /estimates/{id}/print`
 
-**Required Permission:** Estimates - View Details
+
+**Required Permission:** Required permission: Estimates - View Details
+
 
 **Path Parameters:**
 
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| id | integer | Yes | Estimate ID |
+| id | integer | Yes |  |
 
-**Response: 200 OK**
+
+**Response: 200**
+
+
+successful
+
 
 ```json
 {
@@ -270,21 +368,36 @@ Queues a print job for an Estimate.
 }
 ```
 
-#### Email Estimate
 
-Sends an Estimate to a Customer.
+#### Create Estimate
+
+
+Sends an Estimate to a Customer
+
+
+Required permission: Estimates - View Details
+
+
 
 **Endpoint:** `POST /estimates/{id}/email`
 
-**Required Permission:** Estimates - View Details
+
+**Required Permission:** Required permission: Estimates - View Details
+
 
 **Path Parameters:**
 
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| id | integer | Yes | Estimate ID |
+| id | integer | Yes |  |
 
-**Response: 200 OK**
+
+**Response: 200**
+
+
+successful
+
 
 ```json
 {
@@ -292,30 +405,39 @@ Sends an Estimate to a Customer.
 }
 ```
 
-#### Add Line Item to Estimate
 
-Adds a Line Item to an Estimate.
+#### Create Estimate
+
+
+Adds a Line Item to an Estimate
+
+
+Required permission: Estimates - Edit
+
+
 
 **Endpoint:** `POST /estimates/{id}/line_items`
 
-**Required Permission:** Estimates - Edit
+
+**Required Permission:** Required permission: Estimates - Edit
+
 
 **Path Parameters:**
 
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| id | integer | Yes | Estimate ID |
+| id | integer | Yes |  |
+
 
 **Request Body:**
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| item | string | No | Item name |
-| name | string | No | Name |
-| product_id | integer | No | Product ID |
-| quantity | integer | No | Quantity |
 
-**Response: 200 OK**
+**Response: 200**
+
+
+successful
+
 
 ```json
 {
@@ -378,7 +500,12 @@ Adds a Line Item to an Estimate.
 }
 ```
 
-**Response: 422 Unprocessable Entity**
+
+**Response: 422**
+
+
+Invalid request
+
 
 ```json
 {
@@ -386,21 +513,36 @@ Adds a Line Item to an Estimate.
 }
 ```
 
-#### Convert Estimate to Invoice
 
-Convert an Estimate to an Invoice.
+#### Create Estimate
+
+
+Convert an Estimate to an Invoice
+
+
+Required permissions: "Estimates - View Details" and "Invoices - Create"
+
+
 
 **Endpoint:** `POST /estimates/{id}/convert_to_invoice`
 
-**Required permissions:** "Estimates - View Details" and "Invoices - Create"
+
+**Required Permission:** Required permissions: "Estimates - View Details" and "Invoices - Create"
+
 
 **Path Parameters:**
 
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| id | integer | Yes | Estimate ID |
+| id | integer | Yes |  |
 
-**Response: 200 OK**
+
+**Response: 200**
+
+
+successful
+
 
 ```json
 {
@@ -430,7 +572,12 @@ Convert an Estimate to an Invoice.
 }
 ```
 
-**Response: 422 Unprocessable Entity**
+
+**Response: 422**
+
+
+Invalid request
+
 
 ```json
 {
@@ -438,31 +585,40 @@ Convert an Estimate to an Invoice.
 }
 ```
 
-#### Update Estimate Line Item
 
-Updates a Line Item.
+#### Update Estimate
+
+
+Updates a Line Item
+
+
+Required permission: Estimates - Edit
+
+
 
 **Endpoint:** `PUT /estimates/{id}/line_items/{line_item_id}`
 
-**Required Permission:** Estimates - Edit
+
+**Required Permission:** Required permission: Estimates - Edit
+
 
 **Path Parameters:**
 
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| id | integer | Yes | Estimate ID |
-| line_item_id | integer | Yes | Line Item ID |
+| id | integer | Yes |  |
+| line_item_id | integer | Yes |  |
+
 
 **Request Body:**
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| item | string | No | Item name |
-| name | string | No | Name |
-| product_id | integer | No | Product ID |
-| quantity | integer | No | Quantity |
 
-**Response: 200 OK**
+**Response: 200**
+
+
+successful
+
 
 ```json
 {
@@ -486,7 +642,12 @@ Updates a Line Item.
 }
 ```
 
-**Response: 422 Unprocessable Entity**
+
+**Response: 422**
+
+
+Invalid request
+
 
 ```json
 {
@@ -496,22 +657,37 @@ Updates a Line Item.
 }
 ```
 
-#### Delete Estimate Line Item
 
-Deletes a Line Item.
+#### Delete Estimate
+
+
+Deletes a Line Item
+
+
+Required permission: Estimates - Edit
+
+
 
 **Endpoint:** `DELETE /estimates/{id}/line_items/{line_item_id}`
 
-**Required Permission:** Estimates - Edit
+
+**Required Permission:** Required permission: Estimates - Edit
+
 
 **Path Parameters:**
 
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| id | integer | Yes | Estimate ID |
-| line_item_id | integer | Yes | Line Item ID |
+| id | integer | Yes |  |
+| line_item_id | integer | Yes |  |
 
-**Response: 200 OK**
+
+**Response: 200**
+
+
+successful
+
 
 ```json
 {
@@ -535,3 +711,4 @@ Deletes a Line Item.
   }
 }
 ```
+

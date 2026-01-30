@@ -1,26 +1,40 @@
-# RepairShopr API Documentation - Contracts
+# RepairShopr API Documentation - Contract
 
-> **Note:** This file was split from the original docs/repairshoprapi.md file for better organization and maintainability.
+> **Note:** This file was automatically generated from the RepairShopr API swagger.json.
 
 ## API Endpoints
 
-### Contracts
+### Contract
 
 #### Get Contracts
 
-Returns a paginated list of Contracts.
+
+Returns a paginated list of Contracts
+
+
+Required permission: Contracts - List/Search
+
+
 
 **Endpoint:** `GET /contracts`
 
-**Required Permission:** Contracts - List/Search
+
+**Required Permission:** Required permission: Contracts - List/Search
+
 
 **Query Parameters:**
+
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | page | integer | No | Returns provided page of results, each 'page' contains 50 results |
 
-**Response: 200 OK**
+
+**Response: 200**
+
+
+successful
+
 
 ```json
 {
@@ -52,31 +66,47 @@ Returns a paginated list of Contracts.
 }
 ```
 
+
 #### Create Contract
 
-Creates a Contract.
+
+Creates a Contract
+
+
+Required permission: Contracts - Edit
+
+
 
 **Endpoint:** `POST /contracts`
 
-**Required Permission:** Contracts - Edit
+
+**Required Permission:** Required permission: Contracts - Edit
+
 
 **Request Body:**
 
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| customer_id | integer | Yes | Customer ID |
-| contract_amount | string | No | Contract amount |
-| description | string | No | Contract description |
-| start_date | string (date-time) | No | Start date |
-| end_date | string (date-time) | No | End date |
-| name | string | No | Contract name |
-| primary_contact | string | No | Primary contact |
-| status | string | No | Contract status |
-| likelihood | integer | No | Likelihood percentage |
-| apply_to_all | boolean | No | Apply to all |
-| sla_id | integer | No | SLA ID |
+| contract_amount | string | No |  |
+| customer_id | integer | Yes |  |
+| description | string | No |  |
+| start_date | string | No |  |
+| end_date | string | No |  |
+| name | string | No |  |
+| primary_contact | string | No |  |
+| status | string | No |  |
+| likelihood | integer | No |  |
+| apply_to_all | boolean | No |  |
+| sla_id | integer | No |  |
 
-**Response: 200 OK**
+
+
+**Response: 200**
+
+
+successful
+
 
 ```json
 {
@@ -98,7 +128,12 @@ Creates a Contract.
 }
 ```
 
-**Response: 422 Unprocessable Entity**
+
+**Response: 422**
+
+
+Invalid request
+
 
 ```json
 {
@@ -123,21 +158,36 @@ Creates a Contract.
 }
 ```
 
+
 #### Get Contract by ID
 
-Retrieves a Contract by ID.
+
+Retrieves a Contract by ID
+
+
+Required permission: Contracts - Edit
+
+
 
 **Endpoint:** `GET /contracts/{id}`
 
-**Required Permission:** Contracts - Edit
+
+**Required Permission:** Required permission: Contracts - Edit
+
 
 **Path Parameters:**
 
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| id | integer | Yes | Contract ID |
+| id | integer | Yes |  |
 
-**Response: 200 OK**
+
+**Response: 200**
+
+
+successful
+
 
 ```json
 {
@@ -159,39 +209,82 @@ Retrieves a Contract by ID.
 }
 ```
 
+
 #### Update Contract
 
-Updates an existing Contract by ID.
+
+Updates an existing Contract by ID
+
+
+Required permission: Contracts - Edit
+
+
 
 **Endpoint:** `PUT /contracts/{id}`
 
-**Required Permission:** Contracts - Edit
+
+**Required Permission:** Required permission: Contracts - Edit
+
 
 **Path Parameters:**
 
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| id | integer | Yes | Contract ID |
+| id | integer | Yes |  |
+
 
 **Request Body:**
 
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| customer_id | integer | Yes | Customer ID |
-| contract_amount | string | No | Contract amount |
-| description | string | No | Contract description |
-| start_date | string (date-time) | No | Start date |
-| end_date | string (date-time) | No | End date |
-| name | string | No | Contract name |
-| primary_contact | string | No | Primary contact |
-| status | string | No | Contract status |
-| likelihood | integer | No | Likelihood percentage |
-| apply_to_all | boolean | No | Apply to all |
-| sla_id | integer | No | SLA ID |
+| contract_amount | string | No |  |
+| customer_id | integer | Yes |  |
+| description | string | No |  |
+| start_date | string | No |  |
+| end_date | string | No |  |
+| name | string | No |  |
+| primary_contact | string | No |  |
+| status | string | No |  |
+| likelihood | integer | No |  |
+| apply_to_all | boolean | No |  |
+| sla_id | integer | No |  |
 
-**Response: 200 OK**
 
-**Response: 422 Unprocessable Entity**
+
+**Response: 200**
+
+
+successful
+
+
+```json
+{
+  "id": 1,
+  "account_id": 1,
+  "customer_id": 1,
+  "name": "Support Tier 1",
+  "contract_amount": "30k",
+  "start_date": "2019-10-23T00:00:00.000Z",
+  "end_date": "2020-10-22T00:00:00.000Z",
+  "primary_contact": null,
+  "description": "Contract Description",
+  "created_at": "2019-10-22T10:00:55.392Z",
+  "updated_at": "2019-10-22T10:00:55.392Z",
+  "status": "Opportunity",
+  "likelihood": 30,
+  "apply_to_all": false,
+  "sla_id": null
+}
+```
+
+
+**Response: 422**
+
+
+Invalid request
+
 
 ```json
 {
@@ -216,20 +309,39 @@ Updates an existing Contract by ID.
 }
 ```
 
+
 #### Delete Contract
 
-Deletes a Contract by ID.
+
+Deletes a Contract by ID
+
+
+Required permission: Contracts - Delete
+
+
 
 **Endpoint:** `DELETE /contracts/{id}`
 
-**Required Permission:** Contracts - Delete
+
+**Required Permission:** Required permission: Contracts - Delete
+
 
 **Path Parameters:**
 
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| id | integer | Yes | Contract ID |
+| id | integer | Yes |  |
 
-**Response: 200 OK**
 
-**Response: 404 Not Found**
+**Response: 200**
+
+
+successful
+
+
+**Response: 404**
+
+
+Invalid request
+

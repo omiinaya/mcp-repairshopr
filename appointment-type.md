@@ -1,20 +1,32 @@
-# RepairShopr API Documentation - Appointment Types
+# RepairShopr API Documentation - Appointment Type
 
-> **Note:** This file was split from the original docs/repairshoprapi.md file for better organization and maintainability.
+> **Note:** This file was automatically generated from the RepairShopr API swagger.json.
 
 ## API Endpoints
 
-### Appointment Types
+### Appointment Type
 
 #### Get Appointment Types
 
-Returns a paginated list of Appointment Types.
+
+Returns a paginated list of Appointment Types
+
+
+Required permission: Global Admin
+
+
 
 **Endpoint:** `GET /appointment_types`
 
-**Required Permission:** Global Admin
 
-**Response: 200 OK**
+**Required Permission:** Required permission: Global Admin
+
+
+**Response: 200**
+
+
+successful
+
 
 ```json
 {
@@ -35,24 +47,40 @@ Returns a paginated list of Appointment Types.
 }
 ```
 
+
 #### Create Appointment Type
 
-Creates an Appointment Type.
+
+Creates an Appointment Type
+
+
+Required permission: Global Admin
+
+
 
 **Endpoint:** `POST /appointment_types`
 
-**Required Permission:** Global Admin
+
+**Required Permission:** Required permission: Global Admin
+
 
 **Request Body:**
 
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| name | string | Yes | Appointment type name |
-| email_instructions | string | No | Email instructions |
-| location_type | integer | No | Location type |
-| location_hard_code | string | No | Hard-coded location |
+| name | string | Yes |  |
+| email_instructions | string | No |  |
+| location_type | integer | No |  |
+| location_hard_code | string | No |  |
 
-**Response: 200 OK**
+
+
+**Response: 200**
+
+
+successful
+
 
 ```json
 {
@@ -71,7 +99,12 @@ Creates an Appointment Type.
 }
 ```
 
-**Response: 422 Unprocessable Entity**
+
+**Response: 422**
+
+
+Invalid request
+
 
 ```json
 {
@@ -91,21 +124,36 @@ Creates an Appointment Type.
 }
 ```
 
+
 #### Get Appointment Type by ID
 
-Retrieves an Appointment Type by ID.
+
+Retrieves an Appointment Type by ID
+
+
+Required permission: Global Admin
+
+
 
 **Endpoint:** `GET /appointment_types/{id}`
 
-**Required Permission:** Global Admin
+
+**Required Permission:** Required permission: Global Admin
+
 
 **Path Parameters:**
 
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| id | integer | Yes | Appointment Type ID |
+| id | integer | Yes |  |
 
-**Response: 200 OK**
+
+**Response: 200**
+
+
+successful
+
 
 ```json
 {
@@ -122,49 +170,93 @@ Retrieves an Appointment Type by ID.
 }
 ```
 
-**Response: 404 Not Found**
+
+**Response: 404**
+
+
+Invalid request
+
 
 #### Update Appointment Type
 
-Updates an existing Appointment Type by ID.
+
+Updates an existing Appointment Type by ID
+
+
+Required permission: Global Admin
+
+
 
 **Endpoint:** `PUT /appointment_types/{id}`
 
-**Required Permission:** Global Admin
+
+**Required Permission:** Required permission: Global Admin
+
 
 **Path Parameters:**
 
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| id | integer | Yes | Appointment Type ID |
+| id | integer | Yes |  |
+
 
 **Request Body:**
 
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| name | string | No | Appointment type name |
-| email_instructions | string | No | Email instructions |
-| location_type | integer | No | Location type |
-| location_hard_code | string | No | Hard-coded location |
+| name | string | No |  |
+| email_instructions | string | No |  |
+| location_type | integer | No |  |
+| location_hard_code | string | No |  |
 
-**Response: 200 OK**
 
-**Response: 422 Unprocessable Entity**
+
+**Response: 200**
+
+
+successful
+
+
+**Response: 422**
+
+
+Invalid request
+
 
 #### Delete Appointment Type
 
-Deletes an Appointment Type by ID.
+
+Deletes an Appointment Type by ID
+
+
+Required permission: Global Admin
+
+
 
 **Endpoint:** `DELETE /appointment_types/{id}`
 
-**Required Permission:** Global Admin
+
+**Required Permission:** Required permission: Global Admin
+
 
 **Path Parameters:**
 
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| id | integer | Yes | Appointment Type ID |
+| id | integer | Yes |  |
 
-**Response: 200 OK**
 
-**Response: 404 Not Found**
+**Response: 200**
+
+
+successful
+
+
+**Response: 404**
+
+
+Invalid request
+

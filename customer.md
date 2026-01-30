@@ -1,21 +1,30 @@
-# RepairShopr API Documentation - Customers
+# RepairShopr API Documentation - Customer
 
-> **Note:** This file was split from the original docs/repairshoprapi.md file for better organization and maintainability.
+> **Note:** This file was automatically generated from the RepairShopr API swagger.json.
 
 ## API Endpoints
 
-### Customers
+### Customer
 
 #### Get Customers
 
-Returns a paginated list of customers.
+
+Returns a paginated list of customers
+
+
+Required permission: Customers - List/Search
+Single-Customer Users can only access own customer (self).
+
+
 
 **Endpoint:** `GET /customers`
 
-**Required Permission:** Customers - List/Search  
-Single-Customer Users can only access own customer (self).
+
+**Required Permission:** Required permission: Customers - List/Search
+
 
 **Query Parameters:**
+
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
@@ -24,13 +33,18 @@ Single-Customer Users can only access own customer (self).
 | firstname | string | No | Any customers with a first name like the parameter |
 | lastname | string | No | Any customers with a last name like the parameter |
 | business_name | string | No | Any customers with a business name like the parameter |
-| id | array[integer] | No | Any customers with ID included in the list |
-| not_id | array[integer] | No | Any customers with ID not included in the list |
-| email | string | No | Email address |
+| id | array | No | Any customers with ID included in the list |
+| not_id | array | No | Any customers with ID not included in the list |
+| email | string | No |  |
 | include_disabled | string | No | Whether or not the returned list of customers includes disabled customers |
 | page | integer | No | Returns provided page of results, each 'page' contains 25 results |
 
-**Response: 200 OK**
+
+**Response: 200**
+
+
+successful
+
 
 ```json
 {
@@ -83,46 +97,31 @@ Single-Customer Users can only access own customer (self).
 }
 ```
 
+
 #### Create Customer
 
-Creates a Customer.
+
+Creates a Customer
+
+
+Required permission: Customers - Create
+
+
 
 **Endpoint:** `POST /customers`
 
-**Required Permission:** Customers - Create
+
+**Required Permission:** Required permission: Customers - Create
+
 
 **Request Body:**
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| business_name | string | No | Business name |
-| firstname | string | No | First name |
-| lastname | string | No | Last name |
-| email | string | No | Email address |
-| phone | string | No | Phone number |
-| mobile | string | No | Mobile number |
-| address | string | No | Address |
-| address_2 | string | No | Address line 2 |
-| city | string | No | City |
-| state | string | No | State |
-| zip | string | No | ZIP code |
-| notes | string | No | Notes |
-| get_sms | boolean | No | Receive SMS |
-| opt_out | boolean | No | Opt out of marketing |
-| no_email | boolean | No | No email |
-| get_billing | boolean | No | Receive billing |
-| get_marketing | boolean | No | Receive marketing |
-| get_reports | boolean | No | Receive reports |
-| ref_customer_id | integer | No | Referred by customer ID |
-| referred_by | string | No | Referred by |
-| tax_rate_id | integer | No | Tax rate ID |
-| notification_email | string | No | Notification email |
-| invoice_cc_emails | string | No | Invoice CC emails |
-| invoice_term_id | integer | No | Invoice term ID |
-| properties | object | No | Custom properties |
-| consent | object | No | Consent settings |
 
-**Response: 200 OK**
+**Response: 200**
+
+
+successful
+
 
 ```json
 {
@@ -167,7 +166,12 @@ Creates a Customer.
 }
 ```
 
-**Response: 422 Unprocessable Entity**
+
+**Response: 422**
+
+
+Invalid request
+
 
 ```json
 {
@@ -185,22 +189,37 @@ Creates a Customer.
 }
 ```
 
+
 #### Get Customer by ID
 
-Retrieves a Customer by ID.
+
+Retrieves a Customer by ID
+
+
+Required permission: Customers - View Detail
+Single-Customer Users can only access own customer (self).
+
+
 
 **Endpoint:** `GET /customers/{id}`
 
-**Required Permission:** Customers - View Detail  
-Single-Customer Users can only access own customer (self).
+
+**Required Permission:** Required permission: Customers - View Detail
+
 
 **Path Parameters:**
 
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| id | integer | Yes | Customer ID |
+| id | integer | Yes |  |
 
-**Response: 200 OK**
+
+**Response: 200**
+
+
+successful
+
 
 ```json
 {
@@ -245,55 +264,46 @@ Single-Customer Users can only access own customer (self).
 }
 ```
 
-**Response: 404 Not Found**
+
+**Response: 404**
+
+
+Invalid request
+
 
 #### Update Customer
 
-Updates an existing Customer by ID.
+
+Updates an existing Customer by ID
+
+
+Required permission: Customers - Edit
+Single-Customer Users can only access own customer (self).
+
+
 
 **Endpoint:** `PUT /customers/{id}`
 
-**Required Permission:** Customers - Edit  
-Single-Customer Users can only access own customer (self).
+
+**Required Permission:** Required permission: Customers - Edit
+
 
 **Path Parameters:**
 
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| id | integer | Yes | Customer ID |
+| id | integer | Yes |  |
+
 
 **Request Body:**
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| business_name | string | No | Business name |
-| firstname | string | No | First name |
-| lastname | string | No | Last name |
-| email | string | No | Email address |
-| phone | string | No | Phone number |
-| mobile | string | No | Mobile number |
-| address | string | No | Address |
-| address_2 | string | No | Address line 2 |
-| city | string | No | City |
-| state | string | No | State |
-| zip | string | No | ZIP code |
-| notes | string | No | Notes |
-| get_sms | boolean | No | Receive SMS |
-| opt_out | boolean | No | Opt out of marketing |
-| no_email | boolean | No | No email |
-| get_billing | boolean | No | Receive billing |
-| get_marketing | boolean | No | Receive marketing |
-| get_reports | boolean | No | Receive reports |
-| ref_customer_id | integer | No | Referred by customer ID |
-| referred_by | string | No | Referred by |
-| tax_rate_id | integer | No | Tax rate ID |
-| notification_email | string | No | Notification email |
-| invoice_cc_emails | string | No | Invoice CC emails |
-| invoice_term_id | integer | No | Invoice term ID |
-| properties | object | No | Custom properties |
-| consent | object | No | Consent settings |
 
-**Response: 200 OK**
+**Response: 200**
+
+
+successful
+
 
 ```json
 {
@@ -338,7 +348,12 @@ Single-Customer Users can only access own customer (self).
 }
 ```
 
-**Response: 422 Unprocessable Entity**
+
+**Response: 422**
+
+
+Invalid request
+
 
 ```json
 {
@@ -350,21 +365,36 @@ Single-Customer Users can only access own customer (self).
 }
 ```
 
+
 #### Delete Customer
 
-Deletes a Customer by ID.
+
+Deletes a Customer by ID
+
+
+Required permission: Customers - Delete
+
+
 
 **Endpoint:** `DELETE /customers/{id}`
 
-**Required Permission:** Customers - Delete
+
+**Required Permission:** Required permission: Customers - Delete
+
 
 **Path Parameters:**
 
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| id | integer | Yes | Customer ID |
+| id | integer | Yes |  |
 
-**Response: 200 OK**
+
+**Response: 200**
+
+
+successful
+
 
 ```json
 {
@@ -372,18 +402,35 @@ Deletes a Customer by ID.
 }
 ```
 
-**Response: 404 Not Found**
 
-#### Get Latest Customer
+**Response: 404**
 
-Returns latest Customer.
+
+Invalid request
+
+
+#### Get Latests
+
+
+Returns latest Customer
+
+
+Required permission: Customers - Edit
+Single-Customer Users can only access own customer (self).
+
+
 
 **Endpoint:** `GET /customers/latest`
 
-**Required Permission:** Customers - Edit  
-Single-Customer Users can only access own customer (self).
 
-**Response: 200 OK**
+**Required Permission:** Required permission: Customers - Edit
+
+
+**Response: 200**
+
+
+successful
+
 
 ```json
 {
@@ -428,19 +475,29 @@ Single-Customer Users can only access own customer (self).
 }
 ```
 
-#### Customer Autocomplete
 
-Returns a paginated list of customers for autocomplete query.
+#### Get Autocompletes
+
+
+Returns a paginated list of customers for autocomplete query
+
 
 **Endpoint:** `GET /customers/autocomplete`
 
+
 **Query Parameters:**
+
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | query | string | No | Search query |
 
-**Response: 200 OK**
+
+**Response: 200**
+
+
+successful
+
 
 ```json
 {
@@ -486,3 +543,4 @@ Returns a paginated list of customers for autocomplete query.
   ]
 }
 ```
+
