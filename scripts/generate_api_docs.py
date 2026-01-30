@@ -19,7 +19,7 @@ class RepairShoprDocGenerator:
     """Generate markdown documentation from RepairShopr swagger.json"""
     
     SWAGGER_URL = "https://api-docs.repairshopr.com/swagger.json"
-    OUTPUT_DIR = "."
+    OUTPUT_DIR = "docs/api"
     
     def __init__(self):
         self.swagger_data = None
