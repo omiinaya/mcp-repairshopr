@@ -9,6 +9,15 @@ import { ProtocolHandler, MCPTool } from './server/protocol-handler';
 import { ToolRegistry, ToolDefinition } from './server/tool-registry';
 import { monitoringService } from './server/monitoring';
 import { structuredLogger } from './server/structured-logger';
+import { searchApiDocs, SearchParams } from './tools/search';
+import { getEndpoint, getEndpointsBatch, findRelatedEndpoints, getEndpointDetails, EndpointLookupParams, BatchEndpointLookupParams } from './tools/endpoint';
+import { getParameters, ParameterLookupParams } from './tools/parameters';
+import { getResponses, ResponseLookupParams } from './tools/responses';
+import { getPermissions, PermissionLookupParams } from './tools/permissions';
+import { listResources, ResourceListParams } from './tools/resources';
+import { generateCodeExample, CodeExampleParams } from './tools/code-examples';
+import { VectorStore } from './indexer/vector';
+import { MetadataIndex } from './parser/metadata';
 
 export interface HealthCheckResult {
   status: 'healthy' | 'unhealthy';
@@ -23,6 +32,8 @@ class MCPServer {
   private startTime: number = 0;
   private isRunning: boolean = false;
   private config: ServerConfig;
+  private vectorStore: VectorStore | null = null;
+  private metadataIndex: MetadataIndex | null = null;
 
   constructor() {
     // Load configuration on initialization
@@ -53,6 +64,38 @@ class MCPServer {
       // Initialize tool registry
       this.toolRegistry = new ToolRegistry();
       logger.info('Tool registry initialized');
+
+      // Initialize vector store and metadata index
+      this.vectorStore = new VectorStore();
+      logger.info('Vector store initialized');
+
+      // Register the search tool
+      this.registerSearchTool();
+      logger.info('Search tool registered');
+
+      // Register the endpoint tool
+      this.registerEndpointTool();
+      logger.info('Endpoint tool registered');
+
+      // Register the parameters tool
+      this.registerParametersTool();
+      logger.info('Parameters tool registered');
+
+      // Register the responses tool
+      this.registerResponsesTool();
+      logger.info('Responses tool registered');
+
+      // Register the permissions tool
+      this.registerPermissionsTool();
+      logger.info('Permissions tool registered');
+
+      // Register the resources tool
+      this.registerResourcesTool();
+      logger.info('Resources tool registered');
+
+      // Register the code examples tool
+      this.registerCodeExamplesTool();
+      logger.info('Code examples tool registered');
 
       // Enable hot-reload if configured
       if (this.config.enableHotReload) {
@@ -97,6 +140,10 @@ class MCPServer {
         this.toolRegistry.clear();
         this.toolRegistry = null;
       }
+
+      // Clear vector store and metadata index
+      this.vectorStore = null;
+      this.metadataIndex = null;
 
       // Clean up configuration manager
       configurationManager.destroy();
@@ -351,6 +398,657 @@ class MCPServer {
       maxConcurrentRequests: this.config.maxConcurrentRequests,
       requestTimeout: this.config.requestTimeout
     });
+  }
+
+  /**
+   * Set the metadata index for search functionality
+   * @param index - Metadata index to use for search
+   */
+  setMetadataIndex(index: MetadataIndex): void {
+    this.metadataIndex = index;
+    logger.info('Metadata index set for search functionality');
+  }
+
+  /**
+   * Get the vector store
+   * @returns Vector store instance or null
+   */
+  getVectorStore(): VectorStore | null {
+    return this.vectorStore;
+  }
+
+  /**
+   * Get the metadata index
+   * @returns Metadata index or null
+   */
+  getMetadataIndex(): MetadataIndex | null {
+    return this.metadataIndex;
+  }
+
+  /**
+   * Register the search tool with the tool registry
+   */
+  private registerSearchTool(): void {
+    if (!this.toolRegistry) {
+      throw new Error('Tool registry not initialized');
+    }
+
+    const searchToolDefinition: ToolDefinition = {
+      name: 'search_api_docs',
+      description: 'Search RepairShopr API documentation using semantic and keyword search',
+      version: '1.0.0',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          query: {
+            type: 'string',
+            description: 'Search query'
+          },
+          resource: {
+            type: 'string',
+            description: 'Filter by resource name (optional)'
+          },
+          method: {
+            type: 'string',
+            description: 'Filter by HTTP method (optional)'
+          },
+          permission: {
+            type: 'string',
+            description: 'Filter by permission (optional)'
+          },
+          limit: {
+            type: 'number',
+            description: 'Maximum results to return (default: 5)'
+          }
+        },
+        required: ['query']
+      }
+    };
+
+    const searchToolHandler = async (args: any) => {
+      if (!this.vectorStore || !this.metadataIndex) {
+        throw new Error('Vector store or metadata index not initialized');
+      }
+
+      const params: SearchParams = {
+        query: args.query,
+        resource: args.resource,
+        method: args.method,
+        permission: args.permission,
+        limit: args.limit || 5
+      };
+
+      const results = searchApiDocs(params, this.vectorStore, this.metadataIndex);
+
+      return {
+        results: results.map(result => ({
+          endpoint: {
+            resource: result.endpoint.resource,
+            operation: result.endpoint.operation,
+            description: result.endpoint.description,
+            method: result.endpoint.method,
+            path: result.endpoint.path,
+            permission: result.endpoint.permission
+          },
+          score: result.score,
+          context: result.context,
+          matchType: result.matchType
+        }))
+      };
+    };
+
+    this.registerToolWithRegistry(searchToolDefinition, searchToolHandler);
+    logger.info('Search tool registered successfully');
+  }
+
+  /**
+   * Register the endpoint tool with the tool registry
+   */
+  private registerEndpointTool(): void {
+    if (!this.toolRegistry) {
+      throw new Error('Tool registry not initialized');
+    }
+
+    const endpointToolDefinition: ToolDefinition = {
+      name: 'get_endpoint',
+      description: 'Get detailed information about a specific API endpoint',
+      version: '1.0.0',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          path: {
+            type: 'string',
+            description: 'Endpoint path (e.g., /customers/{id})'
+          },
+          method: {
+            type: 'string',
+            description: 'HTTP method (GET, POST, PUT, DELETE, PATCH)'
+          },
+          resource: {
+            type: 'string',
+            description: 'Resource name (alternative to path)'
+          },
+          includeRelated: {
+            type: 'boolean',
+            description: 'Include related endpoints (default: false)'
+          }
+        }
+      }
+    };
+
+    const endpointToolHandler = async (args: any) => {
+      if (!this.metadataIndex) {
+        throw new Error('Metadata index not initialized');
+      }
+
+      const params: EndpointLookupParams = {
+        path: args.path,
+        method: args.method,
+        resource: args.resource
+      };
+
+      const result = getEndpoint(params, this.metadataIndex);
+
+      if (!result) {
+        return {
+          success: false,
+          message: 'Endpoint not found',
+          endpoint: null
+        };
+      }
+
+      // Handle single endpoint result
+      if (!Array.isArray(result)) {
+        const endpointDetails = getEndpointDetails(result.endpoint);
+        
+        // Include related endpoints if requested
+        let relatedEndpoints = null;
+        if (args.includeRelated) {
+          const related = findRelatedEndpoints(result.endpoint, this.metadataIndex);
+          relatedEndpoints = {
+            sameResource: related.sameResource.map(ep => ({
+              resource: ep.resource,
+              operation: ep.operation,
+              method: ep.method,
+              path: ep.path,
+              permission: ep.permission
+            })),
+            relatedByParameters: related.relatedByParameters.map(ep => ({
+              resource: ep.resource,
+              operation: ep.operation,
+              method: ep.method,
+              path: ep.path,
+              permission: ep.permission
+            })),
+            samePermission: related.samePermission.map(ep => ({
+              resource: ep.resource,
+              operation: ep.operation,
+              method: ep.method,
+              path: ep.path,
+              permission: ep.permission
+            }))
+          };
+        }
+
+        return {
+          success: true,
+          exactMatch: result.exactMatch,
+          endpoint: endpointDetails,
+          relatedEndpoints
+        };
+      }
+
+      // Handle multiple endpoints (resource lookup)
+      const endpointsDetails = result.map(r => getEndpointDetails(r.endpoint));
+      
+      return {
+        success: true,
+        count: endpointsDetails.length,
+        endpoints: endpointsDetails
+      };
+    };
+
+    this.registerToolWithRegistry(endpointToolDefinition, endpointToolHandler);
+    logger.info('Endpoint tool registered successfully');
+  }
+
+  /**
+   * Register the parameters tool with the tool registry
+   */
+  private registerParametersTool(): void {
+    if (!this.toolRegistry) {
+      throw new Error('Tool registry not initialized');
+    }
+
+    const parametersToolDefinition: ToolDefinition = {
+      name: 'get_parameters',
+      description: 'Get parameter information for an API endpoint including types, constraints, and validation hints',
+      version: '1.0.0',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          endpoint_path: {
+            type: 'string',
+            description: 'Endpoint path (e.g., /customers/{id})'
+          },
+          method: {
+            type: 'string',
+            description: 'HTTP method (GET, POST, PUT, DELETE, PATCH)'
+          },
+          param_type: {
+            type: 'string',
+            description: 'Filter by parameter type (query, path, body)',
+            enum: ['query', 'path', 'body']
+          }
+        },
+        required: ['endpoint_path', 'method']
+      }
+    };
+
+    const parametersToolHandler = async (args: any) => {
+      if (!this.metadataIndex) {
+        throw new Error('Metadata index not initialized');
+      }
+
+      const params: ParameterLookupParams = {
+        endpointPath: args.endpoint_path,
+        method: args.method,
+        paramType: args.param_type
+      };
+
+      const result = getParameters(params, this.metadataIndex);
+
+      if (!result) {
+        return {
+          success: false,
+          message: 'Endpoint not found',
+          endpoint: null
+        };
+      }
+
+      return {
+        success: true,
+        endpointPath: result.endpointPath,
+        method: result.method,
+        parameters: result.parameters.map(param => ({
+          name: param.name,
+          type: param.type,
+          required: param.required,
+          description: param.description,
+          paramType: param.paramType,
+          constraints: param.constraints,
+          validationHints: param.validationHints,
+          pattern: param.pattern ? {
+            name: param.pattern.name,
+            description: param.pattern.description
+          } : undefined
+        })),
+        totalCount: result.totalCount,
+        requiredCount: result.requiredCount,
+        optionalCount: result.optionalCount
+      };
+    };
+
+    this.registerToolWithRegistry(parametersToolDefinition, parametersToolHandler);
+    logger.info('Parameters tool registered successfully');
+  }
+
+  /**
+   * Register the responses tool with the tool registry
+   */
+  private registerResponsesTool(): void {
+    if (!this.toolRegistry) {
+      throw new Error('Tool registry not initialized');
+    }
+
+    const responsesToolDefinition: ToolDefinition = {
+      name: 'get_responses',
+      description: 'Get response information for an API endpoint including status codes, schemas, examples, and error documentation',
+      version: '1.0.0',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          endpoint_path: {
+            type: 'string',
+            description: 'Endpoint path (e.g., /customers/{id})'
+          },
+          method: {
+            type: 'string',
+            description: 'HTTP method (GET, POST, PUT, DELETE, PATCH)'
+          },
+          status_code: {
+            type: 'string',
+            description: 'Filter by status code (optional)'
+          }
+        },
+        required: ['endpoint_path', 'method']
+      }
+    };
+
+    const responsesToolHandler = async (args: any) => {
+      if (!this.metadataIndex) {
+        throw new Error('Metadata index not initialized');
+      }
+
+      const params: ResponseLookupParams = {
+        endpointPath: args.endpoint_path,
+        method: args.method,
+        statusCode: args.status_code
+      };
+
+      const result = getResponses(params, this.metadataIndex);
+
+      if (!result) {
+        return {
+          success: false,
+          message: 'Endpoint not found',
+          endpoint: null
+        };
+      }
+
+      return {
+        success: true,
+        endpointPath: result.endpointPath,
+        method: result.method,
+        responses: result.responses.map(response => ({
+          statusCode: response.statusCode,
+          statusCodeInfo: {
+            code: response.statusCodeInfo.code,
+            category: response.statusCodeInfo.category,
+            name: response.statusCodeInfo.name,
+            description: response.statusCodeInfo.description,
+            isSuccess: response.statusCodeInfo.isSuccess,
+            isError: response.statusCodeInfo.isError,
+            isRedirect: response.statusCodeInfo.isRedirect
+          },
+          description: response.description,
+          example: response.example,
+          schema: response.schema,
+          errorDocumentation: response.errorDocumentation,
+          formatDescription: response.formatDescription,
+          pattern: response.pattern ? {
+            name: response.pattern.name,
+            description: response.pattern.description,
+            statusCodes: response.pattern.statusCodes,
+            structure: response.pattern.structure,
+            exampleUseCase: response.pattern.exampleUseCase
+          } : undefined
+        })),
+        totalCount: result.totalCount,
+        successCount: result.successCount,
+        errorCount: result.errorCount,
+        commonPatterns: result.commonPatterns.map(pattern => ({
+          name: pattern.name,
+          description: pattern.description,
+          statusCodes: pattern.statusCodes,
+          structure: pattern.structure,
+          exampleUseCase: pattern.exampleUseCase
+        }))
+      };
+    };
+
+    this.registerToolWithRegistry(responsesToolDefinition, responsesToolHandler);
+    logger.info('Responses tool registered successfully');
+  }
+
+  /**
+   * Register the permissions tool with the tool registry
+   */
+  private registerPermissionsTool(): void {
+    if (!this.toolRegistry) {
+      throw new Error('Tool registry not initialized');
+    }
+
+    const permissionsToolDefinition: ToolDefinition = {
+      name: 'get_permissions',
+      description: 'Get permission requirements for API endpoints including descriptions, hierarchy, and usage information',
+      version: '1.0.0',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          endpoint_path: {
+            type: 'string',
+            description: 'Endpoint path (e.g., /customers/{id})'
+          },
+          method: {
+            type: 'string',
+            description: 'HTTP method (GET, POST, PUT, DELETE, PATCH) - required when using endpoint_path'
+          },
+          resource: {
+            type: 'string',
+            description: 'Resource name (alternative to endpoint_path)'
+          },
+          permission: {
+            type: 'string',
+            description: 'Filter by permission name (alternative to endpoint_path and resource)'
+          },
+          include_matrix: {
+            type: 'boolean',
+            description: 'Include permission matrix (default: false)'
+          },
+          include_summaries: {
+            type: 'boolean',
+            description: 'Include permission requirement summaries (default: false)'
+          }
+        }
+      }
+    };
+
+    const permissionsToolHandler = async (args: any) => {
+      if (!this.metadataIndex) {
+        throw new Error('Metadata index not initialized');
+      }
+
+      const params: PermissionLookupParams = {
+        endpointPath: args.endpoint_path,
+        method: args.method,
+        resource: args.resource,
+        permission: args.permission,
+        includeMatrix: args.include_matrix,
+        includeSummaries: args.include_summaries
+      };
+
+      const result = getPermissions(params, this.metadataIndex);
+
+      // Format the response for the tool
+      const formattedResult: any = {
+        totalPermissions: result.totalPermissions
+      };
+
+      if (result.permission) {
+        formattedResult.permission = {
+          name: result.permission.name,
+          description: {
+            name: result.permission.description.name,
+            description: result.permission.description.description,
+            category: result.permission.description.category,
+            operations: result.permission.description.operations
+          },
+          endpoints: result.permission.endpoints,
+          hierarchy: result.permission.hierarchy
+        };
+      }
+
+      if (result.allPermissions) {
+        formattedResult.allPermissions = result.allPermissions.map(p => ({
+          name: p.name,
+          description: {
+            name: p.description.name,
+            description: p.description.description,
+            category: p.description.category,
+            operations: p.description.operations
+          },
+          endpointCount: p.endpoints.length,
+          endpoints: p.endpoints,
+          hierarchy: p.hierarchy
+        }));
+      }
+
+      if (result.summaries) {
+        formattedResult.summaries = result.summaries;
+      }
+
+      if (result.matrix) {
+        formattedResult.matrix = result.matrix;
+      }
+
+      return formattedResult;
+    };
+
+    this.registerToolWithRegistry(permissionsToolDefinition, permissionsToolHandler);
+    logger.info('Permissions tool registered successfully');
+  }
+
+  /**
+   * Register the resources tool with the tool registry
+   */
+  private registerResourcesTool(): void {
+    if (!this.toolRegistry) {
+      throw new Error('Tool registry not initialized');
+    }
+
+    const resourcesToolDefinition: ToolDefinition = {
+      name: 'list_resources',
+      description: 'List all available API resources with summary information, endpoints, relationships, and statistics',
+      version: '1.0.0',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          include_endpoints: {
+            type: 'boolean',
+            description: 'Include endpoint details for each resource (default: false)'
+          },
+          include_relationships: {
+            type: 'boolean',
+            description: 'Include resource relationship information (default: false)'
+          }
+        }
+      }
+    };
+
+    const resourcesToolHandler = async (args: any) => {
+      if (!this.metadataIndex) {
+        throw new Error('Metadata index not initialized');
+      }
+
+      const params: ResourceListParams = {
+        includeEndpoints: args.include_endpoints,
+        includeRelationships: args.include_relationships
+      };
+
+      const result = listResources(params, this.metadataIndex);
+
+      return {
+        totalResources: result.totalResources,
+        overallStatistics: {
+          totalEndpoints: result.overallStatistics.totalEndpoints,
+          totalParameters: result.overallStatistics.totalParameters,
+          totalResponses: result.overallStatistics.totalResponses,
+          uniquePermissions: result.overallStatistics.uniquePermissions,
+          mostCommonMethod: result.overallStatistics.mostCommonMethod,
+          averageEndpointsPerResource: result.overallStatistics.averageEndpointsPerResource
+        },
+        resources: result.resources.map(resource => ({
+          summary: {
+            name: resource.summary.name,
+            description: resource.summary.description,
+            endpointCount: resource.summary.endpointCount,
+            methods: resource.summary.methods,
+            permissions: resource.summary.permissions
+          },
+          endpoints: resource.endpoints,
+          relationships: resource.relationships,
+          statistics: {
+            totalEndpoints: resource.statistics.totalEndpoints,
+            totalParameters: resource.statistics.totalParameters,
+            totalResponses: resource.statistics.totalResponses,
+            uniquePermissions: resource.statistics.uniquePermissions,
+            mostCommonMethod: resource.statistics.mostCommonMethod,
+            averageEndpointsPerResource: resource.statistics.averageEndpointsPerResource
+          },
+          navigation: {
+            relatedResources: resource.navigation.relatedResources,
+            commonOperations: resource.navigation.commonOperations,
+            similarPermissionResources: resource.navigation.similarPermissionResources
+          }
+        }))
+      };
+    };
+
+    this.registerToolWithRegistry(resourcesToolDefinition, resourcesToolHandler);
+    logger.info('Resources tool registered successfully');
+  }
+
+  /**
+   * Register the code examples tool with the tool registry
+   */
+  private registerCodeExamplesTool(): void {
+    if (!this.toolRegistry) {
+      throw new Error('Tool registry not initialized');
+    }
+
+    const codeExamplesToolDefinition: ToolDefinition = {
+      name: 'generate_code_example',
+      description: 'Generate code examples for API endpoints in multiple languages (JavaScript, Python, cURL) with authentication, request/response examples, and error handling',
+      version: '1.0.0',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          endpoint_path: {
+            type: 'string',
+            description: 'Endpoint path (e.g., /customers/{id})'
+          },
+          method: {
+            type: 'string',
+            description: 'HTTP method (GET, POST, PUT, DELETE, PATCH)'
+          },
+          language: {
+            type: 'string',
+            description: 'Programming language for the code example',
+            enum: ['javascript', 'python', 'curl']
+          },
+          include_auth: {
+            type: 'boolean',
+            description: 'Include authentication in the example (default: true)'
+          }
+        },
+        required: ['endpoint_path', 'method', 'language']
+      }
+    };
+
+    const codeExamplesToolHandler = async (args: any) => {
+      if (!this.metadataIndex) {
+        throw new Error('Metadata index not initialized');
+      }
+
+      const params: CodeExampleParams = {
+        endpointPath: args.endpoint_path,
+        method: args.method,
+        language: args.language,
+        includeAuth: args.include_auth !== undefined ? args.include_auth : true
+      };
+
+      const result = generateCodeExample(params, this.metadataIndex);
+
+      return {
+        endpoint: {
+          resource: result.endpoint.resource,
+          operation: result.endpoint.operation,
+          description: result.endpoint.description,
+          method: result.endpoint.method,
+          path: result.endpoint.path
+        },
+        code: result.code,
+        language: result.language,
+        includesAuth: result.includesAuth,
+        exampleRequest: result.exampleRequest,
+        exampleResponse: result.exampleResponse,
+        errorHandling: result.errorHandling
+      };
+    };
+
+    this.registerToolWithRegistry(codeExamplesToolDefinition, codeExamplesToolHandler);
+    logger.info('Code examples tool registered successfully');
   }
 }
 
