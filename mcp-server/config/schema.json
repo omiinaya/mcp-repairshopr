@@ -1,0 +1,81 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://mcp-repairshopr/schema/config.json",
+  "title": "MCP RepairShopr Server Configuration",
+  "description": "Configuration schema for the MCP RepairShopr server",
+  "type": "object",
+  "properties": {
+    "serverName": {
+      "type": "string",
+      "description": "Name of the MCP server",
+      "minLength": 1,
+      "default": "mcp-repairshopr"
+    },
+    "serverVersion": {
+      "type": "string",
+      "description": "Version of the MCP server",
+      "pattern": "^\\d+\\.\\d+\\.\\d+(-[a-zA-Z0-9]+)?$",
+      "default": "0.1.0"
+    },
+    "port": {
+      "type": "integer",
+      "description": "Port number for the server to listen on",
+      "minimum": 1,
+      "maximum": 65535,
+      "default": 3000
+    },
+    "logLevel": {
+      "type": "string",
+      "description": "Logging level for the server",
+      "enum": ["error", "warn", "info", "debug", "trace"],
+      "default": "info"
+    },
+    "docsPath": {
+      "type": "string",
+      "description": "Path to the documentation directory",
+      "minLength": 1,
+      "default": "./docs"
+    },
+    "dataPath": {
+      "type": "string",
+      "description": "Path to the data directory",
+      "minLength": 1,
+      "default": "./data"
+    },
+    "enableHotReload": {
+      "type": "boolean",
+      "description": "Enable hot-reload of configuration changes",
+      "default": true
+    },
+    "enableMetrics": {
+      "type": "boolean",
+      "description": "Enable metrics collection",
+      "default": false
+    },
+    "maxConcurrentRequests": {
+      "type": "integer",
+      "description": "Maximum number of concurrent requests",
+      "minimum": 1,
+      "default": 100
+    },
+    "requestTimeout": {
+      "type": "integer",
+      "description": "Request timeout in milliseconds",
+      "minimum": 0,
+      "default": 30000
+    }
+  },
+  "required": [
+    "serverName",
+    "serverVersion",
+    "port",
+    "logLevel",
+    "docsPath",
+    "dataPath",
+    "enableHotReload",
+    "enableMetrics",
+    "maxConcurrentRequests",
+    "requestTimeout"
+  ],
+  "additionalProperties": false
+}

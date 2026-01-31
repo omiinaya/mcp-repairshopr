@@ -2,5 +2,11 @@
   "serverName": "mcp-repairshopr",
   "serverVersion": "0.1.0",
   "port": 3000,
-  "logLevel": "info"
+  "logLevel": "info",
+  "docsPath": "./docs",
+  "dataPath": "./data",
+  "enableHotReload": true,
+  "enableMetrics": false,
+  "maxConcurrentRequests": 100,
+  "requestTimeout": 30000
 }
