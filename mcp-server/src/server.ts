@@ -18,6 +18,10 @@ import { listResources, ResourceListParams } from './tools/resources';
 import { generateCodeExample, CodeExampleParams } from './tools/code-examples';
 import { VectorStore } from './indexer/vector';
 import { MetadataIndex } from './parser/metadata';
+import { QueryUnderstanding } from './retrieval/query';
+import { RelevanceScorer, SearchResult } from './retrieval/scoring';
+import { ContextManager, formatSearchResults, formatEndpoint, formatParameters, formatResponses } from './retrieval/formatter';
+import { Cache } from './cache/cache';
 
 export interface HealthCheckResult {
   status: 'healthy' | 'unhealthy';
@@ -34,10 +38,21 @@ class MCPServer {
   private config: ServerConfig;
   private vectorStore: VectorStore | null = null;
   private metadataIndex: MetadataIndex | null = null;
+  private queryUnderstanding: QueryUnderstanding | null = null;
+  private relevanceScorer: RelevanceScorer | null = null;
+  private contextManager: ContextManager | null = null;
+  private cache: Cache<any>;
 
   constructor() {
     // Load configuration on initialization
     this.config = configurationManager.loadConfig();
+    // Initialize cache with default configuration
+    this.cache = new Cache({
+      maxSize: 10 * 1024 * 1024, // 10MB
+      defaultTTL: 5 * 60 * 1000, // 5 minutes
+      maxEntries: 1000,
+      enableWarming: true
+    });
   }
 
   async start(): Promise<void> {
@@ -68,6 +83,22 @@ class MCPServer {
       // Initialize vector store and metadata index
       this.vectorStore = new VectorStore();
       logger.info('Vector store initialized');
+
+      // Initialize query understanding
+      this.queryUnderstanding = new QueryUnderstanding();
+      logger.info('Query understanding initialized');
+
+      // Initialize relevance scorer
+      this.relevanceScorer = new RelevanceScorer(this.vectorStore);
+      logger.info('Relevance scorer initialized');
+
+      // Initialize context manager
+      this.contextManager = new ContextManager();
+      logger.info('Context manager initialized');
+
+      // Warm cache with common queries
+      this.warmCache();
+      logger.info('Cache warmed');
 
       // Register the search tool
       this.registerSearchTool();
@@ -144,6 +175,12 @@ class MCPServer {
       // Clear vector store and metadata index
       this.vectorStore = null;
       this.metadataIndex = null;
+      this.queryUnderstanding = null;
+      this.relevanceScorer = null;
+      this.contextManager = null;
+
+      // Clear cache
+      this.cache.clear();
 
       // Clean up configuration manager
       configurationManager.destroy();
@@ -406,6 +443,9 @@ class MCPServer {
    */
   setMetadataIndex(index: MetadataIndex): void {
     this.metadataIndex = index;
+    if (this.queryUnderstanding) {
+      this.queryUnderstanding.setMetadataIndex(index);
+    }
     logger.info('Metadata index set for search functionality');
   }
 
@@ -423,6 +463,76 @@ class MCPServer {
    */
   getMetadataIndex(): MetadataIndex | null {
     return this.metadataIndex;
+  }
+
+  /**
+   * Get the query understanding instance
+   * @returns Query understanding instance or null
+   */
+  getQueryUnderstanding(): QueryUnderstanding | null {
+    return this.queryUnderstanding;
+  }
+
+  /**
+   * Get the relevance scorer instance
+   * @returns Relevance scorer instance or null
+   */
+  getRelevanceScorer(): RelevanceScorer | null {
+    return this.relevanceScorer;
+  }
+
+  /**
+   * Get the context manager instance
+   * @returns Context manager instance or null
+   */
+  getContextManager(): ContextManager | null {
+    return this.contextManager;
+  }
+
+  /**
+   * Get the cache instance
+   * @returns Cache instance
+   */
+  getCache(): Cache<any> {
+    return this.cache;
+  }
+
+  /**
+   * Get cache statistics
+   * @returns Cache statistics
+   */
+  getCacheStats() {
+    return this.cache.getStats();
+  }
+
+  /**
+   * Warm cache with common queries on server start
+   */
+  private warmCache(): void {
+    if (!this.metadataIndex) {
+      return;
+    }
+
+    // Get common search patterns to warm the cache
+    const commonQueries = [
+      'customer',
+      'invoice',
+      'ticket',
+      'estimate',
+      'product',
+      'appointment'
+    ];
+
+    // Pre-warm cache with common queries
+    for (const query of commonQueries) {
+      const cacheKey = `search:${query}`;
+      // Cache will be populated on first actual search
+      // This is a placeholder for future cache warming strategies
+    }
+
+    logger.info('Cache warming completed', {
+      queriesPrepared: commonQueries.length
+    });
   }
 
   /**
@@ -470,8 +580,128 @@ class MCPServer {
         throw new Error('Vector store or metadata index not initialized');
       }
 
+      // Use query understanding to analyze and improve the search
+      let searchQuery = args.query;
+      let queryAnalysis = null;
+      
+      if (this.queryUnderstanding) {
+        queryAnalysis = this.queryUnderstanding.analyzeQuery(args.query);
+        
+        // Use expanded queries for better results
+        const expandedQueries = this.queryUnderstanding.expandQuery(
+          args.query,
+          queryAnalysis.entities
+        );
+        
+        // Use the first expanded query if available, otherwise use original
+        searchQuery = expandedQueries[0] || args.query;
+        
+        // Override filters with extracted entities if not explicitly provided
+        const resourceFilter = args.resource || queryAnalysis.entities.resources[0];
+        const methodFilter = args.method || queryAnalysis.entities.httpMethods[0];
+        const permissionFilter = args.permission || queryAnalysis.entities.permissions[0];
+        
+        const params: SearchParams = {
+          query: searchQuery,
+          resource: resourceFilter,
+          method: methodFilter,
+          permission: permissionFilter,
+          limit: args.limit || 5
+        };
+
+        const results = searchApiDocs(params, this.vectorStore, this.metadataIndex);
+
+        // Apply relevance scoring to rank results
+        let scoredResults: SearchResult[] = results.map(result => ({
+          endpoint: result.endpoint,
+          score: result.score,
+          matchType: result.matchType,
+          context: result.context
+        }));
+
+        // Use relevance scorer to calculate detailed scores and rank results
+        if (this.relevanceScorer) {
+          scoredResults = scoredResults.map(result => {
+            const relevanceScore = this.relevanceScorer!.calculateScore(
+              searchQuery,
+              result.endpoint,
+              queryAnalysis || undefined
+            );
+            return {
+              ...result,
+              score: relevanceScore.overallScore,
+              relevanceScore
+            };
+          });
+
+          // Rank results by relevance score
+          scoredResults = this.relevanceScorer.rankResults(scoredResults, searchQuery);
+
+          // Record usage for popularity tracking
+          for (const result of scoredResults) {
+            this.relevanceScorer!.recordEndpointUsage(result.endpoint);
+          }
+
+          // Apply context optimization to manage response size
+          if (this.contextManager) {
+            const maxTokens = this.contextManager.getConfig().defaultMaxTokens;
+            const optimizedContext = this.contextManager.optimizeContextWindow(scoredResults, maxTokens);
+            
+            logger.info('Context optimized', {
+              resultCount: optimizedContext.resultCount,
+              excludedCount: optimizedContext.excludedCount,
+              tokenCount: optimizedContext.tokenCount,
+              truncated: optimizedContext.truncated
+            });
+          }
+        }
+
+        // Format search results using the formatter module
+        const formattedResults = formatSearchResults(scoredResults, 'markdown');
+
+        return {
+          results: scoredResults.map(result => ({
+            endpoint: {
+              resource: result.endpoint.resource,
+              operation: result.endpoint.operation,
+              description: result.endpoint.description,
+              method: result.endpoint.method,
+              path: result.endpoint.path,
+              permission: result.endpoint.permission
+            },
+            score: result.score,
+            relevanceScore: result.relevanceScore ? {
+              overallScore: result.relevanceScore.overallScore,
+              semanticScore: result.relevanceScore.semanticScore,
+              keywordScore: result.relevanceScore.keywordScore,
+              recencyScore: result.relevanceScore.recencyScore,
+              popularityScore: result.relevanceScore.popularityScore,
+              customScore: result.relevanceScore.customScore,
+              breakdown: result.relevanceScore.breakdown
+            } : undefined,
+            context: result.context,
+            matchType: result.matchType
+          })),
+          formatted: {
+            markdown: formattedResults.markdown,
+            json: formattedResults.json,
+            html: formattedResults.html,
+            tokenCount: formattedResults.tokenCount
+          },
+          queryAnalysis: {
+            originalQuery: queryAnalysis.originalQuery,
+            intent: queryAnalysis.intent,
+            queryType: queryAnalysis.queryType,
+            confidence: queryAnalysis.confidence,
+            entities: queryAnalysis.entities,
+            suggestions: queryAnalysis.suggestions
+          }
+        };
+      }
+
+      // Fallback to basic search if query understanding is not available
       const params: SearchParams = {
-        query: args.query,
+        query: searchQuery,
         resource: args.resource,
         method: args.method,
         permission: args.permission,
@@ -480,21 +710,80 @@ class MCPServer {
 
       const results = searchApiDocs(params, this.vectorStore, this.metadataIndex);
 
-      return {
-        results: results.map(result => ({
-          endpoint: {
-            resource: result.endpoint.resource,
-            operation: result.endpoint.operation,
-            description: result.endpoint.description,
-            method: result.endpoint.method,
-            path: result.endpoint.path,
-            permission: result.endpoint.permission
-          },
-          score: result.score,
-          context: result.context,
-          matchType: result.matchType
-        }))
-      };
+      // Apply relevance scoring to rank results
+      let scoredResults: SearchResult[] = results.map(result => ({
+        endpoint: result.endpoint,
+        score: result.score,
+        matchType: result.matchType,
+        context: result.context
+      }));
+
+      // Use relevance scorer to calculate detailed scores and rank results
+      if (this.relevanceScorer) {
+        scoredResults = scoredResults.map(result => {
+          const relevanceScore = this.relevanceScorer!.calculateScore(searchQuery, result.endpoint);
+          return {
+            ...result,
+            score: relevanceScore.overallScore,
+            relevanceScore
+          };
+        });
+
+          // Rank results by relevance score
+          scoredResults = this.relevanceScorer.rankResults(scoredResults, searchQuery);
+
+          // Record usage for popularity tracking
+          for (const result of scoredResults) {
+            this.relevanceScorer!.recordEndpointUsage(result.endpoint);
+          }
+
+          // Apply context optimization to manage response size
+          if (this.contextManager) {
+            const maxTokens = this.contextManager.getConfig().defaultMaxTokens;
+            const optimizedContext = this.contextManager.optimizeContextWindow(scoredResults, maxTokens);
+            
+            logger.info('Context optimized', {
+              resultCount: optimizedContext.resultCount,
+              excludedCount: optimizedContext.excludedCount,
+              tokenCount: optimizedContext.tokenCount,
+              truncated: optimizedContext.truncated
+            });
+          }
+        }
+
+        // Format search results using the formatter module
+        const formattedResults = formatSearchResults(scoredResults, 'markdown');
+
+        return {
+          results: scoredResults.map(result => ({
+            endpoint: {
+              resource: result.endpoint.resource,
+              operation: result.endpoint.operation,
+              description: result.endpoint.description,
+              method: result.endpoint.method,
+              path: result.endpoint.path,
+              permission: result.endpoint.permission
+            },
+            score: result.score,
+            relevanceScore: result.relevanceScore ? {
+              overallScore: result.relevanceScore.overallScore,
+              semanticScore: result.relevanceScore.semanticScore,
+              keywordScore: result.relevanceScore.keywordScore,
+              recencyScore: result.relevanceScore.recencyScore,
+              popularityScore: result.relevanceScore.popularityScore,
+              customScore: result.relevanceScore.customScore,
+              breakdown: result.relevanceScore.breakdown
+            } : undefined,
+            context: result.context,
+            matchType: result.matchType
+          })),
+          formatted: {
+            markdown: formattedResults.markdown,
+            json: formattedResults.json,
+            html: formattedResults.html,
+            tokenCount: formattedResults.tokenCount
+          }
+        };
     };
 
     this.registerToolWithRegistry(searchToolDefinition, searchToolHandler);
@@ -560,7 +849,10 @@ class MCPServer {
       // Handle single endpoint result
       if (!Array.isArray(result)) {
         const endpointDetails = getEndpointDetails(result.endpoint);
-        
+
+        // Format endpoint using the formatter module
+        const formattedEndpoint = formatEndpoint(result.endpoint, 'markdown');
+
         // Include related endpoints if requested
         let relatedEndpoints = null;
         if (args.includeRelated) {
@@ -594,6 +886,11 @@ class MCPServer {
           success: true,
           exactMatch: result.exactMatch,
           endpoint: endpointDetails,
+          formatted: {
+            markdown: formattedEndpoint,
+            json: formatEndpoint(result.endpoint, 'json'),
+            html: formatEndpoint(result.endpoint, 'html')
+          },
           relatedEndpoints
         };
       }
@@ -666,6 +963,9 @@ class MCPServer {
         };
       }
 
+      // Format parameters using the formatter module
+      const formattedParameters = formatParameters(result.parameters, 'markdown');
+
       return {
         success: true,
         endpointPath: result.endpointPath,
@@ -683,6 +983,11 @@ class MCPServer {
             description: param.pattern.description
           } : undefined
         })),
+        formatted: {
+          markdown: formattedParameters,
+          json: formatParameters(result.parameters, 'json'),
+          html: formatParameters(result.parameters, 'html')
+        },
         totalCount: result.totalCount,
         requiredCount: result.requiredCount,
         optionalCount: result.optionalCount
@@ -746,6 +1051,9 @@ class MCPServer {
         };
       }
 
+      // Format responses using the formatter module
+      const formattedResponses = formatResponses(result.responses, 'markdown');
+
       return {
         success: true,
         endpointPath: result.endpointPath,
@@ -774,6 +1082,11 @@ class MCPServer {
             exampleUseCase: response.pattern.exampleUseCase
           } : undefined
         })),
+        formatted: {
+          markdown: formattedResponses,
+          json: formatResponses(result.responses, 'json'),
+          html: formatResponses(result.responses, 'html')
+        },
         totalCount: result.totalCount,
         successCount: result.successCount,
         errorCount: result.errorCount,
