@@ -152,7 +152,6 @@ const API_TERM_MAPPINGS: Record<string, { type: keyof QueryEntities; value: stri
   'name': { type: 'parameters', value: 'name' },
   'status': { type: 'parameters', value: 'status' },
   'email': { type: 'parameters', value: 'email' },
-  'phone': { type: 'parameters', value: 'phone' },
   'address': { type: 'parameters', value: 'address' },
   'date': { type: 'parameters', value: 'date' },
   'time': { type: 'parameters', value: 'time' },
@@ -162,7 +161,6 @@ const API_TERM_MAPPINGS: Record<string, { type: keyof QueryEntities; value: stri
   'sort': { type: 'parameters', value: 'sort' },
   'filter': { type: 'parameters', value: 'filter' },
   'query': { type: 'parameters', value: 'query' },
-  'search': { type: 'parameters', value: 'search' },
 };
 
 /**

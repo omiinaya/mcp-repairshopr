@@ -424,7 +424,7 @@ class MCPServer {
    */
   private applyConfiguration(): void {
     // Update logger level
-    logger.setLevel(this.config.logLevel);
+    logger.setLevel(this.config.logLevel as 'error' | 'warn' | 'info' | 'debug' | 'trace');
 
     // Note: Server name and version cannot be changed while running
     // These would require a server restart
@@ -547,6 +547,8 @@ class MCPServer {
       name: 'search_api_docs',
       description: 'Search RepairShopr API documentation using semantic and keyword search',
       version: '1.0.0',
+      deprecated: false,
+      dependencies: [],
       inputSchema: {
         type: 'object',
         properties: {
@@ -582,7 +584,7 @@ class MCPServer {
 
       // Use query understanding to analyze and improve the search
       let searchQuery = args.query;
-      let queryAnalysis = null;
+      let queryAnalysis: import('./retrieval/query').QueryAnalysis | null = null;
       
       if (this.queryUnderstanding) {
         queryAnalysis = this.queryUnderstanding.analyzeQuery(args.query);
@@ -802,6 +804,8 @@ class MCPServer {
       name: 'get_endpoint',
       description: 'Get detailed information about a specific API endpoint',
       version: '1.0.0',
+      deprecated: false,
+      dependencies: [],
       inputSchema: {
         type: 'object',
         properties: {
@@ -921,6 +925,8 @@ class MCPServer {
       name: 'get_parameters',
       description: 'Get parameter information for an API endpoint including types, constraints, and validation hints',
       version: '1.0.0',
+      deprecated: false,
+      dependencies: [],
       inputSchema: {
         type: 'object',
         properties: {
@@ -1010,6 +1016,8 @@ class MCPServer {
       name: 'get_responses',
       description: 'Get response information for an API endpoint including status codes, schemas, examples, and error documentation',
       version: '1.0.0',
+      deprecated: false,
+      dependencies: [],
       inputSchema: {
         type: 'object',
         properties: {
@@ -1116,6 +1124,8 @@ class MCPServer {
       name: 'get_permissions',
       description: 'Get permission requirements for API endpoints including descriptions, hierarchy, and usage information',
       version: '1.0.0',
+      deprecated: false,
+      dependencies: [],
       inputSchema: {
         type: 'object',
         properties: {
@@ -1224,6 +1234,8 @@ class MCPServer {
       name: 'list_resources',
       description: 'List all available API resources with summary information, endpoints, relationships, and statistics',
       version: '1.0.0',
+      deprecated: false,
+      dependencies: [],
       inputSchema: {
         type: 'object',
         properties: {
@@ -1304,6 +1316,8 @@ class MCPServer {
       name: 'generate_code_example',
       description: 'Generate code examples for API endpoints in multiple languages (JavaScript, Python, cURL) with authentication, request/response examples, and error handling',
       version: '1.0.0',
+      deprecated: false,
+      dependencies: [],
       inputSchema: {
         type: 'object',
         properties: {

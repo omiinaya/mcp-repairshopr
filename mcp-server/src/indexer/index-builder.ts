@@ -6,7 +6,8 @@
  * health monitoring capabilities.
  */
 
-import * as fs from 'fs/promises';
+import * as fs from 'fs';
+import * as fsPromises from 'fs/promises';
 import * as path from 'path';
 import * as crypto from 'crypto';
 import { parseMarkdownFile } from '../parser/markdown';
@@ -62,7 +63,7 @@ export class IndexBuilder {
     console.log(`Building index from ${docsPath}...`);
 
     // Ensure output directory exists
-    await fs.mkdir(outputPath, { recursive: true });
+    await fsPromises.mkdir(outputPath, { recursive: true });
 
     // Read all markdown files
     const files = await this.getMarkdownFiles(docsPath);
@@ -313,7 +314,7 @@ export class IndexBuilder {
     const files: string[] = [];
 
     async function walk(currentPath: string) {
-      const entries = await fs.readdir(currentPath, { withFileTypes: true });
+      const entries = await fsPromises.readdir(currentPath, { withFileTypes: true });
 
       for (const entry of entries) {
         const fullPath = path.join(currentPath, entry.name);
@@ -343,7 +344,7 @@ export class IndexBuilder {
     const sortedFiles = [...files].sort();
 
     for (const file of sortedFiles) {
-      const content = await fs.readFile(file, 'utf-8');
+      const content = await fsPromises.readFile(file, 'utf-8');
       hash.update(content);
     }
 
@@ -368,7 +369,7 @@ export class IndexBuilder {
       allEndpoints: metadataIndex.allEndpoints
     };
 
-    await fs.writeFile(filePath, JSON.stringify(serialized, null, 2), 'utf-8');
+    await fsPromises.writeFile(filePath, JSON.stringify(serialized, null, 2), 'utf-8');
   }
 
   /**
@@ -386,8 +387,8 @@ export class IndexBuilder {
     const chunksPath = path.join(outputPath, this.CHUNKS_FILE);
     const embeddingsPath = path.join(outputPath, this.EMBEDDINGS_FILE);
 
-    await fs.writeFile(chunksPath, JSON.stringify(chunks, null, 2), 'utf-8');
-    await fs.writeFile(embeddingsPath, JSON.stringify(embeddings), 'utf-8');
+    await fsPromises.writeFile(chunksPath, JSON.stringify(chunks, null, 2), 'utf-8');
+    await fsPromises.writeFile(embeddingsPath, JSON.stringify(embeddings), 'utf-8');
   }
 
   /**
@@ -398,7 +399,7 @@ export class IndexBuilder {
    */
   private async saveIndexInfo(outputPath: string, indexInfo: IndexInfo): Promise<void> {
     const filePath = path.join(outputPath, this.INDEX_INFO_FILE);
-    await fs.writeFile(filePath, JSON.stringify(indexInfo, null, 2), 'utf-8');
+    await fsPromises.writeFile(filePath, JSON.stringify(indexInfo, null, 2), 'utf-8');
   }
 
   /**
@@ -417,7 +418,7 @@ export class IndexBuilder {
     for (const file of files) {
       const filePath = path.join(outputPath, file);
       try {
-        await fs.unlink(filePath);
+        await fsPromises.unlink(filePath);
       } catch (error) {
         // File doesn't exist, that's okay
       }
