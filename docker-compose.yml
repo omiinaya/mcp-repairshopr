@@ -1,8 +1,8 @@
 version: '3.8'
 
-# Coolify-optimized Docker Compose configuration
-# This configuration is designed for Coolify's deployment model with dynamic port assignment
-# Compatible with Coolify v4.0+
+# Coolify Docker Compose configuration
+# Place this file in the ROOT of your repository
+# It references the mcp-server subdirectory
 
 services:
   mcp-repairshopr:
@@ -13,7 +13,7 @@ services:
     # Coolify will override the port mapping with its assigned dynamic port
     ports:
       - "${PORT:-3000}:${PORT:-3000}"
-    
+
     # Environment variables with Coolify-specific overrides
     environment:
       # Server Configuration
@@ -52,12 +52,19 @@ services:
       - MONITORING_ENABLED=${MONITORING_ENABLED:-true}
       - MONITORING_INTERVAL=${MONITORING_INTERVAL:-60000}
 
+      # RepairShopr API Configuration (optional)
+      - REPAIRSHOPR_API_KEY=${REPAIRSHOPR_API_KEY:-}
+      - REPAIRSHOPR_SUBDOMAIN=${REPAIRSHOPR_SUBDOMAIN:-}
+      - REPAIRSHOPR_TIMEOUT_MS=${REPAIRSHOPR_TIMEOUT_MS:-30000}
+      - REPAIRSHOPR_RETRY_ATTEMPTS=${REPAIRSHOPR_RETRY_ATTEMPTS:-3}
+      - REPAIRSHOPR_RETRY_DELAY_MS=${REPAIRSHOPR_RETRY_DELAY_MS:-1000}
+
     # Volume mounts for data persistence and configuration
     volumes:
       - ./mcp-server/data:/app/data:ro
       - ./mcp-server/config:/app/config:ro
       - mcp-logs:/app/logs
-    
+
     # Automatic restart policy
     restart: unless-stopped
 
