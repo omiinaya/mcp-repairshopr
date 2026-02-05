@@ -5,10 +5,14 @@ FROM node:20-alpine AS builder
 # Set working directory
 WORKDIR /app
 
+# Ensure NODE_ENV doesn't affect npm install during build
+ENV NODE_ENV=development
+
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies (including dev for build)
+# Install ALL dependencies (including dev) for build
+# Force install regardless of NODE_ENV
 RUN npm ci && \
     npm cache clean --force
 
