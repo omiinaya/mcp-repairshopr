@@ -8,11 +8,10 @@ WORKDIR /app
 # Ensure NODE_ENV doesn't affect npm install during build
 ENV NODE_ENV=development
 
-# Copy package files
-COPY package*.json ./
+# Copy package files explicitly
+COPY package.json package-lock.json ./
 
 # Install ALL dependencies (including dev) for build
-# Force install regardless of NODE_ENV
 RUN npm ci && \
     npm cache clean --force
 
@@ -35,8 +34,8 @@ RUN apk add --no-cache curl
 RUN addgroup -g 1001 -S nodejs && \
     adduser -S mcpserver -u 1001
 
-# Copy package files
-COPY package*.json ./
+# Copy package files explicitly
+COPY package.json package-lock.json ./
 
 # Install only production dependencies
 RUN npm ci --only=production && \
