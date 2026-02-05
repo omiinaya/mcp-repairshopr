@@ -60,10 +60,9 @@ services:
       - REPAIRSHOPR_RETRY_ATTEMPTS=${REPAIRSHOPR_RETRY_ATTEMPTS:-3}
       - REPAIRSHOPR_RETRY_DELAY_MS=${REPAIRSHOPR_RETRY_DELAY_MS:-1000}
 
-    # Volume mounts for data persistence and configuration
+    # Volume mounts for logs persistence only
+    # Note: data/ and config/ are baked into the Docker image
     volumes:
-      - ./mcp-server/data:/app/data:ro
-      - ./mcp-server/config:/app/config:ro
       - mcp-logs:/app/logs
 
     # Automatic restart policy

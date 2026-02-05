@@ -56,10 +56,9 @@ services:
     # MCP HTTP Transport Configuration (for remote access)
       - MCP_HTTP_PORT=${MCP_HTTP_PORT:-3001}
 
-    # Volume mounts for data persistence and configuration
+    # Volume mounts for logs persistence only
+    # Note: data/ and config/ are baked into the Docker image
     volumes:
-      - ./mcp-server/data:/app/data:ro
-      - ./mcp-server/config:/app/config:ro
       - mcp-logs:/app/logs
     
     # Automatic restart policy
