@@ -7,11 +7,13 @@ import { logger } from './utils/logger';
 import { startupValidator } from './utils/startup-validator';
 import { secretsManager } from './config/secrets';
 import { httpServer } from './server/http-server';
+import { mcpHttpTransport } from './server/mcp-http-transport';
 
 const handleShutdown = async (signal: string): Promise<void> => {
   logger.info(`Received ${signal}, shutting down gracefully...`);
 
   try {
+    await mcpHttpTransport.stop();
     await httpServer.stop();
     await server.stop();
     logger.info('Server shutdown complete');
@@ -72,6 +74,12 @@ const startServer = async (): Promise<void> => {
     await httpServer.start();
     logger.info('HTTP server for health checks started', {
       address: httpServer.getAddress()
+    });
+
+    // Start MCP HTTP transport for remote clients
+    await mcpHttpTransport.start();
+    logger.info('MCP HTTP transport started for remote access', {
+      url: `http://192.168.1.181:3001/mcp`
     });
 
     const health = server.healthCheck();
