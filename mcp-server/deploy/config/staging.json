@@ -1,0 +1,33 @@
+{
+  "serverName": "mcp-repairshopr",
+  "serverVersion": "0.1.0",
+  "port": 3000,
+  "logLevel": "debug",
+  "logFormat": "json",
+  "enableHotReload": true,
+  "enableMetrics": true,
+  "maxConcurrentRequests": 50,
+  "requestTimeout": 30000,
+  "cache": {
+    "maxSize": 5242880,
+    "defaultTTL": 180000,
+    "maxEntries": 500,
+    "enableWarming": true
+  },
+  "monitoring": {
+    "enabled": true,
+    "interval": 30000,
+    "healthCheckInterval": 30000,
+    "healthCheckTimeout": 5000
+  },
+  "data": {
+    "dataDir": "./data",
+    "configDir": "./config",
+    "metadataIndexPath": "./data/metadata-index.json"
+  },
+  "api": {
+    "timeout": 30000,
+    "retryAttempts": 3,
+    "retryDelay": 1000
+  }
+}

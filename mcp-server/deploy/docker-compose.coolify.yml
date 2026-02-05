@@ -1,0 +1,100 @@
+version: '3.8'
+
+# Coolify-optimized Docker Compose configuration
+# This configuration is designed for Coolify's deployment model with dynamic port assignment
+# Compatible with Coolify v4.0+
+
+services:
+  mcp-repairshopr:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    container_name: mcp-repairshopr-server
+    # Coolify will override the port mapping with its assigned dynamic port
+    ports:
+      - "${PORT:-3000}:${PORT:-3000}"
+    
+    # Environment variables with Coolify-specific overrides
+    environment:
+      # Server Configuration
+      - SERVER_NAME=${SERVER_NAME:-mcp-repairshopr}
+      - SERVER_VERSION=${SERVER_VERSION:-0.1.0}
+      # Dynamic port support for Coolify
+      - PORT=${PORT:-3000}
+      - NODE_ENV=${NODE_ENV:-production}
+
+      # Logging Configuration
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+      - LOG_FORMAT=${LOG_FORMAT:-json}
+
+      # Cache Configuration
+      - CACHE_MAX_SIZE=${CACHE_MAX_SIZE:-10485760}
+      - CACHE_DEFAULT_TTL=${CACHE_DEFAULT_TTL:-300000}
+      - CACHE_MAX_ENTRIES=${CACHE_MAX_ENTRIES:-1000}
+      - CACHE_ENABLE_WARMING=${CACHE_ENABLE_WARMING:-true}
+
+      # Performance Configuration
+      - MAX_CONCURRENT_REQUESTS=${MAX_CONCURRENT_REQUESTS:-100}
+      - REQUEST_TIMEOUT=${REQUEST_TIMEOUT:-30000}
+      - ENABLE_METRICS=${ENABLE_METRICS:-true}
+      - ENABLE_HOT_RELOAD=${ENABLE_HOT_RELOAD:-false}
+
+      # Data Configuration
+      - DATA_DIR=./data
+      - CONFIG_DIR=./config
+      - METADATA_INDEX_PATH=./data/metadata-index.json
+
+      # Health Check Configuration
+      - HEALTH_CHECK_INTERVAL=${HEALTH_CHECK_INTERVAL:-60000}
+      - HEALTH_CHECK_TIMEOUT=${HEALTH_CHECK_TIMEOUT:-5000}
+
+      # Monitoring Configuration
+      - MONITORING_ENABLED=${MONITORING_ENABLED:-true}
+      - MONITORING_INTERVAL=${MONITORING_INTERVAL:-60000}
+
+    # Volume mounts for data persistence and configuration
+    volumes:
+      - ./data:/app/data:ro
+      - ./config:/app/config:ro
+      - mcp-logs:/app/logs
+    
+    # Automatic restart policy
+    restart: unless-stopped
+
+    # Health check optimized for Coolify with curl for reliability
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:${PORT:-3000}/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+    # Resource limits for Coolify resource management
+    deploy:
+      resources:
+        limits:
+          cpus: '${CPU_LIMIT:-1.0}'
+          memory: '${MEMORY_LIMIT:-512M}'
+        reservations:
+          cpus: '${CPU_RESERVATION:-0.5}'
+          memory: '${MEMORY_RESERVATION:-256M}'
+
+    # Network configuration
+    networks:
+      - coolify-network
+
+    # Logging configuration for Coolify log management
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+# Named volume for logs persistence
+volumes:
+  mcp-logs:
+    driver: local
+
+networks:
+  coolify-network:
+    driver: bridge

@@ -4,11 +4,15 @@
 
 import { server } from './server';
 import { logger } from './utils/logger';
+import { startupValidator } from './utils/startup-validator';
+import { secretsManager } from './config/secrets';
+import { httpServer } from './server/http-server';
 
 const handleShutdown = async (signal: string): Promise<void> => {
   logger.info(`Received ${signal}, shutting down gracefully...`);
-  
+
   try {
+    await httpServer.stop();
     await server.stop();
     logger.info('Server shutdown complete');
     process.exit(0);
@@ -21,11 +25,58 @@ const handleShutdown = async (signal: string): Promise<void> => {
 const startServer = async (): Promise<void> => {
   try {
     logger.info('Starting MCP server...');
-    await server.start();
+
+    // Run startup validation
+    logger.info('Running startup validation...');
+    const validationResult = startupValidator.validate();
     
+    if (!validationResult.valid) {
+      logger.error('Startup validation failed with errors:', {
+        errors: validationResult.errors
+      });
+      process.exit(1);
+    }
+
+    if (validationResult.warnings.length > 0) {
+      logger.warn('Startup validation completed with warnings:', {
+        warnings: validationResult.warnings
+      });
+    } else {
+      logger.info('Startup validation passed');
+    }
+
+    // Initialize secrets manager
+    logger.info('Initializing secrets manager...');
+    secretsManager.initialize();
+    
+    if (secretsManager.isRepairShoprConfigured()) {
+      logger.info('RepairShopr API configured', {
+        subdomain: secretsManager.getRepairShoprConfig()?.subdomain,
+        apiKey: secretsManager.getMaskedApiKey()
+      });
+      
+      const credentialValidation = secretsManager.validateCredentials();
+      if (!credentialValidation.valid) {
+        logger.warn('RepairShopr credentials validation warnings:', {
+          errors: credentialValidation.errors
+        });
+      }
+    } else {
+      logger.info('RepairShopr API not configured. Running in documentation-only mode.');
+    }
+
+    // Start the server
+    await server.start();
+
+    // Start HTTP server for health checks
+    await httpServer.start();
+    logger.info('HTTP server for health checks started', {
+      address: httpServer.getAddress()
+    });
+
     const health = server.healthCheck();
     logger.info('Server health check', health);
-    
+
     logger.info('Server is ready to accept connections');
   } catch (error) {
     logger.error('Failed to start server', { error });
