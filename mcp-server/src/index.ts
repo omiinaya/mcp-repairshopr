@@ -6,7 +6,7 @@ import { server } from './server';
 import { logger } from './utils/logger';
 import { startupValidator } from './utils/startup-validator';
 import { secretsManager } from './config/secrets';
-import { httpServer } from './server/http-server';
+import { expressServer } from './server/express-server';
 import { mcpHttpTransport } from './server/mcp-http-transport';
 
 const handleShutdown = async (signal: string): Promise<void> => {
@@ -14,7 +14,7 @@ const handleShutdown = async (signal: string): Promise<void> => {
 
   try {
     await mcpHttpTransport.stop();
-    await httpServer.stop();
+    await expressServer.stop();
     await server.stop();
     logger.info('Server shutdown complete');
     process.exit(0);
@@ -70,10 +70,10 @@ const startServer = async (): Promise<void> => {
     // Start the server
     await server.start();
 
-    // Start HTTP server for health checks
-    await httpServer.start();
-    logger.info('HTTP server for health checks started', {
-      address: httpServer.getAddress()
+    // Start Express server for health checks
+    await expressServer.start();
+    logger.info('Express server for health checks started', {
+      address: expressServer.getAddress()
     });
 
     // Start MCP HTTP transport for remote clients
