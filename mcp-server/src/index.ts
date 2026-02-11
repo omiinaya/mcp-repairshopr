@@ -2,6 +2,9 @@
  * MCP Server entry point
  */
 
+import dotenv from 'dotenv';
+dotenv.config();
+
 import { server } from './server';
 import { logger } from './utils/logger';
 import { startupValidator } from './utils/startup-validator';

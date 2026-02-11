@@ -4,8 +4,40 @@
  */
 
 import { Server } from '@modelcontextprotocol/sdk/server';
+import { z } from 'zod';
 import { logger } from '../utils/logger';
 import { config } from '../utils/config';
+
+// Define Zod schemas for MCP methods
+const ListToolsRequestSchema = z.object({
+  method: z.literal('tools/list'),
+  params: z.object({}).optional()
+});
+
+const CallToolRequestSchema = z.object({
+  method: z.literal('tools/call'),
+  params: z.object({
+    name: z.string(),
+    arguments: z.any().optional()
+  })
+});
+
+const InitializeRequestSchema = z.object({
+  method: z.literal('initialize'),
+  params: z.object({
+    protocolVersion: z.string(),
+    capabilities: z.object({}).optional(),
+    clientInfo: z.object({
+      name: z.string(),
+      version: z.string()
+    })
+  })
+});
+
+const InitializedNotificationSchema = z.object({
+  method: z.literal('notifications/initialized'),
+  params: z.object({}).optional()
+});
 
 /**
  * MCP Tool definition interface
@@ -104,12 +136,12 @@ export class ProtocolHandler {
     }
 
     // Set up tool list handler
-    (this.server as any).setRequestHandler('tools/list', async (request: any) => {
+    this.server.setRequestHandler(ListToolsRequestSchema, async (request) => {
       return this.handleToolsList(request);
     });
 
     // Set up tool call handler
-    (this.server as any).setRequestHandler('tools/call', async (request: any) => {
+    this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
       return this.handleToolCall(request);
     });
 
@@ -125,13 +157,13 @@ export class ProtocolHandler {
     }
 
     // Set up initialize handler for capability negotiation
-    (this.server as any).setRequestHandler('initialize', async (request: any) => {
+    this.server.setRequestHandler(InitializeRequestSchema, async (request) => {
       return this.handleInitialize(request);
     });
 
     // Set up initialized notification handler
-    (this.server as any).setRequestHandler('notifications/initialized', async (request: any) => {
-      return this.handleInitialized(request);
+    this.server.setNotificationHandler(InitializedNotificationSchema, async (notification) => {
+      return this.handleInitialized(notification);
     });
 
     logger.info('MCP capability handlers configured');

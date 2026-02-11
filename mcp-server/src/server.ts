@@ -63,10 +63,17 @@ class MCPServer {
 
     try {
       this.startTime = Date.now();
-      this.server = new Server({
+this.server = new Server(
+      {
         name: this.config.serverName,
         version: this.config.serverVersion
-      });
+      },
+      {
+        capabilities: {
+          tools: { listChanged: true }
+        }
+      }
+    );
 
       // Start monitoring service
       monitoringService.startMonitoring();
