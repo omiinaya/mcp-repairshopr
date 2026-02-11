@@ -87,13 +87,34 @@ this.server = new Server(
       this.toolRegistry = new ToolRegistry();
       logger.info('Tool registry initialized');
 
-      // Initialize vector store and metadata index
-      this.vectorStore = new VectorStore();
-      logger.info('Vector store initialized');
+// Initialize vector store and metadata index
+    this.vectorStore = new VectorStore();
+    logger.info('Vector store initialized');
 
-      // Initialize query understanding
-      this.queryUnderstanding = new QueryUnderstanding();
-      logger.info('Query understanding initialized');
+    // Load metadata index from file
+    try {
+      const fs = require('fs');
+      const path = require('path');
+      const metadataPath = path.join(process.cwd(), 'data', 'metadata-index.json');
+      
+      if (fs.existsSync(metadataPath)) {
+        const metadataContent = fs.readFileSync(metadataPath, 'utf-8');
+        const metadataIndex = JSON.parse(metadataContent);
+        this.setMetadataIndex(metadataIndex);
+        logger.info('Metadata index loaded', { 
+          endpoints: metadataIndex.endpoints?.length || 0,
+          resources: Object.keys(metadataIndex.resources || {}).length 
+        });
+      } else {
+        logger.warn('Metadata index file not found', { path: metadataPath });
+      }
+    } catch (error) {
+      logger.error('Failed to load metadata index', { error });
+    }
+
+    // Initialize query understanding
+    this.queryUnderstanding = new QueryUnderstanding();
+    logger.info('Query understanding initialized');
 
       // Initialize relevance scorer
       this.relevanceScorer = new RelevanceScorer(this.vectorStore);
