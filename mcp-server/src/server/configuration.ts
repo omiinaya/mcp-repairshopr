@@ -36,7 +36,7 @@ const DEFAULT_CONFIG: ServerConfig = {
   enableHotReload: true,
   enableMetrics: false,
   maxConcurrentRequests: 100,
-  requestTimeout: 30000
+  requestTimeout: 30000,
 };
 
 /**
@@ -58,12 +58,15 @@ export class ConfigurationManager {
    * @returns Loaded configuration
    */
   loadConfig(configPath?: string): ServerConfig {
-    const resolvedPath = configPath || path.join(process.cwd(), 'config', 'default.json');
+    const resolvedPath =
+      configPath || path.join(process.cwd(), 'config', 'default.json');
     this.configPath = resolvedPath;
 
     try {
       if (!fs.existsSync(resolvedPath)) {
-        logger.warn(`Configuration file not found at ${resolvedPath}, using defaults`);
+        logger.warn(
+          `Configuration file not found at ${resolvedPath}, using defaults`
+        );
         return this.currentConfig;
       }
 
@@ -80,17 +83,22 @@ export class ConfigurationManager {
       // Validate configuration
       const validation = this.validateConfig(this.currentConfig);
       if (!validation.valid) {
-        throw new Error(`Invalid configuration: ${validation.errors.join(', ')}`);
+        throw new Error(
+          `Invalid configuration: ${validation.errors.join(', ')}`
+        );
       }
 
       logger.info('Configuration loaded from file', {
         path: resolvedPath,
-        config: this.currentConfig
+        config: this.currentConfig,
       });
 
       return this.currentConfig;
     } catch (error) {
-      logger.error('Failed to load configuration from file', { error, path: resolvedPath });
+      logger.error('Failed to load configuration from file', {
+        error,
+        path: resolvedPath,
+      });
       throw error;
     }
   }
@@ -152,7 +160,9 @@ export class ConfigurationManager {
     }
 
     if (Object.keys(envConfig).length > 0) {
-      logger.info('Configuration loaded from environment variables', { envConfig });
+      logger.info('Configuration loaded from environment variables', {
+        envConfig,
+      });
     }
 
     return envConfig;
@@ -167,33 +177,57 @@ export class ConfigurationManager {
     const errors: string[] = [];
 
     // Validate serverName
-    if (!config.serverName || typeof config.serverName !== 'string' || config.serverName.trim().length === 0) {
+    if (
+      !config.serverName ||
+      typeof config.serverName !== 'string' ||
+      config.serverName.trim().length === 0
+    ) {
       errors.push('serverName must be a non-empty string');
     }
 
     // Validate serverVersion
-    if (!config.serverVersion || typeof config.serverVersion !== 'string' || config.serverVersion.trim().length === 0) {
+    if (
+      !config.serverVersion ||
+      typeof config.serverVersion !== 'string' ||
+      config.serverVersion.trim().length === 0
+    ) {
       errors.push('serverVersion must be a non-empty string');
     }
 
     // Validate port
-    if (typeof config.port !== 'number' || config.port < 1 || config.port > 65535) {
+    if (
+      typeof config.port !== 'number' ||
+      config.port < 1 ||
+      config.port > 65535
+    ) {
       errors.push('port must be a number between 1 and 65535');
     }
 
     // Validate logLevel
     const validLogLevels = ['error', 'warn', 'info', 'debug', 'trace'];
-    if (!config.logLevel || typeof config.logLevel !== 'string' || !validLogLevels.includes(config.logLevel)) {
+    if (
+      !config.logLevel ||
+      typeof config.logLevel !== 'string' ||
+      !validLogLevels.includes(config.logLevel)
+    ) {
       errors.push(`logLevel must be one of: ${validLogLevels.join(', ')}`);
     }
 
     // Validate docsPath
-    if (!config.docsPath || typeof config.docsPath !== 'string' || config.docsPath.trim().length === 0) {
+    if (
+      !config.docsPath ||
+      typeof config.docsPath !== 'string' ||
+      config.docsPath.trim().length === 0
+    ) {
       errors.push('docsPath must be a non-empty string');
     }
 
     // Validate dataPath
-    if (!config.dataPath || typeof config.dataPath !== 'string' || config.dataPath.trim().length === 0) {
+    if (
+      !config.dataPath ||
+      typeof config.dataPath !== 'string' ||
+      config.dataPath.trim().length === 0
+    ) {
       errors.push('dataPath must be a non-empty string');
     }
 
@@ -208,18 +242,24 @@ export class ConfigurationManager {
     }
 
     // Validate maxConcurrentRequests
-    if (typeof config.maxConcurrentRequests !== 'number' || config.maxConcurrentRequests < 1) {
+    if (
+      typeof config.maxConcurrentRequests !== 'number' ||
+      config.maxConcurrentRequests < 1
+    ) {
       errors.push('maxConcurrentRequests must be a positive number');
     }
 
     // Validate requestTimeout
-    if (typeof config.requestTimeout !== 'number' || config.requestTimeout < 0) {
+    if (
+      typeof config.requestTimeout !== 'number' ||
+      config.requestTimeout < 0
+    ) {
       errors.push('requestTimeout must be a non-negative number');
     }
 
     return {
       valid: errors.length === 0,
-      errors
+      errors,
     };
   }
 
@@ -229,12 +269,15 @@ export class ConfigurationManager {
    * @returns Merged configuration
    */
   mergeConfigs(...configs: Partial<ServerConfig>[]): ServerConfig {
-    return configs.reduce<ServerConfig>((merged, config) => {
-      return {
-        ...merged,
-        ...config
-      };
-    }, { ...DEFAULT_CONFIG });
+    return configs.reduce<ServerConfig>(
+      (merged, config) => {
+        return {
+          ...merged,
+          ...config,
+        };
+      },
+      { ...DEFAULT_CONFIG }
+    );
   }
 
   /**
@@ -242,9 +285,14 @@ export class ConfigurationManager {
    * @param configPath - Path to configuration file to watch
    * @param callback - Callback function to execute on configuration change
    */
-  watchConfig(configPath: string, callback: (config: ServerConfig) => void): void {
+  watchConfig(
+    configPath: string,
+    callback: (config: ServerConfig) => void
+  ): void {
     if (!fs.existsSync(configPath)) {
-      logger.warn(`Cannot watch configuration file: ${configPath} does not exist`);
+      logger.warn(
+        `Cannot watch configuration file: ${configPath} does not exist`
+      );
       return;
     }
 
@@ -263,11 +311,13 @@ export class ConfigurationManager {
             const newConfig = this.loadConfig(configPath);
 
             // Notify all callbacks
-            this.changeCallbacks.forEach(cb => {
+            this.changeCallbacks.forEach((cb) => {
               try {
                 cb(newConfig);
               } catch (error) {
-                logger.error('Error in configuration change callback', { error });
+                logger.error('Error in configuration change callback', {
+                  error,
+                });
               }
             });
 
@@ -280,7 +330,10 @@ export class ConfigurationManager {
 
       logger.info(`Watching configuration file for changes: ${configPath}`);
     } catch (error) {
-      logger.error('Failed to watch configuration file', { error, path: configPath });
+      logger.error('Failed to watch configuration file', {
+        error,
+        path: configPath,
+      });
       throw error;
     }
   }
@@ -303,7 +356,11 @@ export class ConfigurationManager {
    * @param toVersion - Target version
    * @returns Migrated configuration
    */
-  migrateConfig(config: any, fromVersion: string, toVersion: string): ServerConfig {
+  migrateConfig(
+    config: any,
+    fromVersion: string,
+    toVersion: string
+  ): ServerConfig {
     logger.info(`Migrating configuration from ${fromVersion} to ${toVersion}`);
 
     let migratedConfig = { ...config };
@@ -312,10 +369,18 @@ export class ConfigurationManager {
     // Example: Add new fields with defaults when upgrading
     if (this.compareVersions(fromVersion, toVersion) < 0) {
       // Upgrading
-      migratedConfig = this.applyUpgrades(migratedConfig, fromVersion, toVersion);
+      migratedConfig = this.applyUpgrades(
+        migratedConfig,
+        fromVersion,
+        toVersion
+      );
     } else if (this.compareVersions(fromVersion, toVersion) > 0) {
       // Downgrading
-      migratedConfig = this.applyDowngrades(migratedConfig, fromVersion, toVersion);
+      migratedConfig = this.applyDowngrades(
+        migratedConfig,
+        fromVersion,
+        toVersion
+      );
     }
 
     // Ensure all required fields exist
@@ -323,7 +388,7 @@ export class ConfigurationManager {
 
     logger.info('Configuration migrated successfully', {
       fromVersion,
-      toVersion
+      toVersion,
     });
 
     return migratedConfig;
@@ -332,7 +397,11 @@ export class ConfigurationManager {
   /**
    * Apply version upgrades
    */
-  private applyUpgrades(config: any, fromVersion: string, toVersion: string): any {
+  private applyUpgrades(
+    config: any,
+    fromVersion: string,
+    toVersion: string
+  ): any {
     let upgraded = { ...config };
 
     // Example: Add new fields introduced in specific versions
@@ -358,7 +427,11 @@ export class ConfigurationManager {
   /**
    * Apply version downgrades
    */
-  private applyDowngrades(config: any, fromVersion: string, toVersion: string): any {
+  private applyDowngrades(
+    config: any,
+    fromVersion: string,
+    toVersion: string
+  ): any {
     let downgraded = { ...config };
 
     // Remove fields that don't exist in older versions
@@ -402,7 +475,9 @@ export class ConfigurationManager {
       // Validate before saving
       const validation = this.validateConfig(config);
       if (!validation.valid) {
-        throw new Error(`Cannot save invalid configuration: ${validation.errors.join(', ')}`);
+        throw new Error(
+          `Cannot save invalid configuration: ${validation.errors.join(', ')}`
+        );
       }
 
       // Ensure directory exists

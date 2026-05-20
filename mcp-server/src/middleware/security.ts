@@ -20,7 +20,7 @@ const DEFAULT_CONFIG: SecurityConfig = {
   corsOrigin: process.env.CORS_ORIGIN || '*',
   corsEnabled: process.env.CORS_ENABLED !== 'false',
   hstsEnabled: process.env.HSTS_ENABLED !== 'false',
-  contentSecurityPolicy: process.env.CSP_ENABLED !== 'false'
+  contentSecurityPolicy: process.env.CSP_ENABLED !== 'false',
 };
 
 /**
@@ -28,28 +28,32 @@ const DEFAULT_CONFIG: SecurityConfig = {
  */
 export function getHelmetMiddleware(config: SecurityConfig = DEFAULT_CONFIG) {
   return helmet({
-    contentSecurityPolicy: config.contentSecurityPolicy ? {
-      directives: {
-        defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", "'unsafe-inline'"],
-        styleSrc: ["'self'", "'unsafe-inline'"],
-        imgSrc: ["'self'", 'data:', 'https:'],
-        connectSrc: ["'self'"],
-        fontSrc: ["'self'"],
-        objectSrc: ["'none'"],
-        mediaSrc: ["'self'"],
-        frameSrc: ["'none'"]
-      }
-    } : false,
+    contentSecurityPolicy: config.contentSecurityPolicy
+      ? {
+          directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'", "'unsafe-inline'"],
+            styleSrc: ["'self'", "'unsafe-inline'"],
+            imgSrc: ["'self'", 'data:', 'https:'],
+            connectSrc: ["'self'"],
+            fontSrc: ["'self'"],
+            objectSrc: ["'none'"],
+            mediaSrc: ["'self'"],
+            frameSrc: ["'none'"],
+          },
+        }
+      : false,
     crossOriginEmbedderPolicy: false,
-    hsts: config.hstsEnabled ? {
-      maxAge: 31536000,
-      includeSubDomains: true,
-      preload: true
-    } : false,
+    hsts: config.hstsEnabled
+      ? {
+          maxAge: 31536000,
+          includeSubDomains: true,
+          preload: true,
+        }
+      : false,
     noSniff: true,
     xssFilter: true,
-    referrerPolicy: { policy: 'strict-origin-when-cross-origin' }
+    referrerPolicy: { policy: 'strict-origin-when-cross-origin' },
   });
 }
 
@@ -62,13 +66,18 @@ export function getCorsMiddleware(config: SecurityConfig = DEFAULT_CONFIG) {
   }
 
   const origin = config.corsOrigin;
-  
+
   return cors({
-    origin: origin === '*' ? true : (typeof origin === 'string' ? origin.split(',') : origin),
+    origin:
+      origin === '*'
+        ? true
+        : typeof origin === 'string'
+          ? origin.split(',')
+          : origin,
     methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Request-ID'],
     credentials: true,
-    maxAge: 86400 // 24 hours
+    maxAge: 86400, // 24 hours
   });
 }
 
@@ -84,7 +93,7 @@ export function getCompressionMiddleware() {
       // Use default filter
       return compression.filter(req, res);
     },
-    level: 6 // Balanced compression level
+    level: 6, // Balanced compression level
   });
 }
 
@@ -94,7 +103,7 @@ export function getCompressionMiddleware() {
 export function getRequestSizeLimit() {
   const maxSize = parseInt(process.env.MAX_REQUEST_SIZE_MB || '10', 10);
   return {
-    limit: `${maxSize}mb`
+    limit: `${maxSize}mb`,
   };
 }
 
@@ -105,14 +114,14 @@ export function getTimeoutMiddleware(timeoutMs: number = 30000) {
   return (req: Request, res: Response, next: NextFunction) => {
     const timeout = setTimeout(() => {
       if (!res.headersSent) {
-        logger.warn('Request timeout', { 
-          path: req.path, 
+        logger.warn('Request timeout', {
+          path: req.path,
           method: req.method,
-          timeoutMs 
+          timeoutMs,
         });
         res.status(408).json({
           error: 'Request Timeout',
-          message: 'The request took too long to process'
+          message: 'The request took too long to process',
         });
       }
     }, timeoutMs);

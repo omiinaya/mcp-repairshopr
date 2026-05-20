@@ -7,7 +7,7 @@ import {
   getCommonPatterns,
   getResponsesByPattern,
   getStatusInfo,
-  ResponseLookupParams
+  ResponseLookupParams,
 } from '../../src/tools/responses';
 import { MetadataIndex, buildMetadataIndex } from '../../src/parser/metadata';
 import { ApiDocument, ApiEndpoint } from '../../src/utils/types';
@@ -35,8 +35,8 @@ describe('Response Reference Tool', () => {
                 type: 'integer',
                 required: false,
                 description: 'Page number for pagination',
-                paramType: 'query'
-              }
+                paramType: 'query',
+              },
             ],
             responses: [
               {
@@ -45,23 +45,23 @@ describe('Response Reference Tool', () => {
                 example: {
                   data: [
                     { id: 1, name: 'John Doe', email: 'john@example.com' },
-                    { id: 2, name: 'Jane Smith', email: 'jane@example.com' }
+                    { id: 2, name: 'Jane Smith', email: 'jane@example.com' },
                   ],
                   meta: {
                     total: 2,
                     page: 1,
                     per_page: 20,
-                    total_pages: 1
-                  }
-                }
+                    total_pages: 1,
+                  },
+                },
               },
               {
                 statusCode: 401,
                 description: 'Unauthorized - authentication required',
                 example: {
                   error: 'Unauthorized',
-                  message: 'Invalid or missing authentication token'
-                }
+                  message: 'Invalid or missing authentication token',
+                },
               },
               {
                 statusCode: 429,
@@ -69,10 +69,10 @@ describe('Response Reference Tool', () => {
                 example: {
                   error: 'Too Many Requests',
                   message: 'Rate limit exceeded',
-                  retry_after: 60
-                }
-              }
-            ]
+                  retry_after: 60,
+                },
+              },
+            ],
           },
           {
             resource: 'Customer',
@@ -87,8 +87,8 @@ describe('Response Reference Tool', () => {
                 type: 'integer',
                 required: true,
                 description: 'Customer ID',
-                paramType: 'path'
-              }
+                paramType: 'path',
+              },
             ],
             responses: [
               {
@@ -99,18 +99,18 @@ describe('Response Reference Tool', () => {
                   name: 'John Doe',
                   email: 'john@example.com',
                   phone: '555-1234',
-                  created_at: '2024-01-01T00:00:00Z'
-                }
+                  created_at: '2024-01-01T00:00:00Z',
+                },
               },
               {
                 statusCode: 404,
                 description: 'Customer not found',
                 example: {
                   error: 'Not Found',
-                  message: 'The requested customer could not be found'
-                }
-              }
-            ]
+                  message: 'The requested customer could not be found',
+                },
+              },
+            ],
           },
           {
             resource: 'Customer',
@@ -126,8 +126,8 @@ describe('Response Reference Tool', () => {
                 type: 'string',
                 required: true,
                 description: 'Customer name',
-                paramType: 'body'
-              }
+                paramType: 'body',
+              },
             ],
             responses: [
               {
@@ -137,8 +137,8 @@ describe('Response Reference Tool', () => {
                   id: 1,
                   name: 'John Doe',
                   email: 'john@example.com',
-                  created_at: '2024-01-01T00:00:00Z'
-                }
+                  created_at: '2024-01-01T00:00:00Z',
+                },
               },
               {
                 statusCode: 422,
@@ -148,11 +148,11 @@ describe('Response Reference Tool', () => {
                   message: 'The request could not be validated',
                   errors: {
                     name: ['Name is required'],
-                    email: ['Invalid email format']
-                  }
-                }
-              }
-            ]
+                    email: ['Invalid email format'],
+                  },
+                },
+              },
+            ],
           },
           {
             resource: 'Customer',
@@ -167,25 +167,25 @@ describe('Response Reference Tool', () => {
                 type: 'integer',
                 required: true,
                 description: 'Customer ID',
-                paramType: 'path'
-              }
+                paramType: 'path',
+              },
             ],
             responses: [
               {
                 statusCode: 204,
-                description: 'Customer deleted successfully'
+                description: 'Customer deleted successfully',
               },
               {
                 statusCode: 404,
                 description: 'Customer not found',
                 example: {
                   error: 'Not Found',
-                  message: 'The requested customer could not be found'
-                }
-              }
-            ]
-          }
-        ]
+                  message: 'The requested customer could not be found',
+                },
+              },
+            ],
+          },
+        ],
       },
       {
         resourceName: 'Ticket',
@@ -203,21 +203,21 @@ describe('Response Reference Tool', () => {
                 statusCode: 200,
                 description: 'Successful response with ticket list',
                 example: {
-                  tickets: []
-                }
+                  tickets: [],
+                },
               },
               {
                 statusCode: 500,
                 description: 'Internal server error',
                 example: {
                   error: 'Internal Server Error',
-                  message: 'An unexpected error occurred'
-                }
-              }
-            ]
-          }
-        ]
-      }
+                  message: 'An unexpected error occurred',
+                },
+              },
+            ],
+          },
+        ],
+      },
     ];
 
     // Build metadata index from sample documents
@@ -229,7 +229,7 @@ describe('Response Reference Tool', () => {
     test('should find all responses for an endpoint', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers',
-        method: 'GET'
+        method: 'GET',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -244,7 +244,7 @@ describe('Response Reference Tool', () => {
     test('should find responses for endpoint with path parameters', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers/{id}',
-        method: 'GET'
+        method: 'GET',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -258,7 +258,7 @@ describe('Response Reference Tool', () => {
     test('should find responses for POST endpoint', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers',
-        method: 'POST'
+        method: 'POST',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -272,7 +272,7 @@ describe('Response Reference Tool', () => {
     test('should find responses for DELETE endpoint', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers/{id}',
-        method: 'DELETE'
+        method: 'DELETE',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -286,7 +286,7 @@ describe('Response Reference Tool', () => {
     test('should return null for non-existent endpoint', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/nonexistent',
-        method: 'GET'
+        method: 'GET',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -297,7 +297,7 @@ describe('Response Reference Tool', () => {
     test('should return null for wrong method', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers/{id}',
-        method: 'POST'
+        method: 'POST',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -308,7 +308,7 @@ describe('Response Reference Tool', () => {
     test('should handle lowercase method', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers',
-        method: 'get'
+        method: 'get',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -323,7 +323,7 @@ describe('Response Reference Tool', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers',
         method: 'GET',
-        statusCode: '200'
+        statusCode: '200',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -337,7 +337,7 @@ describe('Response Reference Tool', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers/{id}',
         method: 'GET',
-        statusCode: '404'
+        statusCode: '404',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -351,7 +351,7 @@ describe('Response Reference Tool', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers',
         method: 'POST',
-        statusCode: '201'
+        statusCode: '201',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -365,7 +365,7 @@ describe('Response Reference Tool', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers/{id}',
         method: 'DELETE',
-        statusCode: '204'
+        statusCode: '204',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -379,7 +379,7 @@ describe('Response Reference Tool', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers',
         method: 'GET',
-        statusCode: '999'
+        statusCode: '999',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -393,7 +393,7 @@ describe('Response Reference Tool', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers',
         method: 'GET',
-        statusCode: 'invalid'
+        statusCode: 'invalid',
       };
 
       expect(() => {
@@ -407,7 +407,7 @@ describe('Response Reference Tool', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers',
         method: 'GET',
-        statusCode: '200'
+        statusCode: '200',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -425,7 +425,7 @@ describe('Response Reference Tool', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers',
         method: 'POST',
-        statusCode: '201'
+        statusCode: '201',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -441,7 +441,7 @@ describe('Response Reference Tool', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers/{id}',
         method: 'DELETE',
-        statusCode: '204'
+        statusCode: '204',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -457,7 +457,7 @@ describe('Response Reference Tool', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers',
         method: 'GET',
-        statusCode: '401'
+        statusCode: '401',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -474,7 +474,7 @@ describe('Response Reference Tool', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers/{id}',
         method: 'GET',
-        statusCode: '404'
+        statusCode: '404',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -491,7 +491,7 @@ describe('Response Reference Tool', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers',
         method: 'POST',
-        statusCode: '422'
+        statusCode: '422',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -508,7 +508,7 @@ describe('Response Reference Tool', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers',
         method: 'GET',
-        statusCode: '429'
+        statusCode: '429',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -525,7 +525,7 @@ describe('Response Reference Tool', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/tickets',
         method: 'GET',
-        statusCode: '500'
+        statusCode: '500',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -550,9 +550,9 @@ describe('Response Reference Tool', () => {
         responses: [
           {
             statusCode: 418,
-            description: "I'm a teapot"
-          }
-        ]
+            description: "I'm a teapot",
+          },
+        ],
       };
 
       const testIndex: MetadataIndex = {
@@ -560,12 +560,12 @@ describe('Response Reference Tool', () => {
         endpointsByPath: new Map([['GET:/test', endpoint]]),
         endpointsByPermission: new Map(),
         endpointsByMethod: new Map(),
-        allEndpoints: [endpoint]
+        allEndpoints: [endpoint],
       };
 
       const params: ResponseLookupParams = {
         endpointPath: '/test',
-        method: 'GET'
+        method: 'GET',
       };
 
       const result = getResponses(params, testIndex);
@@ -584,7 +584,7 @@ describe('Response Reference Tool', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers',
         method: 'GET',
-        statusCode: '200'
+        statusCode: '200',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -599,7 +599,7 @@ describe('Response Reference Tool', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers',
         method: 'GET',
-        statusCode: '200'
+        statusCode: '200',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -616,7 +616,7 @@ describe('Response Reference Tool', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers',
         method: 'GET',
-        statusCode: '200'
+        statusCode: '200',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -630,7 +630,7 @@ describe('Response Reference Tool', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers/{id}',
         method: 'GET',
-        statusCode: '200'
+        statusCode: '200',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -647,7 +647,7 @@ describe('Response Reference Tool', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers/{id}',
         method: 'DELETE',
-        statusCode: '204'
+        statusCode: '204',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -661,7 +661,7 @@ describe('Response Reference Tool', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers/{id}',
         method: 'GET',
-        statusCode: '200'
+        statusCode: '200',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -677,7 +677,7 @@ describe('Response Reference Tool', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers',
         method: 'GET',
-        statusCode: '401'
+        statusCode: '401',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -694,7 +694,7 @@ describe('Response Reference Tool', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers/{id}',
         method: 'GET',
-        statusCode: '404'
+        statusCode: '404',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -710,7 +710,7 @@ describe('Response Reference Tool', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers',
         method: 'POST',
-        statusCode: '422'
+        statusCode: '422',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -726,7 +726,7 @@ describe('Response Reference Tool', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers',
         method: 'GET',
-        statusCode: '429'
+        statusCode: '429',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -742,7 +742,7 @@ describe('Response Reference Tool', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/tickets',
         method: 'GET',
-        statusCode: '500'
+        statusCode: '500',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -758,7 +758,7 @@ describe('Response Reference Tool', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers',
         method: 'GET',
-        statusCode: '401'
+        statusCode: '401',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -771,7 +771,7 @@ describe('Response Reference Tool', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers',
         method: 'POST',
-        statusCode: '422'
+        statusCode: '422',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -784,7 +784,7 @@ describe('Response Reference Tool', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers',
         method: 'GET',
-        statusCode: '200'
+        statusCode: '200',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -797,7 +797,7 @@ describe('Response Reference Tool', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers',
         method: 'GET',
-        statusCode: '404'
+        statusCode: '404',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -812,7 +812,7 @@ describe('Response Reference Tool', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers',
         method: 'GET',
-        statusCode: '200'
+        statusCode: '200',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -830,7 +830,7 @@ describe('Response Reference Tool', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers/{id}',
         method: 'GET',
-        statusCode: '200'
+        statusCode: '200',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -847,7 +847,7 @@ describe('Response Reference Tool', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers',
         method: 'GET',
-        statusCode: '401'
+        statusCode: '401',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -864,7 +864,7 @@ describe('Response Reference Tool', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers/{id}',
         method: 'DELETE',
-        statusCode: '204'
+        statusCode: '204',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -888,9 +888,9 @@ describe('Response Reference Tool', () => {
         responses: [
           {
             statusCode: 200,
-            description: 'Success'
-          }
-        ]
+            description: 'Success',
+          },
+        ],
       };
 
       const testIndex: MetadataIndex = {
@@ -898,12 +898,12 @@ describe('Response Reference Tool', () => {
         endpointsByPath: new Map([['GET:/test', endpoint]]),
         endpointsByPermission: new Map(),
         endpointsByMethod: new Map(),
-        allEndpoints: [endpoint]
+        allEndpoints: [endpoint],
       };
 
       const params: ResponseLookupParams = {
         endpointPath: '/test',
-        method: 'GET'
+        method: 'GET',
       };
 
       const result = getResponses(params, testIndex);
@@ -918,7 +918,7 @@ describe('Response Reference Tool', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers',
         method: 'GET',
-        statusCode: '200'
+        statusCode: '200',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -934,7 +934,7 @@ describe('Response Reference Tool', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers/{id}',
         method: 'GET',
-        statusCode: '200'
+        statusCode: '200',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -949,7 +949,7 @@ describe('Response Reference Tool', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers',
         method: 'POST',
-        statusCode: '201'
+        statusCode: '201',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -964,7 +964,7 @@ describe('Response Reference Tool', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers',
         method: 'POST',
-        statusCode: '422'
+        statusCode: '422',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -979,7 +979,7 @@ describe('Response Reference Tool', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers',
         method: 'GET',
-        statusCode: '401'
+        statusCode: '401',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -994,7 +994,7 @@ describe('Response Reference Tool', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers/{id}',
         method: 'GET',
-        statusCode: '404'
+        statusCode: '404',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -1009,7 +1009,7 @@ describe('Response Reference Tool', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers',
         method: 'GET',
-        statusCode: '429'
+        statusCode: '429',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -1024,7 +1024,7 @@ describe('Response Reference Tool', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/tickets',
         method: 'GET',
-        statusCode: '500'
+        statusCode: '500',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -1039,7 +1039,7 @@ describe('Response Reference Tool', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers/{id}',
         method: 'DELETE',
-        statusCode: '204'
+        statusCode: '204',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -1053,15 +1053,21 @@ describe('Response Reference Tool', () => {
     test('should include common patterns in result', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers',
-        method: 'GET'
+        method: 'GET',
       };
 
       const result = getResponses(params, metadataIndex);
 
       expect(result!.commonPatterns.length).toBeGreaterThan(0);
-      expect(result!.commonPatterns.some(p => p.name === 'pagination')).toBe(true);
-      expect(result!.commonPatterns.some(p => p.name === 'authentication_error')).toBe(true);
-      expect(result!.commonPatterns.some(p => p.name === 'rate_limit_error')).toBe(true);
+      expect(result!.commonPatterns.some((p) => p.name === 'pagination')).toBe(
+        true
+      );
+      expect(
+        result!.commonPatterns.some((p) => p.name === 'authentication_error')
+      ).toBe(true);
+      expect(
+        result!.commonPatterns.some((p) => p.name === 'rate_limit_error')
+      ).toBe(true);
     });
   });
 
@@ -1069,7 +1075,7 @@ describe('Response Reference Tool', () => {
     test('should calculate total count correctly', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers',
-        method: 'GET'
+        method: 'GET',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -1080,7 +1086,7 @@ describe('Response Reference Tool', () => {
     test('should calculate success count correctly', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers',
-        method: 'GET'
+        method: 'GET',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -1091,7 +1097,7 @@ describe('Response Reference Tool', () => {
     test('should calculate error count correctly', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers',
-        method: 'GET'
+        method: 'GET',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -1102,7 +1108,7 @@ describe('Response Reference Tool', () => {
     test('should calculate statistics for endpoint with only success responses', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers/{id}',
-        method: 'GET'
+        method: 'GET',
       };
 
       const result = getResponses(params, metadataIndex);
@@ -1124,13 +1130,13 @@ describe('Response Reference Tool', () => {
         responses: [
           {
             statusCode: 404,
-            description: 'Not found'
+            description: 'Not found',
           },
           {
             statusCode: 500,
-            description: 'Server error'
-          }
-        ]
+            description: 'Server error',
+          },
+        ],
       };
 
       const testIndex: MetadataIndex = {
@@ -1138,12 +1144,12 @@ describe('Response Reference Tool', () => {
         endpointsByPath: new Map([['GET:/test', endpoint]]),
         endpointsByPermission: new Map(),
         endpointsByMethod: new Map(),
-        allEndpoints: [endpoint]
+        allEndpoints: [endpoint],
       };
 
       const params: ResponseLookupParams = {
         endpointPath: '/test',
-        method: 'GET'
+        method: 'GET',
       };
 
       const result = getResponses(params, testIndex);
@@ -1158,7 +1164,7 @@ describe('Response Reference Tool', () => {
     test('should throw error when endpointPath is missing', () => {
       const params: ResponseLookupParams = {
         endpointPath: '',
-        method: 'GET'
+        method: 'GET',
       };
 
       expect(() => {
@@ -1169,7 +1175,7 @@ describe('Response Reference Tool', () => {
     test('should throw error when method is missing', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers',
-        method: ''
+        method: '',
       };
 
       expect(() => {
@@ -1181,7 +1187,7 @@ describe('Response Reference Tool', () => {
       const params: ResponseLookupParams = {
         endpointPath: '/customers',
         method: 'GET',
-        statusCode: 'abc'
+        statusCode: 'abc',
       };
 
       expect(() => {
@@ -1196,20 +1202,22 @@ describe('Response Reference Tool', () => {
 
       expect(patterns).toBeDefined();
       expect(patterns.length).toBeGreaterThan(0);
-      expect(patterns.some(p => p.name === 'pagination')).toBe(true);
-      expect(patterns.some(p => p.name === 'single_resource')).toBe(true);
-      expect(patterns.some(p => p.name === 'created_resource')).toBe(true);
-      expect(patterns.some(p => p.name === 'validation_error')).toBe(true);
-      expect(patterns.some(p => p.name === 'authentication_error')).toBe(true);
-      expect(patterns.some(p => p.name === 'not_found_error')).toBe(true);
-      expect(patterns.some(p => p.name === 'rate_limit_error')).toBe(true);
-      expect(patterns.some(p => p.name === 'server_error')).toBe(true);
-      expect(patterns.some(p => p.name === 'no_content')).toBe(true);
+      expect(patterns.some((p) => p.name === 'pagination')).toBe(true);
+      expect(patterns.some((p) => p.name === 'single_resource')).toBe(true);
+      expect(patterns.some((p) => p.name === 'created_resource')).toBe(true);
+      expect(patterns.some((p) => p.name === 'validation_error')).toBe(true);
+      expect(patterns.some((p) => p.name === 'authentication_error')).toBe(
+        true
+      );
+      expect(patterns.some((p) => p.name === 'not_found_error')).toBe(true);
+      expect(patterns.some((p) => p.name === 'rate_limit_error')).toBe(true);
+      expect(patterns.some((p) => p.name === 'server_error')).toBe(true);
+      expect(patterns.some((p) => p.name === 'no_content')).toBe(true);
     });
 
     test('should include pattern metadata', () => {
       const patterns = getCommonPatterns();
-      const paginationPattern = patterns.find(p => p.name === 'pagination');
+      const paginationPattern = patterns.find((p) => p.name === 'pagination');
 
       expect(paginationPattern).toBeDefined();
       expect(paginationPattern!.description).toBeDefined();
@@ -1263,59 +1271,79 @@ describe('Response Reference Tool', () => {
 
   describe('getResponsesByPattern', () => {
     test('should find responses matching pagination pattern', () => {
-      const endpoint = sampleEndpoints.find(e => e.path === '/customers' && e.method === 'GET')!;
+      const endpoint = sampleEndpoints.find(
+        (e) => e.path === '/customers' && e.method === 'GET'
+      )!;
       const result = getResponsesByPattern(endpoint, 'pagination');
 
       expect(result.length).toBeGreaterThan(0);
-      expect(result.some(r => r.statusCode === 200)).toBe(true);
-      expect(result.every(r => r.pattern?.name === 'pagination')).toBe(true);
+      expect(result.some((r) => r.statusCode === 200)).toBe(true);
+      expect(result.every((r) => r.pattern?.name === 'pagination')).toBe(true);
     });
 
     test('should find responses matching validation_error pattern', () => {
-      const endpoint = sampleEndpoints.find(e => e.path === '/customers' && e.method === 'POST')!;
+      const endpoint = sampleEndpoints.find(
+        (e) => e.path === '/customers' && e.method === 'POST'
+      )!;
       const result = getResponsesByPattern(endpoint, 'validation_error');
 
       expect(result.length).toBeGreaterThan(0);
-      expect(result.some(r => r.statusCode === 422)).toBe(true);
-      expect(result.every(r => r.pattern?.name === 'validation_error')).toBe(true);
+      expect(result.some((r) => r.statusCode === 422)).toBe(true);
+      expect(result.every((r) => r.pattern?.name === 'validation_error')).toBe(
+        true
+      );
     });
 
     test('should find responses matching authentication_error pattern', () => {
-      const endpoint = sampleEndpoints.find(e => e.path === '/customers' && e.method === 'GET')!;
+      const endpoint = sampleEndpoints.find(
+        (e) => e.path === '/customers' && e.method === 'GET'
+      )!;
       const result = getResponsesByPattern(endpoint, 'authentication_error');
 
       expect(result.length).toBeGreaterThan(0);
-      expect(result.some(r => r.statusCode === 401)).toBe(true);
-      expect(result.every(r => r.pattern?.name === 'authentication_error')).toBe(true);
+      expect(result.some((r) => r.statusCode === 401)).toBe(true);
+      expect(
+        result.every((r) => r.pattern?.name === 'authentication_error')
+      ).toBe(true);
     });
 
     test('should find responses matching not_found_error pattern', () => {
-      const endpoint = sampleEndpoints.find(e => e.path === '/customers/{id}' && e.method === 'GET')!;
+      const endpoint = sampleEndpoints.find(
+        (e) => e.path === '/customers/{id}' && e.method === 'GET'
+      )!;
       const result = getResponsesByPattern(endpoint, 'not_found_error');
 
       expect(result.length).toBeGreaterThan(0);
-      expect(result.some(r => r.statusCode === 404)).toBe(true);
-      expect(result.every(r => r.pattern?.name === 'not_found_error')).toBe(true);
+      expect(result.some((r) => r.statusCode === 404)).toBe(true);
+      expect(result.every((r) => r.pattern?.name === 'not_found_error')).toBe(
+        true
+      );
     });
 
     test('should find responses matching no_content pattern', () => {
-      const endpoint = sampleEndpoints.find(e => e.path === '/customers/{id}' && e.method === 'DELETE')!;
+      const endpoint = sampleEndpoints.find(
+        (e) => e.path === '/customers/{id}' && e.method === 'DELETE'
+      )!;
       const result = getResponsesByPattern(endpoint, 'no_content');
 
       expect(result.length).toBeGreaterThan(0);
-      expect(result.some(r => r.statusCode === 204)).toBe(true);
-      expect(result.every(r => r.pattern?.name === 'no_content')).toBe(true);
+      expect(result.some((r) => r.statusCode === 204)).toBe(true);
+      expect(result.every((r) => r.pattern?.name === 'no_content')).toBe(true);
     });
 
     test('should return empty array for non-existent pattern', () => {
-      const endpoint = sampleEndpoints.find(e => e.path === '/customers' && e.method === 'GET')!;
+      const endpoint = sampleEndpoints.find(
+        (e) => e.path === '/customers' && e.method === 'GET'
+      )!;
       const result = getResponsesByPattern(endpoint, 'nonexistent');
 
       expect(result).toEqual([]);
     });
 
     test('should return empty array when no responses match pattern', () => {
-      const endpoint = sampleEndpoints.find(e => e.path === '/customers/{id}' && e.method === 'GET')!;
+      const endpoint = sampleEndpoints.find(
+        (e) => e.path === '/customers/{id}' && e.method === 'GET'
+      )!;
       const result = getResponsesByPattern(endpoint, 'pagination');
 
       expect(result).toEqual([]);

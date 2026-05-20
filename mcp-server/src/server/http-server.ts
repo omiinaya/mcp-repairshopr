@@ -6,7 +6,10 @@
 import http from 'http';
 import { logger } from '../utils/logger';
 import { healthEndpoints } from './health-endpoints';
-import { rateLimiters, createRateLimitMiddleware } from '../middleware/rate-limiter';
+import {
+  rateLimiters,
+  createRateLimitMiddleware,
+} from '../middleware/rate-limiter';
 import { server as mcpServer } from '../server';
 
 export class HTTPServer {
@@ -58,7 +61,10 @@ export class HTTPServer {
   /**
    * Handle HTTP requests
    */
-  private async handleRequest(req: http.IncomingMessage, res: http.ServerResponse): Promise<void> {
+  private async handleRequest(
+    req: http.IncomingMessage,
+    res: http.ServerResponse
+  ): Promise<void> {
     const url = new URL(req.url || '/', `http://${req.headers.host}`);
     const path = url.pathname;
     const method = req.method || 'GET';
@@ -100,26 +106,39 @@ export class HTTPServer {
   /**
    * Handle health check request
    */
-  private async handleHealthCheck(req: http.IncomingMessage, res: http.ServerResponse): Promise<void> {
+  private async handleHealthCheck(
+    req: http.IncomingMessage,
+    res: http.ServerResponse
+  ): Promise<void> {
     const rateLimitResult = rateLimiters.health.isAllowed('health');
-    
+
     if (!rateLimitResult.allowed) {
       res.statusCode = 429;
       res.setHeader('Content-Type', 'application/json');
-      res.setHeader('X-RateLimit-Limit', rateLimiters.health.getStats().maxRequests);
+      res.setHeader(
+        'X-RateLimit-Limit',
+        rateLimiters.health.getStats().maxRequests
+      );
       res.setHeader('X-RateLimit-Remaining', rateLimitResult.remaining);
-      res.end(JSON.stringify({
-        error: 'Too Many Requests',
-        retryAfter: Math.ceil((rateLimitResult.resetTime - Date.now()) / 1000)
-      }));
+      res.end(
+        JSON.stringify({
+          error: 'Too Many Requests',
+          retryAfter: Math.ceil(
+            (rateLimitResult.resetTime - Date.now()) / 1000
+          ),
+        })
+      );
       return;
     }
 
     const healthStatus = healthEndpoints.getHealthStatus();
-    
+
     res.statusCode = healthStatus.status === 'healthy' ? 200 : 503;
     res.setHeader('Content-Type', 'application/json');
-    res.setHeader('X-RateLimit-Limit', rateLimiters.health.getStats().maxRequests);
+    res.setHeader(
+      'X-RateLimit-Limit',
+      rateLimiters.health.getStats().maxRequests
+    );
     res.setHeader('X-RateLimit-Remaining', rateLimitResult.remaining);
     res.end(JSON.stringify(healthStatus, null, 2));
   }
@@ -127,21 +146,28 @@ export class HTTPServer {
   /**
    * Handle readiness check request
    */
-  private async handleReadinessCheck(req: http.IncomingMessage, res: http.ServerResponse): Promise<void> {
+  private async handleReadinessCheck(
+    req: http.IncomingMessage,
+    res: http.ServerResponse
+  ): Promise<void> {
     const rateLimitResult = rateLimiters.health.isAllowed('readiness');
-    
+
     if (!rateLimitResult.allowed) {
       res.statusCode = 429;
       res.setHeader('Content-Type', 'application/json');
-      res.end(JSON.stringify({
-        error: 'Too Many Requests',
-        retryAfter: Math.ceil((rateLimitResult.resetTime - Date.now()) / 1000)
-      }));
+      res.end(
+        JSON.stringify({
+          error: 'Too Many Requests',
+          retryAfter: Math.ceil(
+            (rateLimitResult.resetTime - Date.now()) / 1000
+          ),
+        })
+      );
       return;
     }
 
     const readinessStatus = healthEndpoints.getReadinessStatus();
-    
+
     res.statusCode = readinessStatus.ready ? 200 : 503;
     res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify(readinessStatus, null, 2));
@@ -150,21 +176,28 @@ export class HTTPServer {
   /**
    * Handle liveness check request
    */
-  private async handleLivenessCheck(req: http.IncomingMessage, res: http.ServerResponse): Promise<void> {
+  private async handleLivenessCheck(
+    req: http.IncomingMessage,
+    res: http.ServerResponse
+  ): Promise<void> {
     const rateLimitResult = rateLimiters.health.isAllowed('liveness');
-    
+
     if (!rateLimitResult.allowed) {
       res.statusCode = 429;
       res.setHeader('Content-Type', 'application/json');
-      res.end(JSON.stringify({
-        error: 'Too Many Requests',
-        retryAfter: Math.ceil((rateLimitResult.resetTime - Date.now()) / 1000)
-      }));
+      res.end(
+        JSON.stringify({
+          error: 'Too Many Requests',
+          retryAfter: Math.ceil(
+            (rateLimitResult.resetTime - Date.now()) / 1000
+          ),
+        })
+      );
       return;
     }
 
     const livenessStatus = healthEndpoints.getLivenessStatus();
-    
+
     res.statusCode = livenessStatus.alive ? 200 : 503;
     res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify(livenessStatus, null, 2));
@@ -173,21 +206,28 @@ export class HTTPServer {
   /**
    * Handle metrics request
    */
-  private async handleMetrics(req: http.IncomingMessage, res: http.ServerResponse): Promise<void> {
+  private async handleMetrics(
+    req: http.IncomingMessage,
+    res: http.ServerResponse
+  ): Promise<void> {
     const rateLimitResult = rateLimiters.health.isAllowed('metrics');
-    
+
     if (!rateLimitResult.allowed) {
       res.statusCode = 429;
       res.setHeader('Content-Type', 'application/json');
-      res.end(JSON.stringify({
-        error: 'Too Many Requests',
-        retryAfter: Math.ceil((rateLimitResult.resetTime - Date.now()) / 1000)
-      }));
+      res.end(
+        JSON.stringify({
+          error: 'Too Many Requests',
+          retryAfter: Math.ceil(
+            (rateLimitResult.resetTime - Date.now()) / 1000
+          ),
+        })
+      );
       return;
     }
 
     const metrics = healthEndpoints.getPrometheusMetrics();
-    
+
     res.statusCode = 200;
     res.setHeader('Content-Type', 'text/plain');
     res.end(metrics);
@@ -199,11 +239,17 @@ export class HTTPServer {
   private handleNotFound(res: http.ServerResponse): void {
     res.statusCode = 404;
     res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify({
-      error: 'Not Found',
-      message: 'The requested endpoint does not exist',
-      availableEndpoints: ['/health', '/ready', '/live', '/metrics']
-    }, null, 2));
+    res.end(
+      JSON.stringify(
+        {
+          error: 'Not Found',
+          message: 'The requested endpoint does not exist',
+          availableEndpoints: ['/health', '/ready', '/live', '/metrics'],
+        },
+        null,
+        2
+      )
+    );
   }
 
   /**
@@ -212,10 +258,16 @@ export class HTTPServer {
   private handleError(res: http.ServerResponse, error: any): void {
     res.statusCode = 500;
     res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify({
-      error: 'Internal Server Error',
-      message: error.message || 'An unexpected error occurred'
-    }, null, 2));
+    res.end(
+      JSON.stringify(
+        {
+          error: 'Internal Server Error',
+          message: error.message || 'An unexpected error occurred',
+        },
+        null,
+        2
+      )
+    );
   }
 
   /**

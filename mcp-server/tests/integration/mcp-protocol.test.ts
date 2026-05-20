@@ -18,16 +18,31 @@ describe('MCP Protocol Integration Tests', () => {
   beforeAll(async () => {
     // Create mock metadata index
     const endpoints = [
-      generateEndpoint({ resource: 'Customer', operation: 'Get Customer', method: 'GET', path: '/customers/{id}' }),
-      generateEndpoint({ resource: 'Invoice', operation: 'Get Invoice', method: 'GET', path: '/invoices/{id}' }),
-      generateEndpoint({ resource: 'Ticket', operation: 'Create Ticket', method: 'POST', path: '/tickets' })
+      generateEndpoint({
+        resource: 'Customer',
+        operation: 'Get Customer',
+        method: 'GET',
+        path: '/customers/{id}',
+      }),
+      generateEndpoint({
+        resource: 'Invoice',
+        operation: 'Get Invoice',
+        method: 'GET',
+        path: '/invoices/{id}',
+      }),
+      generateEndpoint({
+        resource: 'Ticket',
+        operation: 'Create Ticket',
+        method: 'POST',
+        path: '/tickets',
+      }),
     ];
     mockMetadataIndex = createMockMetadataIndex(endpoints);
 
     // Initialize server
     server = new Server({
       name: 'test-server',
-      version: '1.0.0'
+      version: '1.0.0',
     });
 
     // Initialize protocol handler
@@ -50,16 +65,19 @@ describe('MCP Protocol Integration Tests', () => {
         params: {
           protocolVersion: '2024-11-05',
           capabilities: {
-            tools: {}
+            tools: {},
           },
           clientInfo: {
             name: 'test-client',
-            version: '1.0.0'
-          }
-        }
+            version: '1.0.0',
+          },
+        },
       };
 
-      const response = await (server as any).handleRequest('initialize', request);
+      const response = await (server as any).handleRequest(
+        'initialize',
+        request
+      );
 
       expect(response).toBeDefined();
       expect(response.protocolVersion).toBe('2024-11-05');
@@ -72,10 +90,13 @@ describe('MCP Protocol Integration Tests', () => {
 
     test('should handle initialized notification', async () => {
       const request = {
-        params: {}
+        params: {},
       };
 
-      const response = await (server as any).handleRequest('notifications/initialized', request);
+      const response = await (server as any).handleRequest(
+        'notifications/initialized',
+        request
+      );
 
       expect(response).toBeDefined();
       expect(response.success).toBe(true);
@@ -89,20 +110,23 @@ describe('MCP Protocol Integration Tests', () => {
         inputSchema: {
           type: 'object',
           properties: {
-            query: { type: 'string' }
+            query: { type: 'string' },
           },
-          required: ['query']
+          required: ['query'],
         },
-        handler: async (params: any) => ({ result: 'test' })
+        handler: async (params: any) => ({ result: 'test' }),
       };
 
       protocolHandler.registerTool(testTool);
 
       const request = {
-        params: {}
+        params: {},
       };
 
-      const response = await (server as any).handleRequest('tools/list', request);
+      const response = await (server as any).handleRequest(
+        'tools/list',
+        request
+      );
 
       expect(response).toBeDefined();
       expect(response.tools).toBeDefined();
@@ -120,11 +144,11 @@ describe('MCP Protocol Integration Tests', () => {
         inputSchema: {
           type: 'object',
           properties: {
-            message: { type: 'string' }
+            message: { type: 'string' },
           },
-          required: ['message']
+          required: ['message'],
         },
-        handler: async (params: any) => ({ echo: params.message })
+        handler: async (params: any) => ({ echo: params.message }),
       };
 
       protocolHandler.registerTool(testTool);
@@ -133,12 +157,15 @@ describe('MCP Protocol Integration Tests', () => {
         params: {
           name: 'echo_tool',
           arguments: {
-            message: 'Hello, World!'
-          }
-        }
+            message: 'Hello, World!',
+          },
+        },
       };
 
-      const response = await (server as any).handleRequest('tools/call', request);
+      const response = await (server as any).handleRequest(
+        'tools/call',
+        request
+      );
 
       expect(response).toBeDefined();
       expect(response.content).toBeDefined();
@@ -157,11 +184,11 @@ describe('MCP Protocol Integration Tests', () => {
         inputSchema: {
           type: 'object',
           properties: {
-            query: { type: 'string' }
+            query: { type: 'string' },
           },
-          required: ['query']
+          required: ['query'],
         },
-        handler: async (params: any) => ({ results: [] })
+        handler: async (params: any) => ({ results: [] }),
       };
 
       protocolHandler.registerTool(tool);
@@ -177,9 +204,9 @@ describe('MCP Protocol Integration Tests', () => {
         description: 'Temporary tool',
         inputSchema: {
           type: 'object',
-          properties: {}
+          properties: {},
         },
-        handler: async () => ({})
+        handler: async () => ({}),
       };
 
       protocolHandler.registerTool(tool);
@@ -194,7 +221,9 @@ describe('MCP Protocol Integration Tests', () => {
       const tools = protocolHandler.getTools();
       expect(Array.isArray(tools)).toBe(true);
       expect(tools.length).toBeGreaterThan(0);
-      expect(tools.every(t => t.name && t.description && t.inputSchema)).toBe(true);
+      expect(tools.every((t) => t.name && t.description && t.inputSchema)).toBe(
+        true
+      );
     });
 
     test('should get server capabilities', () => {
@@ -214,21 +243,22 @@ describe('MCP Protocol Integration Tests', () => {
           type: 'object',
           properties: {
             query: { type: 'string' },
-            limit: { type: 'number' }
+            limit: { type: 'number' },
           },
-          required: ['query']
+          required: ['query'],
         },
         handler: async (params: any) => {
           // Simulate search using metadata index
-          const results = mockMetadataIndex.allEndpoints.filter((ep: any) =>
-            ep.resource.toLowerCase().includes(params.query.toLowerCase()) ||
-            ep.operation.toLowerCase().includes(params.query.toLowerCase())
+          const results = mockMetadataIndex.allEndpoints.filter(
+            (ep: any) =>
+              ep.resource.toLowerCase().includes(params.query.toLowerCase()) ||
+              ep.operation.toLowerCase().includes(params.query.toLowerCase())
           );
           return {
             results: results.slice(0, params.limit || 5),
-            count: results.length
+            count: results.length,
           };
-        }
+        },
       };
 
       protocolHandler.registerTool(searchTool);
@@ -238,12 +268,15 @@ describe('MCP Protocol Integration Tests', () => {
           name: 'search_api_docs',
           arguments: {
             query: 'customer',
-            limit: 5
-          }
-        }
+            limit: 5,
+          },
+        },
       };
 
-      const response = await (server as any).handleRequest('tools/call', request);
+      const response = await (server as any).handleRequest(
+        'tools/call',
+        request
+      );
 
       expect(response).toBeDefined();
       expect(response.content).toBeDefined();
@@ -260,16 +293,16 @@ describe('MCP Protocol Integration Tests', () => {
           type: 'object',
           properties: {
             path: { type: 'string' },
-            method: { type: 'string' }
+            method: { type: 'string' },
           },
-          required: ['path', 'method']
+          required: ['path', 'method'],
         },
         handler: async (params: any) => {
           const endpoint = mockMetadataIndex.endpointsByPath.get(
             `${params.method}:${params.path}`
           );
           return endpoint || null;
-        }
+        },
       };
 
       protocolHandler.registerTool(endpointTool);
@@ -279,12 +312,15 @@ describe('MCP Protocol Integration Tests', () => {
           name: 'get_endpoint',
           arguments: {
             path: '/customers/{id}',
-            method: 'GET'
-          }
-        }
+            method: 'GET',
+          },
+        },
       };
 
-      const response = await (server as any).handleRequest('tools/call', request);
+      const response = await (server as any).handleRequest(
+        'tools/call',
+        request
+      );
 
       expect(response).toBeDefined();
       expect(response.content).toBeDefined();
@@ -303,9 +339,9 @@ describe('MCP Protocol Integration Tests', () => {
         description: 'Count requests',
         inputSchema: {
           type: 'object',
-          properties: {}
+          properties: {},
         },
-        handler: async () => ({ count: 1 })
+        handler: async () => ({ count: 1 }),
       };
 
       protocolHandler.registerTool(tool);
@@ -313,8 +349,8 @@ describe('MCP Protocol Integration Tests', () => {
       const request = {
         params: {
           name: 'counter_tool',
-          arguments: {}
-        }
+          arguments: {},
+        },
       };
 
       await (server as any).handleRequest('tools/call', request);
@@ -329,9 +365,9 @@ describe('MCP Protocol Integration Tests', () => {
         description: 'Test request IDs',
         inputSchema: {
           type: 'object',
-          properties: {}
+          properties: {},
         },
-        handler: async () => ({})
+        handler: async () => ({}),
       };
 
       protocolHandler.registerTool(tool);
@@ -339,15 +375,15 @@ describe('MCP Protocol Integration Tests', () => {
       const request1 = {
         params: {
           name: 'id_tool',
-          arguments: {}
-        }
+          arguments: {},
+        },
       };
 
       const request2 = {
         params: {
           name: 'id_tool',
-          arguments: {}
-        }
+          arguments: {},
+        },
       };
 
       await (server as any).handleRequest('tools/call', request1);
@@ -367,12 +403,12 @@ describe('MCP Protocol Integration Tests', () => {
         inputSchema: {
           type: 'object',
           properties: {
-            test: { type: 'string' }
-          }
+            test: { type: 'string' },
+          },
         },
         handler: async (params: any) => {
           return { received: params.test };
-        }
+        },
       };
 
       protocolHandler.registerTool(tool);
@@ -381,12 +417,15 @@ describe('MCP Protocol Integration Tests', () => {
         params: {
           name: 'context_tool',
           arguments: {
-            test: 'context-value'
-          }
-        }
+            test: 'context-value',
+          },
+        },
       };
 
-      const response = await (server as any).handleRequest('tools/call', request);
+      const response = await (server as any).handleRequest(
+        'tools/call',
+        request
+      );
 
       expect(response).toBeDefined();
       const parsedResult = JSON.parse(response.content[0].text);
@@ -399,9 +438,9 @@ describe('MCP Protocol Integration Tests', () => {
       const request = {
         params: {
           arguments: {
-            query: 'test'
-          }
-        }
+            query: 'test',
+          },
+        },
       };
 
       await expect(
@@ -413,8 +452,8 @@ describe('MCP Protocol Integration Tests', () => {
       const request = {
         params: {
           name: 'nonexistent_tool',
-          arguments: {}
-        }
+          arguments: {},
+        },
       };
 
       await expect(
@@ -429,11 +468,11 @@ describe('MCP Protocol Integration Tests', () => {
         inputSchema: {
           type: 'object',
           properties: {
-            required_param: { type: 'string' }
+            required_param: { type: 'string' },
           },
-          required: ['required_param']
+          required: ['required_param'],
         },
-        handler: async () => ({})
+        handler: async () => ({}),
       };
 
       protocolHandler.registerTool(tool);
@@ -441,8 +480,8 @@ describe('MCP Protocol Integration Tests', () => {
       const request = {
         params: {
           name: 'required_params_tool',
-          arguments: {}
-        }
+          arguments: {},
+        },
       };
 
       await expect(
@@ -457,11 +496,11 @@ describe('MCP Protocol Integration Tests', () => {
         inputSchema: {
           type: 'object',
           properties: {
-            number_param: { type: 'number' }
+            number_param: { type: 'number' },
           },
-          required: ['number_param']
+          required: ['number_param'],
         },
-        handler: async () => ({})
+        handler: async () => ({}),
       };
 
       protocolHandler.registerTool(tool);
@@ -470,9 +509,9 @@ describe('MCP Protocol Integration Tests', () => {
         params: {
           name: 'type_validation_tool',
           arguments: {
-            number_param: 'not a number'
-          }
-        }
+            number_param: 'not a number',
+          },
+        },
       };
 
       await expect(
@@ -486,11 +525,11 @@ describe('MCP Protocol Integration Tests', () => {
         description: 'Tool that throws errors',
         inputSchema: {
           type: 'object',
-          properties: {}
+          properties: {},
         },
         handler: async () => {
           throw new Error('Tool execution failed');
-        }
+        },
       };
 
       protocolHandler.registerTool(tool);
@@ -498,8 +537,8 @@ describe('MCP Protocol Integration Tests', () => {
       const request = {
         params: {
           name: 'error_tool',
-          arguments: {}
-        }
+          arguments: {},
+        },
       };
 
       await expect(
@@ -516,13 +555,15 @@ describe('MCP Protocol Integration Tests', () => {
         inputSchema: {
           type: 'object',
           properties: {
-            delay: { type: 'number' }
-          }
+            delay: { type: 'number' },
+          },
         },
         handler: async (params: any) => {
-          await new Promise(resolve => setTimeout(resolve, params.delay || 10));
+          await new Promise((resolve) =>
+            setTimeout(resolve, params.delay || 10)
+          );
           return { completed: true };
-        }
+        },
       };
 
       protocolHandler.registerTool(tool);
@@ -530,16 +571,16 @@ describe('MCP Protocol Integration Tests', () => {
       const requests = Array.from({ length: 10 }, (_, i) => ({
         params: {
           name: 'concurrent_tool',
-          arguments: { delay: 10 }
-        }
+          arguments: { delay: 10 },
+        },
       }));
 
       const responses = await Promise.all(
-        requests.map(req => (server as any).handleRequest('tools/call', req))
+        requests.map((req) => (server as any).handleRequest('tools/call', req))
       );
 
       expect(responses).toHaveLength(10);
-      responses.forEach(response => {
+      responses.forEach((response) => {
         expect(response).toBeDefined();
         expect(response.content).toBeDefined();
         const parsedResult = JSON.parse(response.content[0].text);
@@ -556,14 +597,14 @@ describe('MCP Protocol Integration Tests', () => {
         inputSchema: {
           type: 'object',
           properties: {
-            id: { type: 'number' }
-          }
+            id: { type: 'number' },
+          },
         },
         handler: async (params: any) => {
           callCount++;
-          await new Promise(resolve => setTimeout(resolve, 5));
+          await new Promise((resolve) => setTimeout(resolve, 5));
           return { id: params.id, callCount };
-        }
+        },
       };
 
       protocolHandler.registerTool(tool);
@@ -571,16 +612,16 @@ describe('MCP Protocol Integration Tests', () => {
       const requests = Array.from({ length: 5 }, (_, i) => ({
         params: {
           name: 'isolation_tool',
-          arguments: { id: i }
-        }
+          arguments: { id: i },
+        },
       }));
 
       const responses = await Promise.all(
-        requests.map(req => (server as any).handleRequest('tools/call', req))
+        requests.map((req) => (server as any).handleRequest('tools/call', req))
       );
 
       expect(responses).toHaveLength(5);
-      const ids = responses.map(response => {
+      const ids = responses.map((response) => {
         const parsedResult = JSON.parse(response.content[0].text);
         return parsedResult.id;
       });
@@ -593,9 +634,9 @@ describe('MCP Protocol Integration Tests', () => {
         description: 'Tool A',
         inputSchema: {
           type: 'object',
-          properties: {}
+          properties: {},
         },
-        handler: async () => ({ tool: 'A' })
+        handler: async () => ({ tool: 'A' }),
       };
 
       const tool2: MCPTool = {
@@ -603,9 +644,9 @@ describe('MCP Protocol Integration Tests', () => {
         description: 'Tool B',
         inputSchema: {
           type: 'object',
-          properties: {}
+          properties: {},
         },
-        handler: async () => ({ tool: 'B' })
+        handler: async () => ({ tool: 'B' }),
       };
 
       protocolHandler.registerTool(tool1);
@@ -615,29 +656,29 @@ describe('MCP Protocol Integration Tests', () => {
         {
           params: {
             name: 'tool_a',
-            arguments: {}
-          }
+            arguments: {},
+          },
         },
         {
           params: {
             name: 'tool_b',
-            arguments: {}
-          }
+            arguments: {},
+          },
         },
         {
           params: {
             name: 'tool_a',
-            arguments: {}
-          }
-        }
+            arguments: {},
+          },
+        },
       ];
 
       const responses = await Promise.all(
-        requests.map(req => (server as any).handleRequest('tools/call', req))
+        requests.map((req) => (server as any).handleRequest('tools/call', req))
       );
 
       expect(responses).toHaveLength(3);
-      const tools = responses.map(response => {
+      const tools = responses.map((response) => {
         const parsedResult = JSON.parse(response.content[0].text);
         return parsedResult.tool;
       });
@@ -656,9 +697,9 @@ describe('MCP Protocol Integration Tests', () => {
         description: 'Tool for reset testing',
         inputSchema: {
           type: 'object',
-          properties: {}
+          properties: {},
         },
-        handler: async () => ({})
+        handler: async () => ({}),
       };
 
       protocolHandler.registerTool(tool);

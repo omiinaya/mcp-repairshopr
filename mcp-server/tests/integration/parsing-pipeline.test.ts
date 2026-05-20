@@ -7,9 +7,22 @@
 import * as fs from 'fs/promises';
 import * as path from 'path';
 import { parseMarkdownFile } from '../../src/parser/markdown';
-import { buildMetadataIndex, getEndpointsByResource, getEndpointByPath, getEndpointsByPermission, getEndpointsByMethod, getAllParameters, getAllResponses } from '../../src/parser/metadata';
+import {
+  buildMetadataIndex,
+  getEndpointsByResource,
+  getEndpointByPath,
+  getEndpointsByPermission,
+  getEndpointsByMethod,
+  getAllParameters,
+  getAllResponses,
+} from '../../src/parser/metadata';
 import { VectorStore } from '../../src/indexer/vector';
-import { ApiDocument, ApiEndpoint, ApiParameter, ApiResponse } from '../../src/utils/types';
+import {
+  ApiDocument,
+  ApiEndpoint,
+  ApiParameter,
+  ApiResponse,
+} from '../../src/utils/types';
 
 describe('Document Parsing Pipeline Integration Tests', () => {
   let docsPath: string;
@@ -28,7 +41,9 @@ describe('Document Parsing Pipeline Integration Tests', () => {
       await fs.access(apiDocsPath);
     } catch (error) {
       // If docs don't exist, skip these tests
-      console.warn('API documentation directory not found, skipping parsing pipeline tests');
+      console.warn(
+        'API documentation directory not found, skipping parsing pipeline tests'
+      );
     }
   });
 
@@ -37,7 +52,7 @@ describe('Document Parsing Pipeline Integration Tests', () => {
       try {
         // Read all markdown files in docs/api directory
         const files = await fs.readdir(apiDocsPath);
-        const markdownFiles = files.filter(file => file.endsWith('.md'));
+        const markdownFiles = files.filter((file) => file.endsWith('.md'));
 
         expect(markdownFiles.length).toBeGreaterThan(0);
 
@@ -73,7 +88,11 @@ describe('Document Parsing Pipeline Integration Tests', () => {
     });
 
     test('should generate vector embeddings for all endpoints', () => {
-      if (!metadataIndex || !metadataIndex.allEndpoints || metadataIndex.allEndpoints.length === 0) {
+      if (
+        !metadataIndex ||
+        !metadataIndex.allEndpoints ||
+        metadataIndex.allEndpoints.length === 0
+      ) {
         console.warn('Skipping test: No endpoints in metadata index');
         return;
       }
@@ -93,7 +112,10 @@ describe('Document Parsing Pipeline Integration Tests', () => {
         vectorStore.addVector(
           `${endpoint.method}:${endpoint.path}`,
           embedding,
-          { endpointId: `${endpoint.method}:${endpoint.path}`, resource: endpoint.resource }
+          {
+            endpointId: `${endpoint.method}:${endpoint.path}`,
+            resource: endpoint.resource,
+          }
         );
       }
 
@@ -107,7 +129,7 @@ describe('Document Parsing Pipeline Integration Tests', () => {
     test('should parse expected number of documentation files', async () => {
       try {
         const files = await fs.readdir(apiDocsPath);
-        const markdownFiles = files.filter(file => file.endsWith('.md'));
+        const markdownFiles = files.filter((file) => file.endsWith('.md'));
 
         // The project should have approximately 35 documentation files
         // This is a flexible check to accommodate variations
@@ -123,7 +145,7 @@ describe('Document Parsing Pipeline Integration Tests', () => {
         return;
       }
 
-      allDocuments.forEach(document => {
+      allDocuments.forEach((document) => {
         expect(document.resourceName).toBeDefined();
         expect(typeof document.resourceName).toBe('string');
         expect(document.resourceName.length).toBeGreaterThan(0);
@@ -136,7 +158,7 @@ describe('Document Parsing Pipeline Integration Tests', () => {
         return;
       }
 
-      allDocuments.forEach(document => {
+      allDocuments.forEach((document) => {
         expect(document.endpoints).toBeDefined();
         expect(Array.isArray(document.endpoints)).toBe(true);
         expect(document.endpoints.length).toBeGreaterThan(0);
@@ -156,12 +178,16 @@ describe('Document Parsing Pipeline Integration Tests', () => {
 
   describe('Metadata Extraction Accuracy', () => {
     test('should extract endpoint metadata correctly', () => {
-      if (!metadataIndex || !metadataIndex.allEndpoints || metadataIndex.allEndpoints.length === 0) {
+      if (
+        !metadataIndex ||
+        !metadataIndex.allEndpoints ||
+        metadataIndex.allEndpoints.length === 0
+      ) {
         console.warn('Skipping test: No endpoints in metadata index');
         return;
       }
 
-      metadataIndex.allEndpoints.forEach(endpoint => {
+      metadataIndex.allEndpoints.forEach((endpoint) => {
         // Verify required fields
         expect(endpoint.resource).toBeDefined();
         expect(typeof endpoint.resource).toBe('string');
@@ -175,7 +201,9 @@ describe('Document Parsing Pipeline Integration Tests', () => {
         expect(typeof endpoint.description).toBe('string');
 
         expect(endpoint.method).toBeDefined();
-        expect(['GET', 'POST', 'PUT', 'DELETE', 'PATCH']).toContain(endpoint.method);
+        expect(['GET', 'POST', 'PUT', 'DELETE', 'PATCH']).toContain(
+          endpoint.method
+        );
 
         expect(endpoint.path).toBeDefined();
         expect(typeof endpoint.path).toBe('string');
@@ -199,14 +227,21 @@ describe('Document Parsing Pipeline Integration Tests', () => {
 
       const allParameters = getAllParameters(metadataIndex);
 
-      allParameters.forEach(param => {
+      allParameters.forEach((param) => {
         expect(param.name).toBeDefined();
         expect(typeof param.name).toBe('string');
         expect(param.name.length).toBeGreaterThan(0);
 
         expect(param.type).toBeDefined();
         expect(typeof param.type).toBe('string');
-        expect(['string', 'integer', 'number', 'boolean', 'array', 'object']).toContain(param.type);
+        expect([
+          'string',
+          'integer',
+          'number',
+          'boolean',
+          'array',
+          'object',
+        ]).toContain(param.type);
 
         expect(typeof param.required).toBe('boolean');
 
@@ -225,7 +260,7 @@ describe('Document Parsing Pipeline Integration Tests', () => {
 
       const allResponses = getAllResponses(metadataIndex);
 
-      allResponses.forEach(response => {
+      allResponses.forEach((response) => {
         expect(response.statusCode).toBeDefined();
         expect(typeof response.statusCode).toBe('number');
         expect(response.statusCode).toBeGreaterThanOrEqual(100);
@@ -255,7 +290,7 @@ describe('Document Parsing Pipeline Integration Tests', () => {
         expect(endpoints.length).toBeGreaterThan(0);
 
         // Verify all endpoints belong to the correct resource
-        endpoints.forEach(endpoint => {
+        endpoints.forEach((endpoint) => {
           expect(endpoint.resource).toBe(resourceName);
         });
       });
@@ -291,7 +326,7 @@ describe('Document Parsing Pipeline Integration Tests', () => {
         expect(endpoints.length).toBeGreaterThan(0);
 
         // Verify all endpoints have the correct permission
-        endpoints.forEach(endpoint => {
+        endpoints.forEach((endpoint) => {
           expect(endpoint.permission).toBe(permission);
         });
       });
@@ -310,7 +345,7 @@ describe('Document Parsing Pipeline Integration Tests', () => {
         expect(endpoints.length).toBeGreaterThan(0);
 
         // Verify all endpoints use the correct method
-        endpoints.forEach(endpoint => {
+        endpoints.forEach((endpoint) => {
           expect(endpoint.method).toBe(method);
         });
       });
@@ -359,7 +394,11 @@ describe('Document Parsing Pipeline Integration Tests', () => {
     });
 
     test('should store embeddings with correct metadata', () => {
-      if (!metadataIndex || !metadataIndex.allEndpoints || metadataIndex.allEndpoints.length === 0) {
+      if (
+        !metadataIndex ||
+        !metadataIndex.allEndpoints ||
+        metadataIndex.allEndpoints.length === 0
+      ) {
         console.warn('Skipping test: No endpoints in metadata index');
         return;
       }
@@ -404,8 +443,10 @@ describe('Document Parsing Pipeline Integration Tests', () => {
       }
 
       // Count endpoints in each index
-      const resourceCount = Array.from(metadataIndex.resources.values())
-        .reduce((sum, endpoints) => sum + endpoints.length, 0);
+      const resourceCount = Array.from(metadataIndex.resources.values()).reduce(
+        (sum, endpoints) => sum + endpoints.length,
+        0
+      );
 
       const pathCount = metadataIndex.endpointsByPath.size;
       const allEndpointsCount = metadataIndex.allEndpoints.length;
@@ -428,17 +469,25 @@ describe('Document Parsing Pipeline Integration Tests', () => {
       expect(endpoints).toBeDefined();
       expect(Array.isArray(endpoints)).toBe(true);
       expect(endpoints.length).toBeGreaterThan(0);
-      expect(endpoints.every(e => e.resource === resourceName)).toBe(true);
+      expect(endpoints.every((e) => e.resource === resourceName)).toBe(true);
     });
 
     test('should support efficient lookups by path', () => {
-      if (!metadataIndex || !metadataIndex.allEndpoints || metadataIndex.allEndpoints.length === 0) {
+      if (
+        !metadataIndex ||
+        !metadataIndex.allEndpoints ||
+        metadataIndex.allEndpoints.length === 0
+      ) {
         console.warn('Skipping test: No metadata index');
         return;
       }
 
       const endpoint = metadataIndex.allEndpoints[0];
-      const found = getEndpointByPath(metadataIndex, endpoint.path, endpoint.method);
+      const found = getEndpointByPath(
+        metadataIndex,
+        endpoint.path,
+        endpoint.method
+      );
 
       expect(found).toBeDefined();
       expect(found?.path).toBe(endpoint.path);
@@ -451,13 +500,15 @@ describe('Document Parsing Pipeline Integration Tests', () => {
         return;
       }
 
-      const permission = Array.from(metadataIndex.endpointsByPermission.keys())[0];
+      const permission = Array.from(
+        metadataIndex.endpointsByPermission.keys()
+      )[0];
       const endpoints = getEndpointsByPermission(metadataIndex, permission);
 
       expect(endpoints).toBeDefined();
       expect(Array.isArray(endpoints)).toBe(true);
       expect(endpoints.length).toBeGreaterThan(0);
-      expect(endpoints.every(e => e.permission === permission)).toBe(true);
+      expect(endpoints.every((e) => e.permission === permission)).toBe(true);
     });
 
     test('should support efficient lookups by method', () => {
@@ -472,7 +523,7 @@ describe('Document Parsing Pipeline Integration Tests', () => {
       expect(endpoints).toBeDefined();
       expect(Array.isArray(endpoints)).toBe(true);
       expect(endpoints.length).toBeGreaterThan(0);
-      expect(endpoints.every(e => e.method === method)).toBe(true);
+      expect(endpoints.every((e) => e.method === method)).toBe(true);
     });
 
     test('should handle edge cases in lookups', () => {
@@ -482,15 +533,25 @@ describe('Document Parsing Pipeline Integration Tests', () => {
       }
 
       // Lookup non-existent resource
-      const nonExistentResource = getEndpointsByResource(metadataIndex, 'NonExistentResource');
+      const nonExistentResource = getEndpointsByResource(
+        metadataIndex,
+        'NonExistentResource'
+      );
       expect(nonExistentResource).toEqual([]);
 
       // Lookup non-existent endpoint
-      const nonExistentEndpoint = getEndpointByPath(metadataIndex, '/nonexistent', 'GET');
+      const nonExistentEndpoint = getEndpointByPath(
+        metadataIndex,
+        '/nonexistent',
+        'GET'
+      );
       expect(nonExistentEndpoint).toBeUndefined();
 
       // Lookup non-existent permission
-      const nonExistentPermission = getEndpointsByPermission(metadataIndex, 'nonexistent.permission');
+      const nonExistentPermission = getEndpointsByPermission(
+        metadataIndex,
+        'nonexistent.permission'
+      );
       expect(nonExistentPermission).toEqual([]);
 
       // Lookup non-existent method
@@ -510,7 +571,7 @@ describe('Document Parsing Pipeline Integration Tests', () => {
 
       try {
         const files = await fs.readdir(apiDocsPath);
-        const markdownFiles = files.filter(file => file.endsWith('.md'));
+        const markdownFiles = files.filter((file) => file.endsWith('.md'));
 
         for (const file of markdownFiles) {
           const filePath = path.join(apiDocsPath, file);
@@ -543,7 +604,11 @@ describe('Document Parsing Pipeline Integration Tests', () => {
     });
 
     test('should generate embeddings efficiently', () => {
-      if (!metadataIndex || !metadataIndex.allEndpoints || metadataIndex.allEndpoints.length === 0) {
+      if (
+        !metadataIndex ||
+        !metadataIndex.allEndpoints ||
+        metadataIndex.allEndpoints.length === 0
+      ) {
         console.warn('Skipping test: No endpoints in metadata index');
         return;
       }
@@ -554,11 +619,9 @@ describe('Document Parsing Pipeline Integration Tests', () => {
       for (const endpoint of metadataIndex.allEndpoints) {
         const text = `${endpoint.resource} ${endpoint.operation}`;
         const embedding = store.generateEmbedding(text);
-        store.addVector(
-          `${endpoint.method}:${endpoint.path}`,
-          embedding,
-          { endpointId: `${endpoint.method}:${endpoint.path}` }
-        );
+        store.addVector(`${endpoint.method}:${endpoint.path}`, embedding, {
+          endpointId: `${endpoint.method}:${endpoint.path}`,
+        });
       }
 
       const endTime = Date.now();
@@ -578,7 +641,8 @@ describe('Document Parsing Pipeline Integration Tests', () => {
     test('should handle malformed markdown gracefully', async () => {
       // Create a temporary malformed file
       const tempPath = path.join(process.cwd(), 'temp-malformed.md');
-      const malformedContent = 'This is not valid markdown\nNo headers here\nJust random text';
+      const malformedContent =
+        'This is not valid markdown\nNo headers here\nJust random text';
 
       try {
         await fs.writeFile(tempPath, malformedContent, 'utf-8');
@@ -609,7 +673,7 @@ describe('Document Parsing Pipeline Integration Tests', () => {
     test('should handle documents with no endpoints gracefully', () => {
       const documentWithNoEndpoints: ApiDocument = {
         resourceName: 'TestResource',
-        endpoints: []
+        endpoints: [],
       };
 
       const index = buildMetadataIndex([documentWithNoEndpoints]);
@@ -628,8 +692,8 @@ describe('Document Parsing Pipeline Integration Tests', () => {
       }
 
       // Verify that data is preserved through the pipeline
-      allDocuments.forEach(document => {
-        document.endpoints.forEach(endpoint => {
+      allDocuments.forEach((document) => {
+        document.endpoints.forEach((endpoint) => {
           // Verify endpoint data is intact
           expect(endpoint.resource).toBe(document.resourceName);
           expect(endpoint.operation).toBeDefined();
@@ -637,13 +701,13 @@ describe('Document Parsing Pipeline Integration Tests', () => {
           expect(endpoint.path).toBeDefined();
 
           // Verify parameters are intact
-          endpoint.parameters.forEach(param => {
+          endpoint.parameters.forEach((param) => {
             expect(param.name).toBeDefined();
             expect(param.type).toBeDefined();
           });
 
           // Verify responses are intact
-          endpoint.responses.forEach(response => {
+          endpoint.responses.forEach((response) => {
             expect(response.statusCode).toBeDefined();
             expect(response.description).toBeDefined();
           });
@@ -658,12 +722,14 @@ describe('Document Parsing Pipeline Integration Tests', () => {
       }
 
       // Verify that all endpoints in allEndpoints are indexed
-      metadataIndex.allEndpoints.forEach(endpoint => {
+      metadataIndex.allEndpoints.forEach((endpoint) => {
         const pathKey = `${endpoint.method}:${endpoint.path}`;
         expect(metadataIndex.endpointsByPath.has(pathKey)).toBe(true);
 
         if (endpoint.permission) {
-          expect(metadataIndex.endpointsByPermission.has(endpoint.permission)).toBe(true);
+          expect(
+            metadataIndex.endpointsByPermission.has(endpoint.permission)
+          ).toBe(true);
         }
 
         expect(metadataIndex.endpointsByMethod.has(endpoint.method)).toBe(true);
@@ -672,13 +738,17 @@ describe('Document Parsing Pipeline Integration Tests', () => {
     });
 
     test('should handle special characters in data', () => {
-      if (!metadataIndex || !metadataIndex.allEndpoints || metadataIndex.allEndpoints.length === 0) {
+      if (
+        !metadataIndex ||
+        !metadataIndex.allEndpoints ||
+        metadataIndex.allEndpoints.length === 0
+      ) {
         console.warn('Skipping test: No metadata index');
         return;
       }
 
       // Check that special characters in descriptions are preserved
-      metadataIndex.allEndpoints.forEach(endpoint => {
+      metadataIndex.allEndpoints.forEach((endpoint) => {
         if (endpoint.description) {
           // Should not have encoding issues
           expect(() => {

@@ -112,7 +112,7 @@ const DEFAULT_CONFIG: ContextManagerConfig = {
   maxCacheSize: 100,
   enableProgressiveDisclosure: true,
   enableSummarization: true,
-  summarizationThreshold: 5
+  summarizationThreshold: 5,
 };
 
 /**
@@ -134,14 +134,17 @@ export class ContextManager {
    * @param maxTokens - Maximum tokens allowed
    * @returns Optimized context
    */
-  optimizeContextWindow(results: SearchResult[], maxTokens: number): OptimizedContext {
+  optimizeContextWindow(
+    results: SearchResult[],
+    maxTokens: number
+  ): OptimizedContext {
     if (results.length === 0) {
       return {
         content: '',
         tokenCount: 0,
         resultCount: 0,
         excludedCount: 0,
-        truncated: false
+        truncated: false,
       };
     }
 
@@ -184,7 +187,7 @@ export class ContextManager {
       resultCount: includedCount,
       excludedCount,
       truncated,
-      summary
+      summary,
     };
   }
 
@@ -217,7 +220,7 @@ export class ContextManager {
     for (const [resource, resourceResults] of grouped.entries()) {
       const count = resourceResults.length;
       const operations = resourceResults
-        .map(r => r.endpoint.operation)
+        .map((r) => r.endpoint.operation)
         .slice(0, 3)
         .join(', ');
 
@@ -250,7 +253,10 @@ export class ContextManager {
    * @param maxTokens - Maximum tokens for full context
    * @returns Progressive disclosure context
    */
-  progressiveDisclosure(results: SearchResult[], maxTokens: number): ProgressiveContext {
+  progressiveDisclosure(
+    results: SearchResult[],
+    maxTokens: number
+  ): ProgressiveContext {
     if (results.length === 0) {
       return {
         summary: '',
@@ -259,7 +265,7 @@ export class ContextManager {
         detailsTokens: 0,
         full: '',
         fullTokens: 0,
-        fullExceedsLimit: false
+        fullExceedsLimit: false,
       };
     }
 
@@ -285,7 +291,7 @@ export class ContextManager {
       detailsTokens,
       full,
       fullTokens,
-      fullExceedsLimit
+      fullExceedsLimit,
     };
   }
 
@@ -319,7 +325,7 @@ export class ContextManager {
 
     this.cache.set(key, {
       context,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
   }
 
@@ -380,7 +386,7 @@ export class ContextManager {
     return {
       size: this.cache.size,
       maxSize: this.config.maxCacheSize,
-      ttl: this.config.cacheTTL
+      ttl: this.config.cacheTTL,
     };
   }
 
@@ -460,7 +466,9 @@ export class ContextManager {
    */
   private buildSummaryLayer(results: SearchResult[]): string {
     const parts: string[] = [];
-    parts.push(`Found ${results.length} result${results.length > 1 ? 's' : ''}:\n`);
+    parts.push(
+      `Found ${results.length} result${results.length > 1 ? 's' : ''}:\n`
+    );
 
     // Group by resource
     const grouped = new Map<string, SearchResult[]>();
@@ -475,7 +483,8 @@ export class ContextManager {
     for (const [resource, resourceResults] of grouped.entries()) {
       const count = resourceResults.length;
       const avgScore =
-        resourceResults.reduce((sum, r) => sum + r.score, 0) / resourceResults.length;
+        resourceResults.reduce((sum, r) => sum + r.score, 0) /
+        resourceResults.length;
       parts.push(
         `- ${resource}: ${count} endpoint${count > 1 ? 's' : ''} (avg relevance: ${(avgScore * 100).toFixed(0)}%)`
       );
@@ -544,7 +553,7 @@ export function formatSearchResults(
     markdown,
     json,
     html,
-    tokenCount: estimateTokens(markdown)
+    tokenCount: estimateTokens(markdown),
   };
 }
 
@@ -603,7 +612,7 @@ function formatSearchResultsMarkdown(results: SearchResult[]): string {
  * Format search results as JSON
  */
 function formatSearchResultsJson(results: SearchResult[]): string {
-  const formatted = results.map(result => ({
+  const formatted = results.map((result) => ({
     endpoint: {
       resource: result.endpoint.resource,
       operation: result.endpoint.operation,
@@ -613,11 +622,11 @@ function formatSearchResultsJson(results: SearchResult[]): string {
       permission: result.endpoint.permission,
       parameters: result.endpoint.parameters,
       requestBody: result.endpoint.requestBody,
-      responses: result.endpoint.responses
+      responses: result.endpoint.responses,
     },
     score: result.score,
     matchType: result.matchType,
-    context: result.context
+    context: result.context,
   }));
 
   return JSON.stringify({ results: formatted, count: results.length }, null, 2);
@@ -652,7 +661,9 @@ function formatSearchResultsHtml(results: SearchResult[]): string {
       html += '<h3>Parameters</h3>\n';
       html += '<ul>\n';
       for (const param of result.endpoint.parameters) {
-        const required = param.required ? ' <span class="required">(required)</span>' : '';
+        const required = param.required
+          ? ' <span class="required">(required)</span>'
+          : '';
         html += `<li><code>${escapeHtml(param.name)}</code> (${escapeHtml(param.type)})${required}: ${escapeHtml(param.description)}</li>\n`;
       }
       html += '</ul>\n';
@@ -662,7 +673,9 @@ function formatSearchResultsHtml(results: SearchResult[]): string {
       html += '<h3>Request Body</h3>\n';
       html += '<ul>\n';
       for (const param of result.endpoint.requestBody) {
-        const required = param.required ? ' <span class="required">(required)</span>' : '';
+        const required = param.required
+          ? ' <span class="required">(required)</span>'
+          : '';
         html += `<li><code>${escapeHtml(param.name)}</code> (${escapeHtml(param.type)})${required}: ${escapeHtml(param.description)}</li>\n`;
       }
       html += '</ul>\n';
@@ -798,9 +811,14 @@ export function formatParameters(
 /**
  * Format parameters as markdown table
  */
-function formatParametersTable(parameters: ApiParameter[], format: 'markdown' | 'html'): string {
+function formatParametersTable(
+  parameters: ApiParameter[],
+  format: 'markdown' | 'html'
+): string {
   if (parameters.length === 0) {
-    return format === 'markdown' ? 'No parameters.\n' : '<p>No parameters.</p>\n';
+    return format === 'markdown'
+      ? 'No parameters.\n'
+      : '<p>No parameters.</p>\n';
   }
 
   if (format === 'markdown') {
@@ -870,7 +888,10 @@ export function formatResponses(
 /**
  * Format responses as markdown list
  */
-function formatResponsesList(responses: ApiResponse[], format: 'markdown' | 'html'): string {
+function formatResponsesList(
+  responses: ApiResponse[],
+  format: 'markdown' | 'html'
+): string {
   if (responses.length === 0) {
     return format === 'markdown' ? 'No responses.\n' : '<p>No responses.</p>\n';
   }
@@ -940,7 +961,9 @@ export function formatCollapsibleSection(
  * @param type - Template type (search, endpoint, parameters, responses)
  * @returns Formatting template
  */
-export function createFormattingTemplate(type: 'search' | 'endpoint' | 'parameters' | 'responses'): Template {
+export function createFormattingTemplate(
+  type: 'search' | 'endpoint' | 'parameters' | 'responses'
+): Template {
   switch (type) {
     case 'search':
       return {
@@ -949,9 +972,9 @@ export function createFormattingTemplate(type: 'search' | 'endpoint' | 'paramete
         placeholders: {
           count: 'Number of results found',
           plural: 'Plural suffix (s) if count > 1',
-          results: 'Formatted result items'
+          results: 'Formatted result items',
         },
-        example: `# Search Results\n\nFound 3 results:\n\n## 1. Get Customers\n\n**Resource:** Customer\n**Method:** GET\n**Path:** /customers\n**Permission:** customer.view\n**Relevance:** 95.0% (semantic)\n\n**Description:** Retrieve a list of all customers\n\n`
+        example: `# Search Results\n\nFound 3 results:\n\n## 1. Get Customers\n\n**Resource:** Customer\n**Method:** GET\n**Path:** /customers\n**Permission:** customer.view\n**Relevance:** 95.0% (semantic)\n\n**Description:** Retrieve a list of all customers\n\n`,
       };
 
     case 'endpoint':
@@ -967,9 +990,9 @@ export function createFormattingTemplate(type: 'search' | 'endpoint' | 'paramete
           description: 'Endpoint description',
           parameters: 'Parameters section (if any)',
           requestBody: 'Request body section (if any)',
-          responses: 'Responses section (if any)'
+          responses: 'Responses section (if any)',
         },
-        example: `# Get Customers\n\n**Resource:** Customer\n**Method:** GET\n**Path:** /customers\n**Permission:** customer.view\n\n**Description:** Retrieve a list of all customers\n\n## Parameters\n\n| Name | Type | Required | Description |\n|------|------|----------|-------------|\n| page | integer | No | Page number for pagination |\n\n`
+        example: `# Get Customers\n\n**Resource:** Customer\n**Method:** GET\n**Path:** /customers\n**Permission:** customer.view\n\n**Description:** Retrieve a list of all customers\n\n## Parameters\n\n| Name | Type | Required | Description |\n|------|------|----------|-------------|\n| page | integer | No | Page number for pagination |\n\n`,
       };
 
     case 'parameters':
@@ -977,9 +1000,9 @@ export function createFormattingTemplate(type: 'search' | 'endpoint' | 'paramete
         type: 'parameters',
         template: `## Parameters\n\n| Name | Type | Required | Description |\n|------|------|----------|-------------|\n{{rows}}`,
         placeholders: {
-          rows: 'Table rows for each parameter'
+          rows: 'Table rows for each parameter',
         },
-        example: `## Parameters\n\n| Name | Type | Required | Description |\n|------|------|----------|-------------|\n| page | integer | No | Page number for pagination |\n| limit | integer | No | Number of results per page |\n\n`
+        example: `## Parameters\n\n| Name | Type | Required | Description |\n|------|------|----------|-------------|\n| page | integer | No | Page number for pagination |\n| limit | integer | No | Number of results per page |\n\n`,
       };
 
     case 'responses':
@@ -987,9 +1010,9 @@ export function createFormattingTemplate(type: 'search' | 'endpoint' | 'paramete
         type: 'responses',
         template: `## Responses\n\n{{list}}`,
         placeholders: {
-          list: 'List of response items'
+          list: 'List of response items',
         },
-        example: `## Responses\n\n- **200**: List of customers\n  - Example: \`\`\`json\n{\n  \"customers\": [...]\n}\n\`\`\`\n- **401**: Unauthorized\n\n`
+        example: `## Responses\n\n- **200**: List of customers\n  - Example: \`\`\`json\n{\n  \"customers\": [...]\n}\n\`\`\`\n- **401**: Unauthorized\n\n`,
       };
   }
 }
@@ -1027,8 +1050,8 @@ function escapeHtml(text: string): string {
     '<': '&lt;',
     '>': '&gt;',
     '"': '&quot;',
-    "'": '&#039;'
+    "'": '&#039;',
   };
 
-  return text.replace(/[&<>"']/g, m => map[m]);
+  return text.replace(/[&<>"']/g, (m) => map[m]);
 }

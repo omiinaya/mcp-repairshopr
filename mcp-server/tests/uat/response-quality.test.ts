@@ -5,7 +5,11 @@
 
 import { MCPServer } from '../../src/server';
 import { ApiEndpoint, ApiParameter, ApiResponse } from '../../src/utils/types';
-import { generateEndpoint, generateParameter, generateResponse } from '../fixtures';
+import {
+  generateEndpoint,
+  generateParameter,
+  generateResponse,
+} from '../fixtures';
 
 /**
  * Quality metrics interface
@@ -42,7 +46,7 @@ export const QUALITY_THRESHOLDS = {
   MIN_COMPLETENESS: 0.8,
   MIN_CLARITY: 0.85,
   MIN_USEFULNESS: 0.8,
-  MIN_OVERALL_QUALITY: 0.82
+  MIN_OVERALL_QUALITY: 0.82,
 };
 
 /**
@@ -60,13 +64,15 @@ function validateAccuracy(
     if (expected[field] === actual[field]) {
       correctFields++;
     } else {
-      issues.push(`Field '${field}' mismatch: expected ${expected[field]}, got ${actual[field]}`);
+      issues.push(
+        `Field '${field}' mismatch: expected ${expected[field]}, got ${actual[field]}`
+      );
     }
   }
 
   return {
     score: correctFields / fields.length,
-    issues
+    issues,
   };
 }
 
@@ -79,7 +85,13 @@ function validateCompleteness(
 ): { score: number; issues: string[] } {
   const issues: string[] = [];
   let presentFields = 0;
-  const requiredFields = ['resource', 'operation', 'method', 'path', 'description'];
+  const requiredFields = [
+    'resource',
+    'operation',
+    'method',
+    'path',
+    'description',
+  ];
 
   for (const field of requiredFields) {
     if (response[field]) {
@@ -106,7 +118,7 @@ function validateCompleteness(
   const totalFields = requiredFields.length + 2; // +2 for parameters and responses
   return {
     score: presentFields / totalFields,
-    issues
+    issues,
   };
 }
 
@@ -145,7 +157,7 @@ function validateClarity(response: any): { score: number; issues: string[] } {
 
   return {
     score: Math.max(0, clarityScore),
-    issues
+    issues,
   };
 }
 
@@ -183,7 +195,7 @@ function validateUsefulness(
 
   return {
     score: Math.max(0, usefulnessScore),
-    issues
+    issues,
   };
 }
 
@@ -196,7 +208,9 @@ function calculateOverallQuality(
   clarity: number,
   usefulness: number
 ): number {
-  return (accuracy * 0.3 + completeness * 0.25 + clarity * 0.2 + usefulness * 0.25);
+  return (
+    accuracy * 0.3 + completeness * 0.25 + clarity * 0.2 + usefulness * 0.25
+  );
 }
 
 /**
@@ -208,7 +222,7 @@ describe('Response Quality Tests - Accuracy', () => {
 
   beforeAll(async () => {
     server = new MCPServer({
-      configPath: './config/default.json'
+      configPath: './config/default.json',
     });
     await server.initialize();
   });
@@ -237,12 +251,14 @@ describe('Response Quality Tests - Accuracy', () => {
       clarity: 0,
       usefulness: 0,
       overallQuality: 0,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
 
     metrics.push(metric);
 
-    expect(validation.score).toBeGreaterThanOrEqual(QUALITY_THRESHOLDS.MIN_ACCURACY);
+    expect(validation.score).toBeGreaterThanOrEqual(
+      QUALITY_THRESHOLDS.MIN_ACCURACY
+    );
     expect(validation.issues.length).toBe(0);
   });
 
@@ -266,12 +282,14 @@ describe('Response Quality Tests - Accuracy', () => {
       clarity: 0,
       usefulness: 0,
       overallQuality: 0,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
 
     metrics.push(metric);
 
-    expect(validation.score).toBeGreaterThanOrEqual(QUALITY_THRESHOLDS.MIN_ACCURACY);
+    expect(validation.score).toBeGreaterThanOrEqual(
+      QUALITY_THRESHOLDS.MIN_ACCURACY
+    );
   });
 
   test('should provide accurate responses for responses tool', async () => {
@@ -279,11 +297,9 @@ describe('Response Quality Tests - Accuracy', () => {
     const result = await server.handleQuery(query);
 
     const endpoint = result.endpoints[0];
-    const validation = validateAccuracy(
-      { resource: 'Customer' },
-      endpoint,
-      ['resource']
-    );
+    const validation = validateAccuracy({ resource: 'Customer' }, endpoint, [
+      'resource',
+    ]);
 
     const metric: QualityMetrics = {
       toolName: 'responses',
@@ -294,12 +310,14 @@ describe('Response Quality Tests - Accuracy', () => {
       clarity: 0,
       usefulness: 0,
       overallQuality: 0,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
 
     metrics.push(metric);
 
-    expect(validation.score).toBeGreaterThanOrEqual(QUALITY_THRESHOLDS.MIN_ACCURACY);
+    expect(validation.score).toBeGreaterThanOrEqual(
+      QUALITY_THRESHOLDS.MIN_ACCURACY
+    );
   });
 
   test('should provide accurate responses for permissions tool', async () => {
@@ -307,11 +325,9 @@ describe('Response Quality Tests - Accuracy', () => {
     const result = await server.handleQuery(query);
 
     const endpoint = result.endpoints[0];
-    const validation = validateAccuracy(
-      { resource: 'Customer' },
-      endpoint,
-      ['resource']
-    );
+    const validation = validateAccuracy({ resource: 'Customer' }, endpoint, [
+      'resource',
+    ]);
 
     const metric: QualityMetrics = {
       toolName: 'permissions',
@@ -322,12 +338,14 @@ describe('Response Quality Tests - Accuracy', () => {
       clarity: 0,
       usefulness: 0,
       overallQuality: 0,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
 
     metrics.push(metric);
 
-    expect(validation.score).toBeGreaterThanOrEqual(QUALITY_THRESHOLDS.MIN_ACCURACY);
+    expect(validation.score).toBeGreaterThanOrEqual(
+      QUALITY_THRESHOLDS.MIN_ACCURACY
+    );
   });
 
   test('should provide accurate responses for code examples tool', async () => {
@@ -350,16 +368,19 @@ describe('Response Quality Tests - Accuracy', () => {
       clarity: 0,
       usefulness: 0,
       overallQuality: 0,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
 
     metrics.push(metric);
 
-    expect(validation.score).toBeGreaterThanOrEqual(QUALITY_THRESHOLDS.MIN_ACCURACY);
+    expect(validation.score).toBeGreaterThanOrEqual(
+      QUALITY_THRESHOLDS.MIN_ACCURACY
+    );
   });
 
   test('should calculate average accuracy across all tools', () => {
-    const avgAccuracy = metrics.reduce((sum, m) => sum + m.accuracy, 0) / metrics.length;
+    const avgAccuracy =
+      metrics.reduce((sum, m) => sum + m.accuracy, 0) / metrics.length;
     expect(avgAccuracy).toBeGreaterThanOrEqual(QUALITY_THRESHOLDS.MIN_ACCURACY);
   });
 });
@@ -373,7 +394,7 @@ describe('Response Quality Tests - Completeness', () => {
 
   beforeAll(async () => {
     server = new MCPServer({
-      configPath: './config/default.json'
+      configPath: './config/default.json',
     });
     await server.initialize();
   });
@@ -398,12 +419,14 @@ describe('Response Quality Tests - Completeness', () => {
       clarity: 0,
       usefulness: 0,
       overallQuality: 0,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
 
     metrics.push(metric);
 
-    expect(validation.score).toBeGreaterThanOrEqual(QUALITY_THRESHOLDS.MIN_COMPLETENESS);
+    expect(validation.score).toBeGreaterThanOrEqual(
+      QUALITY_THRESHOLDS.MIN_COMPLETENESS
+    );
   });
 
   test('should provide complete responses for parameters tool', async () => {
@@ -422,12 +445,14 @@ describe('Response Quality Tests - Completeness', () => {
       clarity: 0,
       usefulness: 0,
       overallQuality: 0,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
 
     metrics.push(metric);
 
-    expect(validation.score).toBeGreaterThanOrEqual(QUALITY_THRESHOLDS.MIN_COMPLETENESS);
+    expect(validation.score).toBeGreaterThanOrEqual(
+      QUALITY_THRESHOLDS.MIN_COMPLETENESS
+    );
   });
 
   test('should provide complete responses for responses tool', async () => {
@@ -446,17 +471,22 @@ describe('Response Quality Tests - Completeness', () => {
       clarity: 0,
       usefulness: 0,
       overallQuality: 0,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
 
     metrics.push(metric);
 
-    expect(validation.score).toBeGreaterThanOrEqual(QUALITY_THRESHOLDS.MIN_COMPLETENESS);
+    expect(validation.score).toBeGreaterThanOrEqual(
+      QUALITY_THRESHOLDS.MIN_COMPLETENESS
+    );
   });
 
   test('should calculate average completeness across all tools', () => {
-    const avgCompleteness = metrics.reduce((sum, m) => sum + m.completeness, 0) / metrics.length;
-    expect(avgCompleteness).toBeGreaterThanOrEqual(QUALITY_THRESHOLDS.MIN_COMPLETENESS);
+    const avgCompleteness =
+      metrics.reduce((sum, m) => sum + m.completeness, 0) / metrics.length;
+    expect(avgCompleteness).toBeGreaterThanOrEqual(
+      QUALITY_THRESHOLDS.MIN_COMPLETENESS
+    );
   });
 });
 
@@ -469,7 +499,7 @@ describe('Response Quality Tests - Clarity', () => {
 
   beforeAll(async () => {
     server = new MCPServer({
-      configPath: './config/default.json'
+      configPath: './config/default.json',
     });
     await server.initialize();
   });
@@ -494,12 +524,14 @@ describe('Response Quality Tests - Clarity', () => {
       clarity: validation.score,
       usefulness: 0,
       overallQuality: 0,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
 
     metrics.push(metric);
 
-    expect(validation.score).toBeGreaterThanOrEqual(QUALITY_THRESHOLDS.MIN_CLARITY);
+    expect(validation.score).toBeGreaterThanOrEqual(
+      QUALITY_THRESHOLDS.MIN_CLARITY
+    );
   });
 
   test('should provide clear responses for parameters tool', async () => {
@@ -518,12 +550,14 @@ describe('Response Quality Tests - Clarity', () => {
       clarity: validation.score,
       usefulness: 0,
       overallQuality: 0,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
 
     metrics.push(metric);
 
-    expect(validation.score).toBeGreaterThanOrEqual(QUALITY_THRESHOLDS.MIN_CLARITY);
+    expect(validation.score).toBeGreaterThanOrEqual(
+      QUALITY_THRESHOLDS.MIN_CLARITY
+    );
   });
 
   test('should provide clear responses for responses tool', async () => {
@@ -542,16 +576,19 @@ describe('Response Quality Tests - Clarity', () => {
       clarity: validation.score,
       usefulness: 0,
       overallQuality: 0,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
 
     metrics.push(metric);
 
-    expect(validation.score).toBeGreaterThanOrEqual(QUALITY_THRESHOLDS.MIN_CLARITY);
+    expect(validation.score).toBeGreaterThanOrEqual(
+      QUALITY_THRESHOLDS.MIN_CLARITY
+    );
   });
 
   test('should calculate average clarity across all tools', () => {
-    const avgClarity = metrics.reduce((sum, m) => sum + m.clarity, 0) / metrics.length;
+    const avgClarity =
+      metrics.reduce((sum, m) => sum + m.clarity, 0) / metrics.length;
     expect(avgClarity).toBeGreaterThanOrEqual(QUALITY_THRESHOLDS.MIN_CLARITY);
   });
 });
@@ -565,7 +602,7 @@ describe('Response Quality Tests - Usefulness', () => {
 
   beforeAll(async () => {
     server = new MCPServer({
-      configPath: './config/default.json'
+      configPath: './config/default.json',
     });
     await server.initialize();
   });
@@ -590,12 +627,14 @@ describe('Response Quality Tests - Usefulness', () => {
       clarity: 0,
       usefulness: validation.score,
       overallQuality: 0,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
 
     metrics.push(metric);
 
-    expect(validation.score).toBeGreaterThanOrEqual(QUALITY_THRESHOLDS.MIN_USEFULNESS);
+    expect(validation.score).toBeGreaterThanOrEqual(
+      QUALITY_THRESHOLDS.MIN_USEFULNESS
+    );
   });
 
   test('should provide useful responses for parameters tool', async () => {
@@ -614,12 +653,14 @@ describe('Response Quality Tests - Usefulness', () => {
       clarity: 0,
       usefulness: validation.score,
       overallQuality: 0,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
 
     metrics.push(metric);
 
-    expect(validation.score).toBeGreaterThanOrEqual(QUALITY_THRESHOLDS.MIN_USEFULNESS);
+    expect(validation.score).toBeGreaterThanOrEqual(
+      QUALITY_THRESHOLDS.MIN_USEFULNESS
+    );
   });
 
   test('should provide useful responses for responses tool', async () => {
@@ -638,17 +679,22 @@ describe('Response Quality Tests - Usefulness', () => {
       clarity: 0,
       usefulness: validation.score,
       overallQuality: 0,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
 
     metrics.push(metric);
 
-    expect(validation.score).toBeGreaterThanOrEqual(QUALITY_THRESHOLDS.MIN_USEFULNESS);
+    expect(validation.score).toBeGreaterThanOrEqual(
+      QUALITY_THRESHOLDS.MIN_USEFULNESS
+    );
   });
 
   test('should calculate average usefulness across all tools', () => {
-    const avgUsefulness = metrics.reduce((sum, m) => sum + m.usefulness, 0) / metrics.length;
-    expect(avgUsefulness).toBeGreaterThanOrEqual(QUALITY_THRESHOLDS.MIN_USEFULNESS);
+    const avgUsefulness =
+      metrics.reduce((sum, m) => sum + m.usefulness, 0) / metrics.length;
+    expect(avgUsefulness).toBeGreaterThanOrEqual(
+      QUALITY_THRESHOLDS.MIN_USEFULNESS
+    );
   });
 });
 
@@ -661,7 +707,7 @@ describe('Response Quality Tests - Overall Quality', () => {
 
   beforeAll(async () => {
     server = new MCPServer({
-      configPath: './config/default.json'
+      configPath: './config/default.json',
     });
     await server.initialize();
   });
@@ -700,12 +746,14 @@ describe('Response Quality Tests - Overall Quality', () => {
       clarity: clarityValidation.score,
       usefulness: usefulnessValidation.score,
       overallQuality,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
 
     metrics.push(metric);
 
-    expect(overallQuality).toBeGreaterThanOrEqual(QUALITY_THRESHOLDS.MIN_OVERALL_QUALITY);
+    expect(overallQuality).toBeGreaterThanOrEqual(
+      QUALITY_THRESHOLDS.MIN_OVERALL_QUALITY
+    );
   });
 
   test('should provide high quality responses for parameters tool', async () => {
@@ -738,12 +786,14 @@ describe('Response Quality Tests - Overall Quality', () => {
       clarity: clarityValidation.score,
       usefulness: usefulnessValidation.score,
       overallQuality,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
 
     metrics.push(metric);
 
-    expect(overallQuality).toBeGreaterThanOrEqual(QUALITY_THRESHOLDS.MIN_OVERALL_QUALITY);
+    expect(overallQuality).toBeGreaterThanOrEqual(
+      QUALITY_THRESHOLDS.MIN_OVERALL_QUALITY
+    );
   });
 
   test('should provide high quality responses for responses tool', async () => {
@@ -776,22 +826,27 @@ describe('Response Quality Tests - Overall Quality', () => {
       clarity: clarityValidation.score,
       usefulness: usefulnessValidation.score,
       overallQuality,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
 
     metrics.push(metric);
 
-    expect(overallQuality).toBeGreaterThanOrEqual(QUALITY_THRESHOLDS.MIN_OVERALL_QUALITY);
+    expect(overallQuality).toBeGreaterThanOrEqual(
+      QUALITY_THRESHOLDS.MIN_OVERALL_QUALITY
+    );
   });
 
   test('should calculate average overall quality across all tools', () => {
-    const avgOverallQuality = metrics.reduce((sum, m) => sum + m.overallQuality, 0) / metrics.length;
-    expect(avgOverallQuality).toBeGreaterThanOrEqual(QUALITY_THRESHOLDS.MIN_OVERALL_QUALITY);
+    const avgOverallQuality =
+      metrics.reduce((sum, m) => sum + m.overallQuality, 0) / metrics.length;
+    expect(avgOverallQuality).toBeGreaterThanOrEqual(
+      QUALITY_THRESHOLDS.MIN_OVERALL_QUALITY
+    );
   });
 
   test('should export quality metrics', () => {
     expect(metrics.length).toBeGreaterThan(0);
-    metrics.forEach(metric => {
+    metrics.forEach((metric) => {
       expect(metric).toHaveProperty('toolName');
       expect(metric).toHaveProperty('accuracy');
       expect(metric).toHaveProperty('completeness');
@@ -810,19 +865,24 @@ export function createQualityMetricsReport(metrics: QualityMetrics[]): string {
   const report = {
     summary: {
       totalTests: metrics.length,
-      averageAccuracy: metrics.reduce((sum, m) => sum + m.accuracy, 0) / metrics.length,
-      averageCompleteness: metrics.reduce((sum, m) => sum + m.completeness, 0) / metrics.length,
-      averageClarity: metrics.reduce((sum, m) => sum + m.clarity, 0) / metrics.length,
-      averageUsefulness: metrics.reduce((sum, m) => sum + m.usefulness, 0) / metrics.length,
-      averageOverallQuality: metrics.reduce((sum, m) => sum + m.overallQuality, 0) / metrics.length
+      averageAccuracy:
+        metrics.reduce((sum, m) => sum + m.accuracy, 0) / metrics.length,
+      averageCompleteness:
+        metrics.reduce((sum, m) => sum + m.completeness, 0) / metrics.length,
+      averageClarity:
+        metrics.reduce((sum, m) => sum + m.clarity, 0) / metrics.length,
+      averageUsefulness:
+        metrics.reduce((sum, m) => sum + m.usefulness, 0) / metrics.length,
+      averageOverallQuality:
+        metrics.reduce((sum, m) => sum + m.overallQuality, 0) / metrics.length,
     },
     byTool: {} as Record<string, any>,
     thresholds: QUALITY_THRESHOLDS,
-    metrics
+    metrics,
   };
 
   // Group by tool
-  metrics.forEach(metric => {
+  metrics.forEach((metric) => {
     if (!report.byTool[metric.toolName]) {
       report.byTool[metric.toolName] = [];
     }
@@ -830,16 +890,36 @@ export function createQualityMetricsReport(metrics: QualityMetrics[]): string {
   });
 
   // Calculate averages per tool
-  Object.keys(report.byTool).forEach(toolName => {
+  Object.keys(report.byTool).forEach((toolName) => {
     const toolMetrics = report.byTool[toolName];
     report.byTool[toolName] = {
       count: toolMetrics.length,
-      averageAccuracy: toolMetrics.reduce((sum: number, m: QualityMetrics) => sum + m.accuracy, 0) / toolMetrics.length,
-      averageCompleteness: toolMetrics.reduce((sum: number, m: QualityMetrics) => sum + m.completeness, 0) / toolMetrics.length,
-      averageClarity: toolMetrics.reduce((sum: number, m: QualityMetrics) => sum + m.clarity, 0) / toolMetrics.length,
-      averageUsefulness: toolMetrics.reduce((sum: number, m: QualityMetrics) => sum + m.usefulness, 0) / toolMetrics.length,
-      averageOverallQuality: toolMetrics.reduce((sum: number, m: QualityMetrics) => sum + m.overallQuality, 0) / toolMetrics.length,
-      metrics: toolMetrics
+      averageAccuracy:
+        toolMetrics.reduce(
+          (sum: number, m: QualityMetrics) => sum + m.accuracy,
+          0
+        ) / toolMetrics.length,
+      averageCompleteness:
+        toolMetrics.reduce(
+          (sum: number, m: QualityMetrics) => sum + m.completeness,
+          0
+        ) / toolMetrics.length,
+      averageClarity:
+        toolMetrics.reduce(
+          (sum: number, m: QualityMetrics) => sum + m.clarity,
+          0
+        ) / toolMetrics.length,
+      averageUsefulness:
+        toolMetrics.reduce(
+          (sum: number, m: QualityMetrics) => sum + m.usefulness,
+          0
+        ) / toolMetrics.length,
+      averageOverallQuality:
+        toolMetrics.reduce(
+          (sum: number, m: QualityMetrics) => sum + m.overallQuality,
+          0
+        ) / toolMetrics.length,
+      metrics: toolMetrics,
     };
   });
 

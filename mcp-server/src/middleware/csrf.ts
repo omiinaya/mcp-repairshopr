@@ -28,7 +28,7 @@ const DEFAULT_CONFIG: CsrfConfig = {
   cookieHttpOnly: true,
   cookieSameSite: 'strict',
   excludedPaths: ['/health', '/ready', '/live', '/metrics'],
-  excludedMethods: ['GET', 'HEAD', 'OPTIONS']
+  excludedMethods: ['GET', 'HEAD', 'OPTIONS'],
 };
 
 /**
@@ -57,7 +57,7 @@ class CsrfTokenStore {
     const token = generateToken();
     this.tokens.set(sessionId, {
       token,
-      createdAt: Date.now()
+      createdAt: Date.now(),
     });
     return token;
   }
@@ -67,7 +67,7 @@ class CsrfTokenStore {
    */
   validate(sessionId: string, token: string): boolean {
     const stored = this.tokens.get(sessionId);
-    
+
     if (!stored) {
       return false;
     }
@@ -102,7 +102,7 @@ class CsrfTokenStore {
   private cleanup(): void {
     const now = Date.now();
     let cleaned = 0;
-    
+
     for (const [sessionId, data] of this.tokens.entries()) {
       if (now - data.createdAt > this.maxAge) {
         this.tokens.delete(sessionId);
@@ -143,7 +143,7 @@ export function csrfProtection(
     }
 
     // Skip excluded paths
-    if (csrfConfig.excludedPaths.some(path => req.path.startsWith(path))) {
+    if (csrfConfig.excludedPaths.some((path) => req.path.startsWith(path))) {
       return next();
     }
 
@@ -153,21 +153,22 @@ export function csrfProtection(
     }
 
     const sessionId = getSessionId(req);
-    const submittedToken = req.headers[csrfConfig.headerName.toLowerCase()] as string ||
-                          req.body?._csrf ||
-                          req.query?._csrf;
+    const submittedToken =
+      (req.headers[csrfConfig.headerName.toLowerCase()] as string) ||
+      req.body?._csrf ||
+      req.query?._csrf;
 
     // Validate the token
     if (!submittedToken) {
       logger.warn('CSRF token missing', {
         path: req.path,
         method: req.method,
-        ip: req.ip
+        ip: req.ip,
       });
 
       res.status(403).json({
         error: 'Forbidden',
-        message: 'CSRF token is required'
+        message: 'CSRF token is required',
       });
       return;
     }
@@ -176,12 +177,12 @@ export function csrfProtection(
       logger.warn('Invalid CSRF token', {
         path: req.path,
         method: req.method,
-        ip: req.ip
+        ip: req.ip,
       });
 
       res.status(403).json({
         error: 'Forbidden',
-        message: 'Invalid CSRF token'
+        message: 'Invalid CSRF token',
       });
       return;
     }
@@ -205,20 +206,20 @@ export function generateCsrfToken(
     }
 
     const sessionId = getSessionId(req);
-    
+
     // Check if token already exists
     const existingToken = req.cookies?.[csrfConfig.cookieName];
-    
+
     if (!existingToken || !tokenStore.validate(sessionId, existingToken)) {
       // Generate new token
       const newToken = tokenStore.create(sessionId);
-      
+
       // Set cookie
       res.cookie(csrfConfig.cookieName, newToken, {
         secure: csrfConfig.cookieSecure,
         httpOnly: csrfConfig.cookieHttpOnly,
         sameSite: csrfConfig.cookieSameSite,
-        maxAge: 24 * 60 * 60 * 1000 // 24 hours
+        maxAge: 24 * 60 * 60 * 1000, // 24 hours
       });
 
       // Attach to response locals for use in templates
@@ -238,7 +239,7 @@ export function getCsrfToken(sessionId?: string): string | null {
   if (!sessionId) {
     return null;
   }
-  
+
   const stored = tokenStore as any;
   const data = stored.tokens?.get(sessionId);
   return data?.token || null;

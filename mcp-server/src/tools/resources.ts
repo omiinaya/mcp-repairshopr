@@ -7,7 +7,12 @@
  */
 
 import { ApiEndpoint, ApiParameter, ApiResponse } from '../utils/types';
-import { MetadataIndex, getEndpointsByResource, getAllParameters, getAllResponses } from '../parser/metadata';
+import {
+  MetadataIndex,
+  getEndpointsByResource,
+  getAllParameters,
+  getAllResponses,
+} from '../parser/metadata';
 
 /**
  * Resource summary information
@@ -137,16 +142,33 @@ export interface ResourceListParams {
  * @param endpoints - Endpoints for the resource
  * @returns Resource description
  */
-function generateResourceDescription(resource: string, endpoints: ApiEndpoint[]): string {
+function generateResourceDescription(
+  resource: string,
+  endpoints: ApiEndpoint[]
+): string {
   if (endpoints.length === 0) {
     return `API resource for ${resource}`;
   }
 
-  const operations = endpoints.map(e => e.operation.toLowerCase());
-  const hasRead = operations.some(op => op.includes('get') || op.includes('list') || op.includes('show') || op.includes('index'));
-  const hasCreate = operations.some(op => op.includes('create') || op.includes('add') || op.includes('new'));
-  const hasUpdate = operations.some(op => op.includes('update') || op.includes('edit') || op.includes('modify'));
-  const hasDelete = operations.some(op => op.includes('delete') || op.includes('destroy') || op.includes('remove'));
+  const operations = endpoints.map((e) => e.operation.toLowerCase());
+  const hasRead = operations.some(
+    (op) =>
+      op.includes('get') ||
+      op.includes('list') ||
+      op.includes('show') ||
+      op.includes('index')
+  );
+  const hasCreate = operations.some(
+    (op) => op.includes('create') || op.includes('add') || op.includes('new')
+  );
+  const hasUpdate = operations.some(
+    (op) =>
+      op.includes('update') || op.includes('edit') || op.includes('modify')
+  );
+  const hasDelete = operations.some(
+    (op) =>
+      op.includes('delete') || op.includes('destroy') || op.includes('remove')
+  );
 
   const capabilities: string[] = [];
   if (hasRead) capabilities.push('read');
@@ -169,7 +191,10 @@ function generateResourceDescription(resource: string, endpoints: ApiEndpoint[])
  * @param endpoints - Endpoints for the resource
  * @returns Resource summary
  */
-function createResourceSummary(resource: string, endpoints: ApiEndpoint[]): ResourceSummary {
+function createResourceSummary(
+  resource: string,
+  endpoints: ApiEndpoint[]
+): ResourceSummary {
   const methods = new Set<string>();
   const permissions = new Set<string>();
 
@@ -196,14 +221,15 @@ function createResourceSummary(resource: string, endpoints: ApiEndpoint[]): Reso
  * @returns Array of endpoint information
  */
 function createEndpointInfo(endpoints: ApiEndpoint[]): ResourceEndpoint[] {
-  return endpoints.map(endpoint => ({
+  return endpoints.map((endpoint) => ({
     operation: endpoint.operation,
     description: endpoint.description,
     method: endpoint.method,
     path: endpoint.path,
     permission: endpoint.permission,
-    parameterCount: endpoint.parameters.length + (endpoint.requestBody?.length || 0),
-    responseCount: endpoint.responses.length
+    parameterCount:
+      endpoint.parameters.length + (endpoint.requestBody?.length || 0),
+    responseCount: endpoint.responses.length,
   }));
 }
 
@@ -267,7 +293,7 @@ function findResourceRelationships(
         resource: otherResource,
         relationshipType: 'reference',
         description: `Shares ${sharedParamCount} parameter(s)`,
-        connectionCount: sharedParamCount
+        connectionCount: sharedParamCount,
       });
     }
   }
@@ -284,13 +310,16 @@ function findResourceRelationships(
  * @param endpoints - Endpoints for the resource
  * @returns Resource statistics
  */
-function calculateResourceStatistics(endpoints: ApiEndpoint[]): ResourceStatistics {
+function calculateResourceStatistics(
+  endpoints: ApiEndpoint[]
+): ResourceStatistics {
   let totalParameters = 0;
   let totalResponses = 0;
   const methodCounts = new Map<string, number>();
 
   for (const endpoint of endpoints) {
-    totalParameters += endpoint.parameters.length + (endpoint.requestBody?.length || 0);
+    totalParameters +=
+      endpoint.parameters.length + (endpoint.requestBody?.length || 0);
     totalResponses += endpoint.responses.length;
 
     const count = methodCounts.get(endpoint.method) || 0;
@@ -308,7 +337,7 @@ function calculateResourceStatistics(endpoints: ApiEndpoint[]): ResourceStatisti
   }
 
   const uniquePermissions = new Set(
-    endpoints.map(e => e.permission).filter(p => p !== undefined)
+    endpoints.map((e) => e.permission).filter((p) => p !== undefined)
   );
 
   return {
@@ -317,7 +346,7 @@ function calculateResourceStatistics(endpoints: ApiEndpoint[]): ResourceStatisti
     totalResponses,
     uniquePermissions: uniquePermissions.size,
     mostCommonMethod,
-    averageEndpointsPerResource: endpoints.length
+    averageEndpointsPerResource: endpoints.length,
   };
 }
 
@@ -335,7 +364,11 @@ function createNavigationHelpers(
   index: MetadataIndex
 ): ResourceNavigation {
   // Find related resources
-  const relatedResources = findResourceRelationships(resource, endpoints, index);
+  const relatedResources = findResourceRelationships(
+    resource,
+    endpoints,
+    index
+  );
 
   // Find common operations across all resources
   const allOperations = new Set<string>();
@@ -344,16 +377,16 @@ function createNavigationHelpers(
   }
 
   const resourceOperations = new Set(
-    endpoints.map(e => e.operation.toLowerCase())
+    endpoints.map((e) => e.operation.toLowerCase())
   );
 
-  const commonOperations = Array.from(allOperations).filter(op =>
-    resourceOperations.has(op)
-  ).slice(0, 5);
+  const commonOperations = Array.from(allOperations)
+    .filter((op) => resourceOperations.has(op))
+    .slice(0, 5);
 
   // Find resources with similar permissions
   const resourcePermissions = new Set(
-    endpoints.map(e => e.permission).filter(p => p !== undefined)
+    endpoints.map((e) => e.permission).filter((p) => p !== undefined)
   );
 
   const similarPermissionResources: Array<{
@@ -367,7 +400,7 @@ function createNavigationHelpers(
     }
 
     const otherPermissions = new Set(
-      otherEndpoints.map(e => e.permission).filter(p => p !== undefined)
+      otherEndpoints.map((e) => e.permission).filter((p) => p !== undefined)
     );
 
     const sharedPermissions: string[] = [];
@@ -380,18 +413,20 @@ function createNavigationHelpers(
     if (sharedPermissions.length > 0) {
       similarPermissionResources.push({
         resource: otherResource,
-        sharedPermissions
+        sharedPermissions,
       });
     }
   }
 
   // Sort by number of shared permissions (descending)
-  similarPermissionResources.sort((a, b) => b.sharedPermissions.length - a.sharedPermissions.length);
+  similarPermissionResources.sort(
+    (a, b) => b.sharedPermissions.length - a.sharedPermissions.length
+  );
 
   return {
     relatedResources,
     commonOperations,
-    similarPermissionResources: similarPermissionResources.slice(0, 5)
+    similarPermissionResources: similarPermissionResources.slice(0, 5),
   };
 }
 
@@ -429,9 +464,10 @@ function calculateOverallStatistics(index: MetadataIndex): ResourceStatistics {
     totalResponses: allResponses.length,
     uniquePermissions,
     mostCommonMethod,
-    averageEndpointsPerResource: index.resources.size > 0
-      ? index.allEndpoints.length / index.resources.size
-      : 0
+    averageEndpointsPerResource:
+      index.resources.size > 0
+        ? index.allEndpoints.length / index.resources.size
+        : 0,
   };
 }
 
@@ -478,7 +514,7 @@ export function listResources(
     const resourceInfo: ResourceInfo = {
       summary,
       statistics,
-      navigation
+      navigation,
     };
 
     // Add endpoints if requested
@@ -488,7 +524,11 @@ export function listResources(
 
     // Add relationships if requested
     if (includeRelationships) {
-      resourceInfo.relationships = findResourceRelationships(resourceName, endpoints, index);
+      resourceInfo.relationships = findResourceRelationships(
+        resourceName,
+        endpoints,
+        index
+      );
     }
 
     resources.push(resourceInfo);
@@ -503,7 +543,7 @@ export function listResources(
   return {
     resources,
     overallStatistics,
-    totalResources: resources.length
+    totalResources: resources.length,
   };
 }
 
@@ -535,7 +575,7 @@ export function getResource(
   const resourceInfo: ResourceInfo = {
     summary,
     statistics,
-    navigation
+    navigation,
   };
 
   if (includeEndpoints) {
@@ -543,7 +583,11 @@ export function getResource(
   }
 
   if (includeRelationships) {
-    resourceInfo.relationships = findResourceRelationships(resourceName, endpoints, index);
+    resourceInfo.relationships = findResourceRelationships(
+      resourceName,
+      endpoints,
+      index
+    );
   }
 
   return resourceInfo;
@@ -556,8 +600,8 @@ export function getResource(
  * @returns Array of resource names
  */
 export function getResourceNames(index: MetadataIndex): string[] {
-    const collator = new Intl.Collator();
-    return [...index.resources.keys()].sort(collator.compare);
+  const collator = new Intl.Collator();
+  return [...index.resources.keys()].sort(collator.compare);
 }
 
 /**
@@ -567,7 +611,10 @@ export function getResourceNames(index: MetadataIndex): string[] {
  * @param index - Metadata index for searching
  * @returns Array of resource names
  */
-export function getResourcesByMethod(method: string, index: MetadataIndex): string[] {
+export function getResourcesByMethod(
+  method: string,
+  index: MetadataIndex
+): string[] {
   const resources = new Set<string>();
   const collator = new Intl.Collator();
 
@@ -587,7 +634,10 @@ export function getResourcesByMethod(method: string, index: MetadataIndex): stri
  * @param index - Metadata index for searching
  * @returns Array of resource names
  */
-export function getResourcesByPermission(permission: string, index: MetadataIndex): string[] {
+export function getResourcesByPermission(
+  permission: string,
+  index: MetadataIndex
+): string[] {
   const resources = new Set<string>();
   const collator = new Intl.Collator();
 

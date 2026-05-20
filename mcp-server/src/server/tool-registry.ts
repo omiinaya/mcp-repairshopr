@@ -62,7 +62,9 @@ export class ToolRegistry {
 
     // Check if tool already exists
     if (this.tools.has(definition.name)) {
-      logger.warn('Tool already registered, overwriting', { toolName: definition.name });
+      logger.warn('Tool already registered, overwriting', {
+        toolName: definition.name,
+      });
     }
 
     // Store tool definition and handler
@@ -73,7 +75,7 @@ export class ToolRegistry {
       toolName: definition.name,
       version: definition.version,
       deprecated: definition.deprecated,
-      dependencies: definition.dependencies.length
+      dependencies: definition.dependencies.length,
     });
   }
 
@@ -131,10 +133,10 @@ export class ToolRegistry {
     // Apply filters if provided
     if (filter) {
       if (filter.deprecated !== undefined) {
-        tools = tools.filter(tool => tool.deprecated === filter.deprecated);
+        tools = tools.filter((tool) => tool.deprecated === filter.deprecated);
       }
       if (filter.version) {
-        tools = tools.filter(tool => tool.version === filter.version);
+        tools = tools.filter((tool) => tool.version === filter.version);
       }
     }
 
@@ -164,13 +166,13 @@ export class ToolRegistry {
 
     const result = {
       satisfied: missing.length === 0,
-      missing
+      missing,
     };
 
     if (!result.satisfied) {
       logger.warn('Tool dependencies not satisfied', {
         toolName,
-        missing: result.missing
+        missing: result.missing,
       });
     }
 
@@ -256,9 +258,10 @@ export class ToolRegistry {
     const tools = Array.from(this.tools.values());
     return {
       totalTools: tools.length,
-      activeTools: tools.filter(t => !t.deprecated).length,
-      deprecatedTools: tools.filter(t => t.deprecated).length,
-      toolsWithDependencies: tools.filter(t => t.dependencies.length > 0).length
+      activeTools: tools.filter((t) => !t.deprecated).length,
+      deprecatedTools: tools.filter((t) => t.deprecated).length,
+      toolsWithDependencies: tools.filter((t) => t.dependencies.length > 0)
+        .length,
     };
   }
 

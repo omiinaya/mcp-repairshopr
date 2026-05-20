@@ -2,7 +2,12 @@
  * Unit tests for cache module
  */
 
-import { Cache, CacheEntry, CacheStats, CacheConfig } from '../../src/cache/cache';
+import {
+  Cache,
+  CacheEntry,
+  CacheStats,
+  CacheConfig,
+} from '../../src/cache/cache';
 
 describe('Cache', () => {
   let cache: Cache<any>;
@@ -31,7 +36,7 @@ describe('Cache', () => {
       const complexValue = {
         name: 'test',
         nested: { value: 123 },
-        array: [1, 2, 3]
+        array: [1, 2, 3],
       };
       cache.set('complex', complexValue);
       expect(cache.get('complex')).toEqual(complexValue);
@@ -52,7 +57,7 @@ describe('Cache', () => {
       cache.set('user:1', { id: 1 });
       cache.set('user:2', { id: 2 });
       cache.set('product:1', { id: 1 });
-      
+
       const count = cache.invalidate('user:*');
       expect(count).toBe(2);
       expect(cache.get('user:1')).toBeNull();
@@ -63,7 +68,7 @@ describe('Cache', () => {
     test('should invalidate entries matching exact pattern', () => {
       cache.set('exact-key', 'value');
       cache.set('other-key', 'value2');
-      
+
       const count = cache.invalidate('exact-key');
       expect(count).toBe(1);
       expect(cache.get('exact-key')).toBeNull();
@@ -80,7 +85,7 @@ describe('Cache', () => {
       cache.set('a:b:c', 'value1');
       cache.set('a:b:d', 'value2');
       cache.set('x:y:z', 'value3');
-      
+
       const count = cache.invalidate('a:*:*');
       expect(count).toBe(2);
       expect(cache.get('a:b:c')).toBeNull();
@@ -98,7 +103,7 @@ describe('Cache', () => {
           timestamp: Date.now(),
           ttl: 60000,
           accessCount: 0,
-          size: 10
+          size: 10,
         },
         {
           key: 'warm2',
@@ -106,8 +111,8 @@ describe('Cache', () => {
           timestamp: Date.now(),
           ttl: 60000,
           accessCount: 0,
-          size: 10
-        }
+          size: 10,
+        },
       ];
 
       cache.warmCache(entries);
@@ -123,7 +128,7 @@ describe('Cache', () => {
           timestamp: Date.now() - 100000,
           ttl: 1000,
           accessCount: 0,
-          size: 10
+          size: 10,
         },
         {
           key: 'valid',
@@ -131,8 +136,8 @@ describe('Cache', () => {
           timestamp: Date.now(),
           ttl: 60000,
           accessCount: 0,
-          size: 10
-        }
+          size: 10,
+        },
       ];
 
       cache.warmCache(entries);
@@ -149,8 +154,8 @@ describe('Cache', () => {
           timestamp: Date.now(),
           ttl: 60000,
           accessCount: 0,
-          size: 10
-        }
+          size: 10,
+        },
       ];
 
       cacheNoWarming.warmCache(entries);
@@ -385,7 +390,7 @@ describe('Cache', () => {
         maxSize: 1024,
         defaultTTL: 10000,
         maxEntries: 10,
-        enableWarming: false
+        enableWarming: false,
       });
 
       const config = customCache.getConfig();
@@ -423,7 +428,11 @@ describe('Cache', () => {
     });
 
     test('should handle special characters in keys', () => {
-      const specialKeys = ['key:with:colons', 'key/with/slashes', 'key.with.dots'];
+      const specialKeys = [
+        'key:with:colons',
+        'key/with/slashes',
+        'key.with.dots',
+      ];
       for (const key of specialKeys) {
         cache.set(key, `value-${key}`);
         expect(cache.get(key)).toBe(`value-${key}`);

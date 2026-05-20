@@ -106,27 +106,30 @@ const CONFIG = {
   reportFile: 'uat-report.json',
   markdownReportFile: 'uat-report.md',
   coverageThreshold: 80,
-  qualityThreshold: 0.82
+  qualityThreshold: 0.82,
 };
 
 /**
  * Run Jest tests and capture output
  */
-function runJestTests(testPattern: string): { stdout: string; exitCode: number } {
+function runJestTests(testPattern: string): {
+  stdout: string;
+  exitCode: number;
+} {
   try {
     const stdout = execSync(
       `npx jest ${testPattern} --verbose --json --outputFile=/tmp/jest-output.json`,
       {
         cwd: path.join(__dirname, '../..'),
         encoding: 'utf-8',
-        stdio: ['pipe', 'pipe', 'pipe']
+        stdio: ['pipe', 'pipe', 'pipe'],
       }
     );
     return { stdout, exitCode: 0 };
   } catch (error: any) {
     return {
       stdout: error.stdout || '',
-      exitCode: error.status || 1
+      exitCode: error.status || 1,
     };
   }
 }
@@ -161,12 +164,15 @@ function generateTestSuiteResults(jestOutput: any): TestSuiteResult[] {
     const suite: TestSuiteResult = {
       name: testResult.name,
       path: testResult.name,
-      tests: testResult.numPassingTests + testResult.numFailingTests + testResult.numPendingTests,
+      tests:
+        testResult.numPassingTests +
+        testResult.numFailingTests +
+        testResult.numPendingTests,
       passed: testResult.numPassingTests,
       failed: testResult.numFailingTests,
       skipped: testResult.numPendingTests,
       duration: testResult.perfStats?.runtime || 0,
-      status: testResult.numFailingTests > 0 ? 'failed' : 'passed'
+      status: testResult.numFailingTests > 0 ? 'failed' : 'passed',
     };
     results.push(suite);
   }
@@ -191,7 +197,7 @@ function identifyIssues(testSuites: TestSuiteResult[]): Issue[] {
         description: `${suite.failed} test(s) failed in ${suite.name}`,
         testSuite: suite.name,
         testName: 'N/A',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
     }
 
@@ -203,7 +209,7 @@ function identifyIssues(testSuites: TestSuiteResult[]): Issue[] {
         description: `Test suite ${suite.name} took ${suite.duration}ms to complete`,
         testSuite: suite.name,
         testName: 'N/A',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
     }
   }
@@ -227,7 +233,7 @@ function collectFeedback(testSuites: TestSuiteResult[]): Feedback[] {
         description: `All ${suite.passed} tests passed in ${suite.name}`,
         testSuite: suite.name,
         testName: 'N/A',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
     }
 
@@ -239,7 +245,7 @@ function collectFeedback(testSuites: TestSuiteResult[]): Feedback[] {
         description: `${suite.name} has ${suite.passed} passing tests but ${suite.failed} failing tests`,
         testSuite: suite.name,
         testName: 'N/A',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
     }
   }
@@ -265,37 +271,37 @@ function generateQualityMetricsSummary(): QualityMetricsSummary {
         completeness: 0.9,
         clarity: 0.95,
         usefulness: 0.9,
-        overallQuality: 0.93
+        overallQuality: 0.93,
       },
       parameters: {
         accuracy: 0.9,
         completeness: 0.88,
         clarity: 0.92,
         usefulness: 0.88,
-        overallQuality: 0.9
+        overallQuality: 0.9,
       },
       responses: {
         accuracy: 0.88,
         completeness: 0.85,
         clarity: 0.9,
         usefulness: 0.87,
-        overallQuality: 0.88
+        overallQuality: 0.88,
       },
       permissions: {
         accuracy: 0.92,
         completeness: 0.9,
         clarity: 0.93,
         usefulness: 0.9,
-        overallQuality: 0.91
+        overallQuality: 0.91,
       },
       'code-examples': {
         accuracy: 0.85,
         completeness: 0.82,
         clarity: 0.88,
         usefulness: 0.85,
-        overallQuality: 0.85
-      }
-    }
+        overallQuality: 0.85,
+      },
+    },
   };
 }
 
@@ -321,7 +327,7 @@ function generateRecommendations(
   }
 
   // Check critical issues
-  const criticalIssues = issues.filter(i => i.severity === 'critical');
+  const criticalIssues = issues.filter((i) => i.severity === 'critical');
   if (criticalIssues.length > 0) {
     recommendations.push(
       `${criticalIssues.length} critical issue(s) found. Address these immediately before proceeding to production.`
@@ -345,7 +351,7 @@ function generateRecommendations(
   }
 
   // Check for slow tests
-  const slowSuites = testSuites.filter(s => s.duration > 5000);
+  const slowSuites = testSuites.filter((s) => s.duration > 5000);
   if (slowSuites.length > 0) {
     recommendations.push(
       `${slowSuites.length} test suite(s) took more than 5 seconds. Consider optimizing test performance.`
@@ -353,7 +359,9 @@ function generateRecommendations(
   }
 
   if (recommendations.length === 0) {
-    recommendations.push('All tests passed successfully. No critical issues found. Ready for production deployment.');
+    recommendations.push(
+      'All tests passed successfully. No critical issues found. Ready for production deployment.'
+    );
   }
 
   return recommendations;
@@ -379,7 +387,7 @@ function generateUATReport(
       timestamp: new Date().toISOString(),
       version: '1.0.0',
       environment: process.env.NODE_ENV || 'development',
-      runner: 'uat-runner'
+      runner: 'uat-runner',
     },
     summary: {
       totalTests,
@@ -387,13 +395,17 @@ function generateUATReport(
       failed: totalFailed,
       skipped: totalSkipped,
       passRate: totalTests > 0 ? totalPassed / totalTests : 0,
-      duration: totalDuration
+      duration: totalDuration,
     },
     testSuites,
     qualityMetrics,
     issues,
     feedback,
-    recommendations: generateRecommendations(testSuites, issues, qualityMetrics)
+    recommendations: generateRecommendations(
+      testSuites,
+      issues,
+      qualityMetrics
+    ),
   };
 }
 
@@ -428,18 +440,32 @@ function generateMarkdownReport(report: UATReport): string {
   lines.push('');
   lines.push('| Metric | Score |');
   lines.push('|--------|-------|');
-  lines.push(`| Average Accuracy | ${(report.qualityMetrics.averageAccuracy * 100).toFixed(1)}% |`);
-  lines.push(`| Average Completeness | ${(report.qualityMetrics.averageCompleteness * 100).toFixed(1)}% |`);
-  lines.push(`| Average Clarity | ${(report.qualityMetrics.averageClarity * 100).toFixed(1)}% |`);
-  lines.push(`| Average Usefulness | ${(report.qualityMetrics.averageUsefulness * 100).toFixed(1)}% |`);
-  lines.push(`| Overall Quality | ${(report.qualityMetrics.averageOverallQuality * 100).toFixed(1)}% |`);
+  lines.push(
+    `| Average Accuracy | ${(report.qualityMetrics.averageAccuracy * 100).toFixed(1)}% |`
+  );
+  lines.push(
+    `| Average Completeness | ${(report.qualityMetrics.averageCompleteness * 100).toFixed(1)}% |`
+  );
+  lines.push(
+    `| Average Clarity | ${(report.qualityMetrics.averageClarity * 100).toFixed(1)}% |`
+  );
+  lines.push(
+    `| Average Usefulness | ${(report.qualityMetrics.averageUsefulness * 100).toFixed(1)}% |`
+  );
+  lines.push(
+    `| Overall Quality | ${(report.qualityMetrics.averageOverallQuality * 100).toFixed(1)}% |`
+  );
   lines.push('');
 
   // Tool Quality
   lines.push('### Quality by Tool');
   lines.push('');
-  lines.push('| Tool | Accuracy | Completeness | Clarity | Usefulness | Overall |');
-  lines.push('|------|----------|--------------|---------|------------|--------|');
+  lines.push(
+    '| Tool | Accuracy | Completeness | Clarity | Usefulness | Overall |'
+  );
+  lines.push(
+    '|------|----------|--------------|---------|------------|--------|'
+  );
   for (const [tool, metrics] of Object.entries(report.qualityMetrics.byTool)) {
     lines.push(
       `| ${tool} | ${(metrics.accuracy * 100).toFixed(1)}% | ${(metrics.completeness * 100).toFixed(1)}% | ${(metrics.clarity * 100).toFixed(1)}% | ${(metrics.usefulness * 100).toFixed(1)}% | ${(metrics.overallQuality * 100).toFixed(1)}% |`
@@ -450,8 +476,12 @@ function generateMarkdownReport(report: UATReport): string {
   // Test Suites
   lines.push('## Test Suites');
   lines.push('');
-  lines.push('| Suite | Tests | Passed | Failed | Skipped | Duration | Status |');
-  lines.push('|-------|-------|--------|--------|---------|----------|--------|');
+  lines.push(
+    '| Suite | Tests | Passed | Failed | Skipped | Duration | Status |'
+  );
+  lines.push(
+    '|-------|-------|--------|--------|---------|----------|--------|'
+  );
   for (const suite of report.testSuites) {
     lines.push(
       `| ${suite.name} | ${suite.tests} | ${suite.passed} | ${suite.failed} | ${suite.skipped} | ${suite.duration}ms | ${suite.status} |`
@@ -466,7 +496,9 @@ function generateMarkdownReport(report: UATReport): string {
     lines.push('| ID | Severity | Category | Description |');
     lines.push('|----|----------|----------|-------------|');
     for (const issue of report.issues) {
-      lines.push(`| ${issue.id} | ${issue.severity} | ${issue.category} | ${issue.description} |`);
+      lines.push(
+        `| ${issue.id} | ${issue.severity} | ${issue.category} | ${issue.description} |`
+      );
     }
     lines.push('');
   }
@@ -478,7 +510,9 @@ function generateMarkdownReport(report: UATReport): string {
     lines.push('| ID | Type | Category | Description |');
     lines.push('|----|------|----------|-------------|');
     for (const fb of report.feedback) {
-      lines.push(`| ${fb.id} | ${fb.type} | ${fb.category} | ${fb.description} |`);
+      lines.push(
+        `| ${fb.id} | ${fb.type} | ${fb.category} | ${fb.description} |`
+      );
     }
     lines.push('');
   }
@@ -546,7 +580,12 @@ async function main(): Promise<void> {
   const qualityMetrics = generateQualityMetricsSummary();
 
   // Generate UAT report
-  const report = generateUATReport(testSuites, issues, feedback, qualityMetrics);
+  const report = generateUATReport(
+    testSuites,
+    issues,
+    feedback,
+    qualityMetrics
+  );
 
   // Generate markdown report
   const markdownReport = generateMarkdownReport(report);
@@ -566,13 +605,19 @@ async function main(): Promise<void> {
   console.log(`Skipped: ${report.summary.skipped}`);
   console.log(`Pass Rate: ${(report.summary.passRate * 100).toFixed(1)}%`);
   console.log(`Duration: ${duration}ms`);
-  console.log(`Overall Quality: ${(report.qualityMetrics.averageOverallQuality * 100).toFixed(1)}%`);
+  console.log(
+    `Overall Quality: ${(report.qualityMetrics.averageOverallQuality * 100).toFixed(1)}%`
+  );
   console.log('');
   console.log(`Issues Found: ${issues.length}`);
-  console.log(`Critical: ${issues.filter(i => i.severity === 'critical').length}`);
-  console.log(`High: ${issues.filter(i => i.severity === 'high').length}`);
-  console.log(`Medium: ${issues.filter(i => i.severity === 'medium').length}`);
-  console.log(`Low: ${issues.filter(i => i.severity === 'low').length}`);
+  console.log(
+    `Critical: ${issues.filter((i) => i.severity === 'critical').length}`
+  );
+  console.log(`High: ${issues.filter((i) => i.severity === 'high').length}`);
+  console.log(
+    `Medium: ${issues.filter((i) => i.severity === 'medium').length}`
+  );
+  console.log(`Low: ${issues.filter((i) => i.severity === 'low').length}`);
   console.log('');
   console.log('Recommendations:');
   for (const rec of report.recommendations) {
@@ -586,7 +631,7 @@ async function main(): Promise<void> {
 }
 
 // Run main function
-main().catch(error => {
+main().catch((error) => {
   console.error('Error running UAT:', error);
   process.exit(1);
 });

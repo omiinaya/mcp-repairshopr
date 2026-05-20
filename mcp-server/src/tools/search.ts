@@ -7,7 +7,12 @@
 
 import { ApiEndpoint } from '../utils/types';
 import { VectorStore } from '../indexer/vector';
-import { MetadataIndex, getEndpointsByResource, getEndpointsByMethod, getEndpointsByPermission } from '../parser/metadata';
+import {
+  MetadataIndex,
+  getEndpointsByResource,
+  getEndpointsByMethod,
+  getEndpointsByPermission,
+} from '../parser/metadata';
 
 /**
  * Search result with relevance score and context
@@ -65,16 +70,17 @@ function performSemanticSearch(
     if (!endpointId) continue;
 
     // Find the endpoint in the metadata index
-    const endpoint = metadataIndex.allEndpoints.find(ep => 
-      `${ep.method}:${ep.path}` === endpointId
+    const endpoint = metadataIndex.allEndpoints.find(
+      (ep) => `${ep.method}:${ep.path}` === endpointId
     );
-    
+
     if (!endpoint) continue;
 
     // Apply filters
     if (filters?.resource && endpoint.resource !== filters.resource) continue;
     if (filters?.method && endpoint.method !== filters.method) continue;
-    if (filters?.permission && endpoint.permission !== filters.permission) continue;
+    if (filters?.permission && endpoint.permission !== filters.permission)
+      continue;
 
     // Generate context from description
     const context = generateContext(endpoint, query);
@@ -83,7 +89,7 @@ function performSemanticSearch(
       endpoint,
       score: result.score,
       context,
-      matchType: 'semantic'
+      matchType: 'semantic',
     });
   }
 
@@ -104,14 +110,15 @@ function performKeywordSearch(
   filters?: { resource?: string; method?: string; permission?: string }
 ): SearchResult[] {
   const queryLower = query.toLowerCase();
-  const queryTerms = queryLower.split(/\s+/).filter(term => term.length > 0);
+  const queryTerms = queryLower.split(/\s+/).filter((term) => term.length > 0);
   const results: SearchResult[] = [];
 
   for (const endpoint of metadataIndex.allEndpoints) {
     // Apply filters
     if (filters?.resource && endpoint.resource !== filters.resource) continue;
     if (filters?.method && endpoint.method !== filters.method) continue;
-    if (filters?.permission && endpoint.permission !== filters.permission) continue;
+    if (filters?.permission && endpoint.permission !== filters.permission)
+      continue;
 
     // Calculate keyword match score
     let score = 0;
@@ -146,8 +153,10 @@ function performKeywordSearch(
 
     // Search in parameters
     for (const param of endpoint.parameters) {
-      if (param.name.toLowerCase().includes(queryLower) || 
-          param.description.toLowerCase().includes(queryLower)) {
+      if (
+        param.name.toLowerCase().includes(queryLower) ||
+        param.description.toLowerCase().includes(queryLower)
+      ) {
         score += 0.1;
         matchCount++;
       }
@@ -164,7 +173,7 @@ function performKeywordSearch(
         endpoint,
         score,
         context,
-        matchType: 'keyword'
+        matchType: 'keyword',
       });
     }
   }
@@ -194,7 +203,7 @@ function combineResults(
     combinedMap.set(key, {
       ...result,
       score: result.score * semanticWeight,
-      matchType: 'hybrid'
+      matchType: 'hybrid',
     });
   }
 
@@ -205,12 +214,14 @@ function combineResults(
 
     if (existing) {
       // Combine scores
-      existing.score = (existing.score / semanticWeight) * semanticWeight + result.score * keywordWeight;
+      existing.score =
+        (existing.score / semanticWeight) * semanticWeight +
+        result.score * keywordWeight;
     } else {
       combinedMap.set(key, {
         ...result,
         score: result.score * keywordWeight,
-        matchType: 'hybrid'
+        matchType: 'hybrid',
       });
     }
   }
@@ -228,20 +239,23 @@ function combineResults(
  */
 function generateContext(endpoint: ApiEndpoint, query: string): string {
   const queryLower = query.toLowerCase();
-  
+
   // Try to find the query in the description
   const descriptionLower = endpoint.description.toLowerCase();
   const queryIndex = descriptionLower.indexOf(queryLower);
-  
+
   if (queryIndex !== -1) {
     // Extract a snippet around the match
     const start = Math.max(0, queryIndex - 50);
-    const end = Math.min(endpoint.description.length, queryIndex + query.length + 50);
+    const end = Math.min(
+      endpoint.description.length,
+      queryIndex + query.length + 50
+    );
     let snippet = endpoint.description.substring(start, end);
-    
+
     if (start > 0) snippet = '...' + snippet;
     if (end < endpoint.description.length) snippet = snippet + '...';
-    
+
     return snippet;
   }
 
@@ -249,7 +263,7 @@ function generateContext(endpoint: ApiEndpoint, query: string): string {
   if (endpoint.description.length > 150) {
     return endpoint.description.substring(0, 150) + '...';
   }
-  
+
   return endpoint.description;
 }
 
@@ -287,13 +301,19 @@ export function searchApiDocs(
   }
 
   // Build filters object
-  const filters: { resource?: string; method?: string; permission?: string } = {};
+  const filters: { resource?: string; method?: string; permission?: string } =
+    {};
   if (resource) filters.resource = resource;
   if (method) filters.method = method.toUpperCase();
   if (permission) filters.permission = permission;
 
   // Perform semantic search
-  const semanticResults = performSemanticSearch(query, vectorStore, metadataIndex, filters);
+  const semanticResults = performSemanticSearch(
+    query,
+    vectorStore,
+    metadataIndex,
+    filters
+  );
 
   // Perform keyword search
   const keywordResults = performKeywordSearch(query, metadataIndex, filters);
@@ -312,7 +332,10 @@ export function searchApiDocs(
  * @param metadataIndex - Metadata index
  * @returns Array of endpoints for the specified resource
  */
-export function searchByResource(resource: string, metadataIndex: MetadataIndex): ApiEndpoint[] {
+export function searchByResource(
+  resource: string,
+  metadataIndex: MetadataIndex
+): ApiEndpoint[] {
   return getEndpointsByResource(metadataIndex, resource);
 }
 
@@ -323,7 +346,10 @@ export function searchByResource(resource: string, metadataIndex: MetadataIndex)
  * @param metadataIndex - Metadata index
  * @returns Array of endpoints using the specified method
  */
-export function searchByMethod(method: string, metadataIndex: MetadataIndex): ApiEndpoint[] {
+export function searchByMethod(
+  method: string,
+  metadataIndex: MetadataIndex
+): ApiEndpoint[] {
   return getEndpointsByMethod(metadataIndex, method.toUpperCase());
 }
 
@@ -334,6 +360,9 @@ export function searchByMethod(method: string, metadataIndex: MetadataIndex): Ap
  * @param metadataIndex - Metadata index
  * @returns Array of endpoints requiring the specified permission
  */
-export function searchByPermission(permission: string, metadataIndex: MetadataIndex): ApiEndpoint[] {
+export function searchByPermission(
+  permission: string,
+  metadataIndex: MetadataIndex
+): ApiEndpoint[] {
   return getEndpointsByPermission(metadataIndex, permission);
 }

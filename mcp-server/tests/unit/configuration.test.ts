@@ -8,7 +8,7 @@ import * as os from 'os';
 import {
   ConfigurationManager,
   ServerConfig,
-  configurationManager
+  configurationManager,
 } from '../../src/server/configuration';
 
 describe('ConfigurationManager', () => {
@@ -37,7 +37,7 @@ describe('ConfigurationManager', () => {
         serverName: 'test-server',
         serverVersion: '1.0.0',
         port: 4000,
-        logLevel: 'debug'
+        logLevel: 'debug',
       };
 
       fs.writeFileSync(configPath, JSON.stringify(testConfig, null, 2));
@@ -63,7 +63,7 @@ describe('ConfigurationManager', () => {
     it('should merge file config with defaults', () => {
       const partialConfig: Partial<ServerConfig> = {
         serverName: 'custom-server',
-        port: 5000
+        port: 5000,
       };
 
       fs.writeFileSync(configPath, JSON.stringify(partialConfig, null, 2));
@@ -155,7 +155,7 @@ describe('ConfigurationManager', () => {
         enableHotReload: true,
         enableMetrics: false,
         maxConcurrentRequests: 100,
-        requestTimeout: 30000
+        requestTimeout: 30000,
       };
 
       const result = manager.validateConfig(validConfig);
@@ -175,7 +175,7 @@ describe('ConfigurationManager', () => {
         enableHotReload: true,
         enableMetrics: false,
         maxConcurrentRequests: 100,
-        requestTimeout: 30000
+        requestTimeout: 30000,
       };
 
       const result = manager.validateConfig(invalidConfig);
@@ -195,13 +195,13 @@ describe('ConfigurationManager', () => {
         enableHotReload: true,
         enableMetrics: false,
         maxConcurrentRequests: 100,
-        requestTimeout: 30000
+        requestTimeout: 30000,
       };
 
       const result = manager.validateConfig(invalidConfig);
 
       expect(result.valid).toBe(false);
-      expect(result.errors.some(e => e.includes('port'))).toBe(true);
+      expect(result.errors.some((e) => e.includes('port'))).toBe(true);
     });
 
     it('should reject invalid logLevel', () => {
@@ -215,13 +215,13 @@ describe('ConfigurationManager', () => {
         enableHotReload: true,
         enableMetrics: false,
         maxConcurrentRequests: 100,
-        requestTimeout: 30000
+        requestTimeout: 30000,
       };
 
       const result = manager.validateConfig(invalidConfig);
 
       expect(result.valid).toBe(false);
-      expect(result.errors.some(e => e.includes('logLevel'))).toBe(true);
+      expect(result.errors.some((e) => e.includes('logLevel'))).toBe(true);
     });
 
     it('should reject negative maxConcurrentRequests', () => {
@@ -235,13 +235,15 @@ describe('ConfigurationManager', () => {
         enableHotReload: true,
         enableMetrics: false,
         maxConcurrentRequests: -1,
-        requestTimeout: 30000
+        requestTimeout: 30000,
       };
 
       const result = manager.validateConfig(invalidConfig);
 
       expect(result.valid).toBe(false);
-      expect(result.errors.some(e => e.includes('maxConcurrentRequests'))).toBe(true);
+      expect(
+        result.errors.some((e) => e.includes('maxConcurrentRequests'))
+      ).toBe(true);
     });
 
     it('should reject negative requestTimeout', () => {
@@ -255,13 +257,15 @@ describe('ConfigurationManager', () => {
         enableHotReload: true,
         enableMetrics: false,
         maxConcurrentRequests: 100,
-        requestTimeout: -1000
+        requestTimeout: -1000,
       };
 
       const result = manager.validateConfig(invalidConfig);
 
       expect(result.valid).toBe(false);
-      expect(result.errors.some(e => e.includes('requestTimeout'))).toBe(true);
+      expect(result.errors.some((e) => e.includes('requestTimeout'))).toBe(
+        true
+      );
     });
 
     it('should collect multiple validation errors', () => {
@@ -275,7 +279,7 @@ describe('ConfigurationManager', () => {
         enableHotReload: 'not-a-boolean' as any,
         enableMetrics: 'not-a-boolean' as any,
         maxConcurrentRequests: 0,
-        requestTimeout: -1
+        requestTimeout: -1,
       };
 
       const result = manager.validateConfig(invalidConfig);
@@ -289,17 +293,17 @@ describe('ConfigurationManager', () => {
     it('should merge multiple configurations', () => {
       const config1: Partial<ServerConfig> = {
         serverName: 'server1',
-        port: 3000
+        port: 3000,
       };
 
       const config2: Partial<ServerConfig> = {
         serverVersion: '1.0.0',
-        logLevel: 'debug'
+        logLevel: 'debug',
       };
 
       const config3: Partial<ServerConfig> = {
         port: 4000,
-        enableHotReload: false
+        enableHotReload: false,
       };
 
       const merged = manager.mergeConfigs(config1, config2, config3);
@@ -331,7 +335,7 @@ describe('ConfigurationManager', () => {
     it('should watch for configuration changes', (done) => {
       const testConfig: Partial<ServerConfig> = {
         serverName: 'initial-server',
-        port: 3000
+        port: 3000,
       };
 
       fs.writeFileSync(configPath, JSON.stringify(testConfig, null, 2));
@@ -353,7 +357,7 @@ describe('ConfigurationManager', () => {
       setTimeout(() => {
         const updatedConfig: Partial<ServerConfig> = {
           serverName: 'updated-server',
-          port: 4000
+          port: 4000,
         };
         fs.writeFileSync(configPath, JSON.stringify(updatedConfig, null, 2));
       }, 100);
@@ -362,7 +366,7 @@ describe('ConfigurationManager', () => {
     it('should handle multiple callbacks', (done) => {
       const testConfig: Partial<ServerConfig> = {
         serverName: 'test-server',
-        port: 3000
+        port: 3000,
       };
 
       fs.writeFileSync(configPath, JSON.stringify(testConfig, null, 2));
@@ -392,7 +396,7 @@ describe('ConfigurationManager', () => {
       setTimeout(() => {
         const updatedConfig: Partial<ServerConfig> = {
           serverName: 'updated-server',
-          port: 4000
+          port: 4000,
         };
         fs.writeFileSync(configPath, JSON.stringify(updatedConfig, null, 2));
       }, 100);
@@ -415,7 +419,7 @@ describe('ConfigurationManager', () => {
         port: 3000,
         logLevel: 'info',
         docsPath: './docs',
-        dataPath: './data'
+        dataPath: './data',
       };
 
       const migrated = manager.migrateConfig(oldConfig, '0.0.1', '0.1.0');
@@ -439,7 +443,7 @@ describe('ConfigurationManager', () => {
         enableHotReload: true,
         enableMetrics: false,
         maxConcurrentRequests: 100,
-        requestTimeout: 30000
+        requestTimeout: 30000,
       };
 
       const migrated = manager.migrateConfig(newConfig, '0.1.0', '0.0.1');
@@ -458,7 +462,7 @@ describe('ConfigurationManager', () => {
         port: 3000,
         logLevel: 'info',
         docsPath: './docs',
-        dataPath: './data'
+        dataPath: './data',
       };
 
       const migrated = manager.migrateConfig(config, '1.0.0', '1.0.0');
@@ -480,7 +484,7 @@ describe('ConfigurationManager', () => {
         enableHotReload: false,
         enableMetrics: true,
         maxConcurrentRequests: 200,
-        requestTimeout: 60000
+        requestTimeout: 60000,
       };
 
       manager.saveConfig(config, configPath);
@@ -508,7 +512,7 @@ describe('ConfigurationManager', () => {
         enableHotReload: true,
         enableMetrics: false,
         maxConcurrentRequests: 100,
-        requestTimeout: 30000
+        requestTimeout: 30000,
       };
 
       manager.saveConfig(config, nestedPath);
@@ -527,7 +531,7 @@ describe('ConfigurationManager', () => {
         enableHotReload: true,
         enableMetrics: false,
         maxConcurrentRequests: 100,
-        requestTimeout: 30000
+        requestTimeout: 30000,
       };
 
       expect(() => {
@@ -546,7 +550,7 @@ describe('ConfigurationManager', () => {
         enableHotReload: false,
         enableMetrics: true,
         maxConcurrentRequests: 150,
-        requestTimeout: 45000
+        requestTimeout: 45000,
       };
 
       manager.saveConfig(config, configPath);
@@ -577,7 +581,7 @@ describe('ConfigurationManager', () => {
     it('should update current configuration', () => {
       const updates: Partial<ServerConfig> = {
         serverName: 'updated-server',
-        port: 4000
+        port: 4000,
       };
 
       manager.updateConfig(updates);
@@ -593,7 +597,7 @@ describe('ConfigurationManager', () => {
     it('should stop watching configuration file', () => {
       const testConfig: Partial<ServerConfig> = {
         serverName: 'test-server',
-        port: 3000
+        port: 3000,
       };
 
       fs.writeFileSync(configPath, JSON.stringify(testConfig, null, 2));
@@ -610,7 +614,7 @@ describe('ConfigurationManager', () => {
     it('should clear change callbacks', () => {
       const testConfig: Partial<ServerConfig> = {
         serverName: 'test-server',
-        port: 3000
+        port: 3000,
       };
 
       fs.writeFileSync(configPath, JSON.stringify(testConfig, null, 2));

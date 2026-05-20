@@ -33,7 +33,14 @@ export interface ParameterConstraints {
  */
 export interface ParameterValidationHints {
   /** Suggested validation approach */
-  validationType: 'none' | 'required' | 'type' | 'range' | 'pattern' | 'enum' | 'custom';
+  validationType:
+    | 'none'
+    | 'required'
+    | 'type'
+    | 'range'
+    | 'pattern'
+    | 'enum'
+    | 'custom';
   /** Validation message or description */
   message: string;
   /** Example of valid value */
@@ -119,50 +126,57 @@ const COMMON_PATTERNS: ParameterPattern[] = [
     description: 'Pagination parameters for controlling result sets',
     commonNames: ['page', 'limit', 'per_page', 'offset', 'page_size'],
     type: 'integer',
-    paramType: 'query'
+    paramType: 'query',
   },
   {
     name: 'sorting',
     description: 'Sorting parameters for ordering results',
     commonNames: ['sort', 'order', 'sort_by', 'sort_field', 'sort_direction'],
     type: 'string',
-    paramType: 'query'
+    paramType: 'query',
   },
   {
     name: 'filtering',
     description: 'Filtering parameters for narrowing results',
     commonNames: ['filter', 'search', 'q', 'query', 'status', 'state', 'type'],
     type: 'string',
-    paramType: 'query'
+    paramType: 'query',
   },
   {
     name: 'id',
     description: 'Resource identifier parameter',
     commonNames: ['id', 'uuid', 'resource_id'],
     type: 'integer',
-    paramType: 'path'
+    paramType: 'path',
   },
   {
     name: 'date_range',
     description: 'Date range parameters for filtering by time',
-    commonNames: ['start_date', 'end_date', 'from', 'to', 'date_from', 'date_to'],
+    commonNames: [
+      'start_date',
+      'end_date',
+      'from',
+      'to',
+      'date_from',
+      'date_to',
+    ],
     type: 'string',
-    paramType: 'query'
+    paramType: 'query',
   },
   {
     name: 'include',
     description: 'Include related resources in response',
     commonNames: ['include', 'expand', 'embed', 'with'],
     type: 'string',
-    paramType: 'query'
+    paramType: 'query',
   },
   {
     name: 'fields',
     description: 'Select specific fields to return',
     commonNames: ['fields', 'select', 'columns'],
     type: 'string',
-    paramType: 'query'
-  }
+    paramType: 'query',
+  },
 ];
 
 /**
@@ -171,15 +185,17 @@ const COMMON_PATTERNS: ParameterPattern[] = [
  * @param parameter - The parameter to analyze
  * @returns Matching pattern or undefined
  */
-function identifyParameterPattern(parameter: ApiParameter): ParameterPattern | undefined {
+function identifyParameterPattern(
+  parameter: ApiParameter
+): ParameterPattern | undefined {
   const paramName = parameter.name.toLowerCase();
-  
+
   for (const pattern of COMMON_PATTERNS) {
-    if (pattern.commonNames.some(name => paramName.includes(name))) {
+    if (pattern.commonNames.some((name) => paramName.includes(name))) {
       return pattern;
     }
   }
-  
+
   return undefined;
 }
 
@@ -192,41 +208,47 @@ function identifyParameterPattern(parameter: ApiParameter): ParameterPattern | u
 function extractConstraints(parameter: ApiParameter): ParameterConstraints {
   const constraints: ParameterConstraints = {};
   const description = parameter.description.toLowerCase();
-  
+
   // Extract min/max values
   const minMatch = description.match(/min(?:imum)?\s*:?\s*(\d+)/i);
   const maxMatch = description.match(/max(?:imum)?\s*:?\s*(\d+)/i);
-  
+
   if (minMatch) {
     constraints.min = parseInt(minMatch[1], 10);
   }
   if (maxMatch) {
     constraints.max = parseInt(maxMatch[1], 10);
   }
-  
+
   // Extract pattern
   const patternMatch = description.match(/pattern\s*:?\s*([^\s,\)]+)/i);
   if (patternMatch) {
     constraints.pattern = patternMatch[1];
   }
-  
+
   // Extract enum values
   const enumMatch = description.match(/(?:enum|values?)\s*:?\s*\[([^\]]+)\]/i);
   if (enumMatch) {
-    constraints.enum = enumMatch[1].split(',').map(v => v.trim().replace(/['"]/g, ''));
+    constraints.enum = enumMatch[1]
+      .split(',')
+      .map((v) => v.trim().replace(/['"]/g, ''));
   }
-  
+
   // Extract min/max length
-  const minLengthMatch = description.match(/min(?:imum)?\s*length\s*:?\s*(\d+)/i);
-  const maxLengthMatch = description.match(/max(?:imum)?\s*length\s*:?\s*(\d+)/i);
-  
+  const minLengthMatch = description.match(
+    /min(?:imum)?\s*length\s*:?\s*(\d+)/i
+  );
+  const maxLengthMatch = description.match(
+    /max(?:imum)?\s*length\s*:?\s*(\d+)/i
+  );
+
   if (minLengthMatch) {
     constraints.minLength = parseInt(minLengthMatch[1], 10);
   }
   if (maxLengthMatch) {
     constraints.maxLength = parseInt(maxLengthMatch[1], 10);
   }
-  
+
   return constraints;
 }
 
@@ -237,12 +259,15 @@ function extractConstraints(parameter: ApiParameter): ParameterConstraints {
  * @param constraints - Parameter constraints
  * @returns Validation hints
  */
-function generateValidationHints(parameter: ApiParameter, constraints: ParameterConstraints): ParameterValidationHints {
+function generateValidationHints(
+  parameter: ApiParameter,
+  constraints: ParameterConstraints
+): ParameterValidationHints {
   const hints: ParameterValidationHints = {
     validationType: 'none',
-    message: 'No specific validation required'
+    message: 'No specific validation required',
   };
-  
+
   // Check for enum constraints first (highest priority)
   if (constraints.enum && constraints.enum.length > 0) {
     hints.validationType = 'enum';
@@ -251,7 +276,7 @@ function generateValidationHints(parameter: ApiParameter, constraints: Parameter
     hints.invalidExample = 'invalid_value';
     return hints;
   }
-  
+
   if (constraints.pattern) {
     hints.validationType = 'pattern';
     hints.message = `Value must match pattern: ${constraints.pattern}`;
@@ -259,12 +284,14 @@ function generateValidationHints(parameter: ApiParameter, constraints: Parameter
     hints.invalidExample = 'invalid_pattern';
     return hints;
   }
-  
+
   if (parameter.type === 'integer' || parameter.type === 'number') {
     if (constraints.min !== undefined && constraints.max !== undefined) {
       hints.validationType = 'range';
       hints.message = `Value must be between ${constraints.min} and ${constraints.max}`;
-      hints.example = String(Math.floor((constraints.min + constraints.max) / 2));
+      hints.example = String(
+        Math.floor((constraints.min + constraints.max) / 2)
+      );
       hints.invalidExample = String(constraints.max + 1);
     } else if (constraints.min !== undefined) {
       hints.validationType = 'range';
@@ -284,12 +311,17 @@ function generateValidationHints(parameter: ApiParameter, constraints: Parameter
     }
     return hints;
   }
-  
+
   if (parameter.type === 'string') {
-    if (constraints.minLength !== undefined && constraints.maxLength !== undefined) {
+    if (
+      constraints.minLength !== undefined &&
+      constraints.maxLength !== undefined
+    ) {
       hints.validationType = 'range';
       hints.message = `Length must be between ${constraints.minLength} and ${constraints.maxLength} characters`;
-      hints.example = 'a'.repeat(Math.floor((constraints.minLength + constraints.maxLength) / 2));
+      hints.example = 'a'.repeat(
+        Math.floor((constraints.minLength + constraints.maxLength) / 2)
+      );
       hints.invalidExample = 'a'.repeat(constraints.maxLength + 1);
     } else if (constraints.minLength !== undefined) {
       hints.validationType = 'range';
@@ -309,7 +341,7 @@ function generateValidationHints(parameter: ApiParameter, constraints: Parameter
     }
     return hints;
   }
-  
+
   if (parameter.type === 'boolean') {
     hints.validationType = 'type';
     hints.message = 'Value must be true or false';
@@ -317,7 +349,7 @@ function generateValidationHints(parameter: ApiParameter, constraints: Parameter
     hints.invalidExample = 'not_a_boolean';
     return hints;
   }
-  
+
   if (parameter.type === 'array') {
     hints.validationType = 'type';
     hints.message = 'Value must be an array';
@@ -325,7 +357,7 @@ function generateValidationHints(parameter: ApiParameter, constraints: Parameter
     hints.invalidExample = 'not_an_array';
     return hints;
   }
-  
+
   // Check for required parameter last (lowest priority)
   if (parameter.required) {
     hints.validationType = 'required';
@@ -334,12 +366,12 @@ function generateValidationHints(parameter: ApiParameter, constraints: Parameter
     hints.invalidExample = 'Omitting this parameter will result in an error';
     return hints;
   }
-  
+
   hints.validationType = 'type';
   hints.message = `Value must be of type ${parameter.type}`;
   hints.example = 'example_value';
   hints.invalidExample = 'invalid_value';
-  
+
   return hints;
 }
 
@@ -353,7 +385,7 @@ function toParameterDetail(parameter: ApiParameter): ParameterDetail {
   const constraints = extractConstraints(parameter);
   const validationHints = generateValidationHints(parameter, constraints);
   const pattern = identifyParameterPattern(parameter);
-  
+
   return {
     name: parameter.name,
     type: parameter.type,
@@ -362,7 +394,7 @@ function toParameterDetail(parameter: ApiParameter): ParameterDetail {
     paramType: parameter.paramType,
     constraints,
     validationHints,
-    pattern
+    pattern,
   };
 }
 
@@ -397,48 +429,48 @@ export function getParameters(
   index: MetadataIndex
 ): ParameterLookupResult | null {
   const { endpointPath, method, paramType } = params;
-  
+
   // Validate required parameters
   if (!endpointPath || !method) {
     throw new Error('endpointPath and method are required parameters');
   }
-  
+
   // Lookup endpoint by path and method
   const endpoint = getEndpointByPath(index, endpointPath, method.toUpperCase());
-  
+
   if (!endpoint) {
     return null;
   }
-  
+
   // Collect all parameters (path, query, and body)
   let allParameters: ApiParameter[] = [...endpoint.parameters];
-  
+
   // Add request body parameters if present
   if (endpoint.requestBody) {
     allParameters = [...allParameters, ...endpoint.requestBody];
   }
-  
+
   // Filter by parameter type if specified
   let filteredParameters = allParameters;
   if (paramType) {
-    filteredParameters = allParameters.filter(p => p.paramType === paramType);
+    filteredParameters = allParameters.filter((p) => p.paramType === paramType);
   }
-  
+
   // Convert to detailed parameter information
   const parameterDetails = filteredParameters.map(toParameterDetail);
-  
+
   // Calculate statistics
   const totalCount = parameterDetails.length;
-  const requiredCount = parameterDetails.filter(p => p.required).length;
+  const requiredCount = parameterDetails.filter((p) => p.required).length;
   const optionalCount = totalCount - requiredCount;
-  
+
   return {
     endpointPath,
     method: method.toUpperCase(),
     parameters: parameterDetails,
     totalCount,
     requiredCount,
-    optionalCount
+    optionalCount,
   };
 }
 
@@ -462,21 +494,21 @@ export function getParametersByPattern(
   endpoint: ApiEndpoint,
   patternName: string
 ): ParameterDetail[] {
-  const pattern = COMMON_PATTERNS.find(p => p.name === patternName);
-  
+  const pattern = COMMON_PATTERNS.find((p) => p.name === patternName);
+
   if (!pattern) {
     return [];
   }
-  
+
   const allParameters: ApiParameter[] = [...endpoint.parameters];
   if (endpoint.requestBody) {
     allParameters.push(...endpoint.requestBody);
   }
-  
+
   return allParameters
-    .filter(p => {
+    .filter((p) => {
       const paramName = p.name.toLowerCase();
-      return pattern.commonNames.some(name => paramName.includes(name));
+      return pattern.commonNames.some((name) => paramName.includes(name));
     })
     .map(toParameterDetail);
 }

@@ -23,10 +23,10 @@ const DEFAULT_CONFIG: ValidationConfig = {
     'application/json',
     'application/x-www-form-urlencoded',
     'text/plain',
-    'multipart/form-data'
+    'multipart/form-data',
   ],
   sanitizeInput: true,
-  blockSuspiciousPatterns: true
+  blockSuspiciousPatterns: true,
 };
 
 // Suspicious patterns to block
@@ -40,7 +40,7 @@ const SUSPICIOUS_PATTERNS = [
   /union\s+select/i,
   /drop\s+table/i,
   /insert\s+into/i,
-  /delete\s+from/i
+  /delete\s+from/i,
 ];
 
 /**
@@ -86,7 +86,7 @@ function sanitizeObject(obj: any): any {
  * Check for suspicious patterns
  */
 function containsSuspiciousPatterns(input: string): boolean {
-  return SUSPICIOUS_PATTERNS.some(pattern => pattern.test(input));
+  return SUSPICIOUS_PATTERNS.some((pattern) => pattern.test(input));
 }
 
 /**
@@ -104,12 +104,12 @@ export function validateRequest(
         logger.warn('URL too long', {
           length: req.url.length,
           max: validationConfig.maxUrlLength,
-          ip: req.ip
+          ip: req.ip,
         });
 
         res.status(414).json({
           error: 'Request Too Long',
-          message: 'URL exceeds maximum length'
+          message: 'URL exceeds maximum length',
         });
         return;
       }
@@ -120,12 +120,12 @@ export function validateRequest(
         logger.warn('Too many headers', {
           count: headerCount,
           max: validationConfig.maxHeaderCount,
-          ip: req.ip
+          ip: req.ip,
         });
 
         res.status(400).json({
           error: 'Bad Request',
-          message: 'Too many headers'
+          message: 'Too many headers',
         });
         return;
       }
@@ -136,12 +136,12 @@ export function validateRequest(
         logger.warn('Headers too large', {
           size: headerSize,
           max: validationConfig.maxHeaderSize,
-          ip: req.ip
+          ip: req.ip,
         });
 
         res.status(400).json({
           error: 'Bad Request',
-          message: 'Headers exceed maximum size'
+          message: 'Headers exceed maximum size',
         });
         return;
       }
@@ -149,35 +149,37 @@ export function validateRequest(
       // Validate content type for POST/PUT/PATCH
       if (['POST', 'PUT', 'PATCH'].includes(req.method)) {
         const contentType = req.headers['content-type'] || '';
-        const isAllowed = validationConfig.allowedContentTypes.some(type => 
+        const isAllowed = validationConfig.allowedContentTypes.some((type) =>
           contentType.includes(type)
         );
 
         if (!isAllowed && contentType) {
           logger.warn('Invalid content type', {
             contentType,
-            ip: req.ip
+            ip: req.ip,
           });
 
           res.status(415).json({
             error: 'Unsupported Media Type',
-            message: 'Content type not allowed'
+            message: 'Content type not allowed',
           });
           return;
         }
       }
 
       // Check for suspicious patterns in URL
-      if (validationConfig.blockSuspiciousPatterns && 
-          containsSuspiciousPatterns(req.url)) {
+      if (
+        validationConfig.blockSuspiciousPatterns &&
+        containsSuspiciousPatterns(req.url)
+      ) {
         logger.warn('Suspicious pattern detected in URL', {
           url: req.url,
-          ip: req.ip
+          ip: req.ip,
         });
 
         res.status(403).json({
           error: 'Forbidden',
-          message: 'Request contains suspicious patterns'
+          message: 'Request contains suspicious patterns',
         });
         return;
       }
@@ -202,7 +204,7 @@ export function validateRequest(
       logger.error('Validation error', { error, path: req.path });
       res.status(500).json({
         error: 'Internal Server Error',
-        message: 'Request validation failed'
+        message: 'Request validation failed',
       });
     }
   };
@@ -211,14 +213,16 @@ export function validateRequest(
 /**
  * Validate specific fields in request body
  */
-export function validateFields(fields: {
-  name: string;
-  type: 'string' | 'number' | 'boolean' | 'array' | 'object';
-  required?: boolean;
-  minLength?: number;
-  maxLength?: number;
-  pattern?: RegExp;
-}[]): (req: Request, res: Response, next: NextFunction) => void {
+export function validateFields(
+  fields: {
+    name: string;
+    type: 'string' | 'number' | 'boolean' | 'array' | 'object';
+    required?: boolean;
+    minLength?: number;
+    maxLength?: number;
+    pattern?: RegExp;
+  }[]
+): (req: Request, res: Response, next: NextFunction) => void {
   return (req: Request, res: Response, next: NextFunction): void => {
     const errors: string[] = [];
 
@@ -226,7 +230,10 @@ export function validateFields(fields: {
       const value = req.body[field.name];
 
       // Check required
-      if (field.required && (value === undefined || value === null || value === '')) {
+      if (
+        field.required &&
+        (value === undefined || value === null || value === '')
+      ) {
         errors.push(`Field '${field.name}' is required`);
         continue;
       }
@@ -246,10 +253,14 @@ export function validateFields(fields: {
       // Check string constraints
       if (field.type === 'string') {
         if (field.minLength !== undefined && value.length < field.minLength) {
-          errors.push(`Field '${field.name}' must be at least ${field.minLength} characters`);
+          errors.push(
+            `Field '${field.name}' must be at least ${field.minLength} characters`
+          );
         }
         if (field.maxLength !== undefined && value.length > field.maxLength) {
-          errors.push(`Field '${field.name}' must be at most ${field.maxLength} characters`);
+          errors.push(
+            `Field '${field.name}' must be at most ${field.maxLength} characters`
+          );
         }
         if (field.pattern && !field.pattern.test(value)) {
           errors.push(`Field '${field.name}' has invalid format`);
@@ -259,10 +270,14 @@ export function validateFields(fields: {
       // Check array constraints
       if (field.type === 'array') {
         if (field.minLength !== undefined && value.length < field.minLength) {
-          errors.push(`Field '${field.name}' must have at least ${field.minLength} items`);
+          errors.push(
+            `Field '${field.name}' must have at least ${field.minLength} items`
+          );
         }
         if (field.maxLength !== undefined && value.length > field.maxLength) {
-          errors.push(`Field '${field.name}' must have at most ${field.maxLength} items`);
+          errors.push(
+            `Field '${field.name}' must have at most ${field.maxLength} items`
+          );
         }
       }
     }
@@ -271,7 +286,7 @@ export function validateFields(fields: {
       res.status(400).json({
         error: 'Validation Error',
         message: 'Request validation failed',
-        details: errors
+        details: errors,
       });
       return;
     }

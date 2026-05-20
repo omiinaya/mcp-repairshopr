@@ -14,7 +14,7 @@ import {
   formatCollapsibleSection,
   createFormattingTemplate,
   FormattedResponse,
-  Template
+  Template,
 } from '../../src/retrieval/formatter';
 import { SearchResult } from '../../src/retrieval/scoring';
 import { ApiEndpoint, ApiParameter, ApiResponse } from '../../src/utils/types';
@@ -173,15 +173,19 @@ describe('ContextManager', () => {
       const prioritized = contextManager.prioritizeContext(mockResults, '');
 
       for (let i = 0; i < prioritized.length - 1; i++) {
-        expect(prioritized[i].score).toBeGreaterThanOrEqual(prioritized[i + 1].score);
+        expect(prioritized[i].score).toBeGreaterThanOrEqual(
+          prioritized[i + 1].score
+        );
       }
     });
 
     it('should not modify original results array', () => {
-      const originalOrder = mockResults.map(r => r.endpoint.operation);
+      const originalOrder = mockResults.map((r) => r.endpoint.operation);
       const prioritized = contextManager.prioritizeContext(mockResults, '');
 
-      expect(mockResults.map(r => r.endpoint.operation)).toEqual(originalOrder);
+      expect(mockResults.map((r) => r.endpoint.operation)).toEqual(
+        originalOrder
+      );
     });
 
     it('should return empty array for empty input', () => {
@@ -206,7 +210,7 @@ describe('ContextManager', () => {
         tokenCount: 10,
         resultCount: 1,
         excludedCount: 0,
-        truncated: false
+        truncated: false,
       };
 
       contextManager.cacheContext('test-key', context);
@@ -227,7 +231,7 @@ describe('ContextManager', () => {
         tokenCount: 10,
         resultCount: 1,
         excludedCount: 0,
-        truncated: false
+        truncated: false,
       };
 
       // Create context manager with very short TTL
@@ -235,7 +239,7 @@ describe('ContextManager', () => {
       shortTTLManager.cacheContext('test-key', context);
 
       // Wait for cache to expire
-      return new Promise<void>(resolve => {
+      return new Promise<void>((resolve) => {
         setTimeout(() => {
           const cached = shortTTLManager.getCachedContext('test-key');
           expect(cached).toBeNull();
@@ -250,7 +254,7 @@ describe('ContextManager', () => {
         tokenCount: 10,
         resultCount: 1,
         excludedCount: 0,
-        truncated: false
+        truncated: false,
       };
 
       contextManager.cacheContext('key1', context);
@@ -268,7 +272,7 @@ describe('ContextManager', () => {
         tokenCount: 10,
         resultCount: 1,
         excludedCount: 0,
-        truncated: false
+        truncated: false,
       };
 
       // Create context manager with small cache size
@@ -301,7 +305,8 @@ describe('ContextManager', () => {
     });
 
     it('should estimate tokens for markdown content', () => {
-      const markdown = '# Header\n\nSome **bold** text and `code`.\n\n- List item 1\n- List item 2';
+      const markdown =
+        '# Header\n\nSome **bold** text and `code`.\n\n- List item 1\n- List item 2';
       const tokens = contextManager.estimateTokens(markdown);
 
       expect(tokens).toBeGreaterThan(0);
@@ -332,7 +337,7 @@ describe('ContextManager', () => {
     it('should update configuration', () => {
       contextManager.updateConfig({
         defaultMaxTokens: 8000,
-        cacheTTL: 600000
+        cacheTTL: 600000,
       });
 
       const config = contextManager.getConfig();
@@ -368,7 +373,7 @@ describe('ContextManager', () => {
         tokenCount: 5,
         resultCount: 1,
         excludedCount: 0,
-        truncated: false
+        truncated: false,
       };
 
       contextManager.cacheContext('key1', context);
@@ -385,7 +390,7 @@ describe('ContextManager', () => {
         tokenCount: 5,
         resultCount: 1,
         excludedCount: 0,
-        truncated: false
+        truncated: false,
       };
 
       contextManager.cacheContext('key1', context);
@@ -416,15 +421,15 @@ function createMockSearchResults(): SearchResult[] {
           type: 'integer',
           required: false,
           description: 'Page number for pagination',
-          paramType: 'query'
-        }
+          paramType: 'query',
+        },
       ],
       responses: [
         {
           statusCode: 200,
-          description: 'List of customers'
-        }
-      ]
+          description: 'List of customers',
+        },
+      ],
     },
     {
       resource: 'Customer',
@@ -440,15 +445,15 @@ function createMockSearchResults(): SearchResult[] {
           type: 'string',
           required: true,
           description: 'Customer name',
-          paramType: 'body'
-        }
+          paramType: 'body',
+        },
       ],
       responses: [
         {
           statusCode: 201,
-          description: 'Customer created'
-        }
-      ]
+          description: 'Customer created',
+        },
+      ],
     },
     {
       resource: 'Ticket',
@@ -464,15 +469,15 @@ function createMockSearchResults(): SearchResult[] {
           type: 'string',
           required: true,
           description: 'Ticket subject',
-          paramType: 'body'
-        }
+          paramType: 'body',
+        },
       ],
       responses: [
         {
           statusCode: 201,
-          description: 'Ticket created'
-        }
-      ]
+          description: 'Ticket created',
+        },
+      ],
     },
     {
       resource: 'Ticket',
@@ -487,15 +492,15 @@ function createMockSearchResults(): SearchResult[] {
           type: 'string',
           required: false,
           description: 'Filter by status',
-          paramType: 'query'
-        }
+          paramType: 'query',
+        },
       ],
       responses: [
         {
           statusCode: 200,
-          description: 'List of tickets'
-        }
-      ]
+          description: 'List of tickets',
+        },
+      ],
     },
     {
       resource: 'Invoice',
@@ -511,23 +516,23 @@ function createMockSearchResults(): SearchResult[] {
           type: 'integer',
           required: true,
           description: 'Customer ID',
-          paramType: 'body'
-        }
+          paramType: 'body',
+        },
       ],
       responses: [
         {
           statusCode: 201,
-          description: 'Invoice created'
-        }
-      ]
-    }
+          description: 'Invoice created',
+        },
+      ],
+    },
   ];
 
   return endpoints.map((endpoint, index) => ({
     endpoint,
     score: 1 - index * 0.15, // Decreasing scores
     matchType: 'hybrid' as const,
-    context: 'Test context'
+    context: 'Test context',
   }));
 }
 
@@ -866,7 +871,9 @@ describe('Structured Response Formatting', () => {
 
       expect(template.type).toBe('parameters');
       expect(template.template).toContain('## Parameters');
-      expect(template.template).toContain('| Name | Type | Required | Description |');
+      expect(template.template).toContain(
+        '| Name | Type | Required | Description |'
+      );
       expect(template.template).toContain('{{rows}}');
       expect(template.placeholders).toHaveProperty('rows');
       expect(template.example).toContain('## Parameters');
@@ -903,15 +910,15 @@ function createMockParameters(): ApiParameter[] {
       type: 'integer',
       required: true,
       description: 'Page number',
-      paramType: 'query'
+      paramType: 'query',
     },
     {
       name: 'limit',
       type: 'string',
       required: false,
       description: 'Limit results',
-      paramType: 'query'
-    }
+      paramType: 'query',
+    },
   ];
 }
 
@@ -923,16 +930,16 @@ function createMockResponses(): ApiResponse[] {
     {
       statusCode: 200,
       description: 'List of customers',
-      example: { customers: [] }
+      example: { customers: [] },
     },
     {
       statusCode: 201,
       description: 'Customer created',
-      example: { id: 1, name: 'Test Customer' }
+      example: { id: 1, name: 'Test Customer' },
     },
     {
       statusCode: 401,
-      description: 'Unauthorized'
-    }
+      description: 'Unauthorized',
+    },
   ];
 }

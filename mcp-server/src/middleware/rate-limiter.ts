@@ -22,7 +22,7 @@ interface RateLimitEntry {
 const DEFAULT_CONFIG: RateLimitConfig = {
   windowMs: 60 * 1000, // 1 minute
   maxRequests: 100,
-  skipSuccessfulRequests: false
+  skipSuccessfulRequests: false,
 };
 
 export class RateLimiter {
@@ -39,7 +39,11 @@ export class RateLimiter {
   /**
    * Check if request is allowed
    */
-  isAllowed(key: string): { allowed: boolean; remaining: number; resetTime: number } {
+  isAllowed(key: string): {
+    allowed: boolean;
+    remaining: number;
+    resetTime: number;
+  } {
     const now = Date.now();
     const entry = this.store.get(key);
 
@@ -47,13 +51,13 @@ export class RateLimiter {
       // Reset or create new entry
       this.store.set(key, {
         count: 1,
-        resetTime: now + this.config.windowMs
+        resetTime: now + this.config.windowMs,
       });
 
       return {
         allowed: true,
         remaining: this.config.maxRequests - 1,
-        resetTime: now + this.config.windowMs
+        resetTime: now + this.config.windowMs,
       };
     }
 
@@ -61,7 +65,7 @@ export class RateLimiter {
       return {
         allowed: false,
         remaining: 0,
-        resetTime: entry.resetTime
+        resetTime: entry.resetTime,
       };
     }
 
@@ -69,7 +73,7 @@ export class RateLimiter {
     return {
       allowed: true,
       remaining: this.config.maxRequests - entry.count,
-      resetTime: entry.resetTime
+      resetTime: entry.resetTime,
     };
   }
 
@@ -84,14 +88,16 @@ export class RateLimiter {
   /**
    * Get current rate limit status for a key
    */
-  getStatus(key: string): { count: number; remaining: number; resetTime: number } | null {
+  getStatus(
+    key: string
+  ): { count: number; remaining: number; resetTime: number } | null {
     const entry = this.store.get(key);
     if (!entry) return null;
 
     return {
       count: entry.count,
       remaining: Math.max(0, this.config.maxRequests - entry.count),
-      resetTime: entry.resetTime
+      resetTime: entry.resetTime,
     };
   }
 
@@ -140,7 +146,7 @@ export class RateLimiter {
     return {
       size: this.store.size,
       windowMs: this.config.windowMs,
-      maxRequests: this.config.maxRequests
+      maxRequests: this.config.maxRequests,
     };
   }
 }
@@ -150,26 +156,26 @@ export const rateLimiters = {
   // General API rate limiter
   general: new RateLimiter({
     windowMs: 60 * 1000, // 1 minute
-    maxRequests: 100
+    maxRequests: 100,
   }),
 
   // Stricter limit for expensive operations
   expensive: new RateLimiter({
     windowMs: 60 * 1000, // 1 minute
-    maxRequests: 20
+    maxRequests: 20,
   }),
 
   // Health check rate limiter (more lenient)
   health: new RateLimiter({
     windowMs: 60 * 1000, // 1 minute
-    maxRequests: 60
+    maxRequests: 60,
   }),
 
   // Tool call rate limiter
   toolCall: new RateLimiter({
     windowMs: 60 * 1000, // 1 minute
-    maxRequests: 50
-  })
+    maxRequests: 50,
+  }),
 };
 
 /**
@@ -182,8 +188,8 @@ export function createRateLimitMiddleware(
   return async (req: any, res: any, next: () => void): Promise<void> => {
     try {
       // Generate key (default to IP address)
-      const key = keyGenerator ? keyGenerator(req) : (req.ip || 'unknown');
-      
+      const key = keyGenerator ? keyGenerator(req) : req.ip || 'unknown';
+
       // Check rate limit
       const result = limiter.isAllowed(key);
 
@@ -194,14 +200,16 @@ export function createRateLimitMiddleware(
 
       if (!result.allowed) {
         logger.warn(`Rate limit exceeded for key: ${key}`);
-        
+
         res.statusCode = 429;
         res.setHeader('Content-Type', 'application/json');
-        res.end(JSON.stringify({
-          error: 'Too Many Requests',
-          message: 'Rate limit exceeded. Please try again later.',
-          retryAfter: Math.ceil((result.resetTime - Date.now()) / 1000)
-        }));
+        res.end(
+          JSON.stringify({
+            error: 'Too Many Requests',
+            message: 'Rate limit exceeded. Please try again later.',
+            retryAfter: Math.ceil((result.resetTime - Date.now()) / 1000),
+          })
+        );
         return;
       }
 

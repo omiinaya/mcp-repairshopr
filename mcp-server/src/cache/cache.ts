@@ -44,7 +44,7 @@ const DEFAULT_CONFIG: CacheConfig = {
   maxSize: 10 * 1024 * 1024, // 10MB
   defaultTTL: 5 * 60 * 1000, // 5 minutes
   maxEntries: 1000,
-  enableWarming: true
+  enableWarming: true,
 };
 
 /**
@@ -67,7 +67,7 @@ export class Cache<T> {
     this.stats = {
       hits: 0,
       misses: 0,
-      evictions: 0
+      evictions: 0,
     };
   }
 
@@ -118,7 +118,7 @@ export class Cache<T> {
       timestamp: Date.now(),
       ttl: entryTTL,
       accessCount: 0,
-      size
+      size,
     };
 
     this.cache.set(key, entry);
@@ -207,7 +207,7 @@ export class Cache<T> {
       hitRate,
       totalEntries: this.cache.size,
       totalSize: this.getSize(),
-      evictions: this.stats.evictions
+      evictions: this.stats.evictions,
     };
   }
 
@@ -298,9 +298,7 @@ export class Cache<T> {
    * @returns True if key matches pattern
    */
   private matchesPattern(key: string, pattern: string): boolean {
-    const regexPattern = pattern
-      .replace(/\*/g, '.*')
-      .replace(/\?/g, '.');
+    const regexPattern = pattern.replace(/\*/g, '.*').replace(/\?/g, '.');
     const regex = new RegExp(`^${regexPattern}$`);
     return regex.test(key);
   }
@@ -329,12 +327,18 @@ export class Cache<T> {
     const currentEntries = this.getEntryCount();
 
     // Evict based on size limit
-    while (currentSize + entrySize > this.config.maxSize && this.accessOrder.length > 0) {
+    while (
+      currentSize + entrySize > this.config.maxSize &&
+      this.accessOrder.length > 0
+    ) {
       this.evictLeastRecentlyUsed();
     }
 
     // Evict based on entry count limit
-    while (currentEntries >= this.config.maxEntries && this.accessOrder.length > 0) {
+    while (
+      currentEntries >= this.config.maxEntries &&
+      this.accessOrder.length > 0
+    ) {
       this.evictLeastRecentlyUsed();
     }
   }
@@ -362,7 +366,7 @@ export class Cache<T> {
     this.stats = {
       hits: 0,
       misses: 0,
-      evictions: 0
+      evictions: 0,
     };
   }
 }

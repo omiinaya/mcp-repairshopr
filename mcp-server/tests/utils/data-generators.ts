@@ -2,12 +2,19 @@
  * Test data generators for unit tests
  */
 
-import { ApiEndpoint, ApiParameter, ApiResponse, ApiDocument } from '../../src/utils/types';
+import {
+  ApiEndpoint,
+  ApiParameter,
+  ApiResponse,
+  ApiDocument,
+} from '../../src/utils/types';
 
 /**
  * Generate a sample API endpoint
  */
-export function generateEndpoint(overrides: Partial<ApiEndpoint> = {}): ApiEndpoint {
+export function generateEndpoint(
+  overrides: Partial<ApiEndpoint> = {}
+): ApiEndpoint {
   return {
     resource: 'TestResource',
     operation: 'Test Operation',
@@ -19,22 +26,25 @@ export function generateEndpoint(overrides: Partial<ApiEndpoint> = {}): ApiEndpo
     responses: [
       {
         statusCode: 200,
-        description: 'Success'
-      }
+        description: 'Success',
+      },
     ],
-    ...overrides
+    ...overrides,
   };
 }
 
 /**
  * Generate multiple sample endpoints
  */
-export function generateEndpoints(count: number, overrides?: Partial<ApiEndpoint>): ApiEndpoint[] {
+export function generateEndpoints(
+  count: number,
+  overrides?: Partial<ApiEndpoint>
+): ApiEndpoint[] {
   return Array.from({ length: count }, (_, i) =>
     generateEndpoint({
       ...overrides,
       path: `/test/${i}`,
-      operation: `Test Operation ${i}`
+      operation: `Test Operation ${i}`,
     })
   );
 }
@@ -42,25 +52,30 @@ export function generateEndpoints(count: number, overrides?: Partial<ApiEndpoint
 /**
  * Generate a sample API parameter
  */
-export function generateParameter(overrides: Partial<ApiParameter> = {}): ApiParameter {
+export function generateParameter(
+  overrides: Partial<ApiParameter> = {}
+): ApiParameter {
   return {
     name: 'test_param',
     type: 'string',
     required: false,
     description: 'Test parameter',
     paramType: 'query',
-    ...overrides
+    ...overrides,
   };
 }
 
 /**
  * Generate multiple sample parameters
  */
-export function generateParameters(count: number, overrides?: Partial<ApiParameter>): ApiParameter[] {
+export function generateParameters(
+  count: number,
+  overrides?: Partial<ApiParameter>
+): ApiParameter[] {
   return Array.from({ length: count }, (_, i) =>
     generateParameter({
       ...overrides,
-      name: `param_${i}`
+      name: `param_${i}`,
     })
   );
 }
@@ -68,22 +83,27 @@ export function generateParameters(count: number, overrides?: Partial<ApiParamet
 /**
  * Generate a sample API response
  */
-export function generateResponse(overrides: Partial<ApiResponse> = {}): ApiResponse {
+export function generateResponse(
+  overrides: Partial<ApiResponse> = {}
+): ApiResponse {
   return {
     statusCode: 200,
     description: 'Successful response',
-    ...overrides
+    ...overrides,
   };
 }
 
 /**
  * Generate multiple sample responses
  */
-export function generateResponses(count: number, overrides?: Partial<ApiResponse>): ApiResponse[] {
+export function generateResponses(
+  count: number,
+  overrides?: Partial<ApiResponse>
+): ApiResponse[] {
   return Array.from({ length: count }, (_, i) =>
     generateResponse({
       ...overrides,
-      statusCode: 200 + i
+      statusCode: 200 + i,
     })
   );
 }
@@ -91,22 +111,27 @@ export function generateResponses(count: number, overrides?: Partial<ApiResponse
 /**
  * Generate a sample API document
  */
-export function generateDocument(overrides: Partial<ApiDocument> = {}): ApiDocument {
+export function generateDocument(
+  overrides: Partial<ApiDocument> = {}
+): ApiDocument {
   return {
     resourceName: 'TestResource',
     endpoints: [generateEndpoint()],
-    ...overrides
+    ...overrides,
   };
 }
 
 /**
  * Generate multiple sample documents
  */
-export function generateDocuments(count: number, overrides?: Partial<ApiDocument>): ApiDocument[] {
+export function generateDocuments(
+  count: number,
+  overrides?: Partial<ApiDocument>
+): ApiDocument[] {
   return Array.from({ length: count }, (_, i) =>
     generateDocument({
       ...overrides,
-      resourceName: `Resource${i}`
+      resourceName: `Resource${i}`,
     })
   );
 }
@@ -115,11 +140,11 @@ export function generateDocuments(count: number, overrides?: Partial<ApiDocument
  * Generate endpoints with different HTTP methods
  */
 export function generateEndpointsWithMethods(): ApiEndpoint[] {
-  return ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'].map(method =>
+  return ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'].map((method) =>
     generateEndpoint({
       method: method as any,
       operation: `${method} Test`,
-      path: `/test/${method.toLowerCase()}`
+      path: `/test/${method.toLowerCase()}`,
     })
   );
 }
@@ -128,10 +153,10 @@ export function generateEndpointsWithMethods(): ApiEndpoint[] {
  * Generate endpoints with different parameter types
  */
 export function generateEndpointsWithParameterTypes(): ApiEndpoint[] {
-  return ['query', 'path', 'body'].map(paramType =>
+  return ['query', 'path', 'body'].map((paramType) =>
     generateEndpoint({
       operation: `Test with ${paramType} params`,
-      parameters: [generateParameter({ paramType: paramType as any })]
+      parameters: [generateParameter({ paramType: paramType as any })],
     })
   );
 }
@@ -140,10 +165,10 @@ export function generateEndpointsWithParameterTypes(): ApiEndpoint[] {
  * Generate endpoints with various status codes
  */
 export function generateEndpointsWithStatusCodes(): ApiEndpoint[] {
-  return [200, 201, 204, 400, 401, 403, 404, 422, 500].map(statusCode =>
+  return [200, 201, 204, 400, 401, 403, 404, 422, 500].map((statusCode) =>
     generateEndpoint({
       operation: `Test ${statusCode} response`,
-      responses: [generateResponse({ statusCode })]
+      responses: [generateResponse({ statusCode })],
     })
   );
 }
@@ -165,15 +190,15 @@ export function generateComplexEndpoint(): ApiEndpoint {
         type: 'integer',
         required: true,
         description: 'Customer ID',
-        paramType: 'path'
+        paramType: 'path',
       }),
       generateParameter({
         name: 'include',
         type: 'string',
         required: false,
         description: 'Include related resources (comma-separated)',
-        paramType: 'query'
-      })
+        paramType: 'query',
+      }),
     ],
     requestBody: [],
     responses: [
@@ -186,19 +211,19 @@ export function generateComplexEndpoint(): ApiEndpoint {
             name: 'John Doe',
             email: 'john@example.com',
             phone: '555-1234',
-            created_at: '2024-01-01T00:00:00Z'
-          }
-        }
+            created_at: '2024-01-01T00:00:00Z',
+          },
+        },
       }),
       generateResponse({
         statusCode: 404,
         description: 'Customer not found',
         example: {
           error: 'Not Found',
-          message: 'The requested customer could not be found'
-        }
-      })
-    ]
+          message: 'The requested customer could not be found',
+        },
+      }),
+    ],
   });
 }
 
@@ -219,23 +244,23 @@ export function generatePaginationEndpoints(): ApiEndpoint[] {
           type: 'integer',
           required: false,
           description: 'Page number (min: 1)',
-          paramType: 'query'
+          paramType: 'query',
         }),
         generateParameter({
           name: 'limit',
           type: 'integer',
           required: false,
           description: 'Results per page (max: 100)',
-          paramType: 'query'
+          paramType: 'query',
         }),
         generateParameter({
           name: 'sort',
           type: 'string',
           required: false,
           description: 'Sort field (enum: [name, created_at, updated_at])',
-          paramType: 'query'
-        })
-      ]
+          paramType: 'query',
+        }),
+      ],
     }),
     generateEndpoint({
       resource: 'Ticket',
@@ -249,17 +274,17 @@ export function generatePaginationEndpoints(): ApiEndpoint[] {
           type: 'integer',
           required: false,
           description: 'Page number',
-          paramType: 'query'
+          paramType: 'query',
         }),
         generateParameter({
           name: 'per_page',
           type: 'integer',
           required: false,
           description: 'Results per page',
-          paramType: 'query'
-        })
-      ]
-    })
+          paramType: 'query',
+        }),
+      ],
+    }),
   ];
 }
 
@@ -281,22 +306,22 @@ export function generateEndpointsWithBodies(): ApiEndpoint[] {
           type: 'string',
           required: true,
           description: 'Customer name (minLength: 2, maxLength: 100)',
-          paramType: 'body'
+          paramType: 'body',
         }),
         generateParameter({
           name: 'email',
           type: 'string',
           required: true,
           description: 'Customer email (pattern: email)',
-          paramType: 'body'
+          paramType: 'body',
         }),
         generateParameter({
           name: 'phone',
           type: 'string',
           required: false,
           description: 'Customer phone number',
-          paramType: 'body'
-        })
+          paramType: 'body',
+        }),
       ],
       responses: [
         generateResponse({
@@ -306,11 +331,11 @@ export function generateEndpointsWithBodies(): ApiEndpoint[] {
             customer: {
               id: 1,
               name: 'John Doe',
-              email: 'john@example.com'
-            }
-          }
-        })
-      ]
+              email: 'john@example.com',
+            },
+          },
+        }),
+      ],
     }),
     generateEndpoint({
       resource: 'Ticket',
@@ -325,22 +350,22 @@ export function generateEndpointsWithBodies(): ApiEndpoint[] {
           type: 'string',
           required: true,
           description: 'Ticket subject',
-          paramType: 'body'
+          paramType: 'body',
         }),
         generateParameter({
           name: 'description',
           type: 'string',
           required: true,
           description: 'Ticket description',
-          paramType: 'body'
+          paramType: 'body',
         }),
         generateParameter({
           name: 'customer_id',
           type: 'integer',
           required: true,
           description: 'Customer ID',
-          paramType: 'body'
-        })
+          paramType: 'body',
+        }),
       ],
       responses: [
         generateResponse({
@@ -349,12 +374,12 @@ export function generateEndpointsWithBodies(): ApiEndpoint[] {
           example: {
             ticket: {
               id: 1,
-              subject: 'Support Request'
-            }
-          }
-        })
-      ]
-    })
+              subject: 'Support Request',
+            },
+          },
+        }),
+      ],
+    }),
   ];
 }
 
@@ -375,48 +400,48 @@ export function generateEndpointsWithErrors(): ApiEndpoint[] {
           type: 'integer',
           required: true,
           description: 'Customer ID',
-          paramType: 'path'
-        })
+          paramType: 'path',
+        }),
       ],
       responses: [
         generateResponse({
           statusCode: 200,
-          description: 'Success'
+          description: 'Success',
         }),
         generateResponse({
           statusCode: 401,
           description: 'Unauthorized',
           example: {
             error: 'Unauthorized',
-            message: 'Invalid or missing authentication token'
-          }
+            message: 'Invalid or missing authentication token',
+          },
         }),
         generateResponse({
           statusCode: 404,
           description: 'Not found',
           example: {
             error: 'Not Found',
-            message: 'The requested customer could not be found'
-          }
+            message: 'The requested customer could not be found',
+          },
         }),
         generateResponse({
           statusCode: 422,
           description: 'Unprocessable Entity',
           example: {
             error: 'Validation Failed',
-            message: 'The request could not be validated'
-          }
+            message: 'The request could not be validated',
+          },
         }),
         generateResponse({
           statusCode: 500,
           description: 'Internal Server Error',
           example: {
             error: 'Internal Server Error',
-            message: 'An unexpected error occurred'
-          }
-        })
-      ]
-    })
+            message: 'An unexpected error occurred',
+          },
+        }),
+      ],
+    }),
   ];
 }
 
@@ -436,7 +461,7 @@ export function generateSearchQueries(): string[] {
     'search customers',
     'filter tickets',
     'pagination',
-    'sort results'
+    'sort results',
   ];
 }
 
@@ -454,7 +479,7 @@ export function generateComplexSearchQueries(): string[] {
     'delete customer by id',
     'create ticket for customer',
     'get all resources',
-    'filter by permission'
+    'filter by permission',
   ];
 }
 
@@ -471,7 +496,7 @@ export function generateEdgeCaseQueries(): string[] {
     'nonexistent resource', // Non-existent resource
     'invalid endpoint path', // Invalid path
     'GET /customers/{id}/nested/path', // Complex path
-    'multiple words with different meanings' // Ambiguous query
+    'multiple words with different meanings', // Ambiguous query
   ];
 }
 
@@ -485,7 +510,7 @@ export function generateQueryParams(): Record<string, any>[] {
     { query: 'get tickets', method: 'GET' },
     { query: 'search', resource: 'Customer', method: 'GET' },
     { query: 'filter', permission: 'customer.view' },
-    { query: 'get', limit: 10, resource: 'Customer', method: 'GET' }
+    { query: 'get', limit: 10, resource: 'Customer', method: 'GET' },
   ];
 }
 
@@ -501,6 +526,6 @@ export function generateInvalidQueryParams(): Record<string, any>[] {
     { query: 'test', limit: 1000000 },
     { resource: 'NonExistent' },
     { method: 'INVALID' },
-    { permission: 'nonexistent.permission' }
+    { permission: 'nonexistent.permission' },
   ];
 }

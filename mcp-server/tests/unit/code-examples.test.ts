@@ -6,7 +6,7 @@ import {
   generateCodeExample,
   generateCodeExamplesForAllLanguages,
   CodeExampleParams,
-  CodeLanguage
+  CodeLanguage,
 } from '../../src/tools/code-examples';
 import { MetadataIndex, buildMetadataIndex } from '../../src/parser/metadata';
 import { ApiDocument } from '../../src/utils/types';
@@ -33,16 +33,16 @@ describe('Code Example Generator Tool', () => {
                 type: 'integer',
                 required: true,
                 description: 'Customer ID',
-                paramType: 'path'
-              }
+                paramType: 'path',
+              },
             ],
             responses: [
               {
                 statusCode: 200,
                 description: 'Successful response',
-                example: { customer: { id: 123, name: 'John Doe' } }
-              }
-            ]
+                example: { customer: { id: 123, name: 'John Doe' } },
+              },
+            ],
           },
           {
             resource: 'Customer',
@@ -58,23 +58,29 @@ describe('Code Example Generator Tool', () => {
                 type: 'string',
                 required: true,
                 description: 'Customer name',
-                paramType: 'body'
+                paramType: 'body',
               },
               {
                 name: 'email',
                 type: 'string',
                 required: false,
                 description: 'Customer email',
-                paramType: 'body'
-              }
+                paramType: 'body',
+              },
             ],
             responses: [
               {
                 statusCode: 201,
                 description: 'Customer created successfully',
-                example: { customer: { id: 123, name: 'John Doe', email: 'john@example.com' } }
-              }
-            ]
+                example: {
+                  customer: {
+                    id: 123,
+                    name: 'John Doe',
+                    email: 'john@example.com',
+                  },
+                },
+              },
+            ],
           },
           {
             resource: 'Customer',
@@ -89,25 +95,25 @@ describe('Code Example Generator Tool', () => {
                 type: 'integer',
                 required: false,
                 description: 'Page number for pagination',
-                paramType: 'query'
+                paramType: 'query',
               },
               {
                 name: 'limit',
                 type: 'integer',
                 required: false,
                 description: 'Number of results per page',
-                paramType: 'query'
-              }
+                paramType: 'query',
+              },
             ],
             responses: [
               {
                 statusCode: 200,
                 description: 'Successful response',
-                example: { customers: [] }
-              }
-            ]
-          }
-        ]
+                example: { customers: [] },
+              },
+            ],
+          },
+        ],
       },
       {
         resourceName: 'Ticket',
@@ -125,19 +131,19 @@ describe('Code Example Generator Tool', () => {
                 type: 'integer',
                 required: true,
                 description: 'Ticket ID',
-                paramType: 'path'
-              }
+                paramType: 'path',
+              },
             ],
             responses: [
               {
                 statusCode: 200,
                 description: 'Successful response',
-                example: { ticket: { id: 456, subject: 'Support Request' } }
-              }
-            ]
-          }
-        ]
-      }
+                example: { ticket: { id: 456, subject: 'Support Request' } },
+              },
+            ],
+          },
+        ],
+      },
     ];
 
     // Build metadata index from sample documents
@@ -150,7 +156,7 @@ describe('Code Example Generator Tool', () => {
         endpointPath: '/customers/{id}',
         method: 'GET',
         language: 'javascript',
-        includeAuth: true
+        includeAuth: true,
       };
 
       const result = generateCodeExample(params, metadataIndex);
@@ -170,7 +176,7 @@ describe('Code Example Generator Tool', () => {
         endpointPath: '/customers',
         method: 'POST',
         language: 'javascript',
-        includeAuth: true
+        includeAuth: true,
       };
 
       const result = generateCodeExample(params, metadataIndex);
@@ -190,7 +196,7 @@ describe('Code Example Generator Tool', () => {
         endpointPath: '/customers',
         method: 'GET',
         language: 'javascript',
-        includeAuth: true
+        includeAuth: true,
       };
 
       const result = generateCodeExample(params, metadataIndex);
@@ -206,7 +212,7 @@ describe('Code Example Generator Tool', () => {
         endpointPath: '/customers/{id}',
         method: 'GET',
         language: 'javascript',
-        includeAuth: false
+        includeAuth: false,
       };
 
       const result = generateCodeExample(params, metadataIndex);
@@ -220,7 +226,7 @@ describe('Code Example Generator Tool', () => {
         endpointPath: '/customers/{id}',
         method: 'GET',
         language: 'javascript',
-        includeAuth: true
+        includeAuth: true,
       };
 
       const result = generateCodeExample(params, metadataIndex);
@@ -243,7 +249,7 @@ describe('Code Example Generator Tool', () => {
         endpointPath: '/customers/{id}',
         method: 'GET',
         language: 'python',
-        includeAuth: true
+        includeAuth: true,
       };
 
       const result = generateCodeExample(params, metadataIndex);
@@ -262,7 +268,7 @@ describe('Code Example Generator Tool', () => {
         endpointPath: '/customers',
         method: 'POST',
         language: 'python',
-        includeAuth: true
+        includeAuth: true,
       };
 
       const result = generateCodeExample(params, metadataIndex);
@@ -281,7 +287,7 @@ describe('Code Example Generator Tool', () => {
         endpointPath: '/customers',
         method: 'GET',
         language: 'python',
-        includeAuth: true
+        includeAuth: true,
       };
 
       const result = generateCodeExample(params, metadataIndex);
@@ -297,7 +303,7 @@ describe('Code Example Generator Tool', () => {
         endpointPath: '/customers/{id}',
         method: 'GET',
         language: 'python',
-        includeAuth: false
+        includeAuth: false,
       };
 
       const result = generateCodeExample(params, metadataIndex);
@@ -311,7 +317,7 @@ describe('Code Example Generator Tool', () => {
         endpointPath: '/customers/{id}',
         method: 'GET',
         language: 'python',
-        includeAuth: true
+        includeAuth: true,
       };
 
       const result = generateCodeExample(params, metadataIndex);
@@ -335,7 +341,7 @@ describe('Code Example Generator Tool', () => {
         endpointPath: '/customers/{id}',
         method: 'GET',
         language: 'curl',
-        includeAuth: true
+        includeAuth: true,
       };
 
       const result = generateCodeExample(params, metadataIndex);
@@ -354,7 +360,7 @@ describe('Code Example Generator Tool', () => {
         endpointPath: '/customers',
         method: 'POST',
         language: 'curl',
-        includeAuth: true
+        includeAuth: true,
       };
 
       const result = generateCodeExample(params, metadataIndex);
@@ -372,7 +378,7 @@ describe('Code Example Generator Tool', () => {
         endpointPath: '/customers',
         method: 'GET',
         language: 'curl',
-        includeAuth: true
+        includeAuth: true,
       };
 
       const result = generateCodeExample(params, metadataIndex);
@@ -387,7 +393,7 @@ describe('Code Example Generator Tool', () => {
         endpointPath: '/customers/{id}',
         method: 'GET',
         language: 'curl',
-        includeAuth: false
+        includeAuth: false,
       };
 
       const result = generateCodeExample(params, metadataIndex);
@@ -401,7 +407,7 @@ describe('Code Example Generator Tool', () => {
         endpointPath: '/customers/{id}',
         method: 'GET',
         language: 'curl',
-        includeAuth: true
+        includeAuth: true,
       };
 
       const result = generateCodeExample(params, metadataIndex);
@@ -424,7 +430,7 @@ describe('Code Example Generator Tool', () => {
         endpointPath: '/customers/{id}',
         method: 'GET',
         language: 'javascript',
-        includeAuth: true
+        includeAuth: true,
       };
 
       const result = generateCodeExample(params, metadataIndex);
@@ -437,7 +443,7 @@ describe('Code Example Generator Tool', () => {
         endpointPath: '/customers/{id}',
         method: 'GET',
         language: 'python',
-        includeAuth: true
+        includeAuth: true,
       };
 
       const result = generateCodeExample(params, metadataIndex);
@@ -450,7 +456,7 @@ describe('Code Example Generator Tool', () => {
         endpointPath: '/customers/{id}',
         method: 'GET',
         language: 'curl',
-        includeAuth: true
+        includeAuth: true,
       };
 
       const result = generateCodeExample(params, metadataIndex);
@@ -465,7 +471,7 @@ describe('Code Example Generator Tool', () => {
         endpointPath: '/customers',
         method: 'POST',
         language: 'javascript',
-        includeAuth: true
+        includeAuth: true,
       };
 
       const result = generateCodeExample(params, metadataIndex);
@@ -480,7 +486,7 @@ describe('Code Example Generator Tool', () => {
         endpointPath: '/customers/{id}',
         method: 'GET',
         language: 'javascript',
-        includeAuth: true
+        includeAuth: true,
       };
 
       const result = generateCodeExample(params, metadataIndex);
@@ -494,7 +500,7 @@ describe('Code Example Generator Tool', () => {
         endpointPath: '/tickets/{id}',
         method: 'GET',
         language: 'javascript',
-        includeAuth: true
+        includeAuth: true,
       };
 
       const result = generateCodeExample(params, metadataIndex);
@@ -509,7 +515,7 @@ describe('Code Example Generator Tool', () => {
         endpointPath: '/customers/{id}',
         method: 'GET',
         language: 'javascript',
-        includeAuth: true
+        includeAuth: true,
       };
 
       const result = generateCodeExample(params, metadataIndex);
@@ -524,7 +530,7 @@ describe('Code Example Generator Tool', () => {
         endpointPath: '/customers/{id}',
         method: 'GET',
         language: 'javascript',
-        includeAuth: true
+        includeAuth: true,
       };
 
       const result = generateCodeExample(params, metadataIndex);
@@ -542,7 +548,7 @@ describe('Code Example Generator Tool', () => {
         endpointPath: '/customers/{id}',
         method: 'GET',
         language: 'python',
-        includeAuth: true
+        includeAuth: true,
       };
 
       const result = generateCodeExample(params, metadataIndex);
@@ -560,7 +566,7 @@ describe('Code Example Generator Tool', () => {
         endpointPath: '/customers/{id}',
         method: 'GET',
         language: 'curl',
-        includeAuth: true
+        includeAuth: true,
       };
 
       const result = generateCodeExample(params, metadataIndex);
@@ -580,7 +586,7 @@ describe('Code Example Generator Tool', () => {
         endpointPath: '/customers/{id}',
         method: 'GET',
         language: 'javascript',
-        includeAuth: true
+        includeAuth: true,
       };
 
       const result = generateCodeExample(params, metadataIndex);
@@ -598,7 +604,7 @@ describe('Code Example Generator Tool', () => {
         endpointPath: '/customers/{id}',
         method: 'GET',
         language: 'python',
-        includeAuth: true
+        includeAuth: true,
       };
 
       const result = generateCodeExample(params, metadataIndex);
@@ -615,7 +621,7 @@ describe('Code Example Generator Tool', () => {
         endpointPath: '/customers/{id}',
         method: 'GET',
         language: 'curl',
-        includeAuth: true
+        includeAuth: true,
       };
 
       const result = generateCodeExample(params, metadataIndex);
@@ -633,7 +639,7 @@ describe('Code Example Generator Tool', () => {
         endpointPath: '/customers/{id}',
         method: 'GET',
         language: 'ruby' as CodeLanguage,
-        includeAuth: true
+        includeAuth: true,
       };
 
       expect(() => {
@@ -646,7 +652,7 @@ describe('Code Example Generator Tool', () => {
         endpointPath: '/nonexistent',
         method: 'GET',
         language: 'javascript',
-        includeAuth: true
+        includeAuth: true,
       };
 
       expect(() => {
@@ -659,7 +665,7 @@ describe('Code Example Generator Tool', () => {
         endpointPath: '/customers/{id}',
         method: 'get',
         language: 'javascript',
-        includeAuth: true
+        includeAuth: true,
       };
 
       const result = generateCodeExample(params, metadataIndex);
@@ -673,10 +679,13 @@ describe('Code Example Generator Tool', () => {
       const params = {
         endpointPath: '/customers/{id}',
         method: 'GET',
-        includeAuth: true
+        includeAuth: true,
       };
 
-      const results = generateCodeExamplesForAllLanguages(params, metadataIndex);
+      const results = generateCodeExamplesForAllLanguages(
+        params,
+        metadataIndex
+      );
 
       expect(results).toHaveLength(3);
       expect(results[0].language).toBe('javascript');
@@ -688,12 +697,15 @@ describe('Code Example Generator Tool', () => {
       const params = {
         endpointPath: '/customers/{id}',
         method: 'GET',
-        includeAuth: true
+        includeAuth: true,
       };
 
-      const results = generateCodeExamplesForAllLanguages(params, metadataIndex);
+      const results = generateCodeExamplesForAllLanguages(
+        params,
+        metadataIndex
+      );
 
-      results.forEach(result => {
+      results.forEach((result) => {
         expect(result.endpoint.resource).toBe('Customer');
         expect(result.endpoint.operation).toBe('Get Customer by ID');
         expect(result.endpoint.method).toBe('GET');
@@ -706,12 +718,15 @@ describe('Code Example Generator Tool', () => {
       const params = {
         endpointPath: '/customers/{id}',
         method: 'GET',
-        includeAuth: true
+        includeAuth: true,
       };
 
-      const results = generateCodeExamplesForAllLanguages(params, metadataIndex);
+      const results = generateCodeExamplesForAllLanguages(
+        params,
+        metadataIndex
+      );
 
-      results.forEach(result => {
+      results.forEach((result) => {
         expect(result.errorHandling).toBeDefined();
         expect(result.errorHandling.length).toBeGreaterThan(0);
       });
@@ -724,7 +739,7 @@ describe('Code Example Generator Tool', () => {
         endpointPath: '/customers',
         method: 'GET',
         language: 'javascript',
-        includeAuth: true
+        includeAuth: true,
       };
 
       const result = generateCodeExample(params, metadataIndex);
@@ -737,7 +752,7 @@ describe('Code Example Generator Tool', () => {
         endpointPath: '/customers/{id}',
         method: 'GET',
         language: 'javascript',
-        includeAuth: true
+        includeAuth: true,
       };
 
       const result = generateCodeExample(params, metadataIndex);
@@ -764,13 +779,13 @@ describe('Code Example Generator Tool', () => {
                   type: 'boolean',
                   required: false,
                   description: 'Active status',
-                  paramType: 'query'
-                }
+                  paramType: 'query',
+                },
               ],
-              responses: []
-            }
-          ]
-        }
+              responses: [],
+            },
+          ],
+        },
       ];
 
       const testIndex = buildMetadataIndex(testDocuments);
@@ -778,7 +793,7 @@ describe('Code Example Generator Tool', () => {
         endpointPath: '/test',
         method: 'GET',
         language: 'javascript',
-        includeAuth: true
+        includeAuth: true,
       };
 
       const result = generateCodeExample(params, testIndex);

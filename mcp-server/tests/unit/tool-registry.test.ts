@@ -23,12 +23,12 @@ describe('ToolRegistry', () => {
         inputSchema: {
           type: 'object',
           properties: {
-            param1: { type: 'string' }
-          }
+            param1: { type: 'string' },
+          },
         },
         version: '1.0.0',
         deprecated: false,
-        dependencies: []
+        dependencies: [],
       };
 
       const handler = jest.fn();
@@ -46,7 +46,7 @@ describe('ToolRegistry', () => {
         inputSchema: { type: 'object' },
         version: '1.0.0',
         deprecated: false,
-        dependencies: []
+        dependencies: [],
       };
 
       registry.registerTool(definition, jest.fn());
@@ -68,7 +68,7 @@ describe('ToolRegistry', () => {
         inputSchema: { type: 'object' },
         version: '1.0.0',
         deprecated: false,
-        dependencies: []
+        dependencies: [],
       };
 
       const definition2: ToolDefinition = {
@@ -77,7 +77,7 @@ describe('ToolRegistry', () => {
         inputSchema: { type: 'object' },
         version: '2.0.0',
         deprecated: false,
-        dependencies: []
+        dependencies: [],
       };
 
       const handler1 = jest.fn();
@@ -101,7 +101,7 @@ describe('ToolRegistry', () => {
         inputSchema: { type: 'object' },
         version: '1.0.0',
         deprecated: false,
-        dependencies: []
+        dependencies: [],
       };
 
       registry.registerTool(definition, jest.fn());
@@ -122,7 +122,7 @@ describe('ToolRegistry', () => {
         inputSchema: { type: 'object' },
         version: '1.0.0',
         deprecated: false,
-        dependencies: []
+        dependencies: [],
       };
 
       const definition2: ToolDefinition = {
@@ -131,7 +131,7 @@ describe('ToolRegistry', () => {
         inputSchema: { type: 'object' },
         version: '1.0.0',
         deprecated: false,
-        dependencies: []
+        dependencies: [],
       };
 
       registry.registerTool(definition1, jest.fn());
@@ -139,8 +139,8 @@ describe('ToolRegistry', () => {
 
       const allTools = registry.getAllTools();
       expect(allTools).toHaveLength(2);
-      expect(allTools.map(t => t.name)).toContain('tool1');
-      expect(allTools.map(t => t.name)).toContain('tool2');
+      expect(allTools.map((t) => t.name)).toContain('tool1');
+      expect(allTools.map((t) => t.name)).toContain('tool2');
     });
 
     it('should get tool handler by name', () => {
@@ -150,7 +150,7 @@ describe('ToolRegistry', () => {
         inputSchema: { type: 'object' },
         version: '1.0.0',
         deprecated: false,
-        dependencies: []
+        dependencies: [],
       };
 
       const handler = jest.fn();
@@ -175,7 +175,7 @@ describe('ToolRegistry', () => {
           inputSchema: { type: 'object' },
           version: '1.0.0',
           deprecated: false,
-          dependencies: []
+          dependencies: [],
         },
         {
           name: 'deprecated-tool',
@@ -183,7 +183,7 @@ describe('ToolRegistry', () => {
           inputSchema: { type: 'object' },
           version: '1.0.0',
           deprecated: true,
-          dependencies: []
+          dependencies: [],
         },
         {
           name: 'v2-tool',
@@ -191,11 +191,11 @@ describe('ToolRegistry', () => {
           inputSchema: { type: 'object' },
           version: '2.0.0',
           deprecated: false,
-          dependencies: []
-        }
+          dependencies: [],
+        },
       ];
 
-      tools.forEach(tool => registry.registerTool(tool, jest.fn()));
+      tools.forEach((tool) => registry.registerTool(tool, jest.fn()));
     });
 
     it('should discover all tools without filters', () => {
@@ -206,7 +206,7 @@ describe('ToolRegistry', () => {
     it('should filter by deprecated status', () => {
       const activeTools = registry.discoverTools({ deprecated: false });
       expect(activeTools).toHaveLength(2);
-      expect(activeTools.every(t => !t.deprecated)).toBe(true);
+      expect(activeTools.every((t) => !t.deprecated)).toBe(true);
 
       const deprecatedTools = registry.discoverTools({ deprecated: true });
       expect(deprecatedTools).toHaveLength(1);
@@ -216,7 +216,7 @@ describe('ToolRegistry', () => {
     it('should filter by version', () => {
       const v1Tools = registry.discoverTools({ version: '1.0.0' });
       expect(v1Tools).toHaveLength(2);
-      expect(v1Tools.every(t => t.version === '1.0.0')).toBe(true);
+      expect(v1Tools.every((t) => t.version === '1.0.0')).toBe(true);
 
       const v2Tools = registry.discoverTools({ version: '2.0.0' });
       expect(v2Tools).toHaveLength(1);
@@ -224,7 +224,10 @@ describe('ToolRegistry', () => {
     });
 
     it('should filter by both deprecated and version', () => {
-      const filtered = registry.discoverTools({ deprecated: false, version: '1.0.0' });
+      const filtered = registry.discoverTools({
+        deprecated: false,
+        version: '1.0.0',
+      });
       expect(filtered).toHaveLength(1);
       expect(filtered[0].name).toBe('active-tool');
     });
@@ -238,7 +241,7 @@ describe('ToolRegistry', () => {
         inputSchema: { type: 'object' },
         version: '1.0.0',
         deprecated: false,
-        dependencies: []
+        dependencies: [],
       };
 
       const tool2: ToolDefinition = {
@@ -247,7 +250,7 @@ describe('ToolRegistry', () => {
         inputSchema: { type: 'object' },
         version: '1.0.0',
         deprecated: false,
-        dependencies: ['tool1']
+        dependencies: ['tool1'],
       };
 
       registry.registerTool(tool1, jest.fn());
@@ -265,7 +268,7 @@ describe('ToolRegistry', () => {
         inputSchema: { type: 'object' },
         version: '1.0.0',
         deprecated: false,
-        dependencies: ['missing-tool1', 'missing-tool2']
+        dependencies: ['missing-tool1', 'missing-tool2'],
       };
 
       registry.registerTool(tool, jest.fn());
@@ -288,7 +291,7 @@ describe('ToolRegistry', () => {
         inputSchema: { type: 'object' },
         version: '1.0.0',
         deprecated: false,
-        dependencies: []
+        dependencies: [],
       };
 
       registry.registerTool(tool, jest.fn());
@@ -307,7 +310,7 @@ describe('ToolRegistry', () => {
         inputSchema: { type: 'object' },
         version: '1.2.3',
         deprecated: false,
-        dependencies: []
+        dependencies: [],
       };
 
       registry.registerTool(definition, jest.fn());
@@ -328,7 +331,7 @@ describe('ToolRegistry', () => {
         inputSchema: { type: 'object' },
         version: '1.0.0-alpha.1',
         deprecated: false,
-        dependencies: []
+        dependencies: [],
       };
 
       registry.registerTool(definition, jest.fn());
@@ -342,7 +345,7 @@ describe('ToolRegistry', () => {
         inputSchema: { type: 'object' },
         version: '1.0.0+build.123',
         deprecated: false,
-        dependencies: []
+        dependencies: [],
       };
 
       registry.registerTool(definition, jest.fn());
@@ -358,7 +361,7 @@ describe('ToolRegistry', () => {
         inputSchema: { type: 'object' },
         version: '1.0.0',
         deprecated: true,
-        dependencies: []
+        dependencies: [],
       };
 
       const activeTool: ToolDefinition = {
@@ -367,7 +370,7 @@ describe('ToolRegistry', () => {
         inputSchema: { type: 'object' },
         version: '1.0.0',
         deprecated: false,
-        dependencies: []
+        dependencies: [],
       };
 
       registry.registerTool(deprecatedTool, jest.fn());
@@ -390,7 +393,7 @@ describe('ToolRegistry', () => {
         inputSchema: { type: 'object' },
         version: '1.0.0',
         deprecated: false,
-        dependencies: []
+        dependencies: [],
       };
 
       expect(() => registry.registerTool(definition, jest.fn())).toThrow(
@@ -404,7 +407,7 @@ describe('ToolRegistry', () => {
         inputSchema: { type: 'object' },
         version: '1.0.0',
         deprecated: false,
-        dependencies: []
+        dependencies: [],
       };
 
       expect(() => registry.registerTool(definition, jest.fn())).toThrow(
@@ -418,7 +421,7 @@ describe('ToolRegistry', () => {
         description: 'Test',
         version: '1.0.0',
         deprecated: false,
-        dependencies: []
+        dependencies: [],
       };
 
       expect(() => registry.registerTool(definition, jest.fn())).toThrow(
@@ -432,7 +435,7 @@ describe('ToolRegistry', () => {
         description: 'Test',
         inputSchema: { type: 'object' },
         deprecated: false,
-        dependencies: []
+        dependencies: [],
       };
 
       expect(() => registry.registerTool(definition, jest.fn())).toThrow(
@@ -447,7 +450,7 @@ describe('ToolRegistry', () => {
         inputSchema: { type: 'object' },
         version: 'invalid-version',
         deprecated: false,
-        dependencies: []
+        dependencies: [],
       };
 
       expect(() => registry.registerTool(definition, jest.fn())).toThrow(
@@ -461,7 +464,7 @@ describe('ToolRegistry', () => {
         description: 'Test',
         inputSchema: { type: 'object' },
         version: '1.0.0',
-        dependencies: []
+        dependencies: [],
       };
 
       expect(() => registry.registerTool(definition, jest.fn())).toThrow(
@@ -475,7 +478,7 @@ describe('ToolRegistry', () => {
         description: 'Test',
         inputSchema: { type: 'object' },
         version: '1.0.0',
-        deprecated: false
+        deprecated: false,
       };
 
       expect(() => registry.registerTool(definition, jest.fn())).toThrow(
@@ -490,7 +493,7 @@ describe('ToolRegistry', () => {
         inputSchema: { type: 'object' },
         version: '1.0.0',
         deprecated: false,
-        dependencies: ['valid', 123, 'also-valid']
+        dependencies: ['valid', 123, 'also-valid'],
       };
 
       expect(() => registry.registerTool(definition, jest.fn())).toThrow(
@@ -505,13 +508,13 @@ describe('ToolRegistry', () => {
         inputSchema: {
           type: 'object',
           properties: {
-            param1: { type: 'string' }
+            param1: { type: 'string' },
           },
-          required: ['param1']
+          required: ['param1'],
         },
         version: '1.0.0',
         deprecated: false,
-        dependencies: []
+        dependencies: [],
       };
 
       expect(() => registry.registerTool(definition, jest.fn())).not.toThrow();
@@ -527,7 +530,7 @@ describe('ToolRegistry', () => {
           inputSchema: { type: 'object' },
           version: '1.0.0',
           deprecated: false,
-          dependencies: []
+          dependencies: [],
         },
         {
           name: 'active2',
@@ -535,7 +538,7 @@ describe('ToolRegistry', () => {
           inputSchema: { type: 'object' },
           version: '1.0.0',
           deprecated: false,
-          dependencies: ['active1']
+          dependencies: ['active1'],
         },
         {
           name: 'deprecated1',
@@ -543,11 +546,11 @@ describe('ToolRegistry', () => {
           inputSchema: { type: 'object' },
           version: '1.0.0',
           deprecated: true,
-          dependencies: []
-        }
+          dependencies: [],
+        },
       ];
 
-      tools.forEach(tool => registry.registerTool(tool, jest.fn()));
+      tools.forEach((tool) => registry.registerTool(tool, jest.fn()));
 
       const stats = registry.getStats();
       expect(stats.totalTools).toBe(3);
@@ -573,7 +576,7 @@ describe('ToolRegistry', () => {
         inputSchema: { type: 'object' },
         version: '1.0.0',
         deprecated: false,
-        dependencies: []
+        dependencies: [],
       };
 
       registry.registerTool(definition, jest.fn());
@@ -593,7 +596,7 @@ describe('ToolRegistry', () => {
         inputSchema: { type: 'object' },
         version: '1.0.0',
         deprecated: false,
-        dependencies: []
+        dependencies: [],
       };
 
       registry.registerTool(definition, jest.fn());

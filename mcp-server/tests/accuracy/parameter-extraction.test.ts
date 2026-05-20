@@ -1,6 +1,6 @@
 /**
  * Parameter Extraction Tests
- * 
+ *
  * Tests to validate parameter extraction accuracy, parameter constraint extraction,
  * parameter pattern extraction, parameter type extraction, parameter description extraction,
  * and creates parameter extraction metrics.
@@ -37,36 +37,36 @@ const EXPECTED_GET_CUSTOMERS_PARAMS = [
     type: 'string',
     required: false,
     paramType: 'query',
-    descriptionContains: 'order by'
+    descriptionContains: 'order by',
   },
   {
     name: 'query',
     type: 'string',
     required: false,
     paramType: 'query',
-    descriptionContains: 'Search query'
+    descriptionContains: 'Search query',
   },
   {
     name: 'firstname',
     type: 'string',
     required: false,
     paramType: 'query',
-    descriptionContains: 'first name'
+    descriptionContains: 'first name',
   },
   {
     name: 'lastname',
     type: 'string',
     required: false,
     paramType: 'query',
-    descriptionContains: 'last name'
+    descriptionContains: 'last name',
   },
   {
     name: 'page',
     type: 'integer',
     required: false,
     paramType: 'query',
-    descriptionContains: 'page'
-  }
+    descriptionContains: 'page',
+  },
 ];
 
 /**
@@ -78,8 +78,8 @@ const EXPECTED_GET_CUSTOMER_BY_ID_PARAMS = [
     type: 'integer',
     required: true,
     paramType: 'path',
-    descriptionContains: ''
-  }
+    descriptionContains: '',
+  },
 ];
 
 /**
@@ -89,23 +89,29 @@ describe('Parameter Extraction - Accuracy', () => {
   test('should extract all parameters from Get Customers endpoint', async () => {
     const customerPath = path.join(__dirname, '../../../docs/api/customer.md');
     const document = await parseMarkdownFile(customerPath);
-    
-    const getCustomersEndpoint = document.endpoints.find(e => e.operation === 'Get Customers');
+
+    const getCustomersEndpoint = document.endpoints.find(
+      (e) => e.operation === 'Get Customers'
+    );
     expect(getCustomersEndpoint).toBeDefined();
-    
+
     const parameters = getCustomersEndpoint!.parameters;
-    expect(parameters.length).toBeGreaterThanOrEqual(EXPECTED_GET_CUSTOMERS_PARAMS.length);
+    expect(parameters.length).toBeGreaterThanOrEqual(
+      EXPECTED_GET_CUSTOMERS_PARAMS.length
+    );
   });
 
   test('should extract parameter names accurately', async () => {
     const customerPath = path.join(__dirname, '../../../docs/api/customer.md');
     const document = await parseMarkdownFile(customerPath);
-    
-    const getCustomersEndpoint = document.endpoints.find(e => e.operation === 'Get Customers');
+
+    const getCustomersEndpoint = document.endpoints.find(
+      (e) => e.operation === 'Get Customers'
+    );
     const parameters = getCustomersEndpoint!.parameters;
-    
+
     for (const expectedParam of EXPECTED_GET_CUSTOMERS_PARAMS) {
-      const param = parameters.find(p => p.name === expectedParam.name);
+      const param = parameters.find((p) => p.name === expectedParam.name);
       expect(param).toBeDefined();
       expect(param!.name).toBe(expectedParam.name);
     }
@@ -114,12 +120,14 @@ describe('Parameter Extraction - Accuracy', () => {
   test('should extract parameter types accurately', async () => {
     const customerPath = path.join(__dirname, '../../../docs/api/customer.md');
     const document = await parseMarkdownFile(customerPath);
-    
-    const getCustomersEndpoint = document.endpoints.find(e => e.operation === 'Get Customers');
+
+    const getCustomersEndpoint = document.endpoints.find(
+      (e) => e.operation === 'Get Customers'
+    );
     const parameters = getCustomersEndpoint!.parameters;
-    
+
     for (const expectedParam of EXPECTED_GET_CUSTOMERS_PARAMS) {
-      const param = parameters.find(p => p.name === expectedParam.name);
+      const param = parameters.find((p) => p.name === expectedParam.name);
       expect(param).toBeDefined();
       expect(param!.type).toBe(expectedParam.type);
     }
@@ -128,11 +136,13 @@ describe('Parameter Extraction - Accuracy', () => {
   test('should extract required flags accurately', async () => {
     const customerPath = path.join(__dirname, '../../../docs/api/customer.md');
     const document = await parseMarkdownFile(customerPath);
-    
-    const getCustomerByIdEndpoint = document.endpoints.find(e => e.operation === 'Get Customer by ID');
+
+    const getCustomerByIdEndpoint = document.endpoints.find(
+      (e) => e.operation === 'Get Customer by ID'
+    );
     const parameters = getCustomerByIdEndpoint!.parameters;
-    
-    const idParam = parameters.find(p => p.name === 'id');
+
+    const idParam = parameters.find((p) => p.name === 'id');
     expect(idParam).toBeDefined();
     expect(idParam!.required).toBe(true);
   });
@@ -140,15 +150,19 @@ describe('Parameter Extraction - Accuracy', () => {
   test('should extract parameter descriptions accurately', async () => {
     const customerPath = path.join(__dirname, '../../../docs/api/customer.md');
     const document = await parseMarkdownFile(customerPath);
-    
-    const getCustomersEndpoint = document.endpoints.find(e => e.operation === 'Get Customers');
+
+    const getCustomersEndpoint = document.endpoints.find(
+      (e) => e.operation === 'Get Customers'
+    );
     const parameters = getCustomersEndpoint!.parameters;
-    
+
     for (const expectedParam of EXPECTED_GET_CUSTOMERS_PARAMS) {
-      const param = parameters.find(p => p.name === expectedParam.name);
+      const param = parameters.find((p) => p.name === expectedParam.name);
       expect(param).toBeDefined();
       if (expectedParam.descriptionContains) {
-        expect(param!.description.toLowerCase()).toContain(expectedParam.descriptionContains.toLowerCase());
+        expect(param!.description.toLowerCase()).toContain(
+          expectedParam.descriptionContains.toLowerCase()
+        );
       }
     }
   });
@@ -156,15 +170,23 @@ describe('Parameter Extraction - Accuracy', () => {
   test('should extract parameter types (query, path, body) accurately', async () => {
     const customerPath = path.join(__dirname, '../../../docs/api/customer.md');
     const document = await parseMarkdownFile(customerPath);
-    
-    const getCustomersEndpoint = document.endpoints.find(e => e.operation === 'Get Customers');
-    const queryParams = getCustomersEndpoint!.parameters.filter(p => p.paramType === 'query');
-    
+
+    const getCustomersEndpoint = document.endpoints.find(
+      (e) => e.operation === 'Get Customers'
+    );
+    const queryParams = getCustomersEndpoint!.parameters.filter(
+      (p) => p.paramType === 'query'
+    );
+
     expect(queryParams.length).toBeGreaterThan(0);
-    
-    const getCustomerByIdEndpoint = document.endpoints.find(e => e.operation === 'Get Customer by ID');
-    const pathParams = getCustomerByIdEndpoint!.parameters.filter(p => p.paramType === 'path');
-    
+
+    const getCustomerByIdEndpoint = document.endpoints.find(
+      (e) => e.operation === 'Get Customer by ID'
+    );
+    const pathParams = getCustomerByIdEndpoint!.parameters.filter(
+      (p) => p.paramType === 'path'
+    );
+
     expect(pathParams.length).toBe(1);
     expect(pathParams[0].name).toBe('id');
   });
@@ -196,13 +218,13 @@ Success
 
     const tempPath = path.join(__dirname, 'temp-test.md');
     await fs.writeFile(tempPath, markdown);
-    
+
     try {
       const document = await parseMarkdownFile(tempPath);
       const endpoint = document.endpoints[0];
-      
+
       expect(endpoint.requestBody).toBeDefined();
-      const nameParam = endpoint.requestBody!.find(p => p.name === 'name');
+      const nameParam = endpoint.requestBody!.find((p) => p.name === 'name');
       expect(nameParam).toBeDefined();
       expect(nameParam!.description).toContain('minLength: 2');
       expect(nameParam!.description).toContain('maxLength: 100');
@@ -233,12 +255,12 @@ Success
 
     const tempPath = path.join(__dirname, 'temp-test.md');
     await fs.writeFile(tempPath, markdown);
-    
+
     try {
       const document = await parseMarkdownFile(tempPath);
       const endpoint = document.endpoints[0];
-      
-      const sortParam = endpoint.parameters.find(p => p.name === 'sort');
+
+      const sortParam = endpoint.parameters.find((p) => p.name === 'sort');
       expect(sortParam).toBeDefined();
       expect(sortParam!.description).toContain('enum:');
       expect(sortParam!.description).toContain('name');
@@ -270,12 +292,12 @@ Success
 
     const tempPath = path.join(__dirname, 'temp-test.md');
     await fs.writeFile(tempPath, markdown);
-    
+
     try {
       const document = await parseMarkdownFile(tempPath);
       const endpoint = document.endpoints[0];
-      
-      const pageParam = endpoint.parameters.find(p => p.name === 'page');
+
+      const pageParam = endpoint.parameters.find((p) => p.name === 'page');
       expect(pageParam).toBeDefined();
       expect(pageParam!.description).toContain('min: 1');
       expect(pageParam!.description).toContain('max: 100');
@@ -306,13 +328,13 @@ Success
 
     const tempPath = path.join(__dirname, 'temp-test.md');
     await fs.writeFile(tempPath, markdown);
-    
+
     try {
       const document = await parseMarkdownFile(tempPath);
       const endpoint = document.endpoints[0];
-      
+
       expect(endpoint.requestBody).toBeDefined();
-      const emailParam = endpoint.requestBody!.find(p => p.name === 'email');
+      const emailParam = endpoint.requestBody!.find((p) => p.name === 'email');
       expect(emailParam).toBeDefined();
       expect(emailParam!.description).toContain('pattern: email');
     } finally {
@@ -347,12 +369,12 @@ Success
 
     const tempPath = path.join(__dirname, 'temp-test.md');
     await fs.writeFile(tempPath, markdown);
-    
+
     try {
       const document = await parseMarkdownFile(tempPath);
       const endpoint = document.endpoints[0];
-      
-      const emailParam = endpoint.requestBody!.find(p => p.name === 'email');
+
+      const emailParam = endpoint.requestBody!.find((p) => p.name === 'email');
       expect(emailParam).toBeDefined();
       expect(emailParam!.description).toMatch(/pattern:\s*email/i);
     } finally {
@@ -382,12 +404,12 @@ Success
 
     const tempPath = path.join(__dirname, 'temp-test.md');
     await fs.writeFile(tempPath, markdown);
-    
+
     try {
       const document = await parseMarkdownFile(tempPath);
       const endpoint = document.endpoints[0];
-      
-      const dateParam = endpoint.parameters.find(p => p.name === 'date');
+
+      const dateParam = endpoint.parameters.find((p) => p.name === 'date');
       expect(dateParam).toBeDefined();
       expect(dateParam!.description).toMatch(/pattern:\s*date/i);
     } finally {
@@ -417,12 +439,12 @@ Success
 
     const tempPath = path.join(__dirname, 'temp-test.md');
     await fs.writeFile(tempPath, markdown);
-    
+
     try {
       const document = await parseMarkdownFile(tempPath);
       const endpoint = document.endpoints[0];
-      
-      const idParam = endpoint.parameters.find(p => p.name === 'id');
+
+      const idParam = endpoint.parameters.find((p) => p.name === 'id');
       expect(idParam).toBeDefined();
       expect(idParam!.description).toMatch(/pattern:\s*uuid/i);
     } finally {
@@ -457,12 +479,12 @@ Success
 
     const tempPath = path.join(__dirname, 'temp-test.md');
     await fs.writeFile(tempPath, markdown);
-    
+
     try {
       const document = await parseMarkdownFile(tempPath);
       const endpoint = document.endpoints[0];
-      
-      const nameParam = endpoint.parameters.find(p => p.name === 'name');
+
+      const nameParam = endpoint.parameters.find((p) => p.name === 'name');
       expect(nameParam).toBeDefined();
       expect(nameParam!.type).toBe('string');
     } finally {
@@ -492,12 +514,12 @@ Success
 
     const tempPath = path.join(__dirname, 'temp-test.md');
     await fs.writeFile(tempPath, markdown);
-    
+
     try {
       const document = await parseMarkdownFile(tempPath);
       const endpoint = document.endpoints[0];
-      
-      const pageParam = endpoint.parameters.find(p => p.name === 'page');
+
+      const pageParam = endpoint.parameters.find((p) => p.name === 'page');
       expect(pageParam).toBeDefined();
       expect(pageParam!.type).toBe('integer');
     } finally {
@@ -527,12 +549,12 @@ Success
 
     const tempPath = path.join(__dirname, 'temp-test.md');
     await fs.writeFile(tempPath, markdown);
-    
+
     try {
       const document = await parseMarkdownFile(tempPath);
       const endpoint = document.endpoints[0];
-      
-      const activeParam = endpoint.parameters.find(p => p.name === 'active');
+
+      const activeParam = endpoint.parameters.find((p) => p.name === 'active');
       expect(activeParam).toBeDefined();
       expect(activeParam!.type).toBe('boolean');
     } finally {
@@ -562,12 +584,12 @@ Success
 
     const tempPath = path.join(__dirname, 'temp-test.md');
     await fs.writeFile(tempPath, markdown);
-    
+
     try {
       const document = await parseMarkdownFile(tempPath);
       const endpoint = document.endpoints[0];
-      
-      const idsParam = endpoint.parameters.find(p => p.name === 'ids');
+
+      const idsParam = endpoint.parameters.find((p) => p.name === 'ids');
       expect(idsParam).toBeDefined();
       expect(idsParam!.type).toBe('array');
     } finally {
@@ -578,14 +600,16 @@ Success
   test('should extract all parameter types from customer.md', async () => {
     const customerPath = path.join(__dirname, '../../../docs/api/customer.md');
     const document = await parseMarkdownFile(customerPath);
-    
-    const getCustomersEndpoint = document.endpoints.find(e => e.operation === 'Get Customers');
+
+    const getCustomersEndpoint = document.endpoints.find(
+      (e) => e.operation === 'Get Customers'
+    );
     const parameters = getCustomersEndpoint!.parameters;
-    
-    const stringParams = parameters.filter(p => p.type === 'string');
-    const integerParams = parameters.filter(p => p.type === 'integer');
-    const arrayParams = parameters.filter(p => p.type === 'array');
-    
+
+    const stringParams = parameters.filter((p) => p.type === 'string');
+    const integerParams = parameters.filter((p) => p.type === 'integer');
+    const arrayParams = parameters.filter((p) => p.type === 'array');
+
     expect(stringParams.length).toBeGreaterThan(0);
     expect(integerParams.length).toBeGreaterThan(0);
     expect(arrayParams.length).toBeGreaterThan(0);
@@ -619,18 +643,22 @@ Success
 
     const tempPath = path.join(__dirname, 'temp-test.md');
     await fs.writeFile(tempPath, markdown);
-    
+
     try {
       const document = await parseMarkdownFile(tempPath);
       const endpoint = document.endpoints[0];
-      
-      const nameParam = endpoint.parameters.find(p => p.name === 'name');
+
+      const nameParam = endpoint.parameters.find((p) => p.name === 'name');
       expect(nameParam).toBeDefined();
-      expect(nameParam!.description).toBe('The name of the resource to filter by');
-      
-      const pageParam = endpoint.parameters.find(p => p.name === 'page');
+      expect(nameParam!.description).toBe(
+        'The name of the resource to filter by'
+      );
+
+      const pageParam = endpoint.parameters.find((p) => p.name === 'page');
       expect(pageParam).toBeDefined();
-      expect(pageParam!.description).toBe('Page number for pagination (starts at 1)');
+      expect(pageParam!.description).toBe(
+        'Page number for pagination (starts at 1)'
+      );
     } finally {
       await fs.unlink(tempPath);
     }
@@ -658,12 +686,12 @@ Success
 
     const tempPath = path.join(__dirname, 'temp-test.md');
     await fs.writeFile(tempPath, markdown);
-    
+
     try {
       const document = await parseMarkdownFile(tempPath);
       const endpoint = document.endpoints[0];
-      
-      const idParam = endpoint.parameters.find(p => p.name === 'id');
+
+      const idParam = endpoint.parameters.find((p) => p.name === 'id');
       expect(idParam).toBeDefined();
       expect(idParam!.description).toBe('');
     } finally {
@@ -693,12 +721,12 @@ Success
 
     const tempPath = path.join(__dirname, 'temp-test.md');
     await fs.writeFile(tempPath, markdown);
-    
+
     try {
       const document = await parseMarkdownFile(tempPath);
       const endpoint = document.endpoints[0];
-      
-      const queryParam = endpoint.parameters.find(p => p.name === 'query');
+
+      const queryParam = endpoint.parameters.find((p) => p.name === 'query');
       expect(queryParam).toBeDefined();
       expect(queryParam!.description).toContain('< > & " \'');
     } finally {
@@ -717,8 +745,8 @@ describe('Parameter Extraction - All API Files', () => {
   beforeAll(async () => {
     const apiDocsPath = path.join(__dirname, '../../../docs/api');
     const files = await fs.readdir(apiDocsPath);
-    const mdFiles = files.filter(file => file.endsWith('.md'));
-    
+    const mdFiles = files.filter((file) => file.endsWith('.md'));
+
     let totalParameters = 0;
     let successfullyExtracted = 0;
     let failedToExtract = 0;
@@ -732,25 +760,25 @@ describe('Parameter Extraction - All API Files', () => {
       try {
         const document = await parseMarkdownFile(filePath);
         allDocuments.push(document);
-        
+
         for (const endpoint of document.endpoints) {
           // Check query and path parameters
           for (const param of endpoint.parameters) {
             totalParameters++;
             successfullyExtracted++;
-            
+
             if (param.name && param.name.length > 0) validNames++;
             if (param.type && param.type.length > 0) validTypes++;
             if (typeof param.required === 'boolean') validRequired++;
             if (param.description !== undefined) validDescriptions++;
           }
-          
+
           // Check request body parameters
           if (endpoint.requestBody) {
             for (const param of endpoint.requestBody) {
               totalParameters++;
               successfullyExtracted++;
-              
+
               if (param.name && param.name.length > 0) validNames++;
               if (param.type && param.type.length > 0) validTypes++;
               if (typeof param.required === 'boolean') validRequired++;
@@ -767,18 +795,22 @@ describe('Parameter Extraction - All API Files', () => {
       totalParameters,
       successfullyExtracted,
       failedToExtract,
-      nameAccuracy: totalParameters > 0 ? (validNames / totalParameters) * 100 : 100,
-      typeAccuracy: totalParameters > 0 ? (validTypes / totalParameters) * 100 : 100,
-      requiredAccuracy: totalParameters > 0 ? (validRequired / totalParameters) * 100 : 100,
-      descriptionAccuracy: totalParameters > 0 ? (validDescriptions / totalParameters) * 100 : 100,
+      nameAccuracy:
+        totalParameters > 0 ? (validNames / totalParameters) * 100 : 100,
+      typeAccuracy:
+        totalParameters > 0 ? (validTypes / totalParameters) * 100 : 100,
+      requiredAccuracy:
+        totalParameters > 0 ? (validRequired / totalParameters) * 100 : 100,
+      descriptionAccuracy:
+        totalParameters > 0 ? (validDescriptions / totalParameters) * 100 : 100,
       constraintAccuracy: 0, // Would need manual validation
       patternAccuracy: 0, // Would need manual validation
-      overallAccuracy: (
-        (validNames / totalParameters) * 0.25 +
-        (validTypes / totalParameters) * 0.25 +
-        (validRequired / totalParameters) * 0.25 +
-        (validDescriptions / totalParameters) * 0.25
-      ) * 100
+      overallAccuracy:
+        ((validNames / totalParameters) * 0.25 +
+          (validTypes / totalParameters) * 0.25 +
+          (validRequired / totalParameters) * 0.25 +
+          (validDescriptions / totalParameters) * 0.25) *
+        100,
     };
   });
 
@@ -824,7 +856,7 @@ describe('Parameter Extraction - Metrics Generation', () => {
       descriptionAccuracy: 96,
       constraintAccuracy: 0,
       patternAccuracy: 0,
-      overallAccuracy: 97.5
+      overallAccuracy: 97.5,
     };
 
     expect(metrics).toHaveProperty('totalParameters');
@@ -843,4 +875,8 @@ describe('Parameter Extraction - Metrics Generation', () => {
 /**
  * Export metrics for use in validation script
  */
-export { ParameterExtractionMetrics, EXPECTED_GET_CUSTOMERS_PARAMS, EXPECTED_GET_CUSTOMER_BY_ID_PARAMS };
+export {
+  ParameterExtractionMetrics,
+  EXPECTED_GET_CUSTOMERS_PARAMS,
+  EXPECTED_GET_CUSTOMER_BY_ID_PARAMS,
+};

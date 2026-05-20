@@ -4,7 +4,11 @@
  */
 
 import { ApiEndpoint, ApiParameter, ApiResponse } from '../../src/utils/types';
-import { generateEndpoint, generateParameter, generateResponse } from '../fixtures';
+import {
+  generateEndpoint,
+  generateParameter,
+  generateResponse,
+} from '../fixtures';
 
 /**
  * Test scenario interface
@@ -55,7 +59,8 @@ export const apiDiscoveryScenarios: TestScenario[] = [
   {
     id: 'DISC-001',
     name: 'Discover all available endpoints',
-    description: 'AI assistant should be able to discover all available API endpoints',
+    description:
+      'AI assistant should be able to discover all available API endpoints',
     category: 'api-discovery',
     query: 'What endpoints are available?',
     expectedBehavior: {
@@ -65,20 +70,21 @@ export const apiDiscoveryScenarios: TestScenario[] = [
       shouldReturnPermissions: false,
       shouldReturnCodeExamples: false,
       shouldHandleErrors: false,
-      expectedEndpointCount: 1
+      expectedEndpointCount: 1,
     },
     acceptanceCriteria: [
       'Response includes list of available endpoints',
       'Each endpoint has resource name and operation',
       'Response is clear and easy to understand',
-      'No errors occur during discovery'
+      'No errors occur during discovery',
     ],
-    priority: 'critical'
+    priority: 'critical',
   },
   {
     id: 'DISC-002',
     name: 'Discover endpoints for specific resource',
-    description: 'AI assistant should discover endpoints for a specific resource',
+    description:
+      'AI assistant should discover endpoints for a specific resource',
     category: 'api-discovery',
     query: 'What endpoints are available for customers?',
     expectedBehavior: {
@@ -88,19 +94,20 @@ export const apiDiscoveryScenarios: TestScenario[] = [
       shouldReturnPermissions: false,
       shouldReturnCodeExamples: false,
       shouldHandleErrors: false,
-      expectedEndpointCount: 1
+      expectedEndpointCount: 1,
     },
     acceptanceCriteria: [
       'Response includes only customer-related endpoints',
       'Endpoints are relevant to the customer resource',
-      'Response is accurate and complete'
+      'Response is accurate and complete',
     ],
-    priority: 'critical'
+    priority: 'critical',
   },
   {
     id: 'DISC-003',
     name: 'Discover endpoints by HTTP method',
-    description: 'AI assistant should discover endpoints filtered by HTTP method',
+    description:
+      'AI assistant should discover endpoints filtered by HTTP method',
     category: 'api-discovery',
     query: 'What POST endpoints are available?',
     expectedBehavior: {
@@ -110,19 +117,20 @@ export const apiDiscoveryScenarios: TestScenario[] = [
       shouldReturnPermissions: false,
       shouldReturnCodeExamples: false,
       shouldHandleErrors: false,
-      expectedEndpointCount: 1
+      expectedEndpointCount: 1,
     },
     acceptanceCriteria: [
       'Response includes only POST endpoints',
       'All returned endpoints use POST method',
-      'Response is accurate'
+      'Response is accurate',
     ],
-    priority: 'high'
+    priority: 'high',
   },
   {
     id: 'DISC-004',
     name: 'Discover endpoints by permission',
-    description: 'AI assistant should discover endpoints filtered by permission',
+    description:
+      'AI assistant should discover endpoints filtered by permission',
     category: 'api-discovery',
     query: 'What endpoints require customer.view permission?',
     expectedBehavior: {
@@ -132,15 +140,15 @@ export const apiDiscoveryScenarios: TestScenario[] = [
       shouldReturnPermissions: true,
       shouldReturnCodeExamples: false,
       shouldHandleErrors: false,
-      expectedEndpointCount: 1
+      expectedEndpointCount: 1,
     },
     acceptanceCriteria: [
       'Response includes endpoints with customer.view permission',
       'All returned endpoints have the specified permission',
-      'Permission information is clearly displayed'
+      'Permission information is clearly displayed',
     ],
-    priority: 'high'
-  }
+    priority: 'high',
+  },
 ];
 
 /**
@@ -151,7 +159,8 @@ export const parameterLookupScenarios: TestScenario[] = [
   {
     id: 'PARAM-001',
     name: 'Lookup parameters for specific endpoint',
-    description: 'AI assistant should lookup parameters for a specific endpoint',
+    description:
+      'AI assistant should lookup parameters for a specific endpoint',
     category: 'parameter-lookup',
     query: 'What parameters does the create customer endpoint require?',
     expectedBehavior: {
@@ -162,15 +171,15 @@ export const parameterLookupScenarios: TestScenario[] = [
       shouldReturnCodeExamples: false,
       shouldHandleErrors: false,
       expectedEndpointCount: 1,
-      expectedParameterCount: 1
+      expectedParameterCount: 1,
     },
     acceptanceCriteria: [
       'Response includes all parameters for the endpoint',
       'Each parameter has name, type, and required status',
       'Parameter descriptions are clear',
-      'Required parameters are clearly marked'
+      'Required parameters are clearly marked',
     ],
-    priority: 'critical'
+    priority: 'critical',
   },
   {
     id: 'PARAM-002',
@@ -186,14 +195,14 @@ export const parameterLookupScenarios: TestScenario[] = [
       shouldReturnCodeExamples: false,
       shouldHandleErrors: false,
       expectedEndpointCount: 1,
-      expectedParameterCount: 1
+      expectedParameterCount: 1,
     },
     acceptanceCriteria: [
       'Response includes only required parameters',
       'No optional parameters are included',
-      'Required status is clearly indicated'
+      'Required status is clearly indicated',
     ],
-    priority: 'critical'
+    priority: 'critical',
   },
   {
     id: 'PARAM-003',
@@ -209,15 +218,15 @@ export const parameterLookupScenarios: TestScenario[] = [
       shouldReturnCodeExamples: false,
       shouldHandleErrors: false,
       expectedEndpointCount: 1,
-      expectedParameterCount: 1
+      expectedParameterCount: 1,
     },
     acceptanceCriteria: [
       'Response includes parameter types',
       'Constraints (min, max, pattern) are included',
       'Type information is accurate',
-      'Constraints are clearly explained'
+      'Constraints are clearly explained',
     ],
-    priority: 'high'
+    priority: 'high',
   },
   {
     id: 'PARAM-004',
@@ -233,15 +242,15 @@ export const parameterLookupScenarios: TestScenario[] = [
       shouldReturnCodeExamples: false,
       shouldHandleErrors: false,
       expectedEndpointCount: 1,
-      expectedParameterCount: 1
+      expectedParameterCount: 1,
     },
     acceptanceCriteria: [
       'Response includes body parameters',
       'Body parameters are distinguished from query/path parameters',
-      'All body parameters are listed'
+      'All body parameters are listed',
     ],
-    priority: 'high'
-  }
+    priority: 'high',
+  },
 ];
 
 /**
@@ -263,15 +272,15 @@ export const responseFormatScenarios: TestScenario[] = [
       shouldReturnCodeExamples: false,
       shouldHandleErrors: false,
       expectedEndpointCount: 1,
-      expectedResponseCount: 1
+      expectedResponseCount: 1,
     },
     acceptanceCriteria: [
       'Response includes status codes',
       'Response descriptions are clear',
       'Response examples are provided if available',
-      'Multiple response codes are listed'
+      'Multiple response codes are listed',
     ],
-    priority: 'critical'
+    priority: 'critical',
   },
   {
     id: 'RESP-002',
@@ -287,14 +296,14 @@ export const responseFormatScenarios: TestScenario[] = [
       shouldReturnCodeExamples: false,
       shouldHandleErrors: false,
       expectedEndpointCount: 1,
-      expectedResponseCount: 1
+      expectedResponseCount: 1,
     },
     acceptanceCriteria: [
       'Response includes 200/201 status code',
       'Success response example is provided',
-      'Response structure is clear'
+      'Response structure is clear',
     ],
-    priority: 'critical'
+    priority: 'critical',
   },
   {
     id: 'RESP-003',
@@ -310,15 +319,15 @@ export const responseFormatScenarios: TestScenario[] = [
       shouldReturnCodeExamples: false,
       shouldHandleErrors: false,
       expectedEndpointCount: 1,
-      expectedResponseCount: 1
+      expectedResponseCount: 1,
     },
     acceptanceCriteria: [
       'Response includes error status codes',
       'Error response examples are provided',
       'Error messages are clear',
-      'All possible error codes are listed'
+      'All possible error codes are listed',
     ],
-    priority: 'high'
+    priority: 'high',
   },
   {
     id: 'RESP-004',
@@ -334,15 +343,15 @@ export const responseFormatScenarios: TestScenario[] = [
       shouldReturnCodeExamples: false,
       shouldHandleErrors: false,
       expectedEndpointCount: 1,
-      expectedResponseCount: 1
+      expectedResponseCount: 1,
     },
     acceptanceCriteria: [
       'Response includes 404 status code',
       '404 response example is provided',
-      'Error message is clear'
+      'Error message is clear',
     ],
-    priority: 'medium'
-  }
+    priority: 'medium',
+  },
 ];
 
 /**
@@ -363,19 +372,20 @@ export const permissionCheckingScenarios: TestScenario[] = [
       shouldReturnPermissions: true,
       shouldReturnCodeExamples: false,
       shouldHandleErrors: false,
-      expectedEndpointCount: 1
+      expectedEndpointCount: 1,
     },
     acceptanceCriteria: [
       'Response includes required permissions',
       'Permissions are clearly listed',
-      'Permission format is correct (resource.action)'
+      'Permission format is correct (resource.action)',
     ],
-    priority: 'critical'
+    priority: 'critical',
   },
   {
     id: 'PERM-002',
     name: 'Check permissions by resource',
-    description: 'AI assistant should check permissions for all endpoints of a resource',
+    description:
+      'AI assistant should check permissions for all endpoints of a resource',
     category: 'permission-checking',
     query: 'What permissions do I need for ticket operations?',
     expectedBehavior: {
@@ -385,19 +395,20 @@ export const permissionCheckingScenarios: TestScenario[] = [
       shouldReturnPermissions: true,
       shouldReturnCodeExamples: false,
       shouldHandleErrors: false,
-      expectedEndpointCount: 1
+      expectedEndpointCount: 1,
     },
     acceptanceCriteria: [
       'Response includes all ticket-related permissions',
       'Permissions are grouped by operation',
-      'All required permissions are listed'
+      'All required permissions are listed',
     ],
-    priority: 'high'
+    priority: 'high',
   },
   {
     id: 'PERM-003',
     name: 'Check if specific permission exists',
-    description: 'AI assistant should check if a specific permission is required',
+    description:
+      'AI assistant should check if a specific permission is required',
     category: 'permission-checking',
     query: 'Do I need customer.view permission to get customers?',
     expectedBehavior: {
@@ -407,15 +418,15 @@ export const permissionCheckingScenarios: TestScenario[] = [
       shouldReturnPermissions: true,
       shouldReturnCodeExamples: false,
       shouldHandleErrors: false,
-      expectedEndpointCount: 1
+      expectedEndpointCount: 1,
     },
     acceptanceCriteria: [
       'Response confirms or denies permission requirement',
       'Answer is clear and direct',
-      'Relevant endpoints are listed'
+      'Relevant endpoints are listed',
     ],
-    priority: 'medium'
-  }
+    priority: 'medium',
+  },
 ];
 
 /**
@@ -437,20 +448,21 @@ export const codeExampleScenarios: TestScenario[] = [
       shouldReturnCodeExamples: true,
       shouldHandleErrors: false,
       expectedEndpointCount: 1,
-      expectedParameterCount: 1
+      expectedParameterCount: 1,
     },
     acceptanceCriteria: [
       'Response includes code example',
       'Code example is syntactically correct',
       'Code example includes all required parameters',
-      'Code example is well-formatted'
+      'Code example is well-formatted',
     ],
-    priority: 'critical'
+    priority: 'critical',
   },
   {
     id: 'CODE-002',
     name: 'Generate code example with specific language',
-    description: 'AI assistant should generate code example in a specific language',
+    description:
+      'AI assistant should generate code example in a specific language',
     category: 'code-example-generation',
     query: 'Show me how to get a customer in JavaScript',
     expectedBehavior: {
@@ -461,19 +473,20 @@ export const codeExampleScenarios: TestScenario[] = [
       shouldReturnCodeExamples: true,
       shouldHandleErrors: false,
       expectedEndpointCount: 1,
-      expectedParameterCount: 1
+      expectedParameterCount: 1,
     },
     acceptanceCriteria: [
       'Response includes JavaScript code example',
       'Code example is valid JavaScript',
-      'Code example uses appropriate libraries'
+      'Code example uses appropriate libraries',
     ],
-    priority: 'high'
+    priority: 'high',
   },
   {
     id: 'CODE-003',
     name: 'Generate code example with all parameters',
-    description: 'AI assistant should generate code example with all parameters',
+    description:
+      'AI assistant should generate code example with all parameters',
     category: 'code-example-generation',
     query: 'Show me a complete example for creating a ticket',
     expectedBehavior: {
@@ -484,19 +497,20 @@ export const codeExampleScenarios: TestScenario[] = [
       shouldReturnCodeExamples: true,
       shouldHandleErrors: false,
       expectedEndpointCount: 1,
-      expectedParameterCount: 1
+      expectedParameterCount: 1,
     },
     acceptanceCriteria: [
       'Response includes all parameters',
       'Optional parameters are included with default values',
-      'Code example is complete and runnable'
+      'Code example is complete and runnable',
     ],
-    priority: 'high'
+    priority: 'high',
   },
   {
     id: 'CODE-004',
     name: 'Generate code example with error handling',
-    description: 'AI assistant should generate code example with error handling',
+    description:
+      'AI assistant should generate code example with error handling',
     category: 'code-example-generation',
     query: 'Show me how to handle errors when creating a customer',
     expectedBehavior: {
@@ -508,15 +522,15 @@ export const codeExampleScenarios: TestScenario[] = [
       shouldHandleErrors: true,
       expectedEndpointCount: 1,
       expectedParameterCount: 1,
-      expectedResponseCount: 1
+      expectedResponseCount: 1,
     },
     acceptanceCriteria: [
       'Response includes error handling code',
       'Common error cases are handled',
-      'Error messages are logged appropriately'
+      'Error messages are logged appropriately',
     ],
-    priority: 'medium'
-  }
+    priority: 'medium',
+  },
 ];
 
 /**
@@ -527,7 +541,8 @@ export const errorHandlingScenarios: TestScenario[] = [
   {
     id: 'ERR-001',
     name: 'Handle invalid resource query',
-    description: 'AI assistant should handle queries for non-existent resources',
+    description:
+      'AI assistant should handle queries for non-existent resources',
     category: 'error-handling',
     query: 'What endpoints are available for nonexistent?',
     expectedBehavior: {
@@ -536,14 +551,14 @@ export const errorHandlingScenarios: TestScenario[] = [
       shouldReturnResponses: false,
       shouldReturnPermissions: false,
       shouldReturnCodeExamples: false,
-      shouldHandleErrors: true
+      shouldHandleErrors: true,
     },
     acceptanceCriteria: [
       'Response indicates resource not found',
       'Error message is clear and helpful',
-      'Suggestion is provided if possible'
+      'Suggestion is provided if possible',
     ],
-    priority: 'high'
+    priority: 'high',
   },
   {
     id: 'ERR-002',
@@ -557,14 +572,14 @@ export const errorHandlingScenarios: TestScenario[] = [
       shouldReturnResponses: false,
       shouldReturnPermissions: false,
       shouldReturnCodeExamples: false,
-      shouldHandleErrors: false
+      shouldHandleErrors: false,
     },
     acceptanceCriteria: [
       'Response includes multiple possible endpoints',
       'Options are clearly presented',
-      'User is asked to clarify if needed'
+      'User is asked to clarify if needed',
     ],
-    priority: 'medium'
+    priority: 'medium',
   },
   {
     id: 'ERR-003',
@@ -578,15 +593,15 @@ export const errorHandlingScenarios: TestScenario[] = [
       shouldReturnResponses: false,
       shouldReturnPermissions: false,
       shouldReturnCodeExamples: false,
-      shouldHandleErrors: true
+      shouldHandleErrors: true,
     },
     acceptanceCriteria: [
       'Response indicates empty query',
       'Helpful message is provided',
-      'Suggestions are given for valid queries'
+      'Suggestions are given for valid queries',
     ],
-    priority: 'medium'
-  }
+    priority: 'medium',
+  },
 ];
 
 /**
@@ -606,14 +621,14 @@ export const edgeCaseScenarios: TestScenario[] = [
       shouldReturnResponses: false,
       shouldReturnPermissions: false,
       shouldReturnCodeExamples: false,
-      shouldHandleErrors: true
+      shouldHandleErrors: true,
     },
     acceptanceCriteria: [
       'Response handles long query gracefully',
       'Error message is clear if query is too long',
-      'System remains stable'
+      'System remains stable',
     ],
-    priority: 'low'
+    priority: 'low',
   },
   {
     id: 'EDGE-002',
@@ -627,14 +642,14 @@ export const edgeCaseScenarios: TestScenario[] = [
       shouldReturnResponses: false,
       shouldReturnPermissions: false,
       shouldReturnCodeExamples: false,
-      shouldHandleErrors: true
+      shouldHandleErrors: true,
     },
     acceptanceCriteria: [
       'Response handles special characters gracefully',
       'No crashes or errors occur',
-      'Helpful message is provided'
+      'Helpful message is provided',
     ],
-    priority: 'low'
+    priority: 'low',
   },
   {
     id: 'EDGE-003',
@@ -648,15 +663,15 @@ export const edgeCaseScenarios: TestScenario[] = [
       shouldReturnResponses: false,
       shouldReturnPermissions: false,
       shouldReturnCodeExamples: false,
-      shouldHandleErrors: false
+      shouldHandleErrors: false,
     },
     acceptanceCriteria: [
       'Response handles nested paths correctly',
       'Path parameters are identified',
-      'Response is accurate'
+      'Response is accurate',
     ],
-    priority: 'medium'
-  }
+    priority: 'medium',
+  },
 ];
 
 /**
@@ -670,22 +685,30 @@ export function getAllTestScenarios(): TestScenario[] {
     ...permissionCheckingScenarios,
     ...codeExampleScenarios,
     ...errorHandlingScenarios,
-    ...edgeCaseScenarios
+    ...edgeCaseScenarios,
   ];
 }
 
 /**
  * Get test scenarios by category
  */
-export function getScenariosByCategory(category: ScenarioCategory): TestScenario[] {
-  return getAllTestScenarios().filter(scenario => scenario.category === category);
+export function getScenariosByCategory(
+  category: ScenarioCategory
+): TestScenario[] {
+  return getAllTestScenarios().filter(
+    (scenario) => scenario.category === category
+  );
 }
 
 /**
  * Get test scenarios by priority
  */
-export function getScenariosByPriority(priority: 'critical' | 'high' | 'medium' | 'low'): TestScenario[] {
-  return getAllTestScenarios().filter(scenario => scenario.priority === priority);
+export function getScenariosByPriority(
+  priority: 'critical' | 'high' | 'medium' | 'low'
+): TestScenario[] {
+  return getAllTestScenarios().filter(
+    (scenario) => scenario.priority === priority
+  );
 }
 
 /**

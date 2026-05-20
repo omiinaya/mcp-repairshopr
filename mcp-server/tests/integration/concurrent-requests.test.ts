@@ -4,7 +4,11 @@
  */
 
 import { createMockMetadataIndex } from '../utils/test-helpers';
-import { generateEndpoint, generateParameter, generateResponse } from '../utils/data-generators';
+import {
+  generateEndpoint,
+  generateParameter,
+  generateResponse,
+} from '../utils/data-generators';
 import { searchApiDocs } from '../../src/tools/search';
 import { getEndpoint, getEndpointsBatch } from '../../src/tools/endpoint';
 import { getParameters } from '../../src/tools/parameters';
@@ -32,11 +36,20 @@ describe('Concurrent Requests Integration Tests', () => {
         path: '/customers/{id}',
         permission: 'customer.view',
         parameters: [
-          generateParameter({ name: 'id', type: 'integer', required: true, description: 'Customer ID', paramType: 'path' })
+          generateParameter({
+            name: 'id',
+            type: 'integer',
+            required: true,
+            description: 'Customer ID',
+            paramType: 'path',
+          }),
         ],
         responses: [
-          generateResponse({ statusCode: 200, description: 'Successful response' })
-        ]
+          generateResponse({
+            statusCode: 200,
+            description: 'Successful response',
+          }),
+        ],
       }),
       generateEndpoint({
         resource: 'Customer',
@@ -47,11 +60,20 @@ describe('Concurrent Requests Integration Tests', () => {
         permission: 'customer.create',
         parameters: [],
         requestBody: [
-          generateParameter({ name: 'name', type: 'string', required: true, description: 'Customer name', paramType: 'body' })
+          generateParameter({
+            name: 'name',
+            type: 'string',
+            required: true,
+            description: 'Customer name',
+            paramType: 'body',
+          }),
         ],
         responses: [
-          generateResponse({ statusCode: 201, description: 'Customer created' })
-        ]
+          generateResponse({
+            statusCode: 201,
+            description: 'Customer created',
+          }),
+        ],
       }),
       generateEndpoint({
         resource: 'Customer',
@@ -61,14 +83,29 @@ describe('Concurrent Requests Integration Tests', () => {
         path: '/customers/{id}',
         permission: 'customer.update',
         parameters: [
-          generateParameter({ name: 'id', type: 'integer', required: true, description: 'Customer ID', paramType: 'path' })
+          generateParameter({
+            name: 'id',
+            type: 'integer',
+            required: true,
+            description: 'Customer ID',
+            paramType: 'path',
+          }),
         ],
         requestBody: [
-          generateParameter({ name: 'name', type: 'string', required: false, description: 'Customer name', paramType: 'body' })
+          generateParameter({
+            name: 'name',
+            type: 'string',
+            required: false,
+            description: 'Customer name',
+            paramType: 'body',
+          }),
         ],
         responses: [
-          generateResponse({ statusCode: 200, description: 'Customer updated' })
-        ]
+          generateResponse({
+            statusCode: 200,
+            description: 'Customer updated',
+          }),
+        ],
       }),
       // Invoice endpoints
       generateEndpoint({
@@ -79,11 +116,20 @@ describe('Concurrent Requests Integration Tests', () => {
         path: '/invoices/{id}',
         permission: 'invoice.view',
         parameters: [
-          generateParameter({ name: 'id', type: 'integer', required: true, description: 'Invoice ID', paramType: 'path' })
+          generateParameter({
+            name: 'id',
+            type: 'integer',
+            required: true,
+            description: 'Invoice ID',
+            paramType: 'path',
+          }),
         ],
         responses: [
-          generateResponse({ statusCode: 200, description: 'Successful response' })
-        ]
+          generateResponse({
+            statusCode: 200,
+            description: 'Successful response',
+          }),
+        ],
       }),
       generateEndpoint({
         resource: 'Invoice',
@@ -93,11 +139,20 @@ describe('Concurrent Requests Integration Tests', () => {
         path: '/invoices',
         permission: 'invoice.view',
         parameters: [
-          generateParameter({ name: 'page', type: 'integer', required: false, description: 'Page number', paramType: 'query' })
+          generateParameter({
+            name: 'page',
+            type: 'integer',
+            required: false,
+            description: 'Page number',
+            paramType: 'query',
+          }),
         ],
         responses: [
-          generateResponse({ statusCode: 200, description: 'Successful response' })
-        ]
+          generateResponse({
+            statusCode: 200,
+            description: 'Successful response',
+          }),
+        ],
       }),
       // Ticket endpoints
       generateEndpoint({
@@ -109,11 +164,17 @@ describe('Concurrent Requests Integration Tests', () => {
         permission: 'ticket.create',
         parameters: [],
         requestBody: [
-          generateParameter({ name: 'subject', type: 'string', required: true, description: 'Ticket subject', paramType: 'body' })
+          generateParameter({
+            name: 'subject',
+            type: 'string',
+            required: true,
+            description: 'Ticket subject',
+            paramType: 'body',
+          }),
         ],
         responses: [
-          generateResponse({ statusCode: 201, description: 'Ticket created' })
-        ]
+          generateResponse({ statusCode: 201, description: 'Ticket created' }),
+        ],
       }),
       generateEndpoint({
         resource: 'Ticket',
@@ -123,11 +184,20 @@ describe('Concurrent Requests Integration Tests', () => {
         path: '/tickets/{id}',
         permission: 'ticket.view',
         parameters: [
-          generateParameter({ name: 'id', type: 'integer', required: true, description: 'Ticket ID', paramType: 'path' })
+          generateParameter({
+            name: 'id',
+            type: 'integer',
+            required: true,
+            description: 'Ticket ID',
+            paramType: 'path',
+          }),
         ],
         responses: [
-          generateResponse({ statusCode: 200, description: 'Successful response' })
-        ]
+          generateResponse({
+            statusCode: 200,
+            description: 'Successful response',
+          }),
+        ],
       }),
       // Product endpoints
       generateEndpoint({
@@ -139,9 +209,12 @@ describe('Concurrent Requests Integration Tests', () => {
         permission: 'product.view',
         parameters: [],
         responses: [
-          generateResponse({ statusCode: 200, description: 'Successful response' })
-        ]
-      })
+          generateResponse({
+            statusCode: 200,
+            description: 'Successful response',
+          }),
+        ],
+      }),
     ];
 
     metadataIndex = createMockMetadataIndex(endpoints);
@@ -152,11 +225,10 @@ describe('Concurrent Requests Integration Tests', () => {
       const embedding = vectorStore.generateEmbedding(
         `${endpoint.resource} ${endpoint.operation} ${endpoint.description}`
       );
-      vectorStore.addVector(
-        `${endpoint.method}:${endpoint.path}`,
-        embedding,
-        { endpointId: `${endpoint.method}:${endpoint.path}`, resource: endpoint.resource }
-      );
+      vectorStore.addVector(`${endpoint.method}:${endpoint.path}`, embedding, {
+        endpointId: `${endpoint.method}:${endpoint.path}`,
+        resource: endpoint.resource,
+      });
     }
 
     // Initialize cache
@@ -164,7 +236,7 @@ describe('Concurrent Requests Integration Tests', () => {
       maxSize: 10 * 1024 * 1024, // 10MB
       defaultTTL: 5 * 60 * 1000, // 5 minutes
       maxEntries: 1000,
-      enableWarming: false
+      enableWarming: false,
     });
   });
 
@@ -173,14 +245,16 @@ describe('Concurrent Requests Integration Tests', () => {
       const queries = ['customer', 'invoice', 'ticket', 'product', 'create'];
       const limit = 5;
 
-      const promises = queries.map(query =>
-        Promise.resolve(searchApiDocs({ query, limit }, vectorStore, metadataIndex))
+      const promises = queries.map((query) =>
+        Promise.resolve(
+          searchApiDocs({ query, limit }, vectorStore, metadataIndex)
+        )
       );
 
       const results = await Promise.all(promises);
 
       expect(results).toHaveLength(queries.length);
-      results.forEach(result => {
+      results.forEach((result) => {
         expect(result).toBeDefined();
         expect(Array.isArray(result)).toBe(true);
       });
@@ -190,14 +264,18 @@ describe('Concurrent Requests Integration Tests', () => {
       const queries = ['customer', 'invoice', 'ticket'];
       const limit = 5;
 
-      const promises = queries.map(query =>
-        Promise.resolve(searchApiDocs({ query, limit }, vectorStore, metadataIndex))
+      const promises = queries.map((query) =>
+        Promise.resolve(
+          searchApiDocs({ query, limit }, vectorStore, metadataIndex)
+        )
       );
 
       const results = await Promise.all(promises);
 
       // Each result should be independent
-      const resultKeys = results.map(r => r.map(item => item.endpoint.path));
+      const resultKeys = results.map((r) =>
+        r.map((item) => item.endpoint.path)
+      );
       resultKeys.forEach((keys, i) => {
         // Results should be unique per query
         expect(keys.length).toBeGreaterThan(0);
@@ -210,23 +288,27 @@ describe('Concurrent Requests Integration Tests', () => {
       const concurrency = 10;
 
       const promises = Array.from({ length: concurrency }, () =>
-        Promise.resolve(searchApiDocs({ query, limit }, vectorStore, metadataIndex))
+        Promise.resolve(
+          searchApiDocs({ query, limit }, vectorStore, metadataIndex)
+        )
       );
 
       const results = await Promise.all(promises);
 
       expect(results).toHaveLength(concurrency);
       // All results should have the same length
-      const lengths = results.map(r => r.length);
-      expect(lengths.every(l => l === lengths[0])).toBe(true);
+      const lengths = results.map((r) => r.length);
+      expect(lengths.every((l) => l === lengths[0])).toBe(true);
     });
 
     test('should handle concurrent searches with different limits', async () => {
       const query = 'customer';
       const limits = [1, 3, 5, 10, 20];
 
-      const promises = limits.map(limit =>
-        Promise.resolve(searchApiDocs({ query, limit }, vectorStore, metadataIndex))
+      const promises = limits.map((limit) =>
+        Promise.resolve(
+          searchApiDocs({ query, limit }, vectorStore, metadataIndex)
+        )
       );
 
       const results = await Promise.all(promises);
@@ -243,17 +325,17 @@ describe('Concurrent Requests Integration Tests', () => {
         { query: 'invoice', resource: 'Invoice', limit: 5 },
         { query: 'customer', method: 'GET', limit: 5 },
         { query: 'invoice', method: 'GET', limit: 5 },
-        { query: 'customer', permission: 'customer.view', limit: 5 }
+        { query: 'customer', permission: 'customer.view', limit: 5 },
       ];
 
-      const promises = searchConfigs.map(config =>
+      const promises = searchConfigs.map((config) =>
         Promise.resolve(searchApiDocs(config, vectorStore, metadataIndex))
       );
 
       const results = await Promise.all(promises);
 
       expect(results).toHaveLength(searchConfigs.length);
-      results.forEach(result => {
+      results.forEach((result) => {
         expect(result).toBeDefined();
         expect(Array.isArray(result)).toBe(true);
       });
@@ -261,11 +343,16 @@ describe('Concurrent Requests Integration Tests', () => {
 
     test('should handle concurrent searches under high load', async () => {
       const concurrency = 50;
-      const queries = Array.from({ length: concurrency }, (_, i) => `test query ${i}`);
+      const queries = Array.from(
+        { length: concurrency },
+        (_, i) => `test query ${i}`
+      );
 
       const startTime = Date.now();
-      const promises = queries.map(query =>
-        Promise.resolve(searchApiDocs({ query, limit: 3 }, vectorStore, metadataIndex))
+      const promises = queries.map((query) =>
+        Promise.resolve(
+          searchApiDocs({ query, limit: 3 }, vectorStore, metadataIndex)
+        )
       );
 
       const results = await Promise.all(promises);
@@ -285,17 +372,17 @@ describe('Concurrent Requests Integration Tests', () => {
         { path: '/invoices/{id}', method: 'GET' },
         { path: '/tickets/{id}', method: 'GET' },
         { resource: 'Customer' },
-        { resource: 'Invoice' }
+        { resource: 'Invoice' },
       ];
 
-      const promises = lookups.map(lookup =>
+      const promises = lookups.map((lookup) =>
         Promise.resolve(getEndpoint(lookup, metadataIndex))
       );
 
       const results = await Promise.all(promises);
 
       expect(results).toHaveLength(lookups.length);
-      results.forEach(result => {
+      results.forEach((result) => {
         expect(result).toBeDefined();
       });
     });
@@ -304,17 +391,17 @@ describe('Concurrent Requests Integration Tests', () => {
       const lookups = [
         { endpointPath: '/customers/{id}', method: 'GET' },
         { endpointPath: '/invoices/{id}', method: 'GET' },
-        { endpointPath: '/tickets/{id}', method: 'GET' }
+        { endpointPath: '/tickets/{id}', method: 'GET' },
       ];
 
-      const promises = lookups.map(lookup =>
+      const promises = lookups.map((lookup) =>
         Promise.resolve(getParameters(lookup, metadataIndex))
       );
 
       const results = await Promise.all(promises);
 
       expect(results).toHaveLength(lookups.length);
-      results.forEach(result => {
+      results.forEach((result) => {
         expect(result).toBeDefined();
       });
     });
@@ -323,17 +410,17 @@ describe('Concurrent Requests Integration Tests', () => {
       const lookups = [
         { endpointPath: '/customers/{id}', method: 'GET' },
         { endpointPath: '/invoices/{id}', method: 'GET' },
-        { endpointPath: '/tickets/{id}', method: 'GET' }
+        { endpointPath: '/tickets/{id}', method: 'GET' },
       ];
 
-      const promises = lookups.map(lookup =>
+      const promises = lookups.map((lookup) =>
         Promise.resolve(getResponses(lookup, metadataIndex))
       );
 
       const results = await Promise.all(promises);
 
       expect(results).toHaveLength(lookups.length);
-      results.forEach(result => {
+      results.forEach((result) => {
         expect(result).toBeDefined();
       });
     });
@@ -344,38 +431,63 @@ describe('Concurrent Requests Integration Tests', () => {
         { permission: 'invoice.view' },
         { permission: 'ticket.view' },
         { resource: 'Customer' },
-        { resource: 'Invoice' }
+        { resource: 'Invoice' },
       ];
 
-      const promises = lookups.map(lookup =>
+      const promises = lookups.map((lookup) =>
         Promise.resolve(getPermissions(lookup, metadataIndex))
       );
 
       const results = await Promise.all(promises);
 
       expect(results).toHaveLength(lookups.length);
-      results.forEach(result => {
+      results.forEach((result) => {
         expect(result).toBeDefined();
       });
     });
 
     test('should handle concurrent code example generations', async () => {
       const examples = [
-        { endpointPath: '/customers/{id}', method: 'GET', language: 'javascript', includeAuth: true },
-        { endpointPath: '/customers/{id}', method: 'GET', language: 'python', includeAuth: true },
-        { endpointPath: '/customers/{id}', method: 'GET', language: 'curl', includeAuth: true },
-        { endpointPath: '/invoices/{id}', method: 'GET', language: 'javascript', includeAuth: true },
-        { endpointPath: '/tickets/{id}', method: 'GET', language: 'javascript', includeAuth: true }
+        {
+          endpointPath: '/customers/{id}',
+          method: 'GET',
+          language: 'javascript',
+          includeAuth: true,
+        },
+        {
+          endpointPath: '/customers/{id}',
+          method: 'GET',
+          language: 'python',
+          includeAuth: true,
+        },
+        {
+          endpointPath: '/customers/{id}',
+          method: 'GET',
+          language: 'curl',
+          includeAuth: true,
+        },
+        {
+          endpointPath: '/invoices/{id}',
+          method: 'GET',
+          language: 'javascript',
+          includeAuth: true,
+        },
+        {
+          endpointPath: '/tickets/{id}',
+          method: 'GET',
+          language: 'javascript',
+          includeAuth: true,
+        },
       ];
 
-      const promises = examples.map(example =>
+      const promises = examples.map((example) =>
         Promise.resolve(generateCodeExample(example, metadataIndex))
       );
 
       const results = await Promise.all(promises);
 
       expect(results).toHaveLength(examples.length);
-      results.forEach(result => {
+      results.forEach((result) => {
         expect(result).toBeDefined();
         expect(result.code).toBeDefined();
         expect(result.language).toBeDefined();
@@ -387,17 +499,17 @@ describe('Concurrent Requests Integration Tests', () => {
         { includeEndpoints: false, includeRelationships: false },
         { includeEndpoints: true, includeRelationships: false },
         { includeEndpoints: false, includeRelationships: true },
-        { includeEndpoints: true, includeRelationships: true }
+        { includeEndpoints: true, includeRelationships: true },
       ];
 
-      const promises = configs.map(config =>
+      const promises = configs.map((config) =>
         Promise.resolve(listResources(config, metadataIndex))
       );
 
       const results = await Promise.all(promises);
 
       expect(results).toHaveLength(configs.length);
-      results.forEach(result => {
+      results.forEach((result) => {
         expect(result).toBeDefined();
         expect(result.totalResources).toBeGreaterThan(0);
       });
@@ -405,19 +517,22 @@ describe('Concurrent Requests Integration Tests', () => {
 
     test('should handle concurrent batch endpoint lookups', async () => {
       const batches = [
-        { paths: ['/customers/{id}', '/invoices/{id}'], methods: ['GET', 'GET'] },
+        {
+          paths: ['/customers/{id}', '/invoices/{id}'],
+          methods: ['GET', 'GET'],
+        },
         { paths: ['/tickets/{id}', '/products'], methods: ['GET', 'GET'] },
-        { paths: ['/customers', '/invoices'], methods: ['POST', 'POST'] }
+        { paths: ['/customers', '/invoices'], methods: ['POST', 'POST'] },
       ];
 
-      const promises = batches.map(batch =>
+      const promises = batches.map((batch) =>
         Promise.resolve(getEndpointsBatch(batch, metadataIndex))
       );
 
       const results = await Promise.all(promises);
 
       expect(results).toHaveLength(batches.length);
-      results.forEach(result => {
+      results.forEach((result) => {
         expect(result).toBeDefined();
         expect(result.results).toBeDefined();
       });
@@ -427,11 +542,16 @@ describe('Concurrent Requests Integration Tests', () => {
   describe('Server Under Load', () => {
     test('should handle high concurrent search load', async () => {
       const concurrency = 100;
-      const queries = Array.from({ length: concurrency }, (_, i) => `query ${i % 10}`);
+      const queries = Array.from(
+        { length: concurrency },
+        (_, i) => `query ${i % 10}`
+      );
 
       const startTime = Date.now();
-      const promises = queries.map(query =>
-        Promise.resolve(searchApiDocs({ query, limit: 3 }, vectorStore, metadataIndex))
+      const promises = queries.map((query) =>
+        Promise.resolve(
+          searchApiDocs({ query, limit: 3 }, vectorStore, metadataIndex)
+        )
       );
 
       const results = await Promise.all(promises);
@@ -447,11 +567,11 @@ describe('Concurrent Requests Integration Tests', () => {
       const concurrency = 50;
       const lookups = Array.from({ length: concurrency }, (_, i) => ({
         path: '/customers/{id}',
-        method: 'GET'
+        method: 'GET',
       }));
 
       const startTime = Date.now();
-      const promises = lookups.map(lookup =>
+      const promises = lookups.map((lookup) =>
         Promise.resolve(getEndpoint(lookup, metadataIndex))
       );
 
@@ -473,8 +593,10 @@ describe('Concurrent Requests Integration Tests', () => {
 
       for (let round = 0; round < rounds; round++) {
         const startTime = Date.now();
-        const promises = queries.map(query =>
-          Promise.resolve(searchApiDocs({ query, limit: 5 }, vectorStore, metadataIndex))
+        const promises = queries.map((query) =>
+          Promise.resolve(
+            searchApiDocs({ query, limit: 5 }, vectorStore, metadataIndex)
+          )
         );
 
         await Promise.all(promises);
@@ -483,43 +605,66 @@ describe('Concurrent Requests Integration Tests', () => {
       }
 
       // All rounds should complete in reasonable time
-      roundTimes.forEach(time => {
+      roundTimes.forEach((time) => {
         expect(time).toBeLessThan(2000);
       });
 
       // Performance should not degrade significantly
-      const avgTime = roundTimes.reduce((sum, t) => sum + t, 0) / roundTimes.length;
+      const avgTime =
+        roundTimes.reduce((sum, t) => sum + t, 0) / roundTimes.length;
       const maxTime = Math.max(...roundTimes);
       expect(maxTime).toBeLessThan(avgTime * 3); // Max should not be more than 3x average
     });
 
     test('should handle mixed concurrent operations', async () => {
       const operations = [
-        () => searchApiDocs({ query: 'customer', limit: 5 }, vectorStore, metadataIndex),
-        () => getEndpoint({ path: '/customers/{id}', method: 'GET' }, metadataIndex),
-        () => getParameters({ endpointPath: '/customers/{id}', method: 'GET' }, metadataIndex),
-        () => getResponses({ endpointPath: '/customers/{id}', method: 'GET' }, metadataIndex),
+        () =>
+          searchApiDocs(
+            { query: 'customer', limit: 5 },
+            vectorStore,
+            metadataIndex
+          ),
+        () =>
+          getEndpoint(
+            { path: '/customers/{id}', method: 'GET' },
+            metadataIndex
+          ),
+        () =>
+          getParameters(
+            { endpointPath: '/customers/{id}', method: 'GET' },
+            metadataIndex
+          ),
+        () =>
+          getResponses(
+            { endpointPath: '/customers/{id}', method: 'GET' },
+            metadataIndex
+          ),
         () => getPermissions({ permission: 'customer.view' }, metadataIndex),
-        () => listResources({}, metadataIndex)
+        () => listResources({}, metadataIndex),
       ];
 
-      const promises = operations.map(op => Promise.resolve(op()));
+      const promises = operations.map((op) => Promise.resolve(op()));
 
       const results = await Promise.all(promises);
 
       expect(results).toHaveLength(operations.length);
-      results.forEach(result => {
+      results.forEach((result) => {
         expect(result).toBeDefined();
       });
     });
 
     test('should handle burst traffic patterns', async () => {
       const burstSize = 30;
-      const queries = Array.from({ length: burstSize }, (_, i) => `burst query ${i}`);
+      const queries = Array.from(
+        { length: burstSize },
+        (_, i) => `burst query ${i}`
+      );
 
       const startTime = Date.now();
-      const promises = queries.map(query =>
-        Promise.resolve(searchApiDocs({ query, limit: 3 }, vectorStore, metadataIndex))
+      const promises = queries.map((query) =>
+        Promise.resolve(
+          searchApiDocs({ query, limit: 3 }, vectorStore, metadataIndex)
+        )
       );
 
       const results = await Promise.all(promises);
@@ -535,17 +680,22 @@ describe('Concurrent Requests Integration Tests', () => {
   describe('Resource Management', () => {
     test('should manage memory efficiently during concurrent requests', async () => {
       const concurrency = 50;
-      const queries = Array.from({ length: concurrency }, (_, i) => `memory test ${i}`);
+      const queries = Array.from(
+        { length: concurrency },
+        (_, i) => `memory test ${i}`
+      );
 
-      const promises = queries.map(query =>
-        Promise.resolve(searchApiDocs({ query, limit: 10 }, vectorStore, metadataIndex))
+      const promises = queries.map((query) =>
+        Promise.resolve(
+          searchApiDocs({ query, limit: 10 }, vectorStore, metadataIndex)
+        )
       );
 
       const results = await Promise.all(promises);
 
       expect(results).toHaveLength(concurrency);
       // All requests should complete without memory issues
-      results.forEach(result => {
+      results.forEach((result) => {
         expect(result).toBeDefined();
         expect(Array.isArray(result)).toBe(true);
       });
@@ -553,7 +703,9 @@ describe('Concurrent Requests Integration Tests', () => {
 
     test('should handle concurrent cache operations', async () => {
       const keys = Array.from({ length: 20 }, (_, i) => `cache-key-${i}`);
-      const values = Array.from({ length: 20 }, (_, i) => ({ data: `value-${i}` }));
+      const values = Array.from({ length: 20 }, (_, i) => ({
+        data: `value-${i}`,
+      }));
 
       // Set all values concurrently
       const setPromises = keys.map((key, i) =>
@@ -563,9 +715,7 @@ describe('Concurrent Requests Integration Tests', () => {
       await Promise.all(setPromises);
 
       // Get all values concurrently
-      const getPromises = keys.map(key =>
-        Promise.resolve(cache.get(key))
-      );
+      const getPromises = keys.map((key) => Promise.resolve(cache.get(key)));
 
       const results = await Promise.all(getPromises);
 
@@ -590,7 +740,7 @@ describe('Concurrent Requests Integration Tests', () => {
       const results = await Promise.all(getPromises);
 
       expect(results).toHaveLength(10);
-      results.forEach(result => {
+      results.forEach((result) => {
         expect(result).toEqual(value);
       });
     });
@@ -599,17 +749,17 @@ describe('Concurrent Requests Integration Tests', () => {
       const keys = Array.from({ length: 10 }, (_, i) => `invalidate-key-${i}`);
 
       // Set all values
-      keys.forEach(key => cache.set(key, { data: key }));
+      keys.forEach((key) => cache.set(key, { data: key }));
 
       // Concurrent invalidations
-      const invalidatePromises = keys.map(key =>
+      const invalidatePromises = keys.map((key) =>
         Promise.resolve(cache.delete(key))
       );
 
       await Promise.all(invalidatePromises);
 
       // Verify all keys are deleted
-      keys.forEach(key => {
+      keys.forEach((key) => {
         expect(cache.get(key)).toBeNull();
       });
     });
@@ -618,7 +768,7 @@ describe('Concurrent Requests Integration Tests', () => {
       const keys = Array.from({ length: 10 }, (_, i) => `clear-key-${i}`);
 
       // Set all values
-      keys.forEach(key => cache.set(key, { data: key }));
+      keys.forEach((key) => cache.set(key, { data: key }));
 
       // Concurrent clears
       const clearPromises = Array.from({ length: 5 }, () =>
@@ -628,7 +778,7 @@ describe('Concurrent Requests Integration Tests', () => {
       await Promise.all(clearPromises);
 
       // Verify cache is empty
-      keys.forEach(key => {
+      keys.forEach((key) => {
         expect(cache.get(key)).toBeNull();
       });
     });
@@ -637,7 +787,7 @@ describe('Concurrent Requests Integration Tests', () => {
       const keys = Array.from({ length: 10 }, (_, i) => `stats-key-${i}`);
 
       // Set all values
-      keys.forEach(key => cache.set(key, { data: key }));
+      keys.forEach((key) => cache.set(key, { data: key }));
 
       // Concurrent stats operations
       const statsPromises = Array.from({ length: 10 }, () =>
@@ -647,7 +797,7 @@ describe('Concurrent Requests Integration Tests', () => {
       const results = await Promise.all(statsPromises);
 
       expect(results).toHaveLength(10);
-      results.forEach(stats => {
+      results.forEach((stats) => {
         expect(stats).toBeDefined();
         expect(stats.size).toBeGreaterThan(0);
       });
@@ -660,14 +810,16 @@ describe('Concurrent Requests Integration Tests', () => {
       const concurrency = 20;
 
       const promises = Array.from({ length: concurrency }, () =>
-        Promise.resolve(searchApiDocs({ query, limit: 5 }, vectorStore, metadataIndex))
+        Promise.resolve(
+          searchApiDocs({ query, limit: 5 }, vectorStore, metadataIndex)
+        )
       );
 
       const results = await Promise.all(promises);
 
       // All results should be consistent
       const firstResult = results[0];
-      results.forEach(result => {
+      results.forEach((result) => {
         expect(result.length).toBe(firstResult.length);
         result.forEach((item, i) => {
           expect(item.endpoint.path).toBe(firstResult[i].endpoint.path);
@@ -684,7 +836,7 @@ describe('Concurrent Requests Integration Tests', () => {
       // Concurrent sets
       const setPromises = [
         Promise.resolve(cache.set(key, value1)),
-        Promise.resolve(cache.set(key, value2))
+        Promise.resolve(cache.set(key, value2)),
       ];
 
       await Promise.all(setPromises);
@@ -696,7 +848,7 @@ describe('Concurrent Requests Integration Tests', () => {
       expect(result).toBeDefined();
       expect(
         JSON.stringify(result) === JSON.stringify(value1) ||
-        JSON.stringify(result) === JSON.stringify(value2)
+          JSON.stringify(result) === JSON.stringify(value2)
       ).toBe(true);
     });
 
@@ -712,7 +864,7 @@ describe('Concurrent Requests Integration Tests', () => {
 
       // All results should be identical
       const firstResult = results[0];
-      results.forEach(result => {
+      results.forEach((result) => {
         expect(result).toEqual(firstResult);
       });
     });
@@ -729,7 +881,7 @@ describe('Concurrent Requests Integration Tests', () => {
 
       // All results should be identical
       const firstResult = results[0];
-      results.forEach(result => {
+      results.forEach((result) => {
         expect(result).toEqual(firstResult);
       });
     });
@@ -746,7 +898,7 @@ describe('Concurrent Requests Integration Tests', () => {
 
       // All results should be identical
       const firstResult = results[0];
-      results.forEach(result => {
+      results.forEach((result) => {
         expect(result).toEqual(firstResult);
       });
     });
@@ -763,7 +915,7 @@ describe('Concurrent Requests Integration Tests', () => {
 
       // All results should be identical
       const firstResult = results[0];
-      results.forEach(result => {
+      results.forEach((result) => {
         expect(result).toEqual(firstResult);
       });
     });
@@ -780,14 +932,19 @@ describe('Concurrent Requests Integration Tests', () => {
 
       // All results should be identical
       const firstResult = results[0];
-      results.forEach(result => {
+      results.forEach((result) => {
         expect(result.totalResources).toBe(firstResult.totalResources);
         expect(result.resources.length).toBe(firstResult.resources.length);
       });
     });
 
     test('should not have race conditions in concurrent code example generations', async () => {
-      const example = { endpointPath: '/customers/{id}', method: 'GET', language: 'javascript', includeAuth: true };
+      const example = {
+        endpointPath: '/customers/{id}',
+        method: 'GET',
+        language: 'javascript',
+        includeAuth: true,
+      };
       const concurrency = 10;
 
       const promises = Array.from({ length: concurrency }, () =>
@@ -798,7 +955,7 @@ describe('Concurrent Requests Integration Tests', () => {
 
       // All results should be identical
       const firstResult = results[0];
-      results.forEach(result => {
+      results.forEach((result) => {
         expect(result.code).toBe(firstResult.code);
         expect(result.language).toBe(firstResult.language);
       });
@@ -810,8 +967,10 @@ describe('Concurrent Requests Integration Tests', () => {
       const queries = ['customer', 'invoice', 'ticket'];
       const limit = 5;
 
-      const promises = queries.map(query =>
-        Promise.resolve(searchApiDocs({ query, limit }, vectorStore, metadataIndex))
+      const promises = queries.map((query) =>
+        Promise.resolve(
+          searchApiDocs({ query, limit }, vectorStore, metadataIndex)
+        )
       );
 
       const results = await Promise.all(promises);
@@ -822,27 +981,46 @@ describe('Concurrent Requests Integration Tests', () => {
         expect(result.length).toBeGreaterThan(0);
         // Results should be filtered by the query
         if (queries[i] === 'customer') {
-          expect(result.every(r => r.endpoint.resource === 'Customer')).toBe(true);
+          expect(result.every((r) => r.endpoint.resource === 'Customer')).toBe(
+            true
+          );
         }
       });
     });
 
     test('should maintain request isolation for different tools', async () => {
       const operations = [
-        () => searchApiDocs({ query: 'customer', limit: 5 }, vectorStore, metadataIndex),
-        () => getEndpoint({ path: '/customers/{id}', method: 'GET' }, metadataIndex),
-        () => getParameters({ endpointPath: '/customers/{id}', method: 'GET' }, metadataIndex),
-        () => getResponses({ endpointPath: '/customers/{id}', method: 'GET' }, metadataIndex),
-        () => getPermissions({ permission: 'customer.view' }, metadataIndex)
+        () =>
+          searchApiDocs(
+            { query: 'customer', limit: 5 },
+            vectorStore,
+            metadataIndex
+          ),
+        () =>
+          getEndpoint(
+            { path: '/customers/{id}', method: 'GET' },
+            metadataIndex
+          ),
+        () =>
+          getParameters(
+            { endpointPath: '/customers/{id}', method: 'GET' },
+            metadataIndex
+          ),
+        () =>
+          getResponses(
+            { endpointPath: '/customers/{id}', method: 'GET' },
+            metadataIndex
+          ),
+        () => getPermissions({ permission: 'customer.view' }, metadataIndex),
       ];
 
-      const promises = operations.map(op => Promise.resolve(op()));
+      const promises = operations.map((op) => Promise.resolve(op()));
 
       const results = await Promise.all(promises);
 
       expect(results).toHaveLength(operations.length);
       // Each result should be independent and valid
-      results.forEach(result => {
+      results.forEach((result) => {
         expect(result).toBeDefined();
       });
     });
@@ -851,10 +1029,10 @@ describe('Concurrent Requests Integration Tests', () => {
       const lookups = [
         { path: '/customers/{id}', method: 'GET' },
         { path: '/invoices/{id}', method: 'GET' },
-        { path: '/tickets/{id}', method: 'GET' }
+        { path: '/tickets/{id}', method: 'GET' },
       ];
 
-      const promises = lookups.map(lookup =>
+      const promises = lookups.map((lookup) =>
         Promise.resolve(getEndpoint(lookup, metadataIndex))
       );
 
@@ -878,9 +1056,7 @@ describe('Concurrent Requests Integration Tests', () => {
       keys.forEach((key, i) => cache.set(key, values[i]));
 
       // Get all values concurrently
-      const promises = keys.map(key =>
-        Promise.resolve(cache.get(key))
-      );
+      const promises = keys.map((key) => Promise.resolve(cache.get(key)));
 
       const results = await Promise.all(promises);
 
@@ -894,11 +1070,16 @@ describe('Concurrent Requests Integration Tests', () => {
   describe('Concurrent Request Performance', () => {
     test('should complete concurrent requests efficiently', async () => {
       const concurrency = 30;
-      const queries = Array.from({ length: concurrency }, (_, i) => `performance test ${i}`);
+      const queries = Array.from(
+        { length: concurrency },
+        (_, i) => `performance test ${i}`
+      );
 
       const startTime = Date.now();
-      const promises = queries.map(query =>
-        Promise.resolve(searchApiDocs({ query, limit: 3 }, vectorStore, metadataIndex))
+      const promises = queries.map((query) =>
+        Promise.resolve(
+          searchApiDocs({ query, limit: 3 }, vectorStore, metadataIndex)
+        )
       );
 
       await Promise.all(promises);
@@ -918,7 +1099,9 @@ describe('Concurrent Requests Integration Tests', () => {
       // Base test
       const baseStartTime = Date.now();
       const basePromises = Array.from({ length: baseConcurrency }, () =>
-        Promise.resolve(searchApiDocs({ query, limit }, vectorStore, metadataIndex))
+        Promise.resolve(
+          searchApiDocs({ query, limit }, vectorStore, metadataIndex)
+        )
       );
       await Promise.all(basePromises);
       const baseEndTime = Date.now();
@@ -927,7 +1110,9 @@ describe('Concurrent Requests Integration Tests', () => {
       // Scaled test
       const scaledStartTime = Date.now();
       const scaledPromises = Array.from({ length: scaledConcurrency }, () =>
-        Promise.resolve(searchApiDocs({ query, limit }, vectorStore, metadataIndex))
+        Promise.resolve(
+          searchApiDocs({ query, limit }, vectorStore, metadataIndex)
+        )
       );
       await Promise.all(scaledPromises);
       const scaledEndTime = Date.now();
@@ -943,7 +1128,11 @@ describe('Concurrent Requests Integration Tests', () => {
 
       // Single request
       const singleStartTime = Date.now();
-      const singleResult = searchApiDocs({ query: singleQuery, limit }, vectorStore, metadataIndex);
+      const singleResult = searchApiDocs(
+        { query: singleQuery, limit },
+        vectorStore,
+        metadataIndex
+      );
       const singleEndTime = Date.now();
       const singleDuration = singleEndTime - singleStartTime;
 
@@ -951,7 +1140,13 @@ describe('Concurrent Requests Integration Tests', () => {
       const concurrency = 10;
       const concurrentStartTime = Date.now();
       const concurrentPromises = Array.from({ length: concurrency }, () =>
-        Promise.resolve(searchApiDocs({ query: singleQuery, limit }, vectorStore, metadataIndex))
+        Promise.resolve(
+          searchApiDocs(
+            { query: singleQuery, limit },
+            vectorStore,
+            metadataIndex
+          )
+        )
       );
       await Promise.all(concurrentPromises);
       const concurrentEndTime = Date.now();
@@ -965,17 +1160,22 @@ describe('Concurrent Requests Integration Tests', () => {
   describe('Concurrent Request Reliability', () => {
     test('should handle concurrent requests reliably', async () => {
       const concurrency = 50;
-      const queries = Array.from({ length: concurrency }, (_, i) => `reliability test ${i}`);
+      const queries = Array.from(
+        { length: concurrency },
+        (_, i) => `reliability test ${i}`
+      );
 
-      const promises = queries.map(query =>
-        Promise.resolve(searchApiDocs({ query, limit: 3 }, vectorStore, metadataIndex))
+      const promises = queries.map((query) =>
+        Promise.resolve(
+          searchApiDocs({ query, limit: 3 }, vectorStore, metadataIndex)
+        )
       );
 
       const results = await Promise.all(promises);
 
       expect(results).toHaveLength(concurrency);
       // All requests should complete successfully
-      results.forEach(result => {
+      results.forEach((result) => {
         expect(result).toBeDefined();
         expect(Array.isArray(result)).toBe(true);
       });
@@ -985,14 +1185,20 @@ describe('Concurrent Requests Integration Tests', () => {
       const validQueries = ['customer', 'invoice', 'ticket'];
       const invalidQueries = ['', '   ', null, undefined];
 
-      const validPromises = validQueries.map(query =>
-        Promise.resolve(searchApiDocs({ query, limit: 3 }, vectorStore, metadataIndex))
+      const validPromises = validQueries.map((query) =>
+        Promise.resolve(
+          searchApiDocs({ query, limit: 3 }, vectorStore, metadataIndex)
+        )
       );
 
-      const invalidPromises = invalidQueries.map(query =>
+      const invalidPromises = invalidQueries.map((query) =>
         Promise.resolve(
-          searchApiDocs({ query: query as any, limit: 3 }, vectorStore, metadataIndex)
-        ).catch(error => ({ error: true, message: (error as Error).message }))
+          searchApiDocs(
+            { query: query as any, limit: 3 },
+            vectorStore,
+            metadataIndex
+          )
+        ).catch((error) => ({ error: true, message: (error as Error).message }))
       );
 
       const allPromises = [...validPromises, ...invalidPromises];
@@ -1013,23 +1219,45 @@ describe('Concurrent Requests Integration Tests', () => {
 
     test('should handle concurrent requests with mixed success and failure', async () => {
       const operations = [
-        () => searchApiDocs({ query: 'customer', limit: 5 }, vectorStore, metadataIndex),
-        () => getEndpoint({ path: '/nonexistent/{id}', method: 'GET' }, metadataIndex),
-        () => getParameters({ endpointPath: '/customers/{id}', method: 'GET' }, metadataIndex),
-        () => getResponses({ endpointPath: '/nonexistent', method: 'GET' }, metadataIndex),
-        () => getPermissions({ permission: 'customer.view' }, metadataIndex)
+        () =>
+          searchApiDocs(
+            { query: 'customer', limit: 5 },
+            vectorStore,
+            metadataIndex
+          ),
+        () =>
+          getEndpoint(
+            { path: '/nonexistent/{id}', method: 'GET' },
+            metadataIndex
+          ),
+        () =>
+          getParameters(
+            { endpointPath: '/customers/{id}', method: 'GET' },
+            metadataIndex
+          ),
+        () =>
+          getResponses(
+            { endpointPath: '/nonexistent', method: 'GET' },
+            metadataIndex
+          ),
+        () => getPermissions({ permission: 'customer.view' }, metadataIndex),
       ];
 
-      const promises = operations.map(op =>
-        Promise.resolve(op().catch(error => ({ error: true, message: (error as Error).message })))
+      const promises = operations.map((op) =>
+        Promise.resolve(
+          op().catch((error) => ({
+            error: true,
+            message: (error as Error).message,
+          }))
+        )
       );
 
       const results = await Promise.all(promises);
 
       expect(results).toHaveLength(operations.length);
       // Some should succeed, some should fail
-      const successCount = results.filter(r => !(r as any).error).length;
-      const failureCount = results.filter(r => (r as any).error).length;
+      const successCount = results.filter((r) => !(r as any).error).length;
+      const failureCount = results.filter((r) => (r as any).error).length;
       expect(successCount + failureCount).toBe(operations.length);
       expect(successCount).toBeGreaterThan(0);
       expect(failureCount).toBeGreaterThan(0);

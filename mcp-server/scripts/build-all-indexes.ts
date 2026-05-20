@@ -6,7 +6,11 @@
  */
 
 import * as path from 'path';
-import { IndexBuilder, IndexInfo, IndexHealth } from '../src/indexer/index-builder';
+import {
+  IndexBuilder,
+  IndexInfo,
+  IndexHealth,
+} from '../src/indexer/index-builder';
 
 // Configuration
 const DOCS_PATH = path.join(__dirname, '../../docs/api');
@@ -72,7 +76,9 @@ async function buildAllIndexes(): Promise<void> {
     console.log(`Chunks Created:    ${indexInfo.chunkCount}`);
     console.log(`Content Hash:      ${indexInfo.hash}`);
     console.log(`Build Time:        ${buildTime}ms`);
-    console.log(`Health Status:     ${health.healthy ? 'Healthy' : 'Unhealthy'}`);
+    console.log(
+      `Health Status:     ${health.healthy ? 'Healthy' : 'Unhealthy'}`
+    );
     console.log('-'.repeat(60));
     console.log();
 
@@ -97,7 +103,6 @@ async function buildAllIndexes(): Promise<void> {
 
     // Exit with appropriate code
     process.exit(health.healthy && isValid ? 0 : 1);
-
   } catch (error) {
     console.error('✗ Error building indexes:', error);
     console.log();
@@ -140,7 +145,9 @@ async function rebuildAllIndexes(): Promise<void> {
     console.log(`Chunks Created:    ${indexInfo.chunkCount}`);
     console.log(`Content Hash:      ${indexInfo.hash}`);
     console.log(`Build Time:        ${buildTime}ms`);
-    console.log(`Health Status:     ${health.healthy ? 'Healthy' : 'Unhealthy'}`);
+    console.log(
+      `Health Status:     ${health.healthy ? 'Healthy' : 'Unhealthy'}`
+    );
     console.log('-'.repeat(60));
     console.log();
 
@@ -153,7 +160,6 @@ async function rebuildAllIndexes(): Promise<void> {
     console.log('='.repeat(60));
 
     process.exit(health.healthy && isValid ? 0 : 1);
-
   } catch (error) {
     console.error('✗ Error rebuilding indexes:', error);
     console.log();
@@ -178,7 +184,10 @@ async function incrementalUpdateIndexes(): Promise<void> {
 
   try {
     console.log('Checking for changes...');
-    const indexInfo = await indexBuilder.incrementalUpdate(DOCS_PATH, OUTPUT_PATH);
+    const indexInfo = await indexBuilder.incrementalUpdate(
+      DOCS_PATH,
+      OUTPUT_PATH
+    );
 
     console.log('✓ Incremental update completed');
     console.log();
@@ -196,7 +205,9 @@ async function incrementalUpdateIndexes(): Promise<void> {
     console.log(`Chunks Created:    ${indexInfo.chunkCount}`);
     console.log(`Content Hash:      ${indexInfo.hash}`);
     console.log(`Build Time:        ${buildTime}ms`);
-    console.log(`Health Status:     ${health.healthy ? 'Healthy' : 'Unhealthy'}`);
+    console.log(
+      `Health Status:     ${health.healthy ? 'Healthy' : 'Unhealthy'}`
+    );
     console.log('-'.repeat(60));
     console.log();
 
@@ -209,7 +220,6 @@ async function incrementalUpdateIndexes(): Promise<void> {
     console.log('='.repeat(60));
 
     process.exit(health.healthy && isValid ? 0 : 1);
-
   } catch (error) {
     console.error('✗ Error performing incremental update:', error);
     console.log();
@@ -273,7 +283,6 @@ async function checkIndexHealth(): Promise<void> {
     console.log('='.repeat(60));
 
     process.exit(health.healthy ? 0 : 1);
-
   } catch (error) {
     console.error('✗ Error checking index health:', error);
     console.log();

@@ -4,7 +4,11 @@
  */
 
 import { createMockMetadataIndex } from '../utils/test-helpers';
-import { generateEndpoint, generateParameter, generateResponse } from '../utils/data-generators';
+import {
+  generateEndpoint,
+  generateParameter,
+  generateResponse,
+} from '../utils/data-generators';
 import { searchApiDocs } from '../../src/tools/search';
 import { getEndpoint, getEndpointsBatch } from '../../src/tools/endpoint';
 import { getParameters } from '../../src/tools/parameters';
@@ -31,11 +35,20 @@ describe('Error Handling Integration Tests', () => {
         path: '/customers/{id}',
         permission: 'customer.view',
         parameters: [
-          generateParameter({ name: 'id', type: 'integer', required: true, description: 'Customer ID', paramType: 'path' })
+          generateParameter({
+            name: 'id',
+            type: 'integer',
+            required: true,
+            description: 'Customer ID',
+            paramType: 'path',
+          }),
         ],
         responses: [
-          generateResponse({ statusCode: 200, description: 'Successful response' })
-        ]
+          generateResponse({
+            statusCode: 200,
+            description: 'Successful response',
+          }),
+        ],
       }),
       generateEndpoint({
         resource: 'Customer',
@@ -46,11 +59,20 @@ describe('Error Handling Integration Tests', () => {
         permission: 'customer.create',
         parameters: [],
         requestBody: [
-          generateParameter({ name: 'name', type: 'string', required: true, description: 'Customer name', paramType: 'body' })
+          generateParameter({
+            name: 'name',
+            type: 'string',
+            required: true,
+            description: 'Customer name',
+            paramType: 'body',
+          }),
         ],
         responses: [
-          generateResponse({ statusCode: 201, description: 'Customer created' })
-        ]
+          generateResponse({
+            statusCode: 201,
+            description: 'Customer created',
+          }),
+        ],
       }),
       generateEndpoint({
         resource: 'Invoice',
@@ -60,12 +82,21 @@ describe('Error Handling Integration Tests', () => {
         path: '/invoices/{id}',
         permission: 'invoice.view',
         parameters: [
-          generateParameter({ name: 'id', type: 'integer', required: true, description: 'Invoice ID', paramType: 'path' })
+          generateParameter({
+            name: 'id',
+            type: 'integer',
+            required: true,
+            description: 'Invoice ID',
+            paramType: 'path',
+          }),
         ],
         responses: [
-          generateResponse({ statusCode: 200, description: 'Successful response' })
-        ]
-      })
+          generateResponse({
+            statusCode: 200,
+            description: 'Successful response',
+          }),
+        ],
+      }),
     ];
 
     metadataIndex = createMockMetadataIndex(endpoints);
@@ -76,11 +107,10 @@ describe('Error Handling Integration Tests', () => {
       const embedding = vectorStore.generateEmbedding(
         `${endpoint.resource} ${endpoint.operation} ${endpoint.description}`
       );
-      vectorStore.addVector(
-        `${endpoint.method}:${endpoint.path}`,
-        embedding,
-        { endpointId: `${endpoint.method}:${endpoint.path}`, resource: endpoint.resource }
-      );
+      vectorStore.addVector(`${endpoint.method}:${endpoint.path}`, embedding, {
+        endpointId: `${endpoint.method}:${endpoint.path}`,
+        resource: endpoint.resource,
+      });
     }
 
     // Start monitoring service
@@ -119,33 +149,49 @@ describe('Error Handling Integration Tests', () => {
 
     test('should handle very long query gracefully', () => {
       const longQuery = 'customer '.repeat(1000);
-      
+
       expect(() => {
-        searchApiDocs({ query: longQuery, limit: 5 }, vectorStore, metadataIndex);
+        searchApiDocs(
+          { query: longQuery, limit: 5 },
+          vectorStore,
+          metadataIndex
+        );
       }).not.toThrow();
     });
 
     test('should handle special characters in query', () => {
       const specialQuery = 'customer!@#$%^&*()_+-={}[]|\\:";\'<>?,./';
-      
+
       expect(() => {
-        searchApiDocs({ query: specialQuery, limit: 5 }, vectorStore, metadataIndex);
+        searchApiDocs(
+          { query: specialQuery, limit: 5 },
+          vectorStore,
+          metadataIndex
+        );
       }).not.toThrow();
     });
 
     test('should handle unicode characters in query', () => {
       const unicodeQuery = '客户 customer 客戶';
-      
+
       expect(() => {
-        searchApiDocs({ query: unicodeQuery, limit: 5 }, vectorStore, metadataIndex);
+        searchApiDocs(
+          { query: unicodeQuery, limit: 5 },
+          vectorStore,
+          metadataIndex
+        );
       }).not.toThrow();
     });
 
     test('should handle query with only numbers', () => {
       const numberQuery = '1234567890';
-      
+
       expect(() => {
-        searchApiDocs({ query: numberQuery, limit: 5 }, vectorStore, metadataIndex);
+        searchApiDocs(
+          { query: numberQuery, limit: 5 },
+          vectorStore,
+          metadataIndex
+        );
       }).not.toThrow();
     });
   });
@@ -170,10 +216,7 @@ describe('Error Handling Integration Tests', () => {
     });
 
     test('should return null for non-existent endpoint with path only', () => {
-      const result = getEndpoint(
-        { path: '/nonexistent' },
-        metadataIndex
-      );
+      const result = getEndpoint({ path: '/nonexistent' }, metadataIndex);
 
       expect(result).toBeNull();
     });
@@ -191,7 +234,7 @@ describe('Error Handling Integration Tests', () => {
       const result = getEndpointsBatch(
         {
           paths: ['/customers/{id}', '/nonexistent/{id}', '/invoices/{id}'],
-          methods: ['GET', 'GET', 'GET']
+          methods: ['GET', 'GET', 'GET'],
         },
         metadataIndex
       );
@@ -207,7 +250,7 @@ describe('Error Handling Integration Tests', () => {
       const result = getEndpointsBatch(
         {
           paths: ['/nonexistent1/{id}', '/nonexistent2/{id}'],
-          methods: ['GET', 'GET']
+          methods: ['GET', 'GET'],
         },
         metadataIndex
       );
@@ -248,7 +291,12 @@ describe('Error Handling Integration Tests', () => {
     test('should throw error for missing required parameters in generateCodeExample', () => {
       expect(() => {
         generateCodeExample(
-          { endpointPath: '/customers/{id}', method: 'GET', language: 'javascript' as any, includeAuth: true },
+          {
+            endpointPath: '/customers/{id}',
+            method: 'GET',
+            language: 'javascript' as any,
+            includeAuth: true,
+          },
           metadataIndex
         );
       }).toThrow('Unsupported language: javascript');
@@ -257,7 +305,11 @@ describe('Error Handling Integration Tests', () => {
     test('should throw error for invalid status code in getResponses', () => {
       expect(() => {
         getResponses(
-          { endpointPath: '/customers/{id}', method: 'GET', statusCode: 'invalid' },
+          {
+            endpointPath: '/customers/{id}',
+            method: 'GET',
+            statusCode: 'invalid',
+          },
           metadataIndex
         );
       }).toThrow('statusCode must be a valid number');
@@ -266,7 +318,12 @@ describe('Error Handling Integration Tests', () => {
     test('should throw error for invalid language in generateCodeExample', () => {
       expect(() => {
         generateCodeExample(
-          { endpointPath: '/customers/{id}', method: 'GET', language: 'ruby' as any, includeAuth: true },
+          {
+            endpointPath: '/customers/{id}',
+            method: 'GET',
+            language: 'ruby' as any,
+            includeAuth: true,
+          },
           metadataIndex
         );
       }).toThrow('Unsupported language: ruby');
@@ -275,7 +332,12 @@ describe('Error Handling Integration Tests', () => {
     test('should throw error for non-existent endpoint in generateCodeExample', () => {
       expect(() => {
         generateCodeExample(
-          { endpointPath: '/nonexistent', method: 'GET', language: 'javascript', includeAuth: true },
+          {
+            endpointPath: '/nonexistent',
+            method: 'GET',
+            language: 'javascript',
+            includeAuth: true,
+          },
           metadataIndex
         );
       }).toThrow('Endpoint not found: GET /nonexistent');
@@ -283,25 +345,45 @@ describe('Error Handling Integration Tests', () => {
 
     test('should handle invalid limit parameter in search', () => {
       expect(() => {
-        searchApiDocs({ query: 'customer', limit: -1 }, vectorStore, metadataIndex);
+        searchApiDocs(
+          { query: 'customer', limit: -1 },
+          vectorStore,
+          metadataIndex
+        );
       }).not.toThrow(); // Negative limit is handled gracefully
     });
 
     test('should handle zero limit in search', () => {
-      const results = searchApiDocs({ query: 'customer', limit: 0 }, vectorStore, metadataIndex);
+      const results = searchApiDocs(
+        { query: 'customer', limit: 0 },
+        vectorStore,
+        metadataIndex
+      );
       expect(results).toBeDefined();
       expect(results.length).toBe(0);
     });
 
     test('should handle very large limit in search', () => {
-      const results = searchApiDocs({ query: 'customer', limit: 1000000 }, vectorStore, metadataIndex);
+      const results = searchApiDocs(
+        { query: 'customer', limit: 1000000 },
+        vectorStore,
+        metadataIndex
+      );
       expect(results).toBeDefined();
-      expect(results.length).toBeLessThanOrEqual(metadataIndex.allEndpoints.length);
+      expect(results.length).toBeLessThanOrEqual(
+        metadataIndex.allEndpoints.length
+      );
     });
 
     test('should handle invalid filter parameters in search', () => {
       const results = searchApiDocs(
-        { query: 'customer', resource: 'NonExistent', method: 'INVALID', permission: 'nonexistent.permission', limit: 5 },
+        {
+          query: 'customer',
+          resource: 'NonExistent',
+          method: 'INVALID',
+          permission: 'nonexistent.permission',
+          limit: 5,
+        },
         vectorStore,
         metadataIndex
       );
@@ -316,7 +398,11 @@ describe('Error Handling Integration Tests', () => {
       const emptyVectorStore = new VectorStore();
 
       expect(() => {
-        searchApiDocs({ query: 'customer', limit: 5 }, emptyVectorStore, metadataIndex);
+        searchApiDocs(
+          { query: 'customer', limit: 5 },
+          emptyVectorStore,
+          metadataIndex
+        );
       }).not.toThrow(); // Should handle gracefully
     });
 
@@ -326,10 +412,14 @@ describe('Error Handling Integration Tests', () => {
         endpointsByPath: new Map(),
         endpointsByPermission: new Map(),
         endpointsByMethod: new Map(),
-        allEndpoints: []
+        allEndpoints: [],
       };
 
-      const results = searchApiDocs({ query: 'customer', limit: 5 }, vectorStore, emptyMetadataIndex);
+      const results = searchApiDocs(
+        { query: 'customer', limit: 5 },
+        vectorStore,
+        emptyMetadataIndex
+      );
       expect(results).toBeDefined();
       expect(results.length).toBe(0);
     });
@@ -436,7 +526,9 @@ describe('Error Handling Integration Tests', () => {
 
     test('should log structured errors', () => {
       const error = new Error('Test error');
-      const logSpy = jest.spyOn(structuredLogger, 'logError').mockImplementation();
+      const logSpy = jest
+        .spyOn(structuredLogger, 'logError')
+        .mockImplementation();
 
       structuredLogger.logError(error, { phase: 'test' });
 
@@ -445,7 +537,9 @@ describe('Error Handling Integration Tests', () => {
     });
 
     test('should log health check results', () => {
-      const logSpy = jest.spyOn(structuredLogger, 'logHealthCheck').mockImplementation();
+      const logSpy = jest
+        .spyOn(structuredLogger, 'logHealthCheck')
+        .mockImplementation();
 
       structuredLogger.logHealthCheck('healthy', 1000, { test: 'metric' });
 
@@ -456,7 +550,9 @@ describe('Error Handling Integration Tests', () => {
     test('should log configuration changes', () => {
       const oldConfig = { test: 'old' };
       const newConfig = { test: 'new' };
-      const logSpy = jest.spyOn(structuredLogger, 'logConfigChange').mockImplementation();
+      const logSpy = jest
+        .spyOn(structuredLogger, 'logConfigChange')
+        .mockImplementation();
 
       structuredLogger.logConfigChange(oldConfig, newConfig);
 
@@ -469,7 +565,11 @@ describe('Error Handling Integration Tests', () => {
       const initialRequestCount = initialStats.metrics?.requestCount || 0;
 
       // Perform a successful request
-      const results = searchApiDocs({ query: 'customer', limit: 5 }, vectorStore, metadataIndex);
+      const results = searchApiDocs(
+        { query: 'customer', limit: 5 },
+        vectorStore,
+        metadataIndex
+      );
 
       const updatedStats = monitoringService.getHealthStatus();
       const updatedRequestCount = updatedStats.metrics?.requestCount || 0;
@@ -526,7 +626,11 @@ describe('Error Handling Integration Tests', () => {
       }).toThrow();
 
       // Then, try a valid query
-      const results = searchApiDocs({ query: 'customer', limit: 5 }, vectorStore, metadataIndex);
+      const results = searchApiDocs(
+        { query: 'customer', limit: 5 },
+        vectorStore,
+        metadataIndex
+      );
 
       expect(results).toBeDefined();
       expect(results.length).toBeGreaterThan(0);
@@ -567,11 +671,19 @@ describe('Error Handling Integration Tests', () => {
       const invalidMetadataIndex = null as any;
 
       expect(() => {
-        searchApiDocs({ query: 'customer', limit: 5 }, vectorStore, invalidMetadataIndex);
+        searchApiDocs(
+          { query: 'customer', limit: 5 },
+          vectorStore,
+          invalidMetadataIndex
+        );
       }).toThrow();
 
       // Then, try with valid data
-      const results = searchApiDocs({ query: 'customer', limit: 5 }, vectorStore, metadataIndex);
+      const results = searchApiDocs(
+        { query: 'customer', limit: 5 },
+        vectorStore,
+        metadataIndex
+      );
 
       expect(results).toBeDefined();
       expect(results.length).toBeGreaterThan(0);
@@ -593,7 +705,12 @@ describe('Error Handling Integration Tests', () => {
     test('should provide clear error messages for missing endpoints', () => {
       try {
         generateCodeExample(
-          { endpointPath: '/nonexistent', method: 'GET', language: 'javascript', includeAuth: true },
+          {
+            endpointPath: '/nonexistent',
+            method: 'GET',
+            language: 'javascript',
+            includeAuth: true,
+          },
           metadataIndex
         );
         fail('Expected error to be thrown');
@@ -616,7 +733,11 @@ describe('Error Handling Integration Tests', () => {
     test('should provide clear error messages for invalid status codes', () => {
       try {
         getResponses(
-          { endpointPath: '/customers/{id}', method: 'GET', statusCode: 'invalid' },
+          {
+            endpointPath: '/customers/{id}',
+            method: 'GET',
+            statusCode: 'invalid',
+          },
           metadataIndex
         );
         fail('Expected error to be thrown');
@@ -629,7 +750,12 @@ describe('Error Handling Integration Tests', () => {
     test('should provide clear error messages for invalid languages', () => {
       try {
         generateCodeExample(
-          { endpointPath: '/customers/{id}', method: 'GET', language: 'ruby' as any, includeAuth: true },
+          {
+            endpointPath: '/customers/{id}',
+            method: 'GET',
+            language: 'ruby' as any,
+            includeAuth: true,
+          },
           metadataIndex
         );
         fail('Expected error to be thrown');
@@ -643,13 +769,21 @@ describe('Error Handling Integration Tests', () => {
   describe('Error Handling Edge Cases', () => {
     test('should handle null metadata index', () => {
       expect(() => {
-        searchApiDocs({ query: 'customer', limit: 5 }, vectorStore, null as any);
+        searchApiDocs(
+          { query: 'customer', limit: 5 },
+          vectorStore,
+          null as any
+        );
       }).toThrow();
     });
 
     test('should handle null vector store', () => {
       expect(() => {
-        searchApiDocs({ query: 'customer', limit: 5 }, null as any, metadataIndex);
+        searchApiDocs(
+          { query: 'customer', limit: 5 },
+          null as any,
+          metadataIndex
+        );
       }).toThrow();
     });
 
@@ -672,19 +806,13 @@ describe('Error Handling Integration Tests', () => {
     });
 
     test('should handle empty resource name', () => {
-      const result = getEndpoint(
-        { resource: '' },
-        metadataIndex
-      );
+      const result = getEndpoint({ resource: '' }, metadataIndex);
 
       expect(result).toBeNull();
     });
 
     test('should handle special characters in resource name', () => {
-      const result = getEndpoint(
-        { resource: 'Customer!@#$%' },
-        metadataIndex
-      );
+      const result = getEndpoint({ resource: 'Customer!@#$%' }, metadataIndex);
 
       expect(result).toBeNull();
     });
@@ -700,13 +828,21 @@ describe('Error Handling Integration Tests', () => {
     });
 
     test('should handle negative limit values', () => {
-      const results = searchApiDocs({ query: 'customer', limit: -5 }, vectorStore, metadataIndex);
+      const results = searchApiDocs(
+        { query: 'customer', limit: -5 },
+        vectorStore,
+        metadataIndex
+      );
       expect(results).toBeDefined();
       expect(results.length).toBe(0);
     });
 
     test('should handle floating point limit values', () => {
-      const results = searchApiDocs({ query: 'customer', limit: 5.5 as any }, vectorStore, metadataIndex);
+      const results = searchApiDocs(
+        { query: 'customer', limit: 5.5 as any },
+        vectorStore,
+        metadataIndex
+      );
       expect(results).toBeDefined();
     });
   });
@@ -807,7 +943,11 @@ describe('Error Handling Integration Tests', () => {
       }
 
       // System should still be functional
-      const results = searchApiDocs({ query: 'customer', limit: 5 }, vectorStore, metadataIndex);
+      const results = searchApiDocs(
+        { query: 'customer', limit: 5 },
+        vectorStore,
+        metadataIndex
+      );
       expect(results).toBeDefined();
       expect(results.length).toBeGreaterThan(0);
     });

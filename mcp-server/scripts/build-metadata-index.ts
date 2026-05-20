@@ -29,7 +29,9 @@ async function buildMetadataIndexScript(): Promise<void> {
   try {
     // Read all markdown files from docs/api directory
     const files = await fs.readdir(docsDir);
-    const markdownFiles = files.filter(file => file.endsWith('.md') && file !== 'index.md');
+    const markdownFiles = files.filter(
+      (file) => file.endsWith('.md') && file !== 'index.md'
+    );
 
     console.log(`Found ${markdownFiles.length} documentation files to parse\n`);
 
@@ -40,7 +42,9 @@ async function buildMetadataIndexScript(): Promise<void> {
       try {
         const document = await parseMarkdownFile(filePath);
         documents.push(document);
-        console.log(`✓ Parsed: ${file} (${document.endpoints.length} endpoints)`);
+        console.log(
+          `✓ Parsed: ${file} (${document.endpoints.length} endpoints)`
+        );
       } catch (error) {
         console.error(`✗ Failed to parse ${file}:`, error);
       }
@@ -57,7 +61,8 @@ async function buildMetadataIndexScript(): Promise<void> {
     const totalPermissions = index.endpointsByPermission.size;
     const totalMethods = index.endpointsByMethod.size;
     const totalParameters = index.allEndpoints.reduce(
-      (sum, endpoint) => sum + endpoint.parameters.length + (endpoint.requestBody?.length || 0),
+      (sum, endpoint) =>
+        sum + endpoint.parameters.length + (endpoint.requestBody?.length || 0),
       0
     );
     const totalResponses = index.allEndpoints.reduce(
@@ -110,8 +115,8 @@ async function buildMetadataIndexScript(): Promise<void> {
         totalPermissions,
         totalMethods,
         totalParameters,
-        totalResponses
-      }
+        totalResponses,
+      },
     };
 
     await fs.writeFile(outputPath, JSON.stringify(indexData, null, 2), 'utf-8');
@@ -125,7 +130,7 @@ async function buildMetadataIndexScript(): Promise<void> {
 }
 
 // Run the script
-buildMetadataIndexScript().catch(error => {
+buildMetadataIndexScript().catch((error) => {
   console.error('Fatal error:', error);
   process.exit(1);
 });

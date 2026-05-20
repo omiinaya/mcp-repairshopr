@@ -8,7 +8,7 @@ import {
   getResourceNames,
   getResourcesByMethod,
   getResourcesByPermission,
-  ResourceListParams
+  ResourceListParams,
 } from '../../src/tools/resources';
 import { MetadataIndex, buildMetadataIndex } from '../../src/parser/metadata';
 import { ApiDocument } from '../../src/utils/types';
@@ -35,16 +35,16 @@ describe('Resource Overview Tool', () => {
                 type: 'integer',
                 required: false,
                 description: 'Page number for pagination',
-                paramType: 'query'
-              }
+                paramType: 'query',
+              },
             ],
             responses: [
               {
                 statusCode: 200,
                 description: 'Successful response',
-                example: { customers: [] }
-              }
-            ]
+                example: { customers: [] },
+              },
+            ],
           },
           {
             resource: 'Customer',
@@ -59,16 +59,16 @@ describe('Resource Overview Tool', () => {
                 type: 'integer',
                 required: true,
                 description: 'Customer ID',
-                paramType: 'path'
-              }
+                paramType: 'path',
+              },
             ],
             responses: [
               {
                 statusCode: 200,
                 description: 'Successful response',
-                example: { customer: {} }
-              }
-            ]
+                example: { customer: {} },
+              },
+            ],
           },
           {
             resource: 'Customer',
@@ -84,16 +84,16 @@ describe('Resource Overview Tool', () => {
                 type: 'string',
                 required: true,
                 description: 'Customer name',
-                paramType: 'body'
-              }
+                paramType: 'body',
+              },
             ],
             responses: [
               {
                 statusCode: 201,
                 description: 'Customer created successfully',
-                example: { customer: {} }
-              }
-            ]
+                example: { customer: {} },
+              },
+            ],
           },
           {
             resource: 'Customer',
@@ -108,8 +108,8 @@ describe('Resource Overview Tool', () => {
                 type: 'integer',
                 required: true,
                 description: 'Customer ID',
-                paramType: 'path'
-              }
+                paramType: 'path',
+              },
             ],
             requestBody: [
               {
@@ -117,16 +117,16 @@ describe('Resource Overview Tool', () => {
                 type: 'string',
                 required: false,
                 description: 'Customer name',
-                paramType: 'body'
-              }
+                paramType: 'body',
+              },
             ],
             responses: [
               {
                 statusCode: 200,
                 description: 'Customer updated successfully',
-                example: { customer: {} }
-              }
-            ]
+                example: { customer: {} },
+              },
+            ],
           },
           {
             resource: 'Customer',
@@ -141,17 +141,17 @@ describe('Resource Overview Tool', () => {
                 type: 'integer',
                 required: true,
                 description: 'Customer ID',
-                paramType: 'path'
-              }
+                paramType: 'path',
+              },
             ],
             responses: [
               {
                 statusCode: 204,
-                description: 'Customer deleted successfully'
-              }
-            ]
-          }
-        ]
+                description: 'Customer deleted successfully',
+              },
+            ],
+          },
+        ],
       },
       {
         resourceName: 'Ticket',
@@ -169,16 +169,16 @@ describe('Resource Overview Tool', () => {
                 type: 'integer',
                 required: false,
                 description: 'Filter by customer ID',
-                paramType: 'query'
-              }
+                paramType: 'query',
+              },
             ],
             responses: [
               {
                 statusCode: 200,
                 description: 'Successful response',
-                example: { tickets: [] }
-              }
-            ]
+                example: { tickets: [] },
+              },
+            ],
           },
           {
             resource: 'Ticket',
@@ -194,16 +194,16 @@ describe('Resource Overview Tool', () => {
                 type: 'string',
                 required: true,
                 description: 'Ticket subject',
-                paramType: 'body'
-              }
+                paramType: 'body',
+              },
             ],
             responses: [
               {
                 statusCode: 201,
                 description: 'Ticket created successfully',
-                example: { ticket: {} }
-              }
-            ]
+                example: { ticket: {} },
+              },
+            ],
           },
           {
             resource: 'Ticket',
@@ -216,11 +216,11 @@ describe('Resource Overview Tool', () => {
             responses: [
               {
                 statusCode: 200,
-                description: 'Tickets managed successfully'
-              }
-            ]
-          }
-        ]
+                description: 'Tickets managed successfully',
+              },
+            ],
+          },
+        ],
       },
       {
         resourceName: 'Invoice',
@@ -237,9 +237,9 @@ describe('Resource Overview Tool', () => {
               {
                 statusCode: 200,
                 description: 'Successful response',
-                example: { invoices: [] }
-              }
-            ]
+                example: { invoices: [] },
+              },
+            ],
           },
           {
             resource: 'Invoice',
@@ -252,12 +252,12 @@ describe('Resource Overview Tool', () => {
             responses: [
               {
                 statusCode: 200,
-                description: 'Invoices managed successfully'
-              }
-            ]
-          }
-        ]
-      }
+                description: 'Invoices managed successfully',
+              },
+            ],
+          },
+        ],
+      },
     ];
 
     // Build metadata index from sample documents
@@ -278,7 +278,7 @@ describe('Resource Overview Tool', () => {
       const params: ResourceListParams = {};
       const result = listResources(params, metadataIndex);
 
-      const resourceNames = result.resources.map(r => r.summary.name);
+      const resourceNames = result.resources.map((r) => r.summary.name);
       expect(resourceNames).toContain('Customer');
       expect(resourceNames).toContain('Ticket');
       expect(resourceNames).toContain('Invoice');
@@ -288,7 +288,7 @@ describe('Resource Overview Tool', () => {
       const params: ResourceListParams = {};
       const result = listResources(params, metadataIndex);
 
-      const resourceNames = result.resources.map(r => r.summary.name);
+      const resourceNames = result.resources.map((r) => r.summary.name);
       const sortedNames = [...resourceNames].sort();
       expect(resourceNames).toEqual(sortedNames);
     });
@@ -299,7 +299,7 @@ describe('Resource Overview Tool', () => {
         endpointsByPath: new Map(),
         endpointsByPermission: new Map(),
         endpointsByMethod: new Map(),
-        allEndpoints: []
+        allEndpoints: [],
       };
 
       const params: ResourceListParams = {};
@@ -315,7 +315,7 @@ describe('Resource Overview Tool', () => {
       const params: ResourceListParams = {};
       const result = listResources(params, metadataIndex);
 
-      result.resources.forEach(resource => {
+      result.resources.forEach((resource) => {
         expect(resource.summary).toBeDefined();
         expect(resource.summary.name).toBeDefined();
         expect(resource.summary.description).toBeDefined();
@@ -329,7 +329,9 @@ describe('Resource Overview Tool', () => {
       const params: ResourceListParams = {};
       const result = listResources(params, metadataIndex);
 
-      const customer = result.resources.find(r => r.summary.name === 'Customer');
+      const customer = result.resources.find(
+        (r) => r.summary.name === 'Customer'
+      );
       expect(customer?.summary.endpointCount).toBe(5);
     });
 
@@ -337,7 +339,7 @@ describe('Resource Overview Tool', () => {
       const params: ResourceListParams = {};
       const result = listResources(params, metadataIndex);
 
-      const ticket = result.resources.find(r => r.summary.name === 'Ticket');
+      const ticket = result.resources.find((r) => r.summary.name === 'Ticket');
       expect(ticket?.summary.endpointCount).toBe(3);
     });
 
@@ -345,7 +347,9 @@ describe('Resource Overview Tool', () => {
       const params: ResourceListParams = {};
       const result = listResources(params, metadataIndex);
 
-      const customer = result.resources.find(r => r.summary.name === 'Customer');
+      const customer = result.resources.find(
+        (r) => r.summary.name === 'Customer'
+      );
       expect(customer?.summary.methods).toContain('GET');
       expect(customer?.summary.methods).toContain('POST');
       expect(customer?.summary.methods).toContain('PUT');
@@ -356,7 +360,9 @@ describe('Resource Overview Tool', () => {
       const params: ResourceListParams = {};
       const result = listResources(params, metadataIndex);
 
-      const customer = result.resources.find(r => r.summary.name === 'Customer');
+      const customer = result.resources.find(
+        (r) => r.summary.name === 'Customer'
+      );
       expect(customer?.summary.permissions).toContain('customer.view');
       expect(customer?.summary.permissions).toContain('customer.create');
       expect(customer?.summary.permissions).toContain('customer.update');
@@ -367,7 +373,9 @@ describe('Resource Overview Tool', () => {
       const params: ResourceListParams = {};
       const result = listResources(params, metadataIndex);
 
-      const customer = result.resources.find(r => r.summary.name === 'Customer');
+      const customer = result.resources.find(
+        (r) => r.summary.name === 'Customer'
+      );
       expect(customer?.summary.description).toContain('Customer');
       expect(customer?.summary.description).toContain('read');
       expect(customer?.summary.description).toContain('create');
@@ -381,7 +389,7 @@ describe('Resource Overview Tool', () => {
       const params: ResourceListParams = {};
       const result = listResources(params, metadataIndex);
 
-      result.resources.forEach(resource => {
+      result.resources.forEach((resource) => {
         expect(resource.endpoints).toBeUndefined();
       });
     });
@@ -390,7 +398,7 @@ describe('Resource Overview Tool', () => {
       const params: ResourceListParams = { includeEndpoints: true };
       const result = listResources(params, metadataIndex);
 
-      result.resources.forEach(resource => {
+      result.resources.forEach((resource) => {
         expect(resource.endpoints).toBeDefined();
         expect(Array.isArray(resource.endpoints)).toBe(true);
       });
@@ -400,7 +408,9 @@ describe('Resource Overview Tool', () => {
       const params: ResourceListParams = { includeEndpoints: true };
       const result = listResources(params, metadataIndex);
 
-      const customer = result.resources.find(r => r.summary.name === 'Customer');
+      const customer = result.resources.find(
+        (r) => r.summary.name === 'Customer'
+      );
       expect(customer?.endpoints?.length).toBe(5);
     });
 
@@ -408,8 +418,10 @@ describe('Resource Overview Tool', () => {
       const params: ResourceListParams = { includeEndpoints: true };
       const result = listResources(params, metadataIndex);
 
-      const customer = result.resources.find(r => r.summary.name === 'Customer');
-      customer?.endpoints?.forEach(endpoint => {
+      const customer = result.resources.find(
+        (r) => r.summary.name === 'Customer'
+      );
+      customer?.endpoints?.forEach((endpoint) => {
         expect(endpoint.operation).toBeDefined();
         expect(endpoint.description).toBeDefined();
         expect(endpoint.method).toBeDefined();
@@ -424,11 +436,17 @@ describe('Resource Overview Tool', () => {
       const params: ResourceListParams = { includeEndpoints: true };
       const result = listResources(params, metadataIndex);
 
-      const customer = result.resources.find(r => r.summary.name === 'Customer');
-      const getCustomers = customer?.endpoints?.find(e => e.operation === 'Get Customers');
+      const customer = result.resources.find(
+        (r) => r.summary.name === 'Customer'
+      );
+      const getCustomers = customer?.endpoints?.find(
+        (e) => e.operation === 'Get Customers'
+      );
       expect(getCustomers?.parameterCount).toBe(1); // page parameter
 
-      const createCustomer = customer?.endpoints?.find(e => e.operation === 'Create Customer');
+      const createCustomer = customer?.endpoints?.find(
+        (e) => e.operation === 'Create Customer'
+      );
       expect(createCustomer?.parameterCount).toBe(1); // name in requestBody
     });
 
@@ -436,8 +454,10 @@ describe('Resource Overview Tool', () => {
       const params: ResourceListParams = { includeEndpoints: true };
       const result = listResources(params, metadataIndex);
 
-      const customer = result.resources.find(r => r.summary.name === 'Customer');
-      customer?.endpoints?.forEach(endpoint => {
+      const customer = result.resources.find(
+        (r) => r.summary.name === 'Customer'
+      );
+      customer?.endpoints?.forEach((endpoint) => {
         expect(endpoint.responseCount).toBe(1);
       });
     });
@@ -448,7 +468,7 @@ describe('Resource Overview Tool', () => {
       const params: ResourceListParams = {};
       const result = listResources(params, metadataIndex);
 
-      result.resources.forEach(resource => {
+      result.resources.forEach((resource) => {
         expect(resource.relationships).toBeUndefined();
       });
     });
@@ -457,7 +477,7 @@ describe('Resource Overview Tool', () => {
       const params: ResourceListParams = { includeRelationships: true };
       const result = listResources(params, metadataIndex);
 
-      result.resources.forEach(resource => {
+      result.resources.forEach((resource) => {
         expect(resource.relationships).toBeDefined();
         expect(Array.isArray(resource.relationships)).toBe(true);
       });
@@ -467,10 +487,14 @@ describe('Resource Overview Tool', () => {
       const params: ResourceListParams = { includeRelationships: true };
       const result = listResources(params, metadataIndex);
 
-      const customer = result.resources.find(r => r.summary.name === 'Customer');
-      customer?.relationships?.forEach(relationship => {
+      const customer = result.resources.find(
+        (r) => r.summary.name === 'Customer'
+      );
+      customer?.relationships?.forEach((relationship) => {
         expect(relationship.relationshipType).toBeDefined();
-        expect(['parent', 'child', 'sibling', 'reference']).toContain(relationship.relationshipType);
+        expect(['parent', 'child', 'sibling', 'reference']).toContain(
+          relationship.relationshipType
+        );
       });
     });
 
@@ -478,8 +502,10 @@ describe('Resource Overview Tool', () => {
       const params: ResourceListParams = { includeRelationships: true };
       const result = listResources(params, metadataIndex);
 
-      const customer = result.resources.find(r => r.summary.name === 'Customer');
-      customer?.relationships?.forEach(relationship => {
+      const customer = result.resources.find(
+        (r) => r.summary.name === 'Customer'
+      );
+      customer?.relationships?.forEach((relationship) => {
         expect(relationship.resource).toBeDefined();
         expect(relationship.resource).not.toBe('Customer');
       });
@@ -489,8 +515,10 @@ describe('Resource Overview Tool', () => {
       const params: ResourceListParams = { includeRelationships: true };
       const result = listResources(params, metadataIndex);
 
-      const customer = result.resources.find(r => r.summary.name === 'Customer');
-      customer?.relationships?.forEach(relationship => {
+      const customer = result.resources.find(
+        (r) => r.summary.name === 'Customer'
+      );
+      customer?.relationships?.forEach((relationship) => {
         expect(relationship.connectionCount).toBeGreaterThanOrEqual(0);
       });
     });
@@ -499,8 +527,11 @@ describe('Resource Overview Tool', () => {
       const params: ResourceListParams = { includeRelationships: true };
       const result = listResources(params, metadataIndex);
 
-      const customer = result.resources.find(r => r.summary.name === 'Customer');
-      const connectionCounts = customer?.relationships?.map(r => r.connectionCount) || [];
+      const customer = result.resources.find(
+        (r) => r.summary.name === 'Customer'
+      );
+      const connectionCounts =
+        customer?.relationships?.map((r) => r.connectionCount) || [];
       const sortedCounts = [...connectionCounts].sort((a, b) => b - a);
       expect(connectionCounts).toEqual(sortedCounts);
     });
@@ -509,7 +540,7 @@ describe('Resource Overview Tool', () => {
       const params: ResourceListParams = { includeRelationships: true };
       const result = listResources(params, metadataIndex);
 
-      result.resources.forEach(resource => {
+      result.resources.forEach((resource) => {
         expect(resource.relationships?.length).toBeLessThanOrEqual(5);
       });
     });
@@ -520,14 +551,16 @@ describe('Resource Overview Tool', () => {
       const params: ResourceListParams = {};
       const result = listResources(params, metadataIndex);
 
-      result.resources.forEach(resource => {
+      result.resources.forEach((resource) => {
         expect(resource.statistics).toBeDefined();
         expect(resource.statistics.totalEndpoints).toBeGreaterThanOrEqual(0);
         expect(resource.statistics.totalParameters).toBeGreaterThanOrEqual(0);
         expect(resource.statistics.totalResponses).toBeGreaterThanOrEqual(0);
         expect(resource.statistics.uniquePermissions).toBeGreaterThanOrEqual(0);
         expect(resource.statistics.mostCommonMethod).toBeDefined();
-        expect(resource.statistics.averageEndpointsPerResource).toBeGreaterThanOrEqual(0);
+        expect(
+          resource.statistics.averageEndpointsPerResource
+        ).toBeGreaterThanOrEqual(0);
       });
     });
 
@@ -535,7 +568,9 @@ describe('Resource Overview Tool', () => {
       const params: ResourceListParams = {};
       const result = listResources(params, metadataIndex);
 
-      const customer = result.resources.find(r => r.summary.name === 'Customer');
+      const customer = result.resources.find(
+        (r) => r.summary.name === 'Customer'
+      );
       expect(customer?.statistics.totalEndpoints).toBe(5);
     });
 
@@ -543,7 +578,9 @@ describe('Resource Overview Tool', () => {
       const params: ResourceListParams = {};
       const result = listResources(params, metadataIndex);
 
-      const customer = result.resources.find(r => r.summary.name === 'Customer');
+      const customer = result.resources.find(
+        (r) => r.summary.name === 'Customer'
+      );
       // Get Customers: 1 param, Get Customer by ID: 1 param, Create Customer: 1 param, Update Customer: 2 params, Delete Customer: 1 param
       expect(customer?.statistics.totalParameters).toBe(6);
     });
@@ -552,7 +589,9 @@ describe('Resource Overview Tool', () => {
       const params: ResourceListParams = {};
       const result = listResources(params, metadataIndex);
 
-      const customer = result.resources.find(r => r.summary.name === 'Customer');
+      const customer = result.resources.find(
+        (r) => r.summary.name === 'Customer'
+      );
       expect(customer?.statistics.totalResponses).toBe(5); // 1 response per endpoint
     });
 
@@ -560,7 +599,9 @@ describe('Resource Overview Tool', () => {
       const params: ResourceListParams = {};
       const result = listResources(params, metadataIndex);
 
-      const customer = result.resources.find(r => r.summary.name === 'Customer');
+      const customer = result.resources.find(
+        (r) => r.summary.name === 'Customer'
+      );
       expect(customer?.statistics.uniquePermissions).toBe(4); // view, create, update, delete
     });
 
@@ -568,7 +609,9 @@ describe('Resource Overview Tool', () => {
       const params: ResourceListParams = {};
       const result = listResources(params, metadataIndex);
 
-      const customer = result.resources.find(r => r.summary.name === 'Customer');
+      const customer = result.resources.find(
+        (r) => r.summary.name === 'Customer'
+      );
       expect(customer?.statistics.mostCommonMethod).toBe('GET'); // 2 GET endpoints
     });
 
@@ -589,11 +632,13 @@ describe('Resource Overview Tool', () => {
       const params: ResourceListParams = {};
       const result = listResources(params, metadataIndex);
 
-      result.resources.forEach(resource => {
+      result.resources.forEach((resource) => {
         expect(resource.navigation).toBeDefined();
         expect(Array.isArray(resource.navigation.relatedResources)).toBe(true);
         expect(Array.isArray(resource.navigation.commonOperations)).toBe(true);
-        expect(Array.isArray(resource.navigation.similarPermissionResources)).toBe(true);
+        expect(
+          Array.isArray(resource.navigation.similarPermissionResources)
+        ).toBe(true);
       });
     });
 
@@ -601,15 +646,21 @@ describe('Resource Overview Tool', () => {
       const params: ResourceListParams = {};
       const result = listResources(params, metadataIndex);
 
-      const customer = result.resources.find(r => r.summary.name === 'Customer');
-      expect(customer?.navigation.relatedResources.length).toBeGreaterThanOrEqual(0);
+      const customer = result.resources.find(
+        (r) => r.summary.name === 'Customer'
+      );
+      expect(
+        customer?.navigation.relatedResources.length
+      ).toBeGreaterThanOrEqual(0);
     });
 
     test('should include common operations', () => {
       const params: ResourceListParams = {};
       const result = listResources(params, metadataIndex);
 
-      const customer = result.resources.find(r => r.summary.name === 'Customer');
+      const customer = result.resources.find(
+        (r) => r.summary.name === 'Customer'
+      );
       expect(customer?.navigation.commonOperations.length).toBeGreaterThan(0);
     });
 
@@ -617,16 +668,22 @@ describe('Resource Overview Tool', () => {
       const params: ResourceListParams = {};
       const result = listResources(params, metadataIndex);
 
-      const customer = result.resources.find(r => r.summary.name === 'Customer');
-      expect(customer?.navigation.similarPermissionResources.length).toBeGreaterThanOrEqual(0);
+      const customer = result.resources.find(
+        (r) => r.summary.name === 'Customer'
+      );
+      expect(
+        customer?.navigation.similarPermissionResources.length
+      ).toBeGreaterThanOrEqual(0);
     });
 
     test('should limit similar permission resources to top 5', () => {
       const params: ResourceListParams = {};
       const result = listResources(params, metadataIndex);
 
-      result.resources.forEach(resource => {
-        expect(resource.navigation.similarPermissionResources.length).toBeLessThanOrEqual(5);
+      result.resources.forEach((resource) => {
+        expect(
+          resource.navigation.similarPermissionResources.length
+        ).toBeLessThanOrEqual(5);
       });
     });
 
@@ -634,8 +691,8 @@ describe('Resource Overview Tool', () => {
       const params: ResourceListParams = {};
       const result = listResources(params, metadataIndex);
 
-      result.resources.forEach(resource => {
-        resource.navigation.similarPermissionResources.forEach(similar => {
+      result.resources.forEach((resource) => {
+        resource.navigation.similarPermissionResources.forEach((similar) => {
           expect(similar.resource).toBeDefined();
           expect(Array.isArray(similar.sharedPermissions)).toBe(true);
         });
@@ -726,7 +783,7 @@ describe('Resource Overview Tool', () => {
         endpointsByPath: new Map(),
         endpointsByPermission: new Map(),
         endpointsByMethod: new Map(),
-        allEndpoints: []
+        allEndpoints: [],
       };
 
       const names = getResourceNames(emptyIndex);
@@ -791,7 +848,10 @@ describe('Resource Overview Tool', () => {
 
   describe('getResourcesByPermission - Get resources by permission', () => {
     test('should return resources using customer.view permission', () => {
-      const resources = getResourcesByPermission('customer.view', metadataIndex);
+      const resources = getResourcesByPermission(
+        'customer.view',
+        metadataIndex
+      );
 
       expect(resources).toContain('Customer');
       expect(resources.length).toBe(1);
@@ -805,13 +865,19 @@ describe('Resource Overview Tool', () => {
     });
 
     test('should return empty array for non-existent permission', () => {
-      const resources = getResourcesByPermission('nonexistent.permission', metadataIndex);
+      const resources = getResourcesByPermission(
+        'nonexistent.permission',
+        metadataIndex
+      );
 
       expect(resources).toEqual([]);
     });
 
     test('should sort resource names alphabetically', () => {
-      const resources = getResourcesByPermission('customer.view', metadataIndex);
+      const resources = getResourcesByPermission(
+        'customer.view',
+        metadataIndex
+      );
 
       const sortedResources = [...resources].sort();
       expect(resources).toEqual(sortedResources);
@@ -823,8 +889,8 @@ describe('Resource Overview Tool', () => {
       const documents: ApiDocument[] = [
         {
           resourceName: 'EmptyResource',
-          endpoints: []
-        }
+          endpoints: [],
+        },
       ];
 
       const index = buildMetadataIndex(documents);
@@ -852,12 +918,12 @@ describe('Resource Overview Tool', () => {
               responses: [
                 {
                   statusCode: 200,
-                  description: 'Success'
-                }
-              ]
-            }
-          ]
-        }
+                  description: 'Success',
+                },
+              ],
+            },
+          ],
+        },
       ];
 
       const index = buildMetadataIndex(documents);
@@ -884,12 +950,12 @@ describe('Resource Overview Tool', () => {
               responses: [
                 {
                   statusCode: 200,
-                  description: 'Success'
-                }
-              ]
-            }
-          ]
-        }
+                  description: 'Success',
+                },
+              ],
+            },
+          ],
+        },
       ];
 
       const index = buildMetadataIndex(documents);
@@ -902,11 +968,11 @@ describe('Resource Overview Tool', () => {
     test('should handle both includeEndpoints and includeRelationships', () => {
       const params: ResourceListParams = {
         includeEndpoints: true,
-        includeRelationships: true
+        includeRelationships: true,
       };
       const result = listResources(params, metadataIndex);
 
-      result.resources.forEach(resource => {
+      result.resources.forEach((resource) => {
         expect(resource.endpoints).toBeDefined();
         expect(resource.relationships).toBeDefined();
       });

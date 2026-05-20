@@ -6,7 +6,7 @@ import {
   MonitoringService,
   Metrics,
   HealthStatus,
-  monitoringService
+  monitoringService,
 } from '../../src/server/monitoring';
 
 describe('MonitoringService', () => {

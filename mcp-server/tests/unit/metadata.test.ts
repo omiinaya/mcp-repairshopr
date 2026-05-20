@@ -9,13 +9,13 @@ import {
   getEndpointsByPermission,
   getEndpointsByMethod,
   getAllParameters,
-  getAllResponses
+  getAllResponses,
 } from '../../src/parser/metadata';
 import {
   ApiDocument,
   ApiEndpoint,
   ApiParameter,
-  ApiResponse
+  ApiResponse,
 } from '../../src/utils/types';
 
 describe('Metadata Extraction', () => {
@@ -26,15 +26,15 @@ describe('Metadata Extraction', () => {
       type: 'integer',
       required: true,
       description: 'Customer ID',
-      paramType: 'path' as const
+      paramType: 'path' as const,
     },
     {
       name: 'include',
       type: 'string',
       required: false,
       description: 'Include related resources',
-      paramType: 'query' as const
-    }
+      paramType: 'query' as const,
+    },
   ];
 
   const mockRequestBody = [
@@ -43,27 +43,27 @@ describe('Metadata Extraction', () => {
       type: 'string',
       required: true,
       description: 'Customer name',
-      paramType: 'body' as const
+      paramType: 'body' as const,
     },
     {
       name: 'email',
       type: 'string',
       required: true,
       description: 'Customer email',
-      paramType: 'body' as const
-    }
+      paramType: 'body' as const,
+    },
   ];
 
   const mockResponses = [
     {
       statusCode: 200,
       description: 'Success',
-      example: { id: 1, name: 'Test Customer' }
+      example: { id: 1, name: 'Test Customer' },
     },
     {
       statusCode: 404,
-      description: 'Not found'
-    }
+      description: 'Not found',
+    },
   ];
 
   const mockEndpoints = [
@@ -75,7 +75,7 @@ describe('Metadata Extraction', () => {
       path: '/customers/{id}',
       permission: 'customer.view',
       parameters: mockParameters,
-      responses: [mockResponses[0]]
+      responses: [mockResponses[0]],
     },
     {
       resource: 'Customer',
@@ -86,7 +86,7 @@ describe('Metadata Extraction', () => {
       permission: 'customer.create',
       parameters: [],
       requestBody: mockRequestBody,
-      responses: [mockResponses[0]]
+      responses: [mockResponses[0]],
     },
     {
       resource: 'Ticket',
@@ -96,7 +96,7 @@ describe('Metadata Extraction', () => {
       path: '/tickets/{id}',
       permission: 'ticket.view',
       parameters: mockParameters,
-      responses: [mockResponses[0]]
+      responses: [mockResponses[0]],
     },
     {
       resource: 'Ticket',
@@ -107,19 +107,19 @@ describe('Metadata Extraction', () => {
       permission: 'ticket.edit',
       parameters: mockParameters,
       requestBody: mockRequestBody,
-      responses: mockResponses
-    }
+      responses: mockResponses,
+    },
   ];
 
   const mockDocuments = [
     {
       resourceName: 'Customer',
-      endpoints: [mockEndpoints[0], mockEndpoints[1]]
+      endpoints: [mockEndpoints[0], mockEndpoints[1]],
     },
     {
       resourceName: 'Ticket',
-      endpoints: [mockEndpoints[2], mockEndpoints[3]]
-    }
+      endpoints: [mockEndpoints[2], mockEndpoints[3]],
+    },
   ];
 
   describe('buildMetadataIndex', () => {
@@ -147,18 +147,32 @@ describe('Metadata Extraction', () => {
       expect(index.resources.size).toBe(2);
       expect(index.resources.get('Customer')).toHaveLength(2);
       expect(index.resources.get('Ticket')).toHaveLength(2);
-      expect(index.resources.get('Customer')).toEqual([mockEndpoints[0], mockEndpoints[1]]);
-      expect(index.resources.get('Ticket')).toEqual([mockEndpoints[2], mockEndpoints[3]]);
+      expect(index.resources.get('Customer')).toEqual([
+        mockEndpoints[0],
+        mockEndpoints[1],
+      ]);
+      expect(index.resources.get('Ticket')).toEqual([
+        mockEndpoints[2],
+        mockEndpoints[3],
+      ]);
     });
 
     it('should build endpointsByPath map correctly', () => {
       const index = buildMetadataIndex(mockDocuments);
 
       expect(index.endpointsByPath.size).toBe(4);
-      expect(index.endpointsByPath.get('GET:/customers/{id}')).toEqual(mockEndpoints[0]);
-      expect(index.endpointsByPath.get('POST:/customers')).toEqual(mockEndpoints[1]);
-      expect(index.endpointsByPath.get('GET:/tickets/{id}')).toEqual(mockEndpoints[2]);
-      expect(index.endpointsByPath.get('PUT:/tickets/{id}')).toEqual(mockEndpoints[3]);
+      expect(index.endpointsByPath.get('GET:/customers/{id}')).toEqual(
+        mockEndpoints[0]
+      );
+      expect(index.endpointsByPath.get('POST:/customers')).toEqual(
+        mockEndpoints[1]
+      );
+      expect(index.endpointsByPath.get('GET:/tickets/{id}')).toEqual(
+        mockEndpoints[2]
+      );
+      expect(index.endpointsByPath.get('PUT:/tickets/{id}')).toEqual(
+        mockEndpoints[3]
+      );
     });
 
     it('should build endpointsByPermission map correctly', () => {
@@ -166,11 +180,16 @@ describe('Metadata Extraction', () => {
 
       expect(index.endpointsByPermission.size).toBe(4);
       expect(index.endpointsByPermission.get('customer.view')).toHaveLength(1);
-      expect(index.endpointsByPermission.get('customer.create')).toHaveLength(1);
+      expect(index.endpointsByPermission.get('customer.create')).toHaveLength(
+        1
+      );
       expect(index.endpointsByPermission.get('ticket.view')).toHaveLength(1);
       expect(index.endpointsByPermission.get('ticket.edit')).toHaveLength(1);
-      const customerViewEndpoints = index.endpointsByPermission.get('customer.view');
-      expect(customerViewEndpoints && customerViewEndpoints[0]).toEqual(mockEndpoints[0]);
+      const customerViewEndpoints =
+        index.endpointsByPermission.get('customer.view');
+      expect(customerViewEndpoints && customerViewEndpoints[0]).toEqual(
+        mockEndpoints[0]
+      );
     });
 
     it('should build endpointsByMethod map correctly', () => {
@@ -196,9 +215,7 @@ describe('Metadata Extraction', () => {
     });
 
     it('should handle documents with no endpoints', () => {
-      const emptyDocuments = [
-        { resourceName: 'Empty', endpoints: [] }
-      ];
+      const emptyDocuments = [{ resourceName: 'Empty', endpoints: [] }];
 
       const index = buildMetadataIndex(emptyDocuments);
 
@@ -260,7 +277,10 @@ describe('Metadata Extraction', () => {
 
     it('should return empty array for non-existent permission', () => {
       const index = buildMetadataIndex(mockDocuments);
-      const endpoints = getEndpointsByPermission(index, 'nonexistent.permission');
+      const endpoints = getEndpointsByPermission(
+        index,
+        'nonexistent.permission'
+      );
 
       expect(endpoints).toEqual([]);
     });
@@ -300,9 +320,9 @@ describe('Metadata Extraction', () => {
       const index = buildMetadataIndex(mockDocuments);
       const parameters = getAllParameters(index);
 
-      const queryParams = parameters.filter(p => p.paramType === 'query');
-      const pathParams = parameters.filter(p => p.paramType === 'path');
-      const bodyParams = parameters.filter(p => p.paramType === 'body');
+      const queryParams = parameters.filter((p) => p.paramType === 'query');
+      const pathParams = parameters.filter((p) => p.paramType === 'path');
+      const bodyParams = parameters.filter((p) => p.paramType === 'body');
 
       expect(queryParams.length).toBeGreaterThan(0);
       expect(pathParams.length).toBeGreaterThan(0);
@@ -322,10 +342,10 @@ describe('Metadata Extraction', () => {
               path: '/empty',
               permission: '',
               parameters: [],
-              responses: []
-            }
-          ]
-        }
+              responses: [],
+            },
+          ],
+        },
       ];
 
       const index = buildMetadataIndex(emptyDocuments);
@@ -366,10 +386,10 @@ describe('Metadata Extraction', () => {
               path: '/empty',
               permission: '',
               parameters: [],
-              responses: []
-            }
-          ]
-        }
+              responses: [],
+            },
+          ],
+        },
       ];
 
       const index = buildMetadataIndex(emptyDocuments);
@@ -385,10 +405,18 @@ describe('Metadata Extraction', () => {
 
       // Count endpoints from all sources
       const fromAllEndpoints = index.allEndpoints.length;
-      const fromResources = Array.from(index.resources.values()).reduce((sum, arr) => sum + arr.length, 0);
+      const fromResources = Array.from(index.resources.values()).reduce(
+        (sum, arr) => sum + arr.length,
+        0
+      );
       const fromPaths = index.endpointsByPath.size;
-      const fromPermissions = Array.from(index.endpointsByPermission.values()).reduce((sum, arr) => sum + arr.length, 0);
-      const fromMethods = Array.from(index.endpointsByMethod.values()).reduce((sum, arr) => sum + arr.length, 0);
+      const fromPermissions = Array.from(
+        index.endpointsByPermission.values()
+      ).reduce((sum, arr) => sum + arr.length, 0);
+      const fromMethods = Array.from(index.endpointsByMethod.values()).reduce(
+        (sum, arr) => sum + arr.length,
+        0
+      );
 
       expect(fromAllEndpoints).toBe(fromResources);
       expect(fromAllEndpoints).toBe(fromPaths);
@@ -409,10 +437,10 @@ describe('Metadata Extraction', () => {
               path: '/test',
               permission: '',
               parameters: [],
-              responses: []
-            }
-          ]
-        }
+              responses: [],
+            },
+          ],
+        },
       ];
 
       const index = buildMetadataIndex(documentsWithEmptyPermission);

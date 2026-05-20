@@ -11,7 +11,7 @@ import {
   ApiEndpoint,
   ApiParameter,
   ApiResponse,
-  ApiDocument
+  ApiDocument,
 } from '../utils/types';
 
 /**
@@ -20,20 +20,23 @@ import {
 export const ApiDocumentValidation = {
   /**
    * Validates an ApiEndpoint object
-   * 
+   *
    * @param endpoint - The endpoint to validate
    * @returns True if valid, false otherwise
    */
   validateEndpoint(endpoint: ApiEndpoint): boolean {
     // Check required fields
-    if (!endpoint.resource || typeof endpoint.resource !== 'string') return false;
-    if (!endpoint.operation || typeof endpoint.operation !== 'string') return false;
+    if (!endpoint.resource || typeof endpoint.resource !== 'string')
+      return false;
+    if (!endpoint.operation || typeof endpoint.operation !== 'string')
+      return false;
     if (!endpoint.method || typeof endpoint.method !== 'string') return false;
     if (!endpoint.path || typeof endpoint.path !== 'string') return false;
     // Permission can be empty string for endpoints without permission requirements
     if (typeof endpoint.permission !== 'string') return false;
     if (!Array.isArray(endpoint.parameters)) return false;
-    if (!Array.isArray(endpoint.responses) || endpoint.responses.length === 0) return false;
+    if (!Array.isArray(endpoint.responses) || endpoint.responses.length === 0)
+      return false;
 
     // Validate method
     const validMethods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'];
@@ -65,7 +68,7 @@ export const ApiDocumentValidation = {
 
   /**
    * Validates an ApiParameter object
-   * 
+   *
    * @param parameter - The parameter to validate
    * @returns True if valid, false otherwise
    */
@@ -73,11 +76,19 @@ export const ApiDocumentValidation = {
     if (!parameter.name || typeof parameter.name !== 'string') return false;
     if (!parameter.type || typeof parameter.type !== 'string') return false;
     if (typeof parameter.required !== 'boolean') return false;
-    if (!parameter.description || typeof parameter.description !== 'string') return false;
-    
-    const validTypes = ['string', 'integer', 'boolean', 'array', 'object', 'number'];
+    if (!parameter.description || typeof parameter.description !== 'string')
+      return false;
+
+    const validTypes = [
+      'string',
+      'integer',
+      'boolean',
+      'array',
+      'object',
+      'number',
+    ];
     if (!validTypes.includes(parameter.type)) return false;
-    
+
     const validParamTypes = ['query', 'path', 'body'];
     if (!validParamTypes.includes(parameter.paramType)) return false;
 
@@ -86,15 +97,16 @@ export const ApiDocumentValidation = {
 
   /**
    * Validates an ApiResponse object
-   * 
+   *
    * @param response - The response to validate
    * @returns True if valid, false otherwise
    */
   validateResponse(response: ApiResponse): boolean {
     if (typeof response.statusCode !== 'number') return false;
     if (response.statusCode < 100 || response.statusCode > 599) return false;
-    if (!response.description || typeof response.description !== 'string') return false;
-    
+    if (!response.description || typeof response.description !== 'string')
+      return false;
+
     // Example is optional, but if present should be valid
     if (response.example !== undefined) {
       // We can't deeply validate arbitrary JSON, but we can check it's not null/undefined
@@ -106,13 +118,15 @@ export const ApiDocumentValidation = {
 
   /**
    * Validates an ApiDocument object
-   * 
+   *
    * @param document - The document to validate
    * @returns True if valid, false otherwise
    */
   validateDocument(document: ApiDocument): boolean {
-    if (!document.resourceName || typeof document.resourceName !== 'string') return false;
-    if (!Array.isArray(document.endpoints) || document.endpoints.length === 0) return false;
+    if (!document.resourceName || typeof document.resourceName !== 'string')
+      return false;
+    if (!Array.isArray(document.endpoints) || document.endpoints.length === 0)
+      return false;
 
     // All endpoints should have the same resource name
     for (const endpoint of document.endpoints) {
@@ -121,5 +135,5 @@ export const ApiDocumentValidation = {
     }
 
     return true;
-  }
+  },
 };

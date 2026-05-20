@@ -22,7 +22,11 @@ const validateConfig = (config: Config): boolean => {
     return false;
   }
 
-  if (typeof config.port !== 'number' || config.port < 1 || config.port > 65535) {
+  if (
+    typeof config.port !== 'number' ||
+    config.port < 1 ||
+    config.port > 65535
+  ) {
     logger.error('Invalid port in configuration');
     return false;
   }
@@ -45,7 +49,7 @@ const loadConfig = (): Config => {
     serverName: process.env.SERVER_NAME || 'mcp-repairshopr',
     serverVersion: process.env.SERVER_VERSION || '0.1.0',
     port: port,
-    logLevel: process.env.LOG_LEVEL || 'info'
+    logLevel: process.env.LOG_LEVEL || 'info',
   };
 
   if (!validateConfig(config)) {
@@ -56,7 +60,7 @@ const loadConfig = (): Config => {
     serverName: config.serverName,
     serverVersion: config.serverVersion,
     port: config.port,
-    logLevel: config.logLevel
+    logLevel: config.logLevel,
   });
 
   return config;

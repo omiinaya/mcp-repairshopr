@@ -6,7 +6,11 @@
  */
 
 import { ApiEndpoint } from '../utils/types';
-import { MetadataIndex, getEndpointByPath, getEndpointsByResource } from '../parser/metadata';
+import {
+  MetadataIndex,
+  getEndpointByPath,
+  getEndpointsByResource,
+} from '../parser/metadata';
 
 /**
  * Result of an endpoint lookup operation
@@ -80,14 +84,14 @@ function lookupByPathAndMethod(
   method: string
 ): EndpointLookupResult | null {
   const endpoint = getEndpointByPath(index, path, method.toUpperCase());
-  
+
   if (!endpoint) {
     return null;
   }
 
   return {
     endpoint,
-    exactMatch: true
+    exactMatch: true,
   };
 }
 
@@ -103,10 +107,10 @@ function lookupByResource(
   resource: string
 ): EndpointLookupResult[] {
   const endpoints = getEndpointsByResource(index, resource);
-  
-  return endpoints.map(endpoint => ({
+
+  return endpoints.map((endpoint) => ({
     endpoint,
-    exactMatch: true
+    exactMatch: true,
   }));
 }
 
@@ -159,14 +163,14 @@ export function getEndpoint(
 
   // Priority 2: Lookup by path only (returns all endpoints with that path)
   if (path && !method) {
-    const allEndpoints = index.allEndpoints.filter(ep => ep.path === path);
+    const allEndpoints = index.allEndpoints.filter((ep) => ep.path === path);
     if (allEndpoints.length === 0) {
       return null;
     }
     // Return all endpoints with the same path
-    return allEndpoints.map(ep => ({
+    return allEndpoints.map((ep) => ({
       endpoint: ep,
-      exactMatch: true
+      exactMatch: true,
     }));
   }
 
@@ -215,7 +219,7 @@ export function getEndpointsBatch(
     return {
       results: [],
       successCount: 0,
-      failureCount: 0
+      failureCount: 0,
     };
   }
 
@@ -225,7 +229,7 @@ export function getEndpointsBatch(
 
   for (let i = 0; i < paths.length; i++) {
     const result = lookupByPathAndMethod(index, paths[i], methods[i]);
-    
+
     if (result) {
       results.push(result);
       successCount++;
@@ -237,7 +241,7 @@ export function getEndpointsBatch(
   return {
     results,
     successCount,
-    failureCount
+    failureCount,
   };
 }
 
@@ -268,14 +272,15 @@ export function findRelatedEndpoints(
 ): RelatedEndpointsResult {
   // Find endpoints for the same resource (excluding the original)
   const sameResource = index.allEndpoints.filter(
-    ep => ep.resource === endpoint.resource && 
-          (ep.method !== endpoint.method || ep.path !== endpoint.path)
+    (ep) =>
+      ep.resource === endpoint.resource &&
+      (ep.method !== endpoint.method || ep.path !== endpoint.path)
   );
 
   // Find endpoints with related parameters
   const relatedByParameters: ApiEndpoint[] = [];
   const endpointParamNames = new Set(
-    endpoint.parameters.map(p => p.name.toLowerCase())
+    endpoint.parameters.map((p) => p.name.toLowerCase())
   );
 
   for (const ep of index.allEndpoints) {
@@ -286,10 +291,10 @@ export function findRelatedEndpoints(
 
     // Check if this endpoint shares any parameters
     const epParamNames = new Set(
-      ep.parameters.map(p => p.name.toLowerCase())
+      ep.parameters.map((p) => p.name.toLowerCase())
     );
-    
-    const hasSharedParam = Array.from(endpointParamNames).some(paramName =>
+
+    const hasSharedParam = Array.from(endpointParamNames).some((paramName) =>
       epParamNames.has(paramName)
     );
 
@@ -301,7 +306,8 @@ export function findRelatedEndpoints(
   // Find endpoints with the same permission (excluding the original)
   const samePermission: ApiEndpoint[] = [];
   if (endpoint.permission) {
-    const endpointsWithPermission = index.endpointsByPermission.get(endpoint.permission) || [];
+    const endpointsWithPermission =
+      index.endpointsByPermission.get(endpoint.permission) || [];
     for (const ep of endpointsWithPermission) {
       if (ep.method !== endpoint.method || ep.path !== endpoint.path) {
         samePermission.push(ep);
@@ -313,7 +319,7 @@ export function findRelatedEndpoints(
     originalEndpoint: endpoint,
     sameResource,
     relatedByParameters,
-    samePermission
+    samePermission,
   };
 }
 
@@ -357,24 +363,24 @@ export function getEndpointDetails(endpoint: ApiEndpoint): {
     method: endpoint.method,
     path: endpoint.path,
     permission: endpoint.permission,
-    parameters: endpoint.parameters.map(param => ({
+    parameters: endpoint.parameters.map((param) => ({
       name: param.name,
       type: param.type,
       required: param.required,
       description: param.description,
-      paramType: param.paramType
+      paramType: param.paramType,
     })),
-    requestBody: endpoint.requestBody?.map(param => ({
+    requestBody: endpoint.requestBody?.map((param) => ({
       name: param.name,
       type: param.type,
       required: param.required,
       description: param.description,
-      paramType: param.paramType
+      paramType: param.paramType,
     })),
-    responses: endpoint.responses.map(response => ({
+    responses: endpoint.responses.map((response) => ({
       statusCode: response.statusCode,
       description: response.description,
-      example: response.example
-    }))
+      example: response.example,
+    })),
   };
 }

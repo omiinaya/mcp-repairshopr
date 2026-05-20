@@ -57,14 +57,14 @@ class StructuredLogger {
       correlationId,
       method,
       params,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
     logger.info('Incoming request', {
       correlationId,
       method,
       params: this.sanitizeParams(params),
-      timestamp: requestLog.timestamp.toISOString()
+      timestamp: requestLog.timestamp.toISOString(),
     });
 
     return correlationId;
@@ -88,7 +88,7 @@ class StructuredLogger {
       duration,
       result,
       error,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
     const logLevel = success ? 'info' : 'error';
@@ -101,26 +101,30 @@ class StructuredLogger {
       duration: `${duration}ms`,
       result: success ? this.sanitizeResult(result) : undefined,
       error: error,
-      timestamp: responseLog.timestamp.toISOString()
+      timestamp: responseLog.timestamp.toISOString(),
     });
   }
 
   /**
    * Log performance metrics
    */
-  logPerformance(operation: string, duration: number, metadata?: LogMetadata): void {
+  logPerformance(
+    operation: string,
+    duration: number,
+    metadata?: LogMetadata
+  ): void {
     const performanceLog: PerformanceLog = {
       operation,
       duration,
       metadata,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
     logger.info('Performance metric', {
       operation,
       duration: `${duration}ms`,
       metadata,
-      timestamp: performanceLog.timestamp.toISOString()
+      timestamp: performanceLog.timestamp.toISOString(),
     });
   }
 
@@ -133,7 +137,7 @@ class StructuredLogger {
       error,
       stackTrace: error.stack,
       context,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
     logger.error('Error occurred', {
@@ -141,7 +145,7 @@ class StructuredLogger {
       error: error.message,
       stackTrace: error.stack,
       context,
-      timestamp: errorLog.timestamp.toISOString()
+      timestamp: errorLog.timestamp.toISOString(),
     });
   }
 
@@ -152,7 +156,7 @@ class StructuredLogger {
     logger.warn(message, {
       correlationId,
       context,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 
@@ -163,7 +167,7 @@ class StructuredLogger {
     logger.debug(message, {
       correlationId,
       context,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 
@@ -174,7 +178,7 @@ class StructuredLogger {
     logger.trace(message, {
       correlationId,
       context,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 
@@ -186,11 +190,19 @@ class StructuredLogger {
       return params;
     }
 
-    const sensitiveKeys = ['password', 'token', 'apiKey', 'secret', 'credential'];
+    const sensitiveKeys = [
+      'password',
+      'token',
+      'apiKey',
+      'secret',
+      'credential',
+    ];
     const sanitized = { ...params };
 
     for (const key of Object.keys(sanitized)) {
-      if (sensitiveKeys.some(sensitive => key.toLowerCase().includes(sensitive))) {
+      if (
+        sensitiveKeys.some((sensitive) => key.toLowerCase().includes(sensitive))
+      ) {
         sanitized[key] = '[REDACTED]';
       }
     }
@@ -224,7 +236,7 @@ class StructuredLogger {
       correlationId,
       toolName,
       params: this.sanitizeParams(params),
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
 
     return correlationId;
@@ -242,7 +254,9 @@ class StructuredLogger {
     error?: string
   ): void {
     const logLevel = success ? 'info' : 'error';
-    const message = success ? 'Tool execution completed' : 'Tool execution failed';
+    const message = success
+      ? 'Tool execution completed'
+      : 'Tool execution failed';
 
     logger[logLevel](message, {
       correlationId,
@@ -251,19 +265,23 @@ class StructuredLogger {
       duration: `${duration}ms`,
       result: success ? this.sanitizeResult(result) : undefined,
       error,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 
   /**
    * Log health check
    */
-  logHealthCheck(status: 'healthy' | 'unhealthy', uptime: number, metrics?: any): void {
+  logHealthCheck(
+    status: 'healthy' | 'unhealthy',
+    uptime: number,
+    metrics?: any
+  ): void {
     logger.info('Health check', {
       status,
       uptime: `${uptime}ms`,
       metrics,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 
@@ -274,7 +292,7 @@ class StructuredLogger {
     logger.info('Configuration changed', {
       oldConfig,
       newConfig,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 }

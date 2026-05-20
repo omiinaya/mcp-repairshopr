@@ -4,7 +4,11 @@
 
 import * as fs from 'fs/promises';
 import * as path from 'path';
-import { IndexBuilder, IndexInfo, IndexHealth } from '../../src/indexer/index-builder';
+import {
+  IndexBuilder,
+  IndexInfo,
+  IndexHealth,
+} from '../../src/indexer/index-builder';
 import { ApiDocument, ApiEndpoint } from '../../src/utils/types';
 
 // Mock fs module
@@ -28,7 +32,11 @@ describe('IndexBuilder', () => {
       // Mock file system operations
       mockFs.mkdir.mockResolvedValue(undefined);
       mockFs.readdir.mockResolvedValue([
-        { name: 'test.md', isFile: () => true, isDirectory: () => false } as any
+        {
+          name: 'test.md',
+          isFile: () => true,
+          isDirectory: () => false,
+        } as any,
       ]);
       mockFs.readFile.mockResolvedValue(
         '# RepairShopr API Documentation - Test\n\n#### Test Operation\n\n**Endpoint:** `GET /test`\n\nTest description.'
@@ -44,7 +52,9 @@ describe('IndexBuilder', () => {
       expect(result.version).toBe('1.0.0');
       expect(result.timestamp).toBeDefined();
       expect(result.hash).toBeDefined();
-      expect(mockFs.mkdir).toHaveBeenCalledWith(outputPath, { recursive: true });
+      expect(mockFs.mkdir).toHaveBeenCalledWith(outputPath, {
+        recursive: true,
+      });
     });
 
     it('should handle empty documentation directory', async () => {
@@ -72,7 +82,9 @@ describe('IndexBuilder', () => {
 
       await indexBuilder.buildIndex(docsPath, outputPath);
 
-      expect(mockFs.mkdir).toHaveBeenCalledWith(outputPath, { recursive: true });
+      expect(mockFs.mkdir).toHaveBeenCalledWith(outputPath, {
+        recursive: true,
+      });
     });
   });
 
@@ -83,7 +95,11 @@ describe('IndexBuilder', () => {
 
       mockFs.mkdir.mockResolvedValue(undefined);
       mockFs.readdir.mockResolvedValue([
-        { name: 'test.md', isFile: () => true, isDirectory: () => false } as any
+        {
+          name: 'test.md',
+          isFile: () => true,
+          isDirectory: () => false,
+        } as any,
       ]);
       mockFs.readFile.mockResolvedValue(
         '# RepairShopr API Documentation - Test\n\n#### Test Operation\n\n**Endpoint:** `GET /test`\n\nTest description.'
@@ -140,7 +156,7 @@ describe('IndexBuilder', () => {
         fileCount: 1,
         endpointCount: 1,
         chunkCount: 1,
-        hash: 'test-hash'
+        hash: 'test-hash',
       };
 
       mockFs.mkdir.mockResolvedValue(undefined);
@@ -165,7 +181,7 @@ describe('IndexBuilder', () => {
         fileCount: 1,
         endpointCount: 1,
         chunkCount: 1,
-        hash: 'old-hash'
+        hash: 'old-hash',
       };
 
       mockFs.mkdir.mockResolvedValue(undefined);
@@ -194,7 +210,7 @@ describe('IndexBuilder', () => {
           fileCount: 1,
           endpointCount: 1,
           chunkCount: 1,
-          hash: 'test-hash'
+          hash: 'test-hash',
         })
       );
 
@@ -238,7 +254,7 @@ describe('IndexBuilder', () => {
         fileCount: 1,
         endpointCount: 1,
         chunkCount: 1,
-        hash: 'test-hash'
+        hash: 'test-hash',
       };
 
       mockFs.readFileSync.mockReturnValue(JSON.stringify(expectedInfo));
@@ -284,7 +300,7 @@ describe('IndexBuilder', () => {
             fileCount: 1,
             endpointCount: 1,
             chunkCount: 1,
-            hash: 'test-hash'
+            hash: 'test-hash',
           });
         } else if (filePath.includes('metadata-index.json')) {
           return JSON.stringify({
@@ -292,7 +308,7 @@ describe('IndexBuilder', () => {
             endpointsByPath: {},
             endpointsByPermission: {},
             endpointsByMethod: {},
-            allEndpoints: []
+            allEndpoints: [],
           });
         } else if (filePath.includes('embeddings.json')) {
           return JSON.stringify([]);
@@ -379,7 +395,7 @@ describe('IndexBuilder', () => {
             timestamp: new Date().toISOString(),
             fileCount: 1,
             endpointCount: 1,
-            chunkCount: 1
+            chunkCount: 1,
             // Missing hash
           });
         } else if (filePath.includes('metadata-index.json')) {
@@ -388,7 +404,7 @@ describe('IndexBuilder', () => {
             endpointsByPath: {},
             endpointsByPermission: {},
             endpointsByMethod: {},
-            allEndpoints: []
+            allEndpoints: [],
           });
         } else if (filePath.includes('embeddings.json')) {
           return JSON.stringify([]);
@@ -401,7 +417,9 @@ describe('IndexBuilder', () => {
       const result = indexBuilder.getIndexHealth(indexPath);
 
       expect(result.healthy).toBe(false);
-      expect(result.issues).toContain('Index info file is missing required fields');
+      expect(result.issues).toContain(
+        'Index info file is missing required fields'
+      );
     });
 
     it('should report invalid count values', async () => {
@@ -416,7 +434,7 @@ describe('IndexBuilder', () => {
             fileCount: -1,
             endpointCount: 1,
             chunkCount: 1,
-            hash: 'test-hash'
+            hash: 'test-hash',
           });
         } else if (filePath.includes('metadata-index.json')) {
           return JSON.stringify({
@@ -424,7 +442,7 @@ describe('IndexBuilder', () => {
             endpointsByPath: {},
             endpointsByPermission: {},
             endpointsByMethod: {},
-            allEndpoints: []
+            allEndpoints: [],
           });
         } else if (filePath.includes('embeddings.json')) {
           return JSON.stringify([]);
@@ -437,7 +455,9 @@ describe('IndexBuilder', () => {
       const result = indexBuilder.getIndexHealth(indexPath);
 
       expect(result.healthy).toBe(false);
-      expect(result.issues).toContain('Index info contains invalid count values');
+      expect(result.issues).toContain(
+        'Index info contains invalid count values'
+      );
     });
 
     it('should report invalid metadata index structure', async () => {
@@ -452,12 +472,12 @@ describe('IndexBuilder', () => {
             fileCount: 1,
             endpointCount: 1,
             chunkCount: 1,
-            hash: 'test-hash'
+            hash: 'test-hash',
           });
         } else if (filePath.includes('metadata-index.json')) {
           return JSON.stringify({
             // Missing required fields
-            resources: {}
+            resources: {},
           });
         } else if (filePath.includes('embeddings.json')) {
           return JSON.stringify([]);
@@ -470,7 +490,9 @@ describe('IndexBuilder', () => {
       const result = indexBuilder.getIndexHealth(indexPath);
 
       expect(result.healthy).toBe(false);
-      expect(result.issues).toContain('Metadata index is missing required fields');
+      expect(result.issues).toContain(
+        'Metadata index is missing required fields'
+      );
     });
 
     it('should report invalid embeddings format', async () => {
@@ -485,7 +507,7 @@ describe('IndexBuilder', () => {
             fileCount: 1,
             endpointCount: 1,
             chunkCount: 1,
-            hash: 'test-hash'
+            hash: 'test-hash',
           });
         } else if (filePath.includes('metadata-index.json')) {
           return JSON.stringify({
@@ -493,7 +515,7 @@ describe('IndexBuilder', () => {
             endpointsByPath: {},
             endpointsByPermission: {},
             endpointsByMethod: {},
-            allEndpoints: []
+            allEndpoints: [],
           });
         } else if (filePath.includes('embeddings.json')) {
           return JSON.stringify('not an array');
@@ -521,7 +543,7 @@ describe('IndexBuilder', () => {
             fileCount: 1,
             endpointCount: 1,
             chunkCount: 1,
-            hash: 'test-hash'
+            hash: 'test-hash',
           });
         } else if (filePath.includes('metadata-index.json')) {
           return JSON.stringify({
@@ -529,7 +551,7 @@ describe('IndexBuilder', () => {
             endpointsByPath: {},
             endpointsByPermission: {},
             endpointsByMethod: {},
-            allEndpoints: []
+            allEndpoints: [],
           });
         } else if (filePath.includes('embeddings.json')) {
           return JSON.stringify([]);
@@ -549,7 +571,10 @@ describe('IndexBuilder', () => {
       const indexPath = '/test/index';
 
       mockFs.accessSync.mockImplementation((filePath) => {
-        if (filePath.includes('index-info.json') || filePath.includes('metadata-index.json')) {
+        if (
+          filePath.includes('index-info.json') ||
+          filePath.includes('metadata-index.json')
+        ) {
           throw new Error('File not found');
         }
       });
@@ -570,7 +595,11 @@ describe('IndexBuilder', () => {
 
       mockFs.mkdir.mockResolvedValue(undefined);
       mockFs.readdir.mockResolvedValue([
-        { name: 'test.md', isFile: () => true, isDirectory: () => false } as any
+        {
+          name: 'test.md',
+          isFile: () => true,
+          isDirectory: () => false,
+        } as any,
       ]);
       mockFs.readFile.mockResolvedValue(fileContent);
       mockFs.writeFile.mockResolvedValue(undefined);
@@ -587,7 +616,11 @@ describe('IndexBuilder', () => {
 
       mockFs.mkdir.mockResolvedValue(undefined);
       mockFs.readdir.mockResolvedValue([
-        { name: 'test.md', isFile: () => true, isDirectory: () => false } as any
+        {
+          name: 'test.md',
+          isFile: () => true,
+          isDirectory: () => false,
+        } as any,
       ]);
       mockFs.writeFile.mockResolvedValue(undefined);
 

@@ -1,6 +1,6 @@
 /**
  * Verification script to test the markdown parser against all documentation files
- * 
+ *
  * This script attempts to parse all markdown files in docs/api/ and reports
  * any errors or issues encountered.
  */
@@ -14,9 +14,13 @@ async function verifyParser(): Promise<void> {
   const apiDir = path.join(__dirname, '../../docs/api');
   const files = await fs.readdir(apiDir);
   // Skip index.md as it's a table of contents, not an API documentation file
-  const markdownFiles = files.filter(f => f.endsWith('.md') && f !== 'index.md').sort();
+  const markdownFiles = files
+    .filter((f) => f.endsWith('.md') && f !== 'index.md')
+    .sort();
 
-  console.log(`Found ${markdownFiles.length} API documentation files to parse\n`);
+  console.log(
+    `Found ${markdownFiles.length} API documentation files to parse\n`
+  );
   console.log('='.repeat(80));
 
   let successCount = 0;
@@ -30,39 +34,47 @@ async function verifyParser(): Promise<void> {
 
     try {
       const document = await parseMarkdownFile(filePath);
-      
+
       // Validate the document
       const isValid = ApiDocumentValidation.validateDocument(document);
-      
+
       if (!isValid) {
         throw new Error('Document validation failed');
       }
 
       console.log(`  ✓ Resource: ${document.resourceName}`);
       console.log(`  ✓ Endpoints: ${document.endpoints.length}`);
-      
+
       // Validate each endpoint
       let endpointErrors = 0;
       document.endpoints.forEach((endpoint, index) => {
-        const isValidEndpoint = ApiDocumentValidation.validateEndpoint(endpoint);
+        const isValidEndpoint =
+          ApiDocumentValidation.validateEndpoint(endpoint);
         if (!isValidEndpoint) {
           endpointErrors++;
-          console.log(`    ✗ Endpoint ${index + 1} (${endpoint.operation}): Validation failed`);
+          console.log(
+            `    ✗ Endpoint ${index + 1} (${endpoint.operation}): Validation failed`
+          );
         }
       });
 
       if (endpointErrors === 0) {
-        console.log(`  ✓ All ${document.endpoints.length} endpoints validated successfully`);
+        console.log(
+          `  ✓ All ${document.endpoints.length} endpoints validated successfully`
+        );
         successCount++;
       } else {
         console.log(`  ✗ ${endpointErrors} endpoints failed validation`);
         errorCount++;
-        errors.push({ file, error: `${endpointErrors} endpoints failed validation` });
+        errors.push({
+          file,
+          error: `${endpointErrors} endpoints failed validation`,
+        });
       }
-
     } catch (error) {
       errorCount++;
-      const errorMessage = error instanceof Error ? error.message : String(error);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
       console.log(`  ✗ Error: ${errorMessage}`);
       errors.push({ file, error: errorMessage });
     }
@@ -95,7 +107,7 @@ async function verifyParser(): Promise<void> {
 }
 
 // Run verification
-verifyParser().catch(error => {
+verifyParser().catch((error) => {
   console.error('Fatal error:', error);
   process.exit(1);
 });

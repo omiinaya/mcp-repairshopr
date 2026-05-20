@@ -10,8 +10,8 @@ jest.mock('@modelcontextprotocol/sdk/server', () => {
   return {
     Server: jest.fn().mockImplementation(() => ({
       setRequestHandler: jest.fn(),
-      setNotificationHandler: jest.fn()
-    }))
+      setNotificationHandler: jest.fn(),
+    })),
   };
 });
 
@@ -21,7 +21,10 @@ describe('ProtocolHandler', () => {
 
   beforeEach(() => {
     protocolHandler = new ProtocolHandler();
-    mockServer = new Server({ name: 'test', version: '1.0.0' }) as jest.Mocked<Server>;
+    mockServer = new Server({
+      name: 'test',
+      version: '1.0.0',
+    }) as jest.Mocked<Server>;
     jest.clearAllMocks();
   });
 
@@ -36,7 +39,9 @@ describe('ProtocolHandler', () => {
     it('should not initialize twice', async () => {
       await protocolHandler.initialize(mockServer);
 
-      await expect(protocolHandler.initialize(mockServer)).resolves.not.toThrow();
+      await expect(
+        protocolHandler.initialize(mockServer)
+      ).resolves.not.toThrow();
       expect(protocolHandler.isReady()).toBe(true);
     });
 
@@ -48,10 +53,22 @@ describe('ProtocolHandler', () => {
     it('should set up message handlers on initialization', async () => {
       await protocolHandler.initialize(mockServer);
 
-      expect(mockServer.setRequestHandler).toHaveBeenCalledWith('tools/list', expect.any(Function));
-      expect(mockServer.setRequestHandler).toHaveBeenCalledWith('tools/call', expect.any(Function));
-      expect(mockServer.setRequestHandler).toHaveBeenCalledWith('initialize', expect.any(Function));
-      expect(mockServer.setRequestHandler).toHaveBeenCalledWith('notifications/initialized', expect.any(Function));
+      expect(mockServer.setRequestHandler).toHaveBeenCalledWith(
+        'tools/list',
+        expect.any(Function)
+      );
+      expect(mockServer.setRequestHandler).toHaveBeenCalledWith(
+        'tools/call',
+        expect.any(Function)
+      );
+      expect(mockServer.setRequestHandler).toHaveBeenCalledWith(
+        'initialize',
+        expect.any(Function)
+      );
+      expect(mockServer.setRequestHandler).toHaveBeenCalledWith(
+        'notifications/initialized',
+        expect.any(Function)
+      );
     });
   });
 
@@ -67,10 +84,10 @@ describe('ProtocolHandler', () => {
         inputSchema: {
           type: 'object',
           properties: {
-            query: { type: 'string' }
-          }
+            query: { type: 'string' },
+          },
         },
-        handler: async (params) => ({ result: 'success' })
+        handler: async (params) => ({ result: 'success' }),
       };
 
       protocolHandler.registerTool(tool);
@@ -85,19 +102,23 @@ describe('ProtocolHandler', () => {
         name: 'test_tool',
         description: 'A test tool',
         inputSchema: { type: 'object' },
-        handler: async () => ({})
+        handler: async () => ({}),
       };
 
-      expect(() => handler.registerTool(tool)).toThrow('ProtocolHandler not initialized');
+      expect(() => handler.registerTool(tool)).toThrow(
+        'ProtocolHandler not initialized'
+      );
     });
 
     it('should throw error for invalid tool definition', () => {
       const invalidTool = {
-        name: 'invalid_tool'
+        name: 'invalid_tool',
         // Missing description, inputSchema, handler
       } as any;
 
-      expect(() => protocolHandler.registerTool(invalidTool)).toThrow('Invalid tool definition');
+      expect(() => protocolHandler.registerTool(invalidTool)).toThrow(
+        'Invalid tool definition'
+      );
     });
 
     it('should overwrite existing tool with same name', () => {
@@ -105,14 +126,14 @@ describe('ProtocolHandler', () => {
         name: 'test_tool',
         description: 'First version',
         inputSchema: { type: 'object' },
-        handler: async () => ({ version: 1 })
+        handler: async () => ({ version: 1 }),
       };
 
       const tool2: MCPTool = {
         name: 'test_tool',
         description: 'Second version',
         inputSchema: { type: 'object' },
-        handler: async () => ({ version: 2 })
+        handler: async () => ({ version: 2 }),
       };
 
       protocolHandler.registerTool(tool1);
@@ -127,7 +148,7 @@ describe('ProtocolHandler', () => {
         name: 'test_tool',
         description: 'A test tool',
         inputSchema: { type: 'object' },
-        handler: async () => ({})
+        handler: async () => ({}),
       };
 
       protocolHandler.registerTool(tool);
@@ -147,14 +168,14 @@ describe('ProtocolHandler', () => {
         name: 'tool1',
         description: 'Tool 1',
         inputSchema: { type: 'object' },
-        handler: async () => ({})
+        handler: async () => ({}),
       };
 
       const tool2: MCPTool = {
         name: 'tool2',
         description: 'Tool 2',
         inputSchema: { type: 'object' },
-        handler: async () => ({})
+        handler: async () => ({}),
       };
 
       protocolHandler.registerTool(tool1);
@@ -162,8 +183,8 @@ describe('ProtocolHandler', () => {
 
       const tools = protocolHandler.getTools();
       expect(tools).toHaveLength(2);
-      expect(tools.map(t => t.name)).toContain('tool1');
-      expect(tools.map(t => t.name)).toContain('tool2');
+      expect(tools.map((t) => t.name)).toContain('tool1');
+      expect(tools.map((t) => t.name)).toContain('tool2');
     });
   });
 
@@ -175,7 +196,7 @@ describe('ProtocolHandler', () => {
     it('should handle initialize request', async () => {
       const setRequestHandlerMock = mockServer.setRequestHandler as jest.Mock;
       const initializeHandler = setRequestHandlerMock.mock.calls.find(
-        call => call[0] === 'initialize'
+        (call) => call[0] === 'initialize'
       )?.[1];
 
       if (initializeHandler) {
@@ -183,8 +204,8 @@ describe('ProtocolHandler', () => {
           params: {
             protocolVersion: '2024-11-05',
             capabilities: {},
-            clientInfo: { name: 'test-client', version: '1.0.0' }
-          }
+            clientInfo: { name: 'test-client', version: '1.0.0' },
+          },
         };
 
         const response = await initializeHandler(request);
@@ -200,7 +221,7 @@ describe('ProtocolHandler', () => {
     it('should handle initialized notification', async () => {
       const setRequestHandlerMock = mockServer.setRequestHandler as jest.Mock;
       const initializedHandler = setRequestHandlerMock.mock.calls.find(
-        call => call[0] === 'notifications/initialized'
+        (call) => call[0] === 'notifications/initialized'
       )?.[1];
 
       if (initializedHandler) {
@@ -218,17 +239,17 @@ describe('ProtocolHandler', () => {
         inputSchema: {
           type: 'object',
           properties: {
-            query: { type: 'string' }
-          }
+            query: { type: 'string' },
+          },
         },
-        handler: async () => ({})
+        handler: async () => ({}),
       };
 
       protocolHandler.registerTool(tool);
 
       const setRequestHandlerMock = mockServer.setRequestHandler as jest.Mock;
       const toolsListHandler = setRequestHandlerMock.mock.calls.find(
-        call => call[0] === 'tools/list'
+        (call) => call[0] === 'tools/list'
       )?.[1];
 
       if (toolsListHandler) {
@@ -250,26 +271,26 @@ describe('ProtocolHandler', () => {
         inputSchema: {
           type: 'object',
           properties: {
-            message: { type: 'string' }
+            message: { type: 'string' },
           },
-          required: ['message']
+          required: ['message'],
         },
-        handler: async (params) => ({ echo: params.message })
+        handler: async (params) => ({ echo: params.message }),
       };
 
       protocolHandler.registerTool(tool);
 
       const setRequestHandlerMock = mockServer.setRequestHandler as jest.Mock;
       const toolCallHandler = setRequestHandlerMock.mock.calls.find(
-        call => call[0] === 'tools/call'
+        (call) => call[0] === 'tools/call'
       )?.[1];
 
       if (toolCallHandler) {
         const request = {
           params: {
             name: 'echo_tool',
-            arguments: { message: 'hello' }
-          }
+            arguments: { message: 'hello' },
+          },
         };
 
         const response = await toolCallHandler(request);
@@ -285,35 +306,39 @@ describe('ProtocolHandler', () => {
     it('should throw error for tool call without name', async () => {
       const setRequestHandlerMock = mockServer.setRequestHandler as jest.Mock;
       const toolCallHandler = setRequestHandlerMock.mock.calls.find(
-        call => call[0] === 'tools/call'
+        (call) => call[0] === 'tools/call'
       )?.[1];
 
       if (toolCallHandler) {
         const request = {
           params: {
-            arguments: { message: 'hello' }
-          }
+            arguments: { message: 'hello' },
+          },
         };
 
-        await expect(toolCallHandler(request)).rejects.toThrow('Tool name is required');
+        await expect(toolCallHandler(request)).rejects.toThrow(
+          'Tool name is required'
+        );
       }
     });
 
     it('should throw error for non-existent tool', async () => {
       const setRequestHandlerMock = mockServer.setRequestHandler as jest.Mock;
       const toolCallHandler = setRequestHandlerMock.mock.calls.find(
-        call => call[0] === 'tools/call'
+        (call) => call[0] === 'tools/call'
       )?.[1];
 
       if (toolCallHandler) {
         const request = {
           params: {
             name: 'non_existent_tool',
-            arguments: {}
-          }
+            arguments: {},
+          },
         };
 
-        await expect(toolCallHandler(request)).rejects.toThrow('Tool not found: non_existent_tool');
+        await expect(toolCallHandler(request)).rejects.toThrow(
+          'Tool not found: non_existent_tool'
+        );
       }
     });
 
@@ -324,29 +349,31 @@ describe('ProtocolHandler', () => {
         inputSchema: {
           type: 'object',
           properties: {
-            required_param: { type: 'string' }
+            required_param: { type: 'string' },
           },
-          required: ['required_param']
+          required: ['required_param'],
         },
-        handler: async () => ({})
+        handler: async () => ({}),
       };
 
       protocolHandler.registerTool(tool);
 
       const setRequestHandlerMock = mockServer.setRequestHandler as jest.Mock;
       const toolCallHandler = setRequestHandlerMock.mock.calls.find(
-        call => call[0] === 'tools/call'
+        (call) => call[0] === 'tools/call'
       )?.[1];
 
       if (toolCallHandler) {
         const request = {
           params: {
             name: 'required_tool',
-            arguments: {}
-          }
+            arguments: {},
+          },
         };
 
-        await expect(toolCallHandler(request)).rejects.toThrow('Missing required parameter: required_param');
+        await expect(toolCallHandler(request)).rejects.toThrow(
+          'Missing required parameter: required_param'
+        );
       }
     });
 
@@ -359,17 +386,17 @@ describe('ProtocolHandler', () => {
           properties: {
             number_param: { type: 'number' },
             string_param: { type: 'string' },
-            boolean_param: { type: 'boolean' }
-          }
+            boolean_param: { type: 'boolean' },
+          },
         },
-        handler: async () => ({})
+        handler: async () => ({}),
       };
 
       protocolHandler.registerTool(tool);
 
       const setRequestHandlerMock = mockServer.setRequestHandler as jest.Mock;
       const toolCallHandler = setRequestHandlerMock.mock.calls.find(
-        call => call[0] === 'tools/call'
+        (call) => call[0] === 'tools/call'
       )?.[1];
 
       if (toolCallHandler) {
@@ -379,9 +406,9 @@ describe('ProtocolHandler', () => {
             arguments: {
               number_param: 'not a number',
               string_param: 123,
-              boolean_param: 'not a boolean'
-            }
-          }
+              boolean_param: 'not a boolean',
+            },
+          },
         };
 
         await expect(toolCallHandler(request)).rejects.toThrow();
@@ -395,25 +422,27 @@ describe('ProtocolHandler', () => {
         inputSchema: { type: 'object' },
         handler: async () => {
           throw new Error('Tool execution failed');
-        }
+        },
       };
 
       protocolHandler.registerTool(tool);
 
       const setRequestHandlerMock = mockServer.setRequestHandler as jest.Mock;
       const toolCallHandler = setRequestHandlerMock.mock.calls.find(
-        call => call[0] === 'tools/call'
+        (call) => call[0] === 'tools/call'
       )?.[1];
 
       if (toolCallHandler) {
         const request = {
           params: {
             name: 'failing_tool',
-            arguments: {}
-          }
+            arguments: {},
+          },
         };
 
-        await expect(toolCallHandler(request)).rejects.toThrow('Tool execution failed');
+        await expect(toolCallHandler(request)).rejects.toThrow(
+          'Tool execution failed'
+        );
       }
     });
   });
@@ -434,7 +463,7 @@ describe('ProtocolHandler', () => {
     it('should validate client capabilities', async () => {
       const setRequestHandlerMock = mockServer.setRequestHandler as jest.Mock;
       const initializeHandler = setRequestHandlerMock.mock.calls.find(
-        call => call[0] === 'initialize'
+        (call) => call[0] === 'initialize'
       )?.[1];
 
       if (initializeHandler) {
@@ -443,9 +472,9 @@ describe('ProtocolHandler', () => {
             protocolVersion: '2024-11-05',
             capabilities: {
               tools: {},
-              resources: { subscribe: true }
-            }
-          }
+              resources: { subscribe: true },
+            },
+          },
         };
 
         await expect(initializeHandler(request)).resolves.not.toThrow();
@@ -455,18 +484,20 @@ describe('ProtocolHandler', () => {
     it('should reject invalid client capabilities', async () => {
       const setRequestHandlerMock = mockServer.setRequestHandler as jest.Mock;
       const initializeHandler = setRequestHandlerMock.mock.calls.find(
-        call => call[0] === 'initialize'
+        (call) => call[0] === 'initialize'
       )?.[1];
 
       if (initializeHandler) {
         const request = {
           params: {
             protocolVersion: '2024-11-05',
-            capabilities: 'invalid' as any
-          }
+            capabilities: 'invalid' as any,
+          },
         };
 
-        await expect(initializeHandler(request)).rejects.toThrow('Invalid client capabilities format');
+        await expect(initializeHandler(request)).rejects.toThrow(
+          'Invalid client capabilities format'
+        );
       }
     });
   });
@@ -481,22 +512,22 @@ describe('ProtocolHandler', () => {
         name: 'counter_tool',
         description: 'Tool for counting',
         inputSchema: { type: 'object' },
-        handler: async () => ({})
+        handler: async () => ({}),
       };
 
       protocolHandler.registerTool(tool);
 
       const setRequestHandlerMock = mockServer.setRequestHandler as jest.Mock;
       const toolCallHandler = setRequestHandlerMock.mock.calls.find(
-        call => call[0] === 'tools/call'
+        (call) => call[0] === 'tools/call'
       )?.[1];
 
       if (toolCallHandler) {
         const request = {
           params: {
             name: 'counter_tool',
-            arguments: {}
-          }
+            arguments: {},
+          },
         };
 
         await toolCallHandler(request);
@@ -513,7 +544,7 @@ describe('ProtocolHandler', () => {
         name: 'stats_tool',
         description: 'Tool for stats',
         inputSchema: { type: 'object' },
-        handler: async () => ({})
+        handler: async () => ({}),
       };
 
       protocolHandler.registerTool(tool);
@@ -538,25 +569,27 @@ describe('ProtocolHandler', () => {
         inputSchema: { type: 'object' },
         handler: async () => {
           throw new Error('Intentional error');
-        }
+        },
       };
 
       protocolHandler.registerTool(tool);
 
       const setRequestHandlerMock = mockServer.setRequestHandler as jest.Mock;
       const toolCallHandler = setRequestHandlerMock.mock.calls.find(
-        call => call[0] === 'tools/call'
+        (call) => call[0] === 'tools/call'
       )?.[1];
 
       if (toolCallHandler) {
         const request = {
           params: {
             name: 'error_tool',
-            arguments: {}
-          }
+            arguments: {},
+          },
         };
 
-        await expect(toolCallHandler(request)).rejects.toThrow('Intentional error');
+        await expect(toolCallHandler(request)).rejects.toThrow(
+          'Intentional error'
+        );
       }
     });
 
@@ -567,17 +600,17 @@ describe('ProtocolHandler', () => {
         inputSchema: {
           type: 'object',
           properties: {
-            items: { type: 'array' }
-          }
+            items: { type: 'array' },
+          },
         },
-        handler: async () => ({})
+        handler: async () => ({}),
       };
 
       protocolHandler.registerTool(tool);
 
       const setRequestHandlerMock = mockServer.setRequestHandler as jest.Mock;
       const toolCallHandler = setRequestHandlerMock.mock.calls.find(
-        call => call[0] === 'tools/call'
+        (call) => call[0] === 'tools/call'
       )?.[1];
 
       if (toolCallHandler) {
@@ -585,12 +618,14 @@ describe('ProtocolHandler', () => {
           params: {
             name: 'array_tool',
             arguments: {
-              items: 'not an array'
-            }
-          }
+              items: 'not an array',
+            },
+          },
         };
 
-        await expect(toolCallHandler(request)).rejects.toThrow("Parameter 'items' must be an array");
+        await expect(toolCallHandler(request)).rejects.toThrow(
+          "Parameter 'items' must be an array"
+        );
       }
     });
 
@@ -601,17 +636,17 @@ describe('ProtocolHandler', () => {
         inputSchema: {
           type: 'object',
           properties: {
-            data: { type: 'object' }
-          }
+            data: { type: 'object' },
+          },
         },
-        handler: async () => ({})
+        handler: async () => ({}),
       };
 
       protocolHandler.registerTool(tool);
 
       const setRequestHandlerMock = mockServer.setRequestHandler as jest.Mock;
       const toolCallHandler = setRequestHandlerMock.mock.calls.find(
-        call => call[0] === 'tools/call'
+        (call) => call[0] === 'tools/call'
       )?.[1];
 
       if (toolCallHandler) {
@@ -619,12 +654,14 @@ describe('ProtocolHandler', () => {
           params: {
             name: 'object_tool',
             arguments: {
-              data: 'not an object'
-            }
-          }
+              data: 'not an object',
+            },
+          },
         };
 
-        await expect(toolCallHandler(request)).rejects.toThrow("Parameter 'data' must be an object");
+        await expect(toolCallHandler(request)).rejects.toThrow(
+          "Parameter 'data' must be an object"
+        );
       }
     });
 
@@ -635,17 +672,17 @@ describe('ProtocolHandler', () => {
         inputSchema: {
           type: 'object',
           properties: {
-            count: { type: 'integer' }
-          }
+            count: { type: 'integer' },
+          },
         },
-        handler: async () => ({})
+        handler: async () => ({}),
       };
 
       protocolHandler.registerTool(tool);
 
       const setRequestHandlerMock = mockServer.setRequestHandler as jest.Mock;
       const toolCallHandler = setRequestHandlerMock.mock.calls.find(
-        call => call[0] === 'tools/call'
+        (call) => call[0] === 'tools/call'
       )?.[1];
 
       if (toolCallHandler) {
@@ -653,12 +690,14 @@ describe('ProtocolHandler', () => {
           params: {
             name: 'integer_tool',
             arguments: {
-              count: 3.14
-            }
-          }
+              count: 3.14,
+            },
+          },
         };
 
-        await expect(toolCallHandler(request)).rejects.toThrow("Parameter 'count' must be an integer");
+        await expect(toolCallHandler(request)).rejects.toThrow(
+          "Parameter 'count' must be an integer"
+        );
       }
     });
   });
@@ -675,7 +714,8 @@ describe('ProtocolHandler', () => {
         yield { chunk: 3 };
       }
 
-      const stream = await protocolHandler.handleStreamingResponse(streamGenerator);
+      const stream =
+        await protocolHandler.handleStreamingResponse(streamGenerator);
 
       const chunks = [];
       for await (const chunk of stream) {
@@ -695,9 +735,9 @@ describe('ProtocolHandler', () => {
         yield { chunk: 1 };
       }
 
-      await expect(handler.handleStreamingResponse(streamGenerator)).rejects.toThrow(
-        'ProtocolHandler not initialized'
-      );
+      await expect(
+        handler.handleStreamingResponse(streamGenerator)
+      ).rejects.toThrow('ProtocolHandler not initialized');
     });
   });
 
@@ -711,7 +751,7 @@ describe('ProtocolHandler', () => {
         name: 'test_tool',
         description: 'A test tool',
         inputSchema: { type: 'object' },
-        handler: async () => ({})
+        handler: async () => ({}),
       };
 
       protocolHandler.registerTool(tool);
@@ -742,28 +782,30 @@ describe('ProtocolHandler', () => {
           name: 'tool1',
           description: 'First tool',
           inputSchema: { type: 'object' },
-          handler: async () => ({})
+          handler: async () => ({}),
         },
         {
           name: 'tool2',
           description: 'Second tool',
           inputSchema: { type: 'object' },
-          handler: async () => ({})
+          handler: async () => ({}),
         },
         {
           name: 'tool3',
           description: 'Third tool',
           inputSchema: { type: 'object' },
-          handler: async () => ({})
-        }
+          handler: async () => ({}),
+        },
       ];
 
-      tools.forEach(tool => protocolHandler.registerTool(tool));
+      tools.forEach((tool) => protocolHandler.registerTool(tool));
 
       const discoveredTools = protocolHandler.getTools();
 
       expect(discoveredTools).toHaveLength(3);
-      expect(discoveredTools.every(t => t.name && t.description && t.inputSchema)).toBe(true);
+      expect(
+        discoveredTools.every((t) => t.name && t.description && t.inputSchema)
+      ).toBe(true);
     });
 
     it('should find specific tool by name', async () => {
@@ -773,10 +815,10 @@ describe('ProtocolHandler', () => {
         inputSchema: {
           type: 'object',
           properties: {
-            query: { type: 'string' }
-          }
+            query: { type: 'string' },
+          },
         },
-        handler: async () => ({})
+        handler: async () => ({}),
       };
 
       protocolHandler.registerTool(tool);

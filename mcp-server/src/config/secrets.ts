@@ -42,18 +42,29 @@ export class SecretsManager {
           apiKey: repairshoprApiKey,
           subdomain: repairshoprSubdomain,
           baseUrl: `https://${repairshoprSubdomain}.repairshopr.com`,
-          timeoutMs: parseInt(process.env.REPAIRSHOPR_TIMEOUT_MS || '30000', 10),
-          retryAttempts: parseInt(process.env.REPAIRSHOPR_RETRY_ATTEMPTS || '3', 10),
-          retryDelayMs: parseInt(process.env.REPAIRSHOPR_RETRY_DELAY_MS || '1000', 10)
+          timeoutMs: parseInt(
+            process.env.REPAIRSHOPR_TIMEOUT_MS || '30000',
+            10
+          ),
+          retryAttempts: parseInt(
+            process.env.REPAIRSHOPR_RETRY_ATTEMPTS || '3',
+            10
+          ),
+          retryDelayMs: parseInt(
+            process.env.REPAIRSHOPR_RETRY_DELAY_MS || '1000',
+            10
+          ),
         };
 
         logger.info('RepairShopr API configuration loaded', {
           subdomain: repairshoprSubdomain,
           timeoutMs: this.secrets.repairshopr.timeoutMs,
-          retryAttempts: this.secrets.repairshopr.retryAttempts
+          retryAttempts: this.secrets.repairshopr.retryAttempts,
         });
       } else {
-        logger.warn('RepairShopr API credentials not configured. Live API access disabled.');
+        logger.warn(
+          'RepairShopr API credentials not configured. Live API access disabled.'
+        );
       }
 
       // Encryption key (for future use with encrypted secrets)
@@ -61,7 +72,6 @@ export class SecretsManager {
 
       this.initialized = true;
       logger.info('Secrets manager initialized successfully');
-
     } catch (error) {
       logger.error('Failed to initialize secrets manager', { error });
       throw error;
@@ -79,7 +89,10 @@ export class SecretsManager {
    * Check if RepairShopr API is configured
    */
   isRepairShoprConfigured(): boolean {
-    return !!this.secrets.repairshopr?.apiKey && !!this.secrets.repairshopr?.subdomain;
+    return (
+      !!this.secrets.repairshopr?.apiKey &&
+      !!this.secrets.repairshopr?.subdomain
+    );
   }
 
   /**
@@ -88,7 +101,7 @@ export class SecretsManager {
   getMaskedApiKey(): string {
     const apiKey = this.secrets.repairshopr?.apiKey;
     if (!apiKey) return 'not configured';
-    
+
     // Show only first 4 and last 4 characters
     if (apiKey.length <= 8) return '****';
     return `${apiKey.substring(0, 4)}...${apiKey.substring(apiKey.length - 4)}`;
@@ -120,7 +133,7 @@ export class SecretsManager {
 
     return {
       valid: errors.length === 0,
-      errors
+      errors,
     };
   }
 

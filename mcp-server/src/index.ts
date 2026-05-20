@@ -34,17 +34,17 @@ const startServer = async (): Promise<void> => {
     // Run startup validation
     logger.info('Running startup validation...');
     const validationResult = startupValidator.validate();
-    
+
     if (!validationResult.valid) {
       logger.error('Startup validation failed with errors:', {
-        errors: validationResult.errors
+        errors: validationResult.errors,
       });
       process.exit(1);
     }
 
     if (validationResult.warnings.length > 0) {
       logger.warn('Startup validation completed with warnings:', {
-        warnings: validationResult.warnings
+        warnings: validationResult.warnings,
       });
     } else {
       logger.info('Startup validation passed');
@@ -53,21 +53,23 @@ const startServer = async (): Promise<void> => {
     // Initialize secrets manager
     logger.info('Initializing secrets manager...');
     secretsManager.initialize();
-    
+
     if (secretsManager.isRepairShoprConfigured()) {
       logger.info('RepairShopr API configured', {
         subdomain: secretsManager.getRepairShoprConfig()?.subdomain,
-        apiKey: secretsManager.getMaskedApiKey()
+        apiKey: secretsManager.getMaskedApiKey(),
       });
-      
+
       const credentialValidation = secretsManager.validateCredentials();
       if (!credentialValidation.valid) {
         logger.warn('RepairShopr credentials validation warnings:', {
-          errors: credentialValidation.errors
+          errors: credentialValidation.errors,
         });
       }
     } else {
-      logger.info('RepairShopr API not configured. Running in documentation-only mode.');
+      logger.info(
+        'RepairShopr API not configured. Running in documentation-only mode.'
+      );
     }
 
     // Start the server
@@ -76,13 +78,13 @@ const startServer = async (): Promise<void> => {
     // Start Express server for health checks
     await expressServer.start();
     logger.info('Express server for health checks started', {
-      address: expressServer.getAddress()
+      address: expressServer.getAddress(),
     });
 
     // Start MCP HTTP transport for remote clients
     await mcpHttpTransport.start();
     logger.info('MCP HTTP transport started for remote access', {
-      url: `http://192.168.1.181:3001/mcp`
+      url: `http://192.168.1.181:3001/mcp`,
     });
 
     const health = server.healthCheck();

@@ -34,7 +34,7 @@ export class MonitoringService {
       averageResponseTime: 0,
       activeConnections: 0,
       toolCalls: new Map<string, number>(),
-      errors: []
+      errors: [],
     };
     this.startTime = 0;
     this.isMonitoring = false;
@@ -112,7 +112,7 @@ export class MonitoringService {
     const errorRecord = {
       timestamp: new Date(),
       error: error.message,
-      context: context || {}
+      context: context || {},
     };
 
     this.metrics.errors.push(errorRecord);
@@ -134,7 +134,7 @@ export class MonitoringService {
       averageResponseTime: this.metrics.averageResponseTime,
       activeConnections: this.metrics.activeConnections,
       toolCalls: new Map(this.metrics.toolCalls),
-      errors: [...this.metrics.errors]
+      errors: [...this.metrics.errors],
     };
   }
 
@@ -149,7 +149,7 @@ export class MonitoringService {
       averageResponseTime: 0,
       activeConnections: 0,
       toolCalls: new Map<string, number>(),
-      errors: []
+      errors: [],
     };
     this.responseTimes = [];
   }
@@ -170,7 +170,7 @@ export class MonitoringService {
     return {
       healthy,
       uptime,
-      metrics: this.getMetrics()
+      metrics: this.getMetrics(),
     };
   }
 

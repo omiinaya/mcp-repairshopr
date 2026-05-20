@@ -6,7 +6,7 @@ import {
   getPermissions,
   getPermissionHierarchyDefinitions,
   getAllPermissionDescriptions,
-  PermissionLookupParams
+  PermissionLookupParams,
 } from '../../src/tools/permissions';
 import { MetadataIndex, buildMetadataIndex } from '../../src/parser/metadata';
 import { ApiDocument } from '../../src/utils/types';
@@ -33,16 +33,16 @@ describe('Permission Reference Tool', () => {
                 type: 'integer',
                 required: false,
                 description: 'Page number for pagination',
-                paramType: 'query'
-              }
+                paramType: 'query',
+              },
             ],
             responses: [
               {
                 statusCode: 200,
                 description: 'Successful response',
-                example: { customers: [] }
-              }
-            ]
+                example: { customers: [] },
+              },
+            ],
           },
           {
             resource: 'Customer',
@@ -57,16 +57,16 @@ describe('Permission Reference Tool', () => {
                 type: 'integer',
                 required: true,
                 description: 'Customer ID',
-                paramType: 'path'
-              }
+                paramType: 'path',
+              },
             ],
             responses: [
               {
                 statusCode: 200,
                 description: 'Successful response',
-                example: { customer: {} }
-              }
-            ]
+                example: { customer: {} },
+              },
+            ],
           },
           {
             resource: 'Customer',
@@ -82,16 +82,16 @@ describe('Permission Reference Tool', () => {
                 type: 'string',
                 required: true,
                 description: 'Customer name',
-                paramType: 'body'
-              }
+                paramType: 'body',
+              },
             ],
             responses: [
               {
                 statusCode: 201,
                 description: 'Customer created successfully',
-                example: { customer: {} }
-              }
-            ]
+                example: { customer: {} },
+              },
+            ],
           },
           {
             resource: 'Customer',
@@ -106,8 +106,8 @@ describe('Permission Reference Tool', () => {
                 type: 'integer',
                 required: true,
                 description: 'Customer ID',
-                paramType: 'path'
-              }
+                paramType: 'path',
+              },
             ],
             requestBody: [
               {
@@ -115,16 +115,16 @@ describe('Permission Reference Tool', () => {
                 type: 'string',
                 required: false,
                 description: 'Customer name',
-                paramType: 'body'
-              }
+                paramType: 'body',
+              },
             ],
             responses: [
               {
                 statusCode: 200,
                 description: 'Customer updated successfully',
-                example: { customer: {} }
-              }
-            ]
+                example: { customer: {} },
+              },
+            ],
           },
           {
             resource: 'Customer',
@@ -139,17 +139,17 @@ describe('Permission Reference Tool', () => {
                 type: 'integer',
                 required: true,
                 description: 'Customer ID',
-                paramType: 'path'
-              }
+                paramType: 'path',
+              },
             ],
             responses: [
               {
                 statusCode: 204,
-                description: 'Customer deleted successfully'
-              }
-            ]
-          }
-        ]
+                description: 'Customer deleted successfully',
+              },
+            ],
+          },
+        ],
       },
       {
         resourceName: 'Ticket',
@@ -167,16 +167,16 @@ describe('Permission Reference Tool', () => {
                 type: 'integer',
                 required: false,
                 description: 'Filter by customer ID',
-                paramType: 'query'
-              }
+                paramType: 'query',
+              },
             ],
             responses: [
               {
                 statusCode: 200,
                 description: 'Successful response',
-                example: { tickets: [] }
-              }
-            ]
+                example: { tickets: [] },
+              },
+            ],
           },
           {
             resource: 'Ticket',
@@ -192,16 +192,16 @@ describe('Permission Reference Tool', () => {
                 type: 'string',
                 required: true,
                 description: 'Ticket subject',
-                paramType: 'body'
-              }
+                paramType: 'body',
+              },
             ],
             responses: [
               {
                 statusCode: 201,
                 description: 'Ticket created successfully',
-                example: { ticket: {} }
-              }
-            ]
+                example: { ticket: {} },
+              },
+            ],
           },
           {
             resource: 'Ticket',
@@ -214,11 +214,11 @@ describe('Permission Reference Tool', () => {
             responses: [
               {
                 statusCode: 200,
-                description: 'Tickets managed successfully'
-              }
-            ]
-          }
-        ]
+                description: 'Tickets managed successfully',
+              },
+            ],
+          },
+        ],
       },
       {
         resourceName: 'Invoice',
@@ -235,9 +235,9 @@ describe('Permission Reference Tool', () => {
               {
                 statusCode: 200,
                 description: 'Successful response',
-                example: { invoices: [] }
-              }
-            ]
+                example: { invoices: [] },
+              },
+            ],
           },
           {
             resource: 'Invoice',
@@ -250,12 +250,12 @@ describe('Permission Reference Tool', () => {
             responses: [
               {
                 statusCode: 200,
-                description: 'Invoices managed successfully'
-              }
-            ]
-          }
-        ]
-      }
+                description: 'Invoices managed successfully',
+              },
+            ],
+          },
+        ],
+      },
     ];
 
     // Build metadata index from sample documents
@@ -266,7 +266,7 @@ describe('Permission Reference Tool', () => {
     test('should find permission by endpoint path and method', () => {
       const params: PermissionLookupParams = {
         endpointPath: '/customers/{id}',
-        method: 'GET'
+        method: 'GET',
       };
 
       const result = getPermissions(params, metadataIndex);
@@ -277,14 +277,14 @@ describe('Permission Reference Tool', () => {
       expect(result.permission?.endpoints[0]).toMatchObject({
         resource: 'Customer',
         method: 'GET',
-        path: '/customers/{id}'
+        path: '/customers/{id}',
       });
     });
 
     test('should find permission for POST endpoint', () => {
       const params: PermissionLookupParams = {
         endpointPath: '/customers',
-        method: 'POST'
+        method: 'POST',
       };
 
       const result = getPermissions(params, metadataIndex);
@@ -297,7 +297,7 @@ describe('Permission Reference Tool', () => {
     test('should find permission for DELETE endpoint', () => {
       const params: PermissionLookupParams = {
         endpointPath: '/customers/{id}',
-        method: 'DELETE'
+        method: 'DELETE',
       };
 
       const result = getPermissions(params, metadataIndex);
@@ -309,7 +309,7 @@ describe('Permission Reference Tool', () => {
     test('should handle lowercase method', () => {
       const params: PermissionLookupParams = {
         endpointPath: '/customers/{id}',
-        method: 'get'
+        method: 'get',
       };
 
       const result = getPermissions(params, metadataIndex);
@@ -321,7 +321,7 @@ describe('Permission Reference Tool', () => {
     test('should return null for non-existent endpoint', () => {
       const params: PermissionLookupParams = {
         endpointPath: '/nonexistent',
-        method: 'GET'
+        method: 'GET',
       };
 
       const result = getPermissions(params, metadataIndex);
@@ -332,7 +332,7 @@ describe('Permission Reference Tool', () => {
 
     test('should throw error when method is not provided with endpointPath', () => {
       const params: PermissionLookupParams = {
-        endpointPath: '/customers/{id}'
+        endpointPath: '/customers/{id}',
       };
 
       expect(() => {
@@ -344,42 +344,48 @@ describe('Permission Reference Tool', () => {
   describe('getPermissions - Permission lookup by resource', () => {
     test('should find all permissions for a resource', () => {
       const params: PermissionLookupParams = {
-        resource: 'Customer'
+        resource: 'Customer',
       };
 
       const result = getPermissions(params, metadataIndex);
 
       expect(result.allPermissions).toBeDefined();
       expect(result.allPermissions?.length).toBe(4); // view, create, update, delete
-      expect(result.allPermissions?.every(p => p.name.startsWith('customer.'))).toBe(true);
+      expect(
+        result.allPermissions?.every((p) => p.name.startsWith('customer.'))
+      ).toBe(true);
     });
 
     test('should find permissions for Ticket resource', () => {
       const params: PermissionLookupParams = {
-        resource: 'Ticket'
+        resource: 'Ticket',
       };
 
       const result = getPermissions(params, metadataIndex);
 
       expect(result.allPermissions).toBeDefined();
       expect(result.allPermissions?.length).toBe(3); // view, create, admin
-      expect(result.allPermissions?.every(p => p.name.startsWith('ticket.'))).toBe(true);
+      expect(
+        result.allPermissions?.every((p) => p.name.startsWith('ticket.'))
+      ).toBe(true);
     });
 
     test('should include all endpoints for each permission', () => {
       const params: PermissionLookupParams = {
-        resource: 'Customer'
+        resource: 'Customer',
       };
 
       const result = getPermissions(params, metadataIndex);
 
-      const viewPermission = result.allPermissions?.find(p => p.name === 'customer.view');
+      const viewPermission = result.allPermissions?.find(
+        (p) => p.name === 'customer.view'
+      );
       expect(viewPermission?.endpoints.length).toBe(2); // GET /customers and GET /customers/{id}
     });
 
     test('should return empty array for non-existent resource', () => {
       const params: PermissionLookupParams = {
-        resource: 'NonExistent'
+        resource: 'NonExistent',
       };
 
       const result = getPermissions(params, metadataIndex);
@@ -392,7 +398,7 @@ describe('Permission Reference Tool', () => {
   describe('getPermissions - Permission lookup by permission name', () => {
     test('should find permission by exact name', () => {
       const params: PermissionLookupParams = {
-        permission: 'customer.view'
+        permission: 'customer.view',
       };
 
       const result = getPermissions(params, metadataIndex);
@@ -404,7 +410,7 @@ describe('Permission Reference Tool', () => {
 
     test('should find permission with single endpoint', () => {
       const params: PermissionLookupParams = {
-        permission: 'customer.delete'
+        permission: 'customer.delete',
       };
 
       const result = getPermissions(params, metadataIndex);
@@ -416,7 +422,7 @@ describe('Permission Reference Tool', () => {
 
     test('should return null for non-existent permission', () => {
       const params: PermissionLookupParams = {
-        permission: 'nonexistent.permission'
+        permission: 'nonexistent.permission',
       };
 
       const result = getPermissions(params, metadataIndex);
@@ -429,7 +435,7 @@ describe('Permission Reference Tool', () => {
   describe('getPermissions - Permission descriptions', () => {
     test('should include permission description for view permission', () => {
       const params: PermissionLookupParams = {
-        permission: 'customer.view'
+        permission: 'customer.view',
       };
 
       const result = getPermissions(params, metadataIndex);
@@ -441,7 +447,7 @@ describe('Permission Reference Tool', () => {
 
     test('should include permission description for create permission', () => {
       const params: PermissionLookupParams = {
-        permission: 'customer.create'
+        permission: 'customer.create',
       };
 
       const result = getPermissions(params, metadataIndex);
@@ -453,7 +459,7 @@ describe('Permission Reference Tool', () => {
 
     test('should include permission description for update permission', () => {
       const params: PermissionLookupParams = {
-        permission: 'customer.update'
+        permission: 'customer.update',
       };
 
       const result = getPermissions(params, metadataIndex);
@@ -465,7 +471,7 @@ describe('Permission Reference Tool', () => {
 
     test('should include permission description for delete permission', () => {
       const params: PermissionLookupParams = {
-        permission: 'customer.delete'
+        permission: 'customer.delete',
       };
 
       const result = getPermissions(params, metadataIndex);
@@ -477,7 +483,7 @@ describe('Permission Reference Tool', () => {
 
     test('should infer description from permission name', () => {
       const params: PermissionLookupParams = {
-        permission: 'ticket.admin'
+        permission: 'ticket.admin',
       };
 
       const result = getPermissions(params, metadataIndex);
@@ -490,7 +496,7 @@ describe('Permission Reference Tool', () => {
   describe('getPermissions - Permission hierarchy information', () => {
     test('should include hierarchy for view permission', () => {
       const params: PermissionLookupParams = {
-        permission: 'customer.view'
+        permission: 'customer.view',
       };
 
       const result = getPermissions(params, metadataIndex);
@@ -503,7 +509,7 @@ describe('Permission Reference Tool', () => {
 
     test('should include hierarchy for create permission', () => {
       const params: PermissionLookupParams = {
-        permission: 'customer.create'
+        permission: 'customer.create',
       };
 
       const result = getPermissions(params, metadataIndex);
@@ -516,7 +522,7 @@ describe('Permission Reference Tool', () => {
 
     test('should include hierarchy for admin permission', () => {
       const params: PermissionLookupParams = {
-        permission: 'ticket.admin'
+        permission: 'ticket.admin',
       };
 
       const result = getPermissions(params, metadataIndex);
@@ -529,7 +535,7 @@ describe('Permission Reference Tool', () => {
 
     test('should include hierarchy for manage permission', () => {
       const params: PermissionLookupParams = {
-        permission: 'invoice.manage'
+        permission: 'invoice.manage',
       };
 
       const result = getPermissions(params, metadataIndex);
@@ -558,7 +564,7 @@ describe('Permission Reference Tool', () => {
       const result = getPermissions(params, metadataIndex);
 
       expect(result.allPermissions).toBeDefined();
-      const permissionNames = result.allPermissions?.map(p => p.name) || [];
+      const permissionNames = result.allPermissions?.map((p) => p.name) || [];
       const sortedNames = [...permissionNames].sort();
       expect(permissionNames).toEqual(sortedNames);
     });
@@ -569,9 +575,9 @@ describe('Permission Reference Tool', () => {
       const result = getPermissions(params, metadataIndex);
 
       expect(result.allPermissions).toBeDefined();
-      result.allPermissions?.forEach(permission => {
+      result.allPermissions?.forEach((permission) => {
         expect(permission.endpoints.length).toBeGreaterThan(0);
-        permission.endpoints.forEach(endpoint => {
+        permission.endpoints.forEach((endpoint) => {
           expect(endpoint.resource).toBeDefined();
           expect(endpoint.method).toBeDefined();
           expect(endpoint.path).toBeDefined();
@@ -583,7 +589,7 @@ describe('Permission Reference Tool', () => {
   describe('getPermissions - Permission requirement summaries', () => {
     test('should include permission summaries when requested', () => {
       const params: PermissionLookupParams = {
-        includeSummaries: true
+        includeSummaries: true,
       };
 
       const result = getPermissions(params, metadataIndex);
@@ -594,12 +600,12 @@ describe('Permission Reference Tool', () => {
 
     test('should include endpoint count in summaries', () => {
       const params: PermissionLookupParams = {
-        includeSummaries: true
+        includeSummaries: true,
       };
 
       const result = getPermissions(params, metadataIndex);
 
-      result.summaries?.forEach(summary => {
+      result.summaries?.forEach((summary) => {
         expect(summary.endpointCount).toBeGreaterThan(0);
         expect(summary.endpointCount).toBeGreaterThanOrEqual(1);
       });
@@ -607,12 +613,12 @@ describe('Permission Reference Tool', () => {
 
     test('should include resources in summaries', () => {
       const params: PermissionLookupParams = {
-        includeSummaries: true
+        includeSummaries: true,
       };
 
       const result = getPermissions(params, metadataIndex);
 
-      result.summaries?.forEach(summary => {
+      result.summaries?.forEach((summary) => {
         expect(summary.resources.length).toBeGreaterThan(0);
         expect(Array.isArray(summary.resources)).toBe(true);
       });
@@ -620,12 +626,12 @@ describe('Permission Reference Tool', () => {
 
     test('should include methods in summaries', () => {
       const params: PermissionLookupParams = {
-        includeSummaries: true
+        includeSummaries: true,
       };
 
       const result = getPermissions(params, metadataIndex);
 
-      result.summaries?.forEach(summary => {
+      result.summaries?.forEach((summary) => {
         expect(summary.methods.length).toBeGreaterThan(0);
         expect(Array.isArray(summary.methods)).toBe(true);
       });
@@ -633,15 +639,15 @@ describe('Permission Reference Tool', () => {
 
     test('should include sample endpoints in summaries', () => {
       const params: PermissionLookupParams = {
-        includeSummaries: true
+        includeSummaries: true,
       };
 
       const result = getPermissions(params, metadataIndex);
 
-      result.summaries?.forEach(summary => {
+      result.summaries?.forEach((summary) => {
         expect(summary.sampleEndpoints.length).toBeGreaterThan(0);
         expect(summary.sampleEndpoints.length).toBeLessThanOrEqual(3);
-        summary.sampleEndpoints.forEach(endpoint => {
+        summary.sampleEndpoints.forEach((endpoint) => {
           expect(endpoint.resource).toBeDefined();
           expect(endpoint.method).toBeDefined();
           expect(endpoint.path).toBeDefined();
@@ -651,12 +657,13 @@ describe('Permission Reference Tool', () => {
 
     test('should sort summaries by endpoint count descending', () => {
       const params: PermissionLookupParams = {
-        includeSummaries: true
+        includeSummaries: true,
       };
 
       const result = getPermissions(params, metadataIndex);
 
-      const endpointCounts = result.summaries?.map(s => s.endpointCount) || [];
+      const endpointCounts =
+        result.summaries?.map((s) => s.endpointCount) || [];
       const sortedCounts = [...endpointCounts].sort((a, b) => b - a);
       expect(endpointCounts).toEqual(sortedCounts);
     });
@@ -665,7 +672,7 @@ describe('Permission Reference Tool', () => {
   describe('getPermissions - Permission matrix', () => {
     test('should include permission matrix when requested', () => {
       const params: PermissionLookupParams = {
-        includeMatrix: true
+        includeMatrix: true,
       };
 
       const result = getPermissions(params, metadataIndex);
@@ -676,12 +683,12 @@ describe('Permission Reference Tool', () => {
 
     test('should include all required fields in matrix entries', () => {
       const params: PermissionLookupParams = {
-        includeMatrix: true
+        includeMatrix: true,
       };
 
       const result = getPermissions(params, metadataIndex);
 
-      result.matrix?.forEach(entry => {
+      result.matrix?.forEach((entry) => {
         expect(entry.permission).toBeDefined();
         expect(entry.description).toBeDefined();
         expect(entry.category).toBeDefined();
@@ -693,24 +700,24 @@ describe('Permission Reference Tool', () => {
 
     test('should include correct categories in matrix', () => {
       const params: PermissionLookupParams = {
-        includeMatrix: true
+        includeMatrix: true,
       };
 
       const result = getPermissions(params, metadataIndex);
 
-      const categories = new Set(result.matrix?.map(m => m.category));
+      const categories = new Set(result.matrix?.map((m) => m.category));
       expect(categories.has('read')).toBe(true);
       expect(categories.has('write')).toBe(true);
     });
 
     test('should sort matrix by permission name', () => {
       const params: PermissionLookupParams = {
-        includeMatrix: true
+        includeMatrix: true,
       };
 
       const result = getPermissions(params, metadataIndex);
 
-      const permissionNames = result.matrix?.map(m => m.permission) || [];
+      const permissionNames = result.matrix?.map((m) => m.permission) || [];
       const sortedNames = [...permissionNames].sort();
       expect(permissionNames).toEqual(sortedNames);
     });
@@ -718,7 +725,7 @@ describe('Permission Reference Tool', () => {
     test('should include both matrix and summaries when both requested', () => {
       const params: PermissionLookupParams = {
         includeMatrix: true,
-        includeSummaries: true
+        includeSummaries: true,
       };
 
       const result = getPermissions(params, metadataIndex);
@@ -750,13 +757,15 @@ describe('Permission Reference Tool', () => {
 
     test('should include total count in filtered results', () => {
       const params: PermissionLookupParams = {
-        resource: 'Customer'
+        resource: 'Customer',
       };
 
       const result = getPermissions(params, metadataIndex);
 
       expect(result.totalPermissions).toBeGreaterThan(0);
-      expect(result.totalPermissions).toBe(metadataIndex.endpointsByPermission.size);
+      expect(result.totalPermissions).toBe(
+        metadataIndex.endpointsByPermission.size
+      );
     });
   });
 
@@ -771,7 +780,7 @@ describe('Permission Reference Tool', () => {
     test('should include all required fields in hierarchy definitions', () => {
       const hierarchies = getPermissionHierarchyDefinitions();
 
-      hierarchies.forEach(hierarchy => {
+      hierarchies.forEach((hierarchy) => {
         expect(hierarchy.name).toBeDefined();
         expect(hierarchy.level).toBeDefined();
         expect(hierarchy.children).toBeDefined();
@@ -783,11 +792,11 @@ describe('Permission Reference Tool', () => {
     test('should have correct parent-child relationships', () => {
       const hierarchies = getPermissionHierarchyDefinitions();
 
-      const admin = hierarchies.find(h => h.name === 'admin');
+      const admin = hierarchies.find((h) => h.name === 'admin');
       expect(admin?.parent).toBeUndefined();
       expect(admin?.children.length).toBeGreaterThan(0);
 
-      const view = hierarchies.find(h => h.name === 'view');
+      const view = hierarchies.find((h) => h.name === 'view');
       expect(view?.parent).toBe('manage');
       expect(view?.children.length).toBe(0);
     });
@@ -795,13 +804,13 @@ describe('Permission Reference Tool', () => {
     test('should have correct hierarchy levels', () => {
       const hierarchies = getPermissionHierarchyDefinitions();
 
-      const admin = hierarchies.find(h => h.name === 'admin');
+      const admin = hierarchies.find((h) => h.name === 'admin');
       expect(admin?.level).toBe('highest');
 
-      const manage = hierarchies.find(h => h.name === 'manage');
+      const manage = hierarchies.find((h) => h.name === 'manage');
       expect(manage?.level).toBe('high');
 
-      const view = hierarchies.find(h => h.name === 'view');
+      const view = hierarchies.find((h) => h.name === 'view');
       expect(view?.level).toBe('low');
     });
   });
@@ -817,7 +826,7 @@ describe('Permission Reference Tool', () => {
     test('should include all required fields in descriptions', () => {
       const descriptions = getAllPermissionDescriptions();
 
-      descriptions.forEach(desc => {
+      descriptions.forEach((desc) => {
         expect(desc.name).toBeDefined();
         expect(desc.description).toBeDefined();
         expect(desc.category).toBeDefined();
@@ -829,26 +838,26 @@ describe('Permission Reference Tool', () => {
     test('should have correct categories for permissions', () => {
       const descriptions = getAllPermissionDescriptions();
 
-      const view = descriptions.find(d => d.name === 'view');
+      const view = descriptions.find((d) => d.name === 'view');
       expect(view?.category).toBe('read');
 
-      const create = descriptions.find(d => d.name === 'create');
+      const create = descriptions.find((d) => d.name === 'create');
       expect(create?.category).toBe('write');
 
-      const admin = descriptions.find(d => d.name === 'admin');
+      const admin = descriptions.find((d) => d.name === 'admin');
       expect(admin?.category).toBe('admin');
     });
 
     test('should have relevant operations for each permission', () => {
       const descriptions = getAllPermissionDescriptions();
 
-      const view = descriptions.find(d => d.name === 'view');
+      const view = descriptions.find((d) => d.name === 'view');
       expect(view?.operations).toContain('GET');
 
-      const create = descriptions.find(d => d.name === 'create');
+      const create = descriptions.find((d) => d.name === 'create');
       expect(create?.operations).toContain('POST');
 
-      const deletePerm = descriptions.find(d => d.name === 'delete');
+      const deletePerm = descriptions.find((d) => d.name === 'delete');
       expect(deletePerm?.operations).toContain('DELETE');
     });
   });
@@ -856,7 +865,7 @@ describe('Permission Reference Tool', () => {
   describe('getPermissions - Edge cases', () => {
     test('should handle permission with no hierarchy match', () => {
       const params: PermissionLookupParams = {
-        permission: 'custom.permission'
+        permission: 'custom.permission',
       };
 
       const result = getPermissions(params, metadataIndex);
@@ -870,7 +879,7 @@ describe('Permission Reference Tool', () => {
         endpointsByPath: new Map(),
         endpointsByPermission: new Map(),
         endpointsByMethod: new Map(),
-        allEndpoints: []
+        allEndpoints: [],
       };
 
       const params: PermissionLookupParams = {};
@@ -883,7 +892,7 @@ describe('Permission Reference Tool', () => {
 
     test('should handle permission with special characters', () => {
       const params: PermissionLookupParams = {
-        permission: 'customer.view_special'
+        permission: 'customer.view_special',
       };
 
       const result = getPermissions(params, metadataIndex);

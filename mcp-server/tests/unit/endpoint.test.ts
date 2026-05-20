@@ -8,7 +8,7 @@ import {
   findRelatedEndpoints,
   getEndpointDetails,
   EndpointLookupParams,
-  BatchEndpointLookupParams
+  BatchEndpointLookupParams,
 } from '../../src/tools/endpoint';
 import { MetadataIndex, buildMetadataIndex } from '../../src/parser/metadata';
 import { ApiDocument, ApiEndpoint } from '../../src/utils/types';
@@ -36,23 +36,23 @@ describe('Endpoint Lookup Tool', () => {
                 type: 'integer',
                 required: false,
                 description: 'Page number for pagination',
-                paramType: 'query'
+                paramType: 'query',
               },
               {
                 name: 'limit',
                 type: 'integer',
                 required: false,
                 description: 'Number of results per page',
-                paramType: 'query'
-              }
+                paramType: 'query',
+              },
             ],
             responses: [
               {
                 statusCode: 200,
                 description: 'Successful response',
-                example: { customers: [] }
-              }
-            ]
+                example: { customers: [] },
+              },
+            ],
           },
           {
             resource: 'Customer',
@@ -67,16 +67,16 @@ describe('Endpoint Lookup Tool', () => {
                 type: 'integer',
                 required: true,
                 description: 'Customer ID',
-                paramType: 'path'
-              }
+                paramType: 'path',
+              },
             ],
             responses: [
               {
                 statusCode: 200,
                 description: 'Successful response',
-                example: { customer: {} }
-              }
-            ]
+                example: { customer: {} },
+              },
+            ],
           },
           {
             resource: 'Customer',
@@ -92,25 +92,25 @@ describe('Endpoint Lookup Tool', () => {
                 type: 'string',
                 required: true,
                 description: 'Customer name',
-                paramType: 'body'
+                paramType: 'body',
               },
               {
                 name: 'email',
                 type: 'string',
                 required: false,
                 description: 'Customer email',
-                paramType: 'body'
-              }
+                paramType: 'body',
+              },
             ],
             responses: [
               {
                 statusCode: 201,
                 description: 'Customer created successfully',
-                example: { customer: {} }
-              }
-            ]
-          }
-        ]
+                example: { customer: {} },
+              },
+            ],
+          },
+        ],
       },
       {
         resourceName: 'Ticket',
@@ -128,23 +128,23 @@ describe('Endpoint Lookup Tool', () => {
                 type: 'integer',
                 required: false,
                 description: 'Filter by customer ID',
-                paramType: 'query'
+                paramType: 'query',
               },
               {
                 name: 'status',
                 type: 'string',
                 required: false,
                 description: 'Filter by status',
-                paramType: 'query'
-              }
+                paramType: 'query',
+              },
             ],
             responses: [
               {
                 statusCode: 200,
                 description: 'Successful response',
-                example: { tickets: [] }
-              }
-            ]
+                example: { tickets: [] },
+              },
+            ],
           },
           {
             resource: 'Ticket',
@@ -159,19 +159,19 @@ describe('Endpoint Lookup Tool', () => {
                 type: 'integer',
                 required: true,
                 description: 'Ticket ID',
-                paramType: 'path'
-              }
+                paramType: 'path',
+              },
             ],
             responses: [
               {
                 statusCode: 200,
                 description: 'Successful response',
-                example: { ticket: {} }
-              }
-            ]
-          }
-        ]
-      }
+                example: { ticket: {} },
+              },
+            ],
+          },
+        ],
+      },
     ];
 
     // Build metadata index from sample documents
@@ -183,7 +183,7 @@ describe('Endpoint Lookup Tool', () => {
     test('should find endpoint by exact path and method', () => {
       const params: EndpointLookupParams = {
         path: '/customers/{id}',
-        method: 'GET'
+        method: 'GET',
       };
 
       const result = getEndpoint(params, metadataIndex);
@@ -200,7 +200,7 @@ describe('Endpoint Lookup Tool', () => {
     test('should find endpoint with lowercase method', () => {
       const params: EndpointLookupParams = {
         path: '/customers/{id}',
-        method: 'get'
+        method: 'get',
       };
 
       const result = getEndpoint(params, metadataIndex);
@@ -214,7 +214,7 @@ describe('Endpoint Lookup Tool', () => {
     test('should return null for non-existent endpoint', () => {
       const params: EndpointLookupParams = {
         path: '/nonexistent',
-        method: 'GET'
+        method: 'GET',
       };
 
       const result = getEndpoint(params, metadataIndex);
@@ -225,7 +225,7 @@ describe('Endpoint Lookup Tool', () => {
     test('should return null for wrong method', () => {
       const params: EndpointLookupParams = {
         path: '/customers/{id}',
-        method: 'POST'
+        method: 'POST',
       };
 
       const result = getEndpoint(params, metadataIndex);
@@ -237,7 +237,7 @@ describe('Endpoint Lookup Tool', () => {
   describe('getEndpoint - Lookup by resource name', () => {
     test('should find all endpoints for a resource', () => {
       const params: EndpointLookupParams = {
-        resource: 'Customer'
+        resource: 'Customer',
       };
 
       const result = getEndpoint(params, metadataIndex);
@@ -246,14 +246,16 @@ describe('Endpoint Lookup Tool', () => {
       expect(Array.isArray(result)).toBe(true);
       if (Array.isArray(result)) {
         expect(result.length).toBe(3);
-        expect(result.every(r => r.endpoint.resource === 'Customer')).toBe(true);
-        expect(result.every(r => r.exactMatch)).toBe(true);
+        expect(result.every((r) => r.endpoint.resource === 'Customer')).toBe(
+          true
+        );
+        expect(result.every((r) => r.exactMatch)).toBe(true);
       }
     });
 
     test('should find all endpoints for Ticket resource', () => {
       const params: EndpointLookupParams = {
-        resource: 'Ticket'
+        resource: 'Ticket',
       };
 
       const result = getEndpoint(params, metadataIndex);
@@ -262,13 +264,15 @@ describe('Endpoint Lookup Tool', () => {
       expect(Array.isArray(result)).toBe(true);
       if (Array.isArray(result)) {
         expect(result.length).toBe(2);
-        expect(result.every(r => r.endpoint.resource === 'Ticket')).toBe(true);
+        expect(result.every((r) => r.endpoint.resource === 'Ticket')).toBe(
+          true
+        );
       }
     });
 
     test('should return empty array for non-existent resource', () => {
       const params: EndpointLookupParams = {
-        resource: 'NonExistent'
+        resource: 'NonExistent',
       };
 
       const result = getEndpoint(params, metadataIndex);
@@ -288,7 +292,7 @@ describe('Endpoint Lookup Tool', () => {
 
     test('should handle path without method gracefully', () => {
       const params: EndpointLookupParams = {
-        path: '/customers'
+        path: '/customers',
       };
 
       const result = getEndpoint(params, metadataIndex);
@@ -298,8 +302,10 @@ describe('Endpoint Lookup Tool', () => {
       expect(Array.isArray(result)).toBe(true);
       if (Array.isArray(result)) {
         expect(result.length).toBeGreaterThan(0);
-        expect(result.every(r => r.endpoint.path === '/customers')).toBe(true);
-        expect(result.every(r => r.exactMatch)).toBe(true);
+        expect(result.every((r) => r.endpoint.path === '/customers')).toBe(
+          true
+        );
+        expect(result.every((r) => r.exactMatch)).toBe(true);
       }
     });
   });
@@ -308,7 +314,7 @@ describe('Endpoint Lookup Tool', () => {
     test('should lookup multiple endpoints successfully', () => {
       const params: BatchEndpointLookupParams = {
         paths: ['/customers/{id}', '/tickets/{id}'],
-        methods: ['GET', 'GET']
+        methods: ['GET', 'GET'],
       };
 
       const result = getEndpointsBatch(params, metadataIndex);
@@ -323,7 +329,7 @@ describe('Endpoint Lookup Tool', () => {
     test('should handle mixed success and failure', () => {
       const params: BatchEndpointLookupParams = {
         paths: ['/customers/{id}', '/nonexistent', '/tickets'],
-        methods: ['GET', 'GET', 'GET']
+        methods: ['GET', 'GET', 'GET'],
       };
 
       const result = getEndpointsBatch(params, metadataIndex);
@@ -336,7 +342,7 @@ describe('Endpoint Lookup Tool', () => {
     test('should handle empty arrays', () => {
       const params: BatchEndpointLookupParams = {
         paths: [],
-        methods: []
+        methods: [],
       };
 
       const result = getEndpointsBatch(params, metadataIndex);
@@ -349,7 +355,7 @@ describe('Endpoint Lookup Tool', () => {
     test('should throw error when paths and methods lengths differ', () => {
       const params: BatchEndpointLookupParams = {
         paths: ['/customers/{id}', '/tickets/{id}'],
-        methods: ['GET']
+        methods: ['GET'],
       };
 
       expect(() => {
@@ -360,31 +366,47 @@ describe('Endpoint Lookup Tool', () => {
 
   describe('findRelatedEndpoints - Related endpoint discovery', () => {
     test('should find endpoints with same resource', () => {
-      const endpoint = sampleEndpoints.find(e => e.path === '/customers/{id}')!;
+      const endpoint = sampleEndpoints.find(
+        (e) => e.path === '/customers/{id}'
+      )!;
       const result = findRelatedEndpoints(endpoint, metadataIndex);
 
       expect(result.originalEndpoint).toBe(endpoint);
       expect(result.sameResource.length).toBe(2); // Other Customer endpoints
-      expect(result.sameResource.every(e => e.resource === 'Customer')).toBe(true);
-      expect(result.sameResource.every(e => e.path !== '/customers/{id}')).toBe(true);
+      expect(result.sameResource.every((e) => e.resource === 'Customer')).toBe(
+        true
+      );
+      expect(
+        result.sameResource.every((e) => e.path !== '/customers/{id}')
+      ).toBe(true);
     });
 
     test('should find endpoints with related parameters', () => {
-      const endpoint = sampleEndpoints.find(e => e.path === '/customers/{id}')!;
+      const endpoint = sampleEndpoints.find(
+        (e) => e.path === '/customers/{id}'
+      )!;
       const result = findRelatedEndpoints(endpoint, metadataIndex);
 
       // Should find endpoints that share the 'id' parameter
       expect(result.relatedByParameters.length).toBeGreaterThan(0);
-      expect(result.relatedByParameters.every(e => e.path !== '/customers/{id}')).toBe(true);
+      expect(
+        result.relatedByParameters.every((e) => e.path !== '/customers/{id}')
+      ).toBe(true);
     });
 
     test('should find endpoints with same permission', () => {
-      const endpoint = sampleEndpoints.find(e => e.path === '/customers/{id}')!;
+      const endpoint = sampleEndpoints.find(
+        (e) => e.path === '/customers/{id}'
+      )!;
       const result = findRelatedEndpoints(endpoint, metadataIndex);
 
       expect(result.samePermission.length).toBeGreaterThan(0);
-      expect(result.samePermission.every(e => e.permission === 'customer.view')).toBe(true);
-      expect(result.samePermission.every(e => e.path !== '/customers/{id}')).toBe(true);
+      expect(
+        result.samePermission.every((e) => e.permission === 'customer.view')
+      ).toBe(true);
+      expect(
+        result.samePermission.every((e) => e.path !== '/customers/{id}')
+      ).toBe(true);
     });
 
     test('should handle endpoint with no permission', () => {
@@ -396,7 +418,7 @@ describe('Endpoint Lookup Tool', () => {
         path: '/test',
         permission: '',
         parameters: [],
-        responses: []
+        responses: [],
       };
 
       const result = findRelatedEndpoints(endpoint, metadataIndex);
@@ -407,7 +429,7 @@ describe('Endpoint Lookup Tool', () => {
 
   describe('getEndpointDetails - Parameter details inclusion', () => {
     test('should include all parameter details', () => {
-      const endpoint = sampleEndpoints.find(e => e.path === '/customers')!;
+      const endpoint = sampleEndpoints.find((e) => e.path === '/customers')!;
       const details = getEndpointDetails(endpoint);
 
       expect(details.parameters).toBeDefined();
@@ -417,19 +439,21 @@ describe('Endpoint Lookup Tool', () => {
         type: 'integer',
         required: false,
         description: 'Page number for pagination',
-        paramType: 'query'
+        paramType: 'query',
       });
       expect(details.parameters[1]).toMatchObject({
         name: 'limit',
         type: 'integer',
         required: false,
         description: 'Number of results per page',
-        paramType: 'query'
+        paramType: 'query',
       });
     });
 
     test('should include path parameters', () => {
-      const endpoint = sampleEndpoints.find(e => e.path === '/customers/{id}')!;
+      const endpoint = sampleEndpoints.find(
+        (e) => e.path === '/customers/{id}'
+      )!;
       const details = getEndpointDetails(endpoint);
 
       expect(details.parameters).toBeDefined();
@@ -439,12 +463,14 @@ describe('Endpoint Lookup Tool', () => {
         type: 'integer',
         required: true,
         description: 'Customer ID',
-        paramType: 'path'
+        paramType: 'path',
       });
     });
 
     test('should handle endpoints with no parameters', () => {
-      const endpoint = sampleEndpoints.find(e => e.path === '/customers' && e.method === 'POST')!;
+      const endpoint = sampleEndpoints.find(
+        (e) => e.path === '/customers' && e.method === 'POST'
+      )!;
       const details = getEndpointDetails(endpoint);
 
       expect(details.parameters).toEqual([]);
@@ -453,14 +479,16 @@ describe('Endpoint Lookup Tool', () => {
 
   describe('getEndpointDetails - Response details inclusion', () => {
     test('should include all response details', () => {
-      const endpoint = sampleEndpoints.find(e => e.path === '/customers/{id}')!;
+      const endpoint = sampleEndpoints.find(
+        (e) => e.path === '/customers/{id}'
+      )!;
       const details = getEndpointDetails(endpoint);
 
       expect(details.responses).toBeDefined();
       expect(details.responses.length).toBe(1);
       expect(details.responses[0]).toMatchObject({
         statusCode: 200,
-        description: 'Successful response'
+        description: 'Successful response',
       });
       expect(details.responses[0].example).toBeDefined();
     });
@@ -478,14 +506,14 @@ describe('Endpoint Lookup Tool', () => {
           {
             statusCode: 200,
             description: 'Success',
-            example: { success: true }
+            example: { success: true },
           },
           {
             statusCode: 404,
             description: 'Not found',
-            example: { error: 'Not found' }
-          }
-        ]
+            example: { error: 'Not found' },
+          },
+        ],
       };
 
       const details = getEndpointDetails(endpoint);
@@ -507,9 +535,9 @@ describe('Endpoint Lookup Tool', () => {
         responses: [
           {
             statusCode: 200,
-            description: 'Success'
-          }
-        ]
+            description: 'Success',
+          },
+        ],
       };
 
       const details = getEndpointDetails(endpoint);
@@ -520,15 +548,21 @@ describe('Endpoint Lookup Tool', () => {
 
   describe('getEndpointDetails - Permission information inclusion', () => {
     test('should include permission information', () => {
-      const endpoint = sampleEndpoints.find(e => e.path === '/customers/{id}')!;
+      const endpoint = sampleEndpoints.find(
+        (e) => e.path === '/customers/{id}'
+      )!;
       const details = getEndpointDetails(endpoint);
 
       expect(details.permission).toBe('customer.view');
     });
 
     test('should handle endpoints with different permissions', () => {
-      const getEndpoint = sampleEndpoints.find(e => e.path === '/customers' && e.method === 'GET')!;
-      const postEndpoint = sampleEndpoints.find(e => e.path === '/customers' && e.method === 'POST')!;
+      const getEndpoint = sampleEndpoints.find(
+        (e) => e.path === '/customers' && e.method === 'GET'
+      )!;
+      const postEndpoint = sampleEndpoints.find(
+        (e) => e.path === '/customers' && e.method === 'POST'
+      )!;
 
       const getDetails = getEndpointDetails(getEndpoint);
       const postDetails = getEndpointDetails(postEndpoint);
@@ -546,7 +580,7 @@ describe('Endpoint Lookup Tool', () => {
         path: '/test',
         permission: '',
         parameters: [],
-        responses: []
+        responses: [],
       };
 
       const details = getEndpointDetails(endpoint);
@@ -557,7 +591,9 @@ describe('Endpoint Lookup Tool', () => {
 
   describe('getEndpointDetails - Request body inclusion', () => {
     test('should include request body details', () => {
-      const endpoint = sampleEndpoints.find(e => e.path === '/customers' && e.method === 'POST')!;
+      const endpoint = sampleEndpoints.find(
+        (e) => e.path === '/customers' && e.method === 'POST'
+      )!;
       const details = getEndpointDetails(endpoint);
 
       expect(details.requestBody).toBeDefined();
@@ -567,19 +603,21 @@ describe('Endpoint Lookup Tool', () => {
         type: 'string',
         required: true,
         description: 'Customer name',
-        paramType: 'body'
+        paramType: 'body',
       });
       expect(details.requestBody![1]).toMatchObject({
         name: 'email',
         type: 'string',
         required: false,
         description: 'Customer email',
-        paramType: 'body'
+        paramType: 'body',
       });
     });
 
     test('should handle endpoints without request body', () => {
-      const endpoint = sampleEndpoints.find(e => e.path === '/customers/{id}')!;
+      const endpoint = sampleEndpoints.find(
+        (e) => e.path === '/customers/{id}'
+      )!;
       const details = getEndpointDetails(endpoint);
 
       expect(details.requestBody).toBeUndefined();
@@ -588,7 +626,9 @@ describe('Endpoint Lookup Tool', () => {
 
   describe('getEndpointDetails - Complete endpoint information', () => {
     test('should include all endpoint metadata', () => {
-      const endpoint = sampleEndpoints.find(e => e.path === '/customers/{id}')!;
+      const endpoint = sampleEndpoints.find(
+        (e) => e.path === '/customers/{id}'
+      )!;
       const details = getEndpointDetails(endpoint);
 
       expect(details.resource).toBe('Customer');

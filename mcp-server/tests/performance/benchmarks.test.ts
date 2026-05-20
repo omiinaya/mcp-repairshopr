@@ -5,7 +5,12 @@
  * memory usage, and identifies performance bottlenecks.
  */
 
-import { searchApiDocs, searchByResource, searchByMethod, searchByPermission } from '../../src/tools/search';
+import {
+  searchApiDocs,
+  searchByResource,
+  searchByMethod,
+  searchByPermission,
+} from '../../src/tools/search';
 import { VectorStore } from '../../src/indexer/vector';
 import { MetadataIndex } from '../../src/parser/metadata';
 import {
@@ -13,7 +18,7 @@ import {
   generateEndpoint,
   generateSearchQueries,
   generateComplexSearchQueries,
-  createMockMetadataIndex
+  createMockMetadataIndex,
 } from '../utils/data-generators';
 import { createMockVectorStore } from '../fixtures/mock-vector-store';
 import { measureTime } from '../utils/test-helpers';
@@ -72,7 +77,9 @@ describe('Performance Benchmarks', () => {
       for (const query of queries) {
         const memoryBefore = process.memoryUsage().heapUsed;
         const { result, time } = await measureTime(() =>
-          Promise.resolve(searchApiDocs({ query, limit: 5 }, vectorStore, metadataIndex))
+          Promise.resolve(
+            searchApiDocs({ query, limit: 5 }, vectorStore, metadataIndex)
+          )
         );
         const memoryAfter = process.memoryUsage().heapUsed;
 
@@ -82,7 +89,7 @@ describe('Performance Benchmarks', () => {
           memoryBefore,
           memoryAfter,
           memoryDelta: memoryAfter - memoryBefore,
-          resultsCount: result.length
+          resultsCount: result.length,
         });
 
         // Performance assertion: search should complete within 100ms
@@ -91,8 +98,10 @@ describe('Performance Benchmarks', () => {
 
       // Log performance metrics
       console.log('\n=== Simple Search Performance ===');
-      metrics.forEach(m => {
-        console.log(`${m.operation}: ${m.duration}ms, ${m.resultsCount} results, ${m.memoryDelta / 1024}KB memory`);
+      metrics.forEach((m) => {
+        console.log(
+          `${m.operation}: ${m.duration}ms, ${m.resultsCount} results, ${m.memoryDelta / 1024}KB memory`
+        );
       });
     });
 
@@ -103,7 +112,9 @@ describe('Performance Benchmarks', () => {
       for (const query of queries) {
         const memoryBefore = process.memoryUsage().heapUsed;
         const { result, time } = await measureTime(() =>
-          Promise.resolve(searchApiDocs({ query, limit: 10 }, vectorStore, metadataIndex))
+          Promise.resolve(
+            searchApiDocs({ query, limit: 10 }, vectorStore, metadataIndex)
+          )
         );
         const memoryAfter = process.memoryUsage().heapUsed;
 
@@ -113,7 +124,7 @@ describe('Performance Benchmarks', () => {
           memoryBefore,
           memoryAfter,
           memoryDelta: memoryAfter - memoryBefore,
-          resultsCount: result.length
+          resultsCount: result.length,
         });
 
         // Performance assertion: complex search should complete within 150ms
@@ -121,8 +132,10 @@ describe('Performance Benchmarks', () => {
       }
 
       console.log('\n=== Complex Search Performance ===');
-      metrics.forEach(m => {
-        console.log(`${m.operation}: ${m.duration}ms, ${m.resultsCount} results, ${m.memoryDelta / 1024}KB memory`);
+      metrics.forEach((m) => {
+        console.log(
+          `${m.operation}: ${m.duration}ms, ${m.resultsCount} results, ${m.memoryDelta / 1024}KB memory`
+        );
       });
     });
 
@@ -134,7 +147,9 @@ describe('Performance Benchmarks', () => {
       for (const limit of limits) {
         const memoryBefore = process.memoryUsage().heapUsed;
         const { result, time } = await measureTime(() =>
-          Promise.resolve(searchApiDocs({ query, limit }, vectorStore, metadataIndex))
+          Promise.resolve(
+            searchApiDocs({ query, limit }, vectorStore, metadataIndex)
+          )
         );
         const memoryAfter = process.memoryUsage().heapUsed;
 
@@ -144,7 +159,7 @@ describe('Performance Benchmarks', () => {
           memoryBefore,
           memoryAfter,
           memoryDelta: memoryAfter - memoryBefore,
-          resultsCount: result.length
+          resultsCount: result.length,
         });
 
         // Performance assertion: search should scale linearly with limit
@@ -152,8 +167,10 @@ describe('Performance Benchmarks', () => {
       }
 
       console.log('\n=== Search Performance by Result Size ===');
-      metrics.forEach(m => {
-        console.log(`${m.operation}: ${m.duration}ms, ${m.resultsCount} results, ${m.memoryDelta / 1024}KB memory`);
+      metrics.forEach((m) => {
+        console.log(
+          `${m.operation}: ${m.duration}ms, ${m.resultsCount} results, ${m.memoryDelta / 1024}KB memory`
+        );
       });
     });
 
@@ -162,7 +179,7 @@ describe('Performance Benchmarks', () => {
         { query: 'get customers', resource: 'Customer' },
         { query: 'create ticket', method: 'POST' },
         { query: 'get data', permission: 'customer.view' },
-        { query: 'search', resource: 'Customer', method: 'GET' }
+        { query: 'search', resource: 'Customer', method: 'GET' },
       ];
       const metrics: PerformanceMetrics[] = [];
 
@@ -179,7 +196,7 @@ describe('Performance Benchmarks', () => {
           memoryBefore,
           memoryAfter,
           memoryDelta: memoryAfter - memoryBefore,
-          resultsCount: result.length
+          resultsCount: result.length,
         });
 
         // Performance assertion: filtered search should complete within 100ms
@@ -187,8 +204,10 @@ describe('Performance Benchmarks', () => {
       }
 
       console.log('\n=== Search Performance with Filters ===');
-      metrics.forEach(m => {
-        console.log(`${m.operation}: ${m.duration}ms, ${m.resultsCount} results, ${m.memoryDelta / 1024}KB memory`);
+      metrics.forEach((m) => {
+        console.log(
+          `${m.operation}: ${m.duration}ms, ${m.resultsCount} results, ${m.memoryDelta / 1024}KB memory`
+        );
       });
     });
   });
@@ -214,7 +233,7 @@ describe('Performance Benchmarks', () => {
           memoryBefore,
           memoryAfter,
           memoryDelta: memoryAfter - memoryBefore,
-          resultsCount: result.length
+          resultsCount: result.length,
         });
 
         // Performance assertion: resource search should complete within 50ms
@@ -222,8 +241,10 @@ describe('Performance Benchmarks', () => {
       }
 
       console.log('\n=== searchByResource Performance ===');
-      metrics.forEach(m => {
-        console.log(`${m.operation}: ${m.duration}ms, ${m.resultsCount} results, ${m.memoryDelta / 1024}KB memory`);
+      metrics.forEach((m) => {
+        console.log(
+          `${m.operation}: ${m.duration}ms, ${m.resultsCount} results, ${m.memoryDelta / 1024}KB memory`
+        );
       });
     });
 
@@ -244,7 +265,7 @@ describe('Performance Benchmarks', () => {
           memoryBefore,
           memoryAfter,
           memoryDelta: memoryAfter - memoryBefore,
-          resultsCount: result.length
+          resultsCount: result.length,
         });
 
         // Performance assertion: method search should complete within 50ms
@@ -252,13 +273,20 @@ describe('Performance Benchmarks', () => {
       }
 
       console.log('\n=== searchByMethod Performance ===');
-      metrics.forEach(m => {
-        console.log(`${m.operation}: ${m.duration}ms, ${m.resultsCount} results, ${m.memoryDelta / 1024}KB memory`);
+      metrics.forEach((m) => {
+        console.log(
+          `${m.operation}: ${m.duration}ms, ${m.resultsCount} results, ${m.memoryDelta / 1024}KB memory`
+        );
       });
     });
 
     it('should benchmark searchByPermission', async () => {
-      const permissions = ['customer.view', 'ticket.create', 'invoice.update', 'test.view'];
+      const permissions = [
+        'customer.view',
+        'ticket.create',
+        'invoice.update',
+        'test.view',
+      ];
       const metrics: PerformanceMetrics[] = [];
 
       for (const permission of permissions) {
@@ -274,7 +302,7 @@ describe('Performance Benchmarks', () => {
           memoryBefore,
           memoryAfter,
           memoryDelta: memoryAfter - memoryBefore,
-          resultsCount: result.length
+          resultsCount: result.length,
         });
 
         // Performance assertion: permission search should complete within 50ms
@@ -282,8 +310,10 @@ describe('Performance Benchmarks', () => {
       }
 
       console.log('\n=== searchByPermission Performance ===');
-      metrics.forEach(m => {
-        console.log(`${m.operation}: ${m.duration}ms, ${m.resultsCount} results, ${m.memoryDelta / 1024}KB memory`);
+      metrics.forEach((m) => {
+        console.log(
+          `${m.operation}: ${m.duration}ms, ${m.resultsCount} results, ${m.memoryDelta / 1024}KB memory`
+        );
       });
     });
   });
@@ -319,10 +349,16 @@ describe('Performance Benchmarks', () => {
       const avgMemoryPerOperation = memoryGrowth / iterations;
 
       console.log('\n=== Memory Usage During Search ===');
-      console.log(`Initial memory: ${(initialMemory / 1024 / 1024).toFixed(2)}MB`);
+      console.log(
+        `Initial memory: ${(initialMemory / 1024 / 1024).toFixed(2)}MB`
+      );
       console.log(`Final memory: ${(finalMemory / 1024 / 1024).toFixed(2)}MB`);
-      console.log(`Memory growth: ${(memoryGrowth / 1024 / 1024).toFixed(2)}MB`);
-      console.log(`Average memory per operation: ${(avgMemoryPerOperation / 1024).toFixed(2)}KB`);
+      console.log(
+        `Memory growth: ${(memoryGrowth / 1024 / 1024).toFixed(2)}MB`
+      );
+      console.log(
+        `Average memory per operation: ${(avgMemoryPerOperation / 1024).toFixed(2)}KB`
+      );
 
       // Performance assertion: memory growth should be minimal (< 10KB per operation)
       expect(avgMemoryPerOperation).toBeLessThan(10 * 1024);
@@ -342,7 +378,11 @@ describe('Performance Benchmarks', () => {
 
       // Perform multiple searches
       for (let i = 0; i < 50; i++) {
-        searchApiDocs({ query: `search ${i}`, limit: 10 }, largeVectorStore, largeMetadataIndex);
+        searchApiDocs(
+          { query: `search ${i}`, limit: 10 },
+          largeVectorStore,
+          largeMetadataIndex
+        );
       }
 
       // Force garbage collection if available
@@ -354,7 +394,9 @@ describe('Performance Benchmarks', () => {
       const memoryDelta = memoryAfter - memoryBefore;
 
       console.log('\n=== Memory Usage with Large Dataset ===');
-      console.log(`Memory before: ${(memoryBefore / 1024 / 1024).toFixed(2)}MB`);
+      console.log(
+        `Memory before: ${(memoryBefore / 1024 / 1024).toFixed(2)}MB`
+      );
       console.log(`Memory after: ${(memoryAfter / 1024 / 1024).toFixed(2)}MB`);
       console.log(`Memory delta: ${(memoryDelta / 1024 / 1024).toFixed(2)}MB`);
 
@@ -393,29 +435,48 @@ describe('Performance Benchmarks', () => {
 
         // Measure result combination
         const combineStart = Date.now();
-        const results = searchApiDocs({ query, limit: 5 }, vectorStore, metadataIndex);
+        const results = searchApiDocs(
+          { query, limit: 5 },
+          vectorStore,
+          metadataIndex
+        );
         combineResultsTimes.push(Date.now() - combineStart);
       }
 
-      const avgSemanticTime = semanticSearchTimes.reduce((a, b) => a + b, 0) / iterations;
-      const avgKeywordTime = keywordSearchTimes.reduce((a, b) => a + b, 0) / iterations;
-      const avgCombineTime = combineResultsTimes.reduce((a, b) => a + b, 0) / iterations;
+      const avgSemanticTime =
+        semanticSearchTimes.reduce((a, b) => a + b, 0) / iterations;
+      const avgKeywordTime =
+        keywordSearchTimes.reduce((a, b) => a + b, 0) / iterations;
+      const avgCombineTime =
+        combineResultsTimes.reduce((a, b) => a + b, 0) / iterations;
 
       console.log('\n=== Performance Bottleneck Analysis ===');
-      console.log(`Average semantic search time: ${avgSemanticTime.toFixed(2)}ms`);
-      console.log(`Average keyword search time: ${avgKeywordTime.toFixed(2)}ms`);
-      console.log(`Average combine results time: ${avgCombineTime.toFixed(2)}ms`);
+      console.log(
+        `Average semantic search time: ${avgSemanticTime.toFixed(2)}ms`
+      );
+      console.log(
+        `Average keyword search time: ${avgKeywordTime.toFixed(2)}ms`
+      );
+      console.log(
+        `Average combine results time: ${avgCombineTime.toFixed(2)}ms`
+      );
 
       // Identify the slowest component
-      const bottleneck = Math.max(avgSemanticTime, avgKeywordTime, avgCombineTime);
+      const bottleneck = Math.max(
+        avgSemanticTime,
+        avgKeywordTime,
+        avgCombineTime
+      );
       const bottleneckName =
         bottleneck === avgSemanticTime
           ? 'semantic search'
           : bottleneck === avgKeywordTime
-          ? 'keyword search'
-          : 'result combination';
+            ? 'keyword search'
+            : 'result combination';
 
-      console.log(`\nPrimary bottleneck: ${bottleneckName} (${bottleneck.toFixed(2)}ms)`);
+      console.log(
+        `\nPrimary bottleneck: ${bottleneckName} (${bottleneck.toFixed(2)}ms)`
+      );
 
       // Performance assertion: no single component should dominate (> 50% of total time)
       const totalTime = avgSemanticTime + avgKeywordTime + avgCombineTime;
@@ -430,7 +491,9 @@ describe('Performance Benchmarks', () => {
       for (const limit of limits) {
         const memoryBefore = process.memoryUsage().heapUsed;
         const { result, time } = await measureTime(() =>
-          Promise.resolve(searchApiDocs({ query, limit }, vectorStore, metadataIndex))
+          Promise.resolve(
+            searchApiDocs({ query, limit }, vectorStore, metadataIndex)
+          )
         );
         const memoryAfter = process.memoryUsage().heapUsed;
 
@@ -440,13 +503,15 @@ describe('Performance Benchmarks', () => {
           memoryBefore,
           memoryAfter,
           memoryDelta: memoryAfter - memoryBefore,
-          resultsCount: result.length
+          resultsCount: result.length,
         });
       }
 
       console.log('\n=== Bottleneck Analysis with Large Result Sets ===');
-      metrics.forEach(m => {
-        console.log(`${m.operation}: ${m.duration}ms, ${m.resultsCount} results, ${m.memoryDelta / 1024}KB memory`);
+      metrics.forEach((m) => {
+        console.log(
+          `${m.operation}: ${m.duration}ms, ${m.resultsCount} results, ${m.memoryDelta / 1024}KB memory`
+        );
       });
 
       // Check if performance degrades significantly with larger result sets
@@ -474,7 +539,9 @@ describe('Performance Benchmarks', () => {
         const memoryBefore = process.memoryUsage().heapUsed;
         const { result, time } = await measureTime(async () => {
           const promises = Array.from({ length: concurrency }, () =>
-            Promise.resolve(searchApiDocs({ query, limit: 5 }, vectorStore, metadataIndex))
+            Promise.resolve(
+              searchApiDocs({ query, limit: 5 }, vectorStore, metadataIndex)
+            )
           );
           return Promise.all(promises);
         });
@@ -486,7 +553,7 @@ describe('Performance Benchmarks', () => {
           memoryBefore,
           memoryAfter,
           memoryDelta: memoryAfter - memoryBefore,
-          resultsCount: result.length
+          resultsCount: result.length,
         });
 
         // Performance assertion: concurrent requests should complete within reasonable time
@@ -494,24 +561,32 @@ describe('Performance Benchmarks', () => {
       }
 
       console.log('\n=== Concurrent Request Performance ===');
-      metrics.forEach(m => {
-        console.log(`${m.operation}: ${m.duration}ms, ${m.resultsCount} results, ${m.memoryDelta / 1024}KB memory`);
+      metrics.forEach((m) => {
+        console.log(
+          `${m.operation}: ${m.duration}ms, ${m.resultsCount} results, ${m.memoryDelta / 1024}KB memory`
+        );
       });
     });
 
     it('should handle concurrent mixed tool requests', async () => {
       const concurrency = 10;
       const operations = [
-        () => searchApiDocs({ query: 'get customers', limit: 5 }, vectorStore, metadataIndex),
+        () =>
+          searchApiDocs(
+            { query: 'get customers', limit: 5 },
+            vectorStore,
+            metadataIndex
+          ),
         () => searchByResource('Customer', metadataIndex),
         () => searchByMethod('GET', metadataIndex),
-        () => searchByPermission('customer.view', metadataIndex)
+        () => searchByPermission('customer.view', metadataIndex),
       ];
 
       const memoryBefore = process.memoryUsage().heapUsed;
       const { result, time } = await measureTime(async () => {
         const promises = Array.from({ length: concurrency }, () => {
-          const operation = operations[Math.floor(Math.random() * operations.length)];
+          const operation =
+            operations[Math.floor(Math.random() * operations.length)];
           return Promise.resolve(operation());
         });
         return Promise.all(promises);
@@ -540,31 +615,55 @@ describe('Performance Benchmarks', () => {
       const simpleSearchTimes: number[] = [];
       for (let i = 0; i < 100; i++) {
         const { time } = await measureTime(() =>
-          Promise.resolve(searchApiDocs({ query: 'get customers', limit: 5 }, vectorStore, metadataIndex))
+          Promise.resolve(
+            searchApiDocs(
+              { query: 'get customers', limit: 5 },
+              vectorStore,
+              metadataIndex
+            )
+          )
         );
         simpleSearchTimes.push(time);
       }
-      benchmarkResults.push(calculateBenchmarkStats('Simple Search', simpleSearchTimes));
+      benchmarkResults.push(
+        calculateBenchmarkStats('Simple Search', simpleSearchTimes)
+      );
 
       // Benchmark 2: Complex search
       const complexSearchTimes: number[] = [];
       for (let i = 0; i < 100; i++) {
         const { time } = await measureTime(() =>
-          Promise.resolve(searchApiDocs({ query: 'GET customer by id and email', limit: 10 }, vectorStore, metadataIndex))
+          Promise.resolve(
+            searchApiDocs(
+              { query: 'GET customer by id and email', limit: 10 },
+              vectorStore,
+              metadataIndex
+            )
+          )
         );
         complexSearchTimes.push(time);
       }
-      benchmarkResults.push(calculateBenchmarkStats('Complex Search', complexSearchTimes));
+      benchmarkResults.push(
+        calculateBenchmarkStats('Complex Search', complexSearchTimes)
+      );
 
       // Benchmark 3: Search with filters
       const filteredSearchTimes: number[] = [];
       for (let i = 0; i < 100; i++) {
         const { time } = await measureTime(() =>
-          Promise.resolve(searchApiDocs({ query: 'get', resource: 'Customer', method: 'GET' }, vectorStore, metadataIndex))
+          Promise.resolve(
+            searchApiDocs(
+              { query: 'get', resource: 'Customer', method: 'GET' },
+              vectorStore,
+              metadataIndex
+            )
+          )
         );
         filteredSearchTimes.push(time);
       }
-      benchmarkResults.push(calculateBenchmarkStats('Filtered Search', filteredSearchTimes));
+      benchmarkResults.push(
+        calculateBenchmarkStats('Filtered Search', filteredSearchTimes)
+      );
 
       // Benchmark 4: Resource search
       const resourceSearchTimes: number[] = [];
@@ -574,7 +673,9 @@ describe('Performance Benchmarks', () => {
         );
         resourceSearchTimes.push(time);
       }
-      benchmarkResults.push(calculateBenchmarkStats('Resource Search', resourceSearchTimes));
+      benchmarkResults.push(
+        calculateBenchmarkStats('Resource Search', resourceSearchTimes)
+      );
 
       // Benchmark 5: Method search
       const methodSearchTimes: number[] = [];
@@ -584,7 +685,9 @@ describe('Performance Benchmarks', () => {
         );
         methodSearchTimes.push(time);
       }
-      benchmarkResults.push(calculateBenchmarkStats('Method Search', methodSearchTimes));
+      benchmarkResults.push(
+        calculateBenchmarkStats('Method Search', methodSearchTimes)
+      );
 
       // Benchmark 6: Permission search
       const permissionSearchTimes: number[] = [];
@@ -594,13 +697,15 @@ describe('Performance Benchmarks', () => {
         );
         permissionSearchTimes.push(time);
       }
-      benchmarkResults.push(calculateBenchmarkStats('Permission Search', permissionSearchTimes));
+      benchmarkResults.push(
+        calculateBenchmarkStats('Permission Search', permissionSearchTimes)
+      );
 
       // Generate and log comprehensive report
       console.log('\n=== COMPREHENSIVE BENCHMARK REPORT ===');
       console.log('=====================================\n');
 
-      benchmarkResults.forEach(result => {
+      benchmarkResults.forEach((result) => {
         console.log(`Benchmark: ${result.name}`);
         console.log(`  Iterations: ${result.iterations}`);
         console.log(`  Total Time: ${result.totalTime.toFixed(2)}ms`);
@@ -610,12 +715,14 @@ describe('Performance Benchmarks', () => {
         console.log(`  P50: ${result.p50.toFixed(2)}ms`);
         console.log(`  P95: ${result.p95.toFixed(2)}ms`);
         console.log(`  P99: ${result.p99.toFixed(2)}ms`);
-        console.log(`  Memory Usage: ${(result.memoryUsage / 1024).toFixed(2)}KB`);
+        console.log(
+          `  Memory Usage: ${(result.memoryUsage / 1024).toFixed(2)}KB`
+        );
         console.log('');
       });
 
       // Performance assertions
-      benchmarkResults.forEach(result => {
+      benchmarkResults.forEach((result) => {
         expect(result.averageTime).toBeLessThan(100);
         expect(result.p95).toBeLessThan(200);
         expect(result.p99).toBeLessThan(500);
@@ -627,7 +734,10 @@ describe('Performance Benchmarks', () => {
 /**
  * Calculate benchmark statistics from an array of times
  */
-function calculateBenchmarkStats(name: string, times: number[]): BenchmarkResult {
+function calculateBenchmarkStats(
+  name: string,
+  times: number[]
+): BenchmarkResult {
   const sorted = [...times].sort((a, b) => a - b);
   const total = times.reduce((a, b) => a + b, 0);
   const avg = total / times.length;
@@ -654,6 +764,6 @@ function calculateBenchmarkStats(name: string, times: number[]): BenchmarkResult
     p50,
     p95,
     p99,
-    memoryUsage: memoryAfter - memoryBefore
+    memoryUsage: memoryAfter - memoryBefore,
   };
 }

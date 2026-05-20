@@ -13,8 +13,8 @@ export const mockVectors: EmbeddingVector[] = [
       resource: 'Customer',
       method: 'GET',
       path: '/customers',
-      type: 'description'
-    }
+      type: 'description',
+    },
   },
   {
     id: 'GET:/customers/{id}',
@@ -24,8 +24,8 @@ export const mockVectors: EmbeddingVector[] = [
       resource: 'Customer',
       method: 'GET',
       path: '/customers/{id}',
-      type: 'description'
-    }
+      type: 'description',
+    },
   },
   {
     id: 'POST:/customers',
@@ -35,8 +35,8 @@ export const mockVectors: EmbeddingVector[] = [
       resource: 'Customer',
       method: 'POST',
       path: '/customers',
-      type: 'description'
-    }
+      type: 'description',
+    },
   },
   {
     id: 'GET:/tickets',
@@ -46,8 +46,8 @@ export const mockVectors: EmbeddingVector[] = [
       resource: 'Ticket',
       method: 'GET',
       path: '/tickets',
-      type: 'description'
-    }
+      type: 'description',
+    },
   },
   {
     id: 'POST:/tickets',
@@ -57,8 +57,8 @@ export const mockVectors: EmbeddingVector[] = [
       resource: 'Ticket',
       method: 'POST',
       path: '/tickets',
-      type: 'description'
-    }
+      type: 'description',
+    },
   },
   {
     id: 'GET:/invoices',
@@ -68,8 +68,8 @@ export const mockVectors: EmbeddingVector[] = [
       resource: 'Invoice',
       method: 'GET',
       path: '/invoices',
-      type: 'description'
-    }
+      type: 'description',
+    },
   },
   {
     id: 'POST:/invoices',
@@ -79,9 +79,9 @@ export const mockVectors: EmbeddingVector[] = [
       resource: 'Invoice',
       method: 'POST',
       path: '/invoices',
-      type: 'description'
-    }
-  }
+      type: 'description',
+    },
+  },
 ];
 
 export function createMockVectorStore(): VectorStore {
@@ -97,7 +97,7 @@ export function createEmptyVectorStore(): VectorStore {
 export function createLargeVectorStore(count: number = 100): VectorStore {
   const store = new VectorStore();
   const vectors: EmbeddingVector[] = [];
-  
+
   for (let i = 0; i < count; i++) {
     vectors.push({
       id: `endpoint-${i}`,
@@ -107,11 +107,11 @@ export function createLargeVectorStore(count: number = 100): VectorStore {
         resource: `Resource${i % 3}`,
         method: ['GET', 'POST', 'PUT', 'DELETE'][i % 4],
         path: `/resource-${i % 3}/${i}`,
-        type: 'description'
-      }
+        type: 'description',
+      },
     });
   }
-  
+
   store.addVectors(vectors);
   return store;
 }

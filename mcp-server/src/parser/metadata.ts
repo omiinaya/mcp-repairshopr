@@ -9,7 +9,7 @@ import {
   ApiDocument,
   ApiEndpoint,
   ApiParameter,
-  ApiResponse
+  ApiResponse,
 } from '../utils/types';
 
 /**
@@ -40,7 +40,7 @@ export function buildMetadataIndex(documents: ApiDocument[]): MetadataIndex {
     endpointsByPath: new Map(),
     endpointsByPermission: new Map(),
     endpointsByMethod: new Map(),
-    allEndpoints: []
+    allEndpoints: [],
   };
 
   // Iterate through all documents and endpoints
@@ -88,7 +88,10 @@ export function buildMetadataIndex(documents: ApiDocument[]): MetadataIndex {
  * @param resource - Resource name to look up
  * @returns Array of endpoints for the resource, or empty array if not found
  */
-export function getEndpointsByResource(index: MetadataIndex, resource: string): ApiEndpoint[] {
+export function getEndpointsByResource(
+  index: MetadataIndex,
+  resource: string
+): ApiEndpoint[] {
   return index.resources.get(resource) || [];
 }
 
@@ -100,7 +103,11 @@ export function getEndpointsByResource(index: MetadataIndex, resource: string): 
  * @param method - HTTP method
  * @returns Endpoint if found, undefined otherwise
  */
-export function getEndpointByPath(index: MetadataIndex, path: string, method: string): ApiEndpoint | undefined {
+export function getEndpointByPath(
+  index: MetadataIndex,
+  path: string,
+  method: string
+): ApiEndpoint | undefined {
   const pathKey = `${method}:${path}`;
   return index.endpointsByPath.get(pathKey);
 }
@@ -112,7 +119,10 @@ export function getEndpointByPath(index: MetadataIndex, path: string, method: st
  * @param permission - Permission to look up
  * @returns Array of endpoints requiring the permission, or empty array if not found
  */
-export function getEndpointsByPermission(index: MetadataIndex, permission: string): ApiEndpoint[] {
+export function getEndpointsByPermission(
+  index: MetadataIndex,
+  permission: string
+): ApiEndpoint[] {
   return index.endpointsByPermission.get(permission) || [];
 }
 
@@ -123,7 +133,10 @@ export function getEndpointsByPermission(index: MetadataIndex, permission: strin
  * @param method - HTTP method to look up
  * @returns Array of endpoints using the method, or empty array if not found
  */
-export function getEndpointsByMethod(index: MetadataIndex, method: string): ApiEndpoint[] {
+export function getEndpointsByMethod(
+  index: MetadataIndex,
+  method: string
+): ApiEndpoint[] {
   return index.endpointsByMethod.get(method) || [];
 }
 

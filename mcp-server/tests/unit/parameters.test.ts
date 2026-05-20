@@ -6,7 +6,7 @@ import {
   getParameters,
   getCommonPatterns,
   getParametersByPattern,
-  ParameterLookupParams
+  ParameterLookupParams,
 } from '../../src/tools/parameters';
 import { MetadataIndex, buildMetadataIndex } from '../../src/parser/metadata';
 import { ApiDocument, ApiEndpoint } from '../../src/utils/types';
@@ -34,37 +34,37 @@ describe('Parameter Reference Tool', () => {
                 type: 'integer',
                 required: false,
                 description: 'Page number for pagination (min: 1)',
-                paramType: 'query'
+                paramType: 'query',
               },
               {
                 name: 'limit',
                 type: 'integer',
                 required: false,
                 description: 'Number of results per page (max: 100)',
-                paramType: 'query'
+                paramType: 'query',
               },
               {
                 name: 'sort',
                 type: 'string',
                 required: false,
                 description: 'Sort field (enum: [name, email, created_at])',
-                paramType: 'query'
+                paramType: 'query',
               },
               {
                 name: 'status',
                 type: 'string',
                 required: false,
                 description: 'Filter by customer status',
-                paramType: 'query'
-              }
+                paramType: 'query',
+              },
             ],
             responses: [
               {
                 statusCode: 200,
                 description: 'Successful response',
-                example: { customers: [] }
-              }
-            ]
+                example: { customers: [] },
+              },
+            ],
           },
           {
             resource: 'Customer',
@@ -79,16 +79,16 @@ describe('Parameter Reference Tool', () => {
                 type: 'integer',
                 required: true,
                 description: 'Customer ID',
-                paramType: 'path'
-              }
+                paramType: 'path',
+              },
             ],
             responses: [
               {
                 statusCode: 200,
                 description: 'Successful response',
-                example: { customer: {} }
-              }
-            ]
+                example: { customer: {} },
+              },
+            ],
           },
           {
             resource: 'Customer',
@@ -104,32 +104,32 @@ describe('Parameter Reference Tool', () => {
                 type: 'string',
                 required: true,
                 description: 'Customer name (minLength: 2, maxLength: 100)',
-                paramType: 'body'
+                paramType: 'body',
               },
               {
                 name: 'email',
                 type: 'string',
                 required: false,
                 description: 'Customer email (pattern: email)',
-                paramType: 'body'
+                paramType: 'body',
               },
               {
                 name: 'phone',
                 type: 'string',
                 required: false,
                 description: 'Customer phone number',
-                paramType: 'body'
-              }
+                paramType: 'body',
+              },
             ],
             responses: [
               {
                 statusCode: 201,
                 description: 'Customer created successfully',
-                example: { customer: {} }
-              }
-            ]
-          }
-        ]
+                example: { customer: {} },
+              },
+            ],
+          },
+        ],
       },
       {
         resourceName: 'Ticket',
@@ -147,30 +147,30 @@ describe('Parameter Reference Tool', () => {
                 type: 'integer',
                 required: false,
                 description: 'Filter by customer ID',
-                paramType: 'query'
+                paramType: 'query',
               },
               {
                 name: 'status',
                 type: 'string',
                 required: false,
                 description: 'Filter by ticket status',
-                paramType: 'query'
+                paramType: 'query',
               },
               {
                 name: 'per_page',
                 type: 'integer',
                 required: false,
                 description: 'Results per page',
-                paramType: 'query'
-              }
+                paramType: 'query',
+              },
             ],
             responses: [
               {
                 statusCode: 200,
                 description: 'Successful response',
-                example: { tickets: [] }
-              }
-            ]
+                example: { tickets: [] },
+              },
+            ],
           },
           {
             resource: 'Ticket',
@@ -185,19 +185,19 @@ describe('Parameter Reference Tool', () => {
                 type: 'integer',
                 required: true,
                 description: 'Ticket ID',
-                paramType: 'path'
-              }
+                paramType: 'path',
+              },
             ],
             responses: [
               {
                 statusCode: 200,
                 description: 'Successful response',
-                example: { ticket: {} }
-              }
-            ]
-          }
-        ]
-      }
+                example: { ticket: {} },
+              },
+            ],
+          },
+        ],
+      },
     ];
 
     // Build metadata index from sample documents
@@ -209,7 +209,7 @@ describe('Parameter Reference Tool', () => {
     test('should find all parameters for an endpoint', () => {
       const params: ParameterLookupParams = {
         endpointPath: '/customers',
-        method: 'GET'
+        method: 'GET',
       };
 
       const result = getParameters(params, metadataIndex);
@@ -224,7 +224,7 @@ describe('Parameter Reference Tool', () => {
     test('should find parameters for endpoint with path parameters', () => {
       const params: ParameterLookupParams = {
         endpointPath: '/customers/{id}',
-        method: 'GET'
+        method: 'GET',
       };
 
       const result = getParameters(params, metadataIndex);
@@ -238,20 +238,20 @@ describe('Parameter Reference Tool', () => {
     test('should find parameters for endpoint with request body', () => {
       const params: ParameterLookupParams = {
         endpointPath: '/customers',
-        method: 'POST'
+        method: 'POST',
       };
 
       const result = getParameters(params, metadataIndex);
 
       expect(result).not.toBeNull();
       expect(result!.totalCount).toBe(3);
-      expect(result!.parameters.some(p => p.paramType === 'body')).toBe(true);
+      expect(result!.parameters.some((p) => p.paramType === 'body')).toBe(true);
     });
 
     test('should return null for non-existent endpoint', () => {
       const params: ParameterLookupParams = {
         endpointPath: '/nonexistent',
-        method: 'GET'
+        method: 'GET',
       };
 
       const result = getParameters(params, metadataIndex);
@@ -262,7 +262,7 @@ describe('Parameter Reference Tool', () => {
     test('should return null for wrong method', () => {
       const params: ParameterLookupParams = {
         endpointPath: '/customers/{id}',
-        method: 'POST'
+        method: 'POST',
       };
 
       const result = getParameters(params, metadataIndex);
@@ -273,7 +273,7 @@ describe('Parameter Reference Tool', () => {
     test('should handle lowercase method', () => {
       const params: ParameterLookupParams = {
         endpointPath: '/customers',
-        method: 'get'
+        method: 'get',
       };
 
       const result = getParameters(params, metadataIndex);
@@ -288,21 +288,23 @@ describe('Parameter Reference Tool', () => {
       const params: ParameterLookupParams = {
         endpointPath: '/customers',
         method: 'GET',
-        paramType: 'query'
+        paramType: 'query',
       };
 
       const result = getParameters(params, metadataIndex);
 
       expect(result).not.toBeNull();
       expect(result!.totalCount).toBe(4);
-      expect(result!.parameters.every(p => p.paramType === 'query')).toBe(true);
+      expect(result!.parameters.every((p) => p.paramType === 'query')).toBe(
+        true
+      );
     });
 
     test('should filter by path parameters', () => {
       const params: ParameterLookupParams = {
         endpointPath: '/customers/{id}',
         method: 'GET',
-        paramType: 'path'
+        paramType: 'path',
       };
 
       const result = getParameters(params, metadataIndex);
@@ -316,21 +318,23 @@ describe('Parameter Reference Tool', () => {
       const params: ParameterLookupParams = {
         endpointPath: '/customers',
         method: 'POST',
-        paramType: 'body'
+        paramType: 'body',
       };
 
       const result = getParameters(params, metadataIndex);
 
       expect(result).not.toBeNull();
       expect(result!.totalCount).toBe(3);
-      expect(result!.parameters.every(p => p.paramType === 'body')).toBe(true);
+      expect(result!.parameters.every((p) => p.paramType === 'body')).toBe(
+        true
+      );
     });
 
     test('should return empty result when no parameters match type', () => {
       const params: ParameterLookupParams = {
         endpointPath: '/customers/{id}',
         method: 'GET',
-        paramType: 'body'
+        paramType: 'body',
       };
 
       const result = getParameters(params, metadataIndex);
@@ -345,7 +349,7 @@ describe('Parameter Reference Tool', () => {
     test('should include parameter type information', () => {
       const params: ParameterLookupParams = {
         endpointPath: '/customers',
-        method: 'GET'
+        method: 'GET',
       };
 
       const result = getParameters(params, metadataIndex);
@@ -358,11 +362,11 @@ describe('Parameter Reference Tool', () => {
     test('should extract min constraint from description', () => {
       const params: ParameterLookupParams = {
         endpointPath: '/customers',
-        method: 'GET'
+        method: 'GET',
       };
 
       const result = getParameters(params, metadataIndex);
-      const pageParam = result!.parameters.find(p => p.name === 'page');
+      const pageParam = result!.parameters.find((p) => p.name === 'page');
 
       expect(pageParam).toBeDefined();
       expect(pageParam!.constraints.min).toBe(1);
@@ -371,11 +375,11 @@ describe('Parameter Reference Tool', () => {
     test('should extract max constraint from description', () => {
       const params: ParameterLookupParams = {
         endpointPath: '/customers',
-        method: 'GET'
+        method: 'GET',
       };
 
       const result = getParameters(params, metadataIndex);
-      const limitParam = result!.parameters.find(p => p.name === 'limit');
+      const limitParam = result!.parameters.find((p) => p.name === 'limit');
 
       expect(limitParam).toBeDefined();
       expect(limitParam!.constraints.max).toBe(100);
@@ -384,24 +388,28 @@ describe('Parameter Reference Tool', () => {
     test('should extract enum values from description', () => {
       const params: ParameterLookupParams = {
         endpointPath: '/customers',
-        method: 'GET'
+        method: 'GET',
       };
 
       const result = getParameters(params, metadataIndex);
-      const sortParam = result!.parameters.find(p => p.name === 'sort');
+      const sortParam = result!.parameters.find((p) => p.name === 'sort');
 
       expect(sortParam).toBeDefined();
-      expect(sortParam!.constraints.enum).toEqual(['name', 'email', 'created_at']);
+      expect(sortParam!.constraints.enum).toEqual([
+        'name',
+        'email',
+        'created_at',
+      ]);
     });
 
     test('should extract minLength and maxLength constraints', () => {
       const params: ParameterLookupParams = {
         endpointPath: '/customers',
-        method: 'POST'
+        method: 'POST',
       };
 
       const result = getParameters(params, metadataIndex);
-      const nameParam = result!.parameters.find(p => p.name === 'name');
+      const nameParam = result!.parameters.find((p) => p.name === 'name');
 
       expect(nameParam).toBeDefined();
       expect(nameParam!.constraints.minLength).toBe(2);
@@ -411,11 +419,11 @@ describe('Parameter Reference Tool', () => {
     test('should extract pattern constraint', () => {
       const params: ParameterLookupParams = {
         endpointPath: '/customers',
-        method: 'POST'
+        method: 'POST',
       };
 
       const result = getParameters(params, metadataIndex);
-      const emailParam = result!.parameters.find(p => p.name === 'email');
+      const emailParam = result!.parameters.find((p) => p.name === 'email');
 
       expect(emailParam).toBeDefined();
       expect(emailParam!.constraints.pattern).toBe('email');
@@ -426,7 +434,7 @@ describe('Parameter Reference Tool', () => {
     test('should correctly identify required parameters', () => {
       const params: ParameterLookupParams = {
         endpointPath: '/customers/{id}',
-        method: 'GET'
+        method: 'GET',
       };
 
       const result = getParameters(params, metadataIndex);
@@ -439,20 +447,20 @@ describe('Parameter Reference Tool', () => {
     test('should correctly identify optional parameters', () => {
       const params: ParameterLookupParams = {
         endpointPath: '/customers',
-        method: 'GET'
+        method: 'GET',
       };
 
       const result = getParameters(params, metadataIndex);
 
       expect(result).not.toBeNull();
       expect(result!.optionalCount).toBe(4);
-      expect(result!.parameters.every(p => !p.required)).toBe(true);
+      expect(result!.parameters.every((p) => !p.required)).toBe(true);
     });
 
     test('should count required and optional parameters correctly', () => {
       const params: ParameterLookupParams = {
         endpointPath: '/customers',
-        method: 'POST'
+        method: 'POST',
       };
 
       const result = getParameters(params, metadataIndex);
@@ -472,7 +480,7 @@ describe('Parameter Reference Tool', () => {
         path: '/test',
         permission: 'test.view',
         parameters: [],
-        responses: []
+        responses: [],
       };
 
       const testIndex: MetadataIndex = {
@@ -480,12 +488,12 @@ describe('Parameter Reference Tool', () => {
         endpointsByPath: new Map([['GET:/test', endpoint]]),
         endpointsByPermission: new Map(),
         endpointsByMethod: new Map(),
-        allEndpoints: [endpoint]
+        allEndpoints: [endpoint],
       };
 
       const params: ParameterLookupParams = {
         endpointPath: '/test',
-        method: 'GET'
+        method: 'GET',
       };
 
       const result = getParameters(params, testIndex);
@@ -501,20 +509,24 @@ describe('Parameter Reference Tool', () => {
     test('should include parameter description', () => {
       const params: ParameterLookupParams = {
         endpointPath: '/customers',
-        method: 'GET'
+        method: 'GET',
       };
 
       const result = getParameters(params, metadataIndex);
 
       expect(result).not.toBeNull();
-      expect(result!.parameters[0].description).toBe('Page number for pagination (min: 1)');
-      expect(result!.parameters[1].description).toBe('Number of results per page (max: 100)');
+      expect(result!.parameters[0].description).toBe(
+        'Page number for pagination (min: 1)'
+      );
+      expect(result!.parameters[1].description).toBe(
+        'Number of results per page (max: 100)'
+      );
     });
 
     test('should include all parameter metadata', () => {
       const params: ParameterLookupParams = {
         endpointPath: '/customers',
-        method: 'GET'
+        method: 'GET',
       };
 
       const result = getParameters(params, metadataIndex);
@@ -525,7 +537,7 @@ describe('Parameter Reference Tool', () => {
         type: 'integer',
         required: false,
         description: 'Page number for pagination (min: 1)',
-        paramType: 'query'
+        paramType: 'query',
       });
     });
   });
@@ -534,16 +546,18 @@ describe('Parameter Reference Tool', () => {
     test('should generate validation hints for required parameters', () => {
       const params: ParameterLookupParams = {
         endpointPath: '/customers',
-        method: 'POST'
+        method: 'POST',
       };
 
       const result = getParameters(params, metadataIndex);
-      const nameParam = result!.parameters.find(p => p.name === 'name');
+      const nameParam = result!.parameters.find((p) => p.name === 'name');
 
       expect(nameParam).toBeDefined();
       // The name parameter has minLength/maxLength constraints, so it's classified as 'range'
       expect(nameParam!.validationHints.validationType).toBe('range');
-      expect(nameParam!.validationHints.message).toContain('between 2 and 100 characters');
+      expect(nameParam!.validationHints.message).toContain(
+        'between 2 and 100 characters'
+      );
       expect(nameParam!.validationHints.example).toBeDefined();
       expect(nameParam!.validationHints.invalidExample).toBeDefined();
     });
@@ -551,15 +565,17 @@ describe('Parameter Reference Tool', () => {
     test('should generate validation hints for enum parameters', () => {
       const params: ParameterLookupParams = {
         endpointPath: '/customers',
-        method: 'GET'
+        method: 'GET',
       };
 
       const result = getParameters(params, metadataIndex);
-      const sortParam = result!.parameters.find(p => p.name === 'sort');
+      const sortParam = result!.parameters.find((p) => p.name === 'sort');
 
       expect(sortParam).toBeDefined();
       expect(sortParam!.validationHints.validationType).toBe('enum');
-      expect(sortParam!.validationHints.message).toContain('name, email, created_at');
+      expect(sortParam!.validationHints.message).toContain(
+        'name, email, created_at'
+      );
       expect(sortParam!.validationHints.example).toBe('name');
       expect(sortParam!.validationHints.invalidExample).toBe('invalid_value');
     });
@@ -567,11 +583,11 @@ describe('Parameter Reference Tool', () => {
     test('should generate validation hints for range parameters', () => {
       const params: ParameterLookupParams = {
         endpointPath: '/customers',
-        method: 'GET'
+        method: 'GET',
       };
 
       const result = getParameters(params, metadataIndex);
-      const pageParam = result!.parameters.find(p => p.name === 'page');
+      const pageParam = result!.parameters.find((p) => p.name === 'page');
 
       expect(pageParam).toBeDefined();
       expect(pageParam!.validationHints.validationType).toBe('range');
@@ -581,25 +597,27 @@ describe('Parameter Reference Tool', () => {
     test('should generate validation hints for string length constraints', () => {
       const params: ParameterLookupParams = {
         endpointPath: '/customers',
-        method: 'POST'
+        method: 'POST',
       };
 
       const result = getParameters(params, metadataIndex);
-      const nameParam = result!.parameters.find(p => p.name === 'name');
+      const nameParam = result!.parameters.find((p) => p.name === 'name');
 
       expect(nameParam).toBeDefined();
       expect(nameParam!.validationHints.validationType).toBe('range');
-      expect(nameParam!.validationHints.message).toContain('between 2 and 100 characters');
+      expect(nameParam!.validationHints.message).toContain(
+        'between 2 and 100 characters'
+      );
     });
 
     test('should generate validation hints for pattern constraints', () => {
       const params: ParameterLookupParams = {
         endpointPath: '/customers',
-        method: 'POST'
+        method: 'POST',
       };
 
       const result = getParameters(params, metadataIndex);
-      const emailParam = result!.parameters.find(p => p.name === 'email');
+      const emailParam = result!.parameters.find((p) => p.name === 'email');
 
       expect(emailParam).toBeDefined();
       expect(emailParam!.validationHints.validationType).toBe('pattern');
@@ -609,11 +627,11 @@ describe('Parameter Reference Tool', () => {
     test('should generate validation hints for type validation', () => {
       const params: ParameterLookupParams = {
         endpointPath: '/customers',
-        method: 'GET'
+        method: 'GET',
       };
 
       const result = getParameters(params, metadataIndex);
-      const statusParam = result!.parameters.find(p => p.name === 'status');
+      const statusParam = result!.parameters.find((p) => p.name === 'status');
 
       expect(statusParam).toBeDefined();
       expect(statusParam!.validationHints.validationType).toBe('type');
@@ -625,12 +643,12 @@ describe('Parameter Reference Tool', () => {
     test('should identify pagination pattern', () => {
       const params: ParameterLookupParams = {
         endpointPath: '/customers',
-        method: 'GET'
+        method: 'GET',
       };
 
       const result = getParameters(params, metadataIndex);
-      const pageParam = result!.parameters.find(p => p.name === 'page');
-      const limitParam = result!.parameters.find(p => p.name === 'limit');
+      const pageParam = result!.parameters.find((p) => p.name === 'page');
+      const limitParam = result!.parameters.find((p) => p.name === 'limit');
 
       expect(pageParam).toBeDefined();
       expect(pageParam!.pattern).toBeDefined();
@@ -644,11 +662,11 @@ describe('Parameter Reference Tool', () => {
     test('should identify sorting pattern', () => {
       const params: ParameterLookupParams = {
         endpointPath: '/customers',
-        method: 'GET'
+        method: 'GET',
       };
 
       const result = getParameters(params, metadataIndex);
-      const sortParam = result!.parameters.find(p => p.name === 'sort');
+      const sortParam = result!.parameters.find((p) => p.name === 'sort');
 
       expect(sortParam).toBeDefined();
       expect(sortParam!.pattern).toBeDefined();
@@ -658,11 +676,11 @@ describe('Parameter Reference Tool', () => {
     test('should identify filtering pattern', () => {
       const params: ParameterLookupParams = {
         endpointPath: '/customers',
-        method: 'GET'
+        method: 'GET',
       };
 
       const result = getParameters(params, metadataIndex);
-      const statusParam = result!.parameters.find(p => p.name === 'status');
+      const statusParam = result!.parameters.find((p) => p.name === 'status');
 
       expect(statusParam).toBeDefined();
       expect(statusParam!.pattern).toBeDefined();
@@ -672,7 +690,7 @@ describe('Parameter Reference Tool', () => {
     test('should identify id pattern', () => {
       const params: ParameterLookupParams = {
         endpointPath: '/customers/{id}',
-        method: 'GET'
+        method: 'GET',
       };
 
       const result = getParameters(params, metadataIndex);
@@ -686,11 +704,11 @@ describe('Parameter Reference Tool', () => {
     test('should not identify pattern for non-standard parameters', () => {
       const params: ParameterLookupParams = {
         endpointPath: '/customers',
-        method: 'POST'
+        method: 'POST',
       };
 
       const result = getParameters(params, metadataIndex);
-      const phoneParam = result!.parameters.find(p => p.name === 'phone');
+      const phoneParam = result!.parameters.find((p) => p.name === 'phone');
 
       expect(phoneParam).toBeDefined();
       expect(phoneParam!.pattern).toBeUndefined();
@@ -701,7 +719,7 @@ describe('Parameter Reference Tool', () => {
     test('should throw error when endpointPath is missing', () => {
       const params: ParameterLookupParams = {
         endpointPath: '',
-        method: 'GET'
+        method: 'GET',
       };
 
       expect(() => {
@@ -712,7 +730,7 @@ describe('Parameter Reference Tool', () => {
     test('should throw error when method is missing', () => {
       const params: ParameterLookupParams = {
         endpointPath: '/customers',
-        method: ''
+        method: '',
       };
 
       expect(() => {
@@ -727,15 +745,15 @@ describe('Parameter Reference Tool', () => {
 
       expect(patterns).toBeDefined();
       expect(patterns.length).toBeGreaterThan(0);
-      expect(patterns.some(p => p.name === 'pagination')).toBe(true);
-      expect(patterns.some(p => p.name === 'sorting')).toBe(true);
-      expect(patterns.some(p => p.name === 'filtering')).toBe(true);
-      expect(patterns.some(p => p.name === 'id')).toBe(true);
+      expect(patterns.some((p) => p.name === 'pagination')).toBe(true);
+      expect(patterns.some((p) => p.name === 'sorting')).toBe(true);
+      expect(patterns.some((p) => p.name === 'filtering')).toBe(true);
+      expect(patterns.some((p) => p.name === 'id')).toBe(true);
     });
 
     test('should include pattern metadata', () => {
       const patterns = getCommonPatterns();
-      const paginationPattern = patterns.find(p => p.name === 'pagination');
+      const paginationPattern = patterns.find((p) => p.name === 'pagination');
 
       expect(paginationPattern).toBeDefined();
       expect(paginationPattern!.description).toBeDefined();
@@ -747,39 +765,49 @@ describe('Parameter Reference Tool', () => {
 
   describe('getParametersByPattern', () => {
     test('should find parameters matching pagination pattern', () => {
-      const endpoint = sampleEndpoints.find(e => e.path === '/customers' && e.method === 'GET')!;
+      const endpoint = sampleEndpoints.find(
+        (e) => e.path === '/customers' && e.method === 'GET'
+      )!;
       const result = getParametersByPattern(endpoint, 'pagination');
 
       expect(result.length).toBeGreaterThan(0);
-      expect(result.some(p => p.name === 'page')).toBe(true);
-      expect(result.some(p => p.name === 'limit')).toBe(true);
+      expect(result.some((p) => p.name === 'page')).toBe(true);
+      expect(result.some((p) => p.name === 'limit')).toBe(true);
     });
 
     test('should find parameters matching sorting pattern', () => {
-      const endpoint = sampleEndpoints.find(e => e.path === '/customers' && e.method === 'GET')!;
+      const endpoint = sampleEndpoints.find(
+        (e) => e.path === '/customers' && e.method === 'GET'
+      )!;
       const result = getParametersByPattern(endpoint, 'sorting');
 
       expect(result.length).toBeGreaterThan(0);
-      expect(result.some(p => p.name === 'sort')).toBe(true);
+      expect(result.some((p) => p.name === 'sort')).toBe(true);
     });
 
     test('should find parameters matching filtering pattern', () => {
-      const endpoint = sampleEndpoints.find(e => e.path === '/customers' && e.method === 'GET')!;
+      const endpoint = sampleEndpoints.find(
+        (e) => e.path === '/customers' && e.method === 'GET'
+      )!;
       const result = getParametersByPattern(endpoint, 'filtering');
 
       expect(result.length).toBeGreaterThan(0);
-      expect(result.some(p => p.name === 'status')).toBe(true);
+      expect(result.some((p) => p.name === 'status')).toBe(true);
     });
 
     test('should return empty array for non-existent pattern', () => {
-      const endpoint = sampleEndpoints.find(e => e.path === '/customers' && e.method === 'GET')!;
+      const endpoint = sampleEndpoints.find(
+        (e) => e.path === '/customers' && e.method === 'GET'
+      )!;
       const result = getParametersByPattern(endpoint, 'nonexistent');
 
       expect(result).toEqual([]);
     });
 
     test('should return empty array when no parameters match pattern', () => {
-      const endpoint = sampleEndpoints.find(e => e.path === '/customers/{id}' && e.method === 'GET')!;
+      const endpoint = sampleEndpoints.find(
+        (e) => e.path === '/customers/{id}' && e.method === 'GET'
+      )!;
       const result = getParametersByPattern(endpoint, 'pagination');
 
       expect(result).toEqual([]);

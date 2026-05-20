@@ -1,6 +1,6 @@
 /**
  * Search Relevance Tests
- * 
+ *
  * Tests to validate search result relevance for various query types,
  * semantic search accuracy, keyword search accuracy, hybrid search accuracy,
  * search result ranking, and creates relevance metrics.
@@ -12,7 +12,10 @@ import { VectorStore } from '../../src/indexer/vector';
 import { MetadataIndex } from '../../src/parser/metadata';
 import { ApiEndpoint } from '../../src/utils/types';
 import { generateEndpoint, generateEndpoints } from '../utils/data-generators';
-import { createMockMetadataIndex, createMockVectorStore } from '../fixtures/mock-vector-store';
+import {
+  createMockMetadataIndex,
+  createMockVectorStore,
+} from '../fixtures/mock-vector-store';
 
 /**
  * Relevance metrics for search
@@ -37,50 +40,50 @@ const TEST_QUERIES = [
     query: 'get customers',
     expectedResource: 'Customer',
     expectedMethod: 'GET',
-    minRelevanceScore: 0.7
+    minRelevanceScore: 0.7,
   },
   {
     query: 'create customer',
     expectedResource: 'Customer',
     expectedMethod: 'POST',
-    minRelevanceScore: 0.7
+    minRelevanceScore: 0.7,
   },
   {
     query: 'get tickets',
     expectedResource: 'Ticket',
     expectedMethod: 'GET',
-    minRelevanceScore: 0.7
+    minRelevanceScore: 0.7,
   },
   {
     query: 'create ticket',
     expectedResource: 'Ticket',
     expectedMethod: 'POST',
-    minRelevanceScore: 0.7
+    minRelevanceScore: 0.7,
   },
   {
     query: 'get invoices',
     expectedResource: 'Invoice',
     expectedMethod: 'GET',
-    minRelevanceScore: 0.7
+    minRelevanceScore: 0.7,
   },
   {
     query: 'customer by id',
     expectedResource: 'Customer',
     expectedMethod: 'GET',
-    minRelevanceScore: 0.6
+    minRelevanceScore: 0.6,
   },
   {
     query: 'ticket status',
     expectedResource: 'Ticket',
     expectedMethod: 'GET',
-    minRelevanceScore: 0.6
+    minRelevanceScore: 0.6,
   },
   {
     query: 'invoice list',
     expectedResource: 'Invoice',
     expectedMethod: 'GET',
-    minRelevanceScore: 0.6
-  }
+    minRelevanceScore: 0.6,
+  },
 ];
 
 /**
@@ -94,7 +97,7 @@ const SEMANTIC_QUERIES = [
   'list all invoices',
   'search for customers',
   'update customer data',
-  'delete customer record'
+  'delete customer record',
 ];
 
 /**
@@ -108,7 +111,7 @@ const KEYWORD_QUERIES = [
   'GET invoices',
   'customer id',
   'ticket status',
-  'invoice list'
+  'invoice list',
 ];
 
 /**
@@ -122,7 +125,7 @@ const HYBRID_QUERIES = [
   'update customer phone',
   'delete customer account',
   'list customers with pagination',
-  'get ticket by id'
+  'get ticket by id',
 ];
 
 /**
@@ -142,7 +145,7 @@ describe('Search Relevance - Query Types', () => {
         description: 'Returns a paginated list of customers',
         method: 'GET',
         path: '/customers',
-        permission: 'customer.view'
+        permission: 'customer.view',
       }),
       generateEndpoint({
         resource: 'Customer',
@@ -150,7 +153,7 @@ describe('Search Relevance - Query Types', () => {
         description: 'Creates a new customer',
         method: 'POST',
         path: '/customers',
-        permission: 'customer.create'
+        permission: 'customer.create',
       }),
       generateEndpoint({
         resource: 'Customer',
@@ -158,7 +161,7 @@ describe('Search Relevance - Query Types', () => {
         description: 'Retrieves a customer by ID',
         method: 'GET',
         path: '/customers/{id}',
-        permission: 'customer.view'
+        permission: 'customer.view',
       }),
       generateEndpoint({
         resource: 'Ticket',
@@ -166,7 +169,7 @@ describe('Search Relevance - Query Types', () => {
         description: 'Returns a paginated list of tickets',
         method: 'GET',
         path: '/tickets',
-        permission: 'ticket.view'
+        permission: 'ticket.view',
       }),
       generateEndpoint({
         resource: 'Ticket',
@@ -174,7 +177,7 @@ describe('Search Relevance - Query Types', () => {
         description: 'Creates a new ticket',
         method: 'POST',
         path: '/tickets',
-        permission: 'ticket.create'
+        permission: 'ticket.create',
       }),
       generateEndpoint({
         resource: 'Invoice',
@@ -182,8 +185,8 @@ describe('Search Relevance - Query Types', () => {
         description: 'Returns a paginated list of invoices',
         method: 'GET',
         path: '/invoices',
-        permission: 'invoice.view'
-      })
+        permission: 'invoice.view',
+      }),
     ];
 
     // Create mock vector store and metadata index
@@ -212,8 +215,10 @@ describe('Search Relevance - Query Types', () => {
     );
 
     expect(results.length).toBeGreaterThan(0);
-    const createCustomer = results.find(r => 
-      r.endpoint.operation === 'Create Customer' && r.endpoint.method === 'POST'
+    const createCustomer = results.find(
+      (r) =>
+        r.endpoint.operation === 'Create Customer' &&
+        r.endpoint.method === 'POST'
     );
     expect(createCustomer).toBeDefined();
     expect(createCustomer!.score).toBeGreaterThanOrEqual(0.7);
@@ -251,7 +256,7 @@ describe('Search Relevance - Query Types', () => {
     );
 
     expect(results.length).toBeGreaterThan(0);
-    results.forEach(result => {
+    results.forEach((result) => {
       expect(result.endpoint.resource).toBe('Customer');
       expect(result.endpoint.method).toBe('GET');
     });
@@ -269,11 +274,7 @@ describe('Search Relevance - Query Types', () => {
 
   test('should throw error for empty query', () => {
     expect(() => {
-      searchApiDocs(
-        { query: '', limit: 5 },
-        vectorStore,
-        metadataIndex
-      );
+      searchApiDocs({ query: '', limit: 5 }, vectorStore, metadataIndex);
     }).toThrow('Query parameter is required');
   });
 });
@@ -292,10 +293,11 @@ describe('Search Relevance - Semantic Search', () => {
       generateEndpoint({
         resource: 'Customer',
         operation: 'Get Customers',
-        description: 'Returns a paginated list of customers with filtering options',
+        description:
+          'Returns a paginated list of customers with filtering options',
         method: 'GET',
         path: '/customers',
-        permission: 'customer.view'
+        permission: 'customer.view',
       }),
       generateEndpoint({
         resource: 'Customer',
@@ -303,7 +305,7 @@ describe('Search Relevance - Semantic Search', () => {
         description: 'Creates a new customer account with provided details',
         method: 'POST',
         path: '/customers',
-        permission: 'customer.create'
+        permission: 'customer.create',
       }),
       generateEndpoint({
         resource: 'Ticket',
@@ -311,8 +313,8 @@ describe('Search Relevance - Semantic Search', () => {
         description: 'Retrieves support tickets with various filters',
         method: 'GET',
         path: '/tickets',
-        permission: 'ticket.view'
-      })
+        permission: 'ticket.view',
+      }),
     ];
 
     vectorStore = createMockVectorStore(endpoints);
@@ -340,7 +342,9 @@ describe('Search Relevance - Semantic Search', () => {
     );
 
     expect(results.length).toBeGreaterThan(0);
-    const createCustomer = results.find(r => r.endpoint.operation === 'Create Customer');
+    const createCustomer = results.find(
+      (r) => r.endpoint.operation === 'Create Customer'
+    );
     expect(createCustomer).toBeDefined();
   });
 
@@ -403,7 +407,7 @@ describe('Search Relevance - Keyword Search', () => {
         description: 'Returns a paginated list of customers',
         method: 'GET',
         path: '/customers',
-        permission: 'customer.view'
+        permission: 'customer.view',
       }),
       generateEndpoint({
         resource: 'Customer',
@@ -411,7 +415,7 @@ describe('Search Relevance - Keyword Search', () => {
         description: 'Creates a new customer',
         method: 'POST',
         path: '/customers',
-        permission: 'customer.create'
+        permission: 'customer.create',
       }),
       generateEndpoint({
         resource: 'Ticket',
@@ -419,8 +423,8 @@ describe('Search Relevance - Keyword Search', () => {
         description: 'Returns a paginated list of tickets',
         method: 'GET',
         path: '/tickets',
-        permission: 'ticket.view'
-      })
+        permission: 'ticket.view',
+      }),
     ];
 
     vectorStore = createMockVectorStore(endpoints);
@@ -448,8 +452,10 @@ describe('Search Relevance - Keyword Search', () => {
     );
 
     expect(results.length).toBeGreaterThan(0);
-    const createCustomer = results.find(r => 
-      r.endpoint.operation === 'Create Customer' && r.endpoint.method === 'POST'
+    const createCustomer = results.find(
+      (r) =>
+        r.endpoint.operation === 'Create Customer' &&
+        r.endpoint.method === 'POST'
     );
     expect(createCustomer).toBeDefined();
   });
@@ -462,7 +468,7 @@ describe('Search Relevance - Keyword Search', () => {
     );
 
     expect(results.length).toBeGreaterThan(0);
-    results.forEach(result => {
+    results.forEach((result) => {
       expect(result.endpoint.resource).toBe('Customer');
     });
   });
@@ -521,7 +527,8 @@ describe('Search Relevance - Hybrid Search', () => {
       generateEndpoint({
         resource: 'Customer',
         operation: 'Get Customers',
-        description: 'Returns a paginated list of customers with filtering options',
+        description:
+          'Returns a paginated list of customers with filtering options',
         method: 'GET',
         path: '/customers',
         permission: 'customer.view',
@@ -531,9 +538,9 @@ describe('Search Relevance - Hybrid Search', () => {
             type: 'string',
             required: false,
             description: 'Filter by customer email',
-            paramType: 'query'
-          }
-        ]
+            paramType: 'query',
+          },
+        ],
       }),
       generateEndpoint({
         resource: 'Customer',
@@ -548,14 +555,15 @@ describe('Search Relevance - Hybrid Search', () => {
             type: 'string',
             required: true,
             description: 'Customer name',
-            paramType: 'body'
-          }
-        ]
+            paramType: 'body',
+          },
+        ],
       }),
       generateEndpoint({
         resource: 'Ticket',
         operation: 'Get Tickets',
-        description: 'Retrieves support tickets with various filters including status',
+        description:
+          'Retrieves support tickets with various filters including status',
         method: 'GET',
         path: '/tickets',
         permission: 'ticket.view',
@@ -565,10 +573,10 @@ describe('Search Relevance - Hybrid Search', () => {
             type: 'string',
             required: false,
             description: 'Filter by ticket status',
-            paramType: 'query'
-          }
-        ]
-      })
+            paramType: 'query',
+          },
+        ],
+      }),
     ];
 
     vectorStore = createMockVectorStore(endpoints);
@@ -595,7 +603,9 @@ describe('Search Relevance - Hybrid Search', () => {
     );
 
     expect(results.length).toBeGreaterThan(0);
-    const createCustomer = results.find(r => r.endpoint.operation === 'Create Customer');
+    const createCustomer = results.find(
+      (r) => r.endpoint.operation === 'Create Customer'
+    );
     expect(createCustomer).toBeDefined();
     expect(createCustomer!.matchType).toBe('hybrid');
   });
@@ -640,7 +650,9 @@ describe('Search Relevance - Hybrid Search', () => {
     );
 
     // Check for duplicates
-    const uniqueEndpoints = new Set(results.map(r => `${r.endpoint.method}:${r.endpoint.path}`));
+    const uniqueEndpoints = new Set(
+      results.map((r) => `${r.endpoint.method}:${r.endpoint.path}`)
+    );
     expect(uniqueEndpoints.size).toBe(results.length);
   });
 });
@@ -662,7 +674,7 @@ describe('Search Relevance - Result Ranking', () => {
         description: 'Returns a paginated list of customers',
         method: 'GET',
         path: '/customers',
-        permission: 'customer.view'
+        permission: 'customer.view',
       }),
       generateEndpoint({
         resource: 'Customer',
@@ -670,7 +682,7 @@ describe('Search Relevance - Result Ranking', () => {
         description: 'Creates a new customer',
         method: 'POST',
         path: '/customers',
-        permission: 'customer.create'
+        permission: 'customer.create',
       }),
       generateEndpoint({
         resource: 'Customer',
@@ -678,7 +690,7 @@ describe('Search Relevance - Result Ranking', () => {
         description: 'Retrieves a customer by ID',
         method: 'GET',
         path: '/customers/{id}',
-        permission: 'customer.view'
+        permission: 'customer.view',
       }),
       generateEndpoint({
         resource: 'Ticket',
@@ -686,8 +698,8 @@ describe('Search Relevance - Result Ranking', () => {
         description: 'Returns a paginated list of tickets',
         method: 'GET',
         path: '/tickets',
-        permission: 'ticket.view'
-      })
+        permission: 'ticket.view',
+      }),
     ];
 
     vectorStore = createMockVectorStore(endpoints);
@@ -714,7 +726,9 @@ describe('Search Relevance - Result Ranking', () => {
       metadataIndex
     );
 
-    const exactMatch = results.find(r => r.endpoint.operation === 'Get Customers');
+    const exactMatch = results.find(
+      (r) => r.endpoint.operation === 'Get Customers'
+    );
     expect(exactMatch).toBeDefined();
     expect(exactMatch!.score).toBeGreaterThanOrEqual(0.8);
   });
@@ -779,7 +793,7 @@ describe('Search Relevance - Metrics Generation', () => {
       keywordAccuracy: 0,
       hybridAccuracy: 0,
       rankingAccuracy: 0,
-      overallRelevance: 0
+      overallRelevance: 0,
     };
 
     expect(metrics).toHaveProperty('totalQueries');
@@ -840,4 +854,10 @@ describe('Search Relevance - Metrics Generation', () => {
 /**
  * Export metrics for use in validation script
  */
-export { SearchRelevanceMetrics, TEST_QUERIES, SEMANTIC_QUERIES, KEYWORD_QUERIES, HYBRID_QUERIES };
+export {
+  SearchRelevanceMetrics,
+  TEST_QUERIES,
+  SEMANTIC_QUERIES,
+  KEYWORD_QUERIES,
+  HYBRID_QUERIES,
+};

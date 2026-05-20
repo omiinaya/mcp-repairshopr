@@ -14,9 +14,9 @@ export interface CorrelationConfig {
 
 // Simple UUID generator
 function generateUUID(): string {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-    const r = Math.random() * 16 | 0;
-    const v = c === 'x' ? r : (r & 0x3 | 0x8);
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    const r = (Math.random() * 16) | 0;
+    const v = c === 'x' ? r : (r & 0x3) | 0x8;
     return v.toString(16);
   });
 }
@@ -24,15 +24,18 @@ function generateUUID(): string {
 const DEFAULT_CONFIG: CorrelationConfig = {
   headerName: 'X-Request-ID',
   generateId: generateUUID,
-  includeInResponse: true
+  includeInResponse: true,
 };
 
 // Store for correlation context (scoped to request)
-const correlationStorage = new Map<string, {
-  id: string;
-  startTime: number;
-  metadata: Map<string, any>;
-}>();
+const correlationStorage = new Map<
+  string,
+  {
+    id: string;
+    startTime: number;
+    metadata: Map<string, any>;
+  }
+>();
 
 /**
  * Correlation ID middleware
@@ -44,14 +47,16 @@ export function correlationId(
 
   return (req: Request, res: Response, next: NextFunction): void => {
     // Get existing correlation ID from header or generate new one
-    const existingId = req.headers[correlationConfig.headerName.toLowerCase()] as string;
+    const existingId = req.headers[
+      correlationConfig.headerName.toLowerCase()
+    ] as string;
     const correlationId = existingId || correlationConfig.generateId();
 
     // Store correlation data
     correlationStorage.set(correlationId, {
       id: correlationId,
       startTime: Date.now(),
-      metadata: new Map()
+      metadata: new Map(),
     });
 
     // Attach to request
@@ -67,7 +72,7 @@ export function correlationId(
       correlationId,
       method: req.method,
       path: req.path,
-      ip: req.ip
+      ip: req.ip,
     });
 
     // Cleanup on response finish
@@ -78,7 +83,7 @@ export function correlationId(
         logger.debug('Request completed', {
           correlationId,
           duration: `${duration}ms`,
-          statusCode: res.statusCode
+          statusCode: res.statusCode,
         });
         correlationStorage.delete(correlationId);
       }
@@ -98,11 +103,13 @@ export function getCorrelationId(req: Request): string | undefined {
 /**
  * Get correlation data
  */
-export function getCorrelationData(correlationId: string): {
-  id: string;
-  startTime: number;
-  metadata: Map<string, any>;
-} | undefined {
+export function getCorrelationData(correlationId: string):
+  | {
+      id: string;
+      startTime: number;
+      metadata: Map<string, any>;
+    }
+  | undefined {
   return correlationStorage.get(correlationId);
 }
 
@@ -126,10 +133,7 @@ export function setCorrelationMetadata(
 /**
  * Get correlation metadata
  */
-export function getCorrelationMetadata(
-  req: Request,
-  key: string
-): any {
+export function getCorrelationMetadata(req: Request, key: string): any {
   const id = getCorrelationId(req);
   if (id) {
     const data = correlationStorage.get(id);
@@ -176,19 +180,19 @@ class Tracer {
         const duration = span.endTime - span.startTime;
         logger.debug(`Span ended: ${name}`, {
           spanId: id,
-          duration: `${duration}ms`
+          duration: `${duration}ms`,
         });
       },
       addEvent: (eventName: string, attributes?: Record<string, any>) => {
         logger.debug(`Span event: ${eventName}`, {
           spanId: id,
           spanName: name,
-          ...attributes
+          ...attributes,
         });
       },
       setAttribute: (key: string, value: any) => {
         span.metadata.set(key, value);
-      }
+      },
     };
 
     this.spans.set(id, span);
@@ -227,7 +231,10 @@ export const tracer = new Tracer();
  */
 export class PerformanceTimer {
   private marks: Map<string, number> = new Map();
-  private measures: Map<string, { start: string; end: string; duration: number }> = new Map();
+  private measures: Map<
+    string,
+    { start: string; end: string; duration: number }
+  > = new Map();
 
   /**
    * Mark a point in time
@@ -286,13 +293,13 @@ export function requestPerformanceTracker(): (
     res.on('finish', () => {
       timer.mark('request-end');
       const duration = timer.measure('total', 'request-start', 'request-end');
-      
+
       logger.debug('Request performance', {
         method: req.method,
         path: req.path,
         duration: `${duration.toFixed(2)}ms`,
         statusCode: res.statusCode,
-        correlationId: getCorrelationId(req)
+        correlationId: getCorrelationId(req),
       });
     });
 

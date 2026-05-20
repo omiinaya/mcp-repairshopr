@@ -61,8 +61,8 @@ function generateJavaScriptExample(
   includeAuth: boolean
 ): { code: string; errorHandling: string } {
   const { method, path, parameters, requestBody, responses } = endpoint;
-  const pathParams = parameters.filter(p => p.paramType === 'path');
-  const queryParams = parameters.filter(p => p.paramType === 'query');
+  const pathParams = parameters.filter((p) => p.paramType === 'path');
+  const queryParams = parameters.filter((p) => p.paramType === 'query');
   const bodyParams = requestBody || [];
 
   // Build URL with path parameters
@@ -76,7 +76,9 @@ function generateJavaScriptExample(
   // Build query parameters
   let queryParamsCode = '';
   if (queryParams.length > 0) {
-    const params = queryParams.map(p => `    '${p.name}': ${getJavaScriptExampleValue(p.type)}`).join(',\n');
+    const params = queryParams
+      .map((p) => `    '${p.name}': ${getJavaScriptExampleValue(p.type)}`)
+      .join(',\n');
     queryParamsCode = `\n  const queryParams = {\n${params}\n  };`;
   }
 
@@ -84,7 +86,9 @@ function generateJavaScriptExample(
   let bodyCode = '';
   let exampleRequest: any = {};
   if (bodyParams.length > 0) {
-    const body = bodyParams.map(p => `    '${p.name}': ${getJavaScriptExampleValue(p.type)}`).join(',\n');
+    const body = bodyParams
+      .map((p) => `    '${p.name}': ${getJavaScriptExampleValue(p.type)}`)
+      .join(',\n');
     bodyCode = `\n  const requestBody = {\n${body}\n  };`;
     exampleRequest = bodyParams.reduce((acc, p) => {
       acc[p.name] = getExampleValue(p.type);
@@ -116,7 +120,7 @@ function generateJavaScriptExample(
   const code = `// ${endpoint.operation}
 // ${endpoint.description}
 
-${pathParams.map(p => `const ${p.name} = ${getJavaScriptExampleValue(p.type)};`).join('\n')}${queryParamsCode}${bodyCode}
+${pathParams.map((p) => `const ${p.name} = ${getJavaScriptExampleValue(p.type)};`).join('\n')}${queryParamsCode}${bodyCode}
 
 ${urlCode}
 
@@ -184,8 +188,8 @@ function generatePythonExample(
   includeAuth: boolean
 ): { code: string; errorHandling: string } {
   const { method, path, parameters, requestBody, responses } = endpoint;
-  const pathParams = parameters.filter(p => p.paramType === 'path');
-  const queryParams = parameters.filter(p => p.paramType === 'query');
+  const pathParams = parameters.filter((p) => p.paramType === 'path');
+  const queryParams = parameters.filter((p) => p.paramType === 'query');
   const bodyParams = requestBody || [];
 
   // Build URL with path parameters
@@ -199,7 +203,9 @@ function generatePythonExample(
   // Build query parameters
   let queryParamsCode = '';
   if (queryParams.length > 0) {
-    const params = queryParams.map(p => `    '${p.name}': ${getPythonExampleValue(p.type)}`).join(',\n');
+    const params = queryParams
+      .map((p) => `    '${p.name}': ${getPythonExampleValue(p.type)}`)
+      .join(',\n');
     queryParamsCode = `\nquery_params = {\n${params}\n}`;
   }
 
@@ -207,7 +213,9 @@ function generatePythonExample(
   let bodyCode = '';
   let exampleRequest: any = {};
   if (bodyParams.length > 0) {
-    const body = bodyParams.map(p => `    '${p.name}': ${getPythonExampleValue(p.type)}`).join(',\n');
+    const body = bodyParams
+      .map((p) => `    '${p.name}': ${getPythonExampleValue(p.type)}`)
+      .join(',\n');
     bodyCode = `\nrequest_body = {\n${body}\n}`;
     exampleRequest = bodyParams.reduce((acc, p) => {
       acc[p.name] = getExampleValue(p.type);
@@ -242,7 +250,7 @@ function generatePythonExample(
 
 import requests
 
-${pathParams.map(p => `${p.name} = ${getPythonExampleValue(p.type)}`).join('\n')}${queryParamsCode}${bodyCode}
+${pathParams.map((p) => `${p.name} = ${getPythonExampleValue(p.type)}`).join('\n')}${queryParamsCode}${bodyCode}
 
 ${headersCode}
 
@@ -295,8 +303,8 @@ function generateCurlExample(
   includeAuth: boolean
 ): { code: string; errorHandling: string } {
   const { method, path, parameters, requestBody, responses } = endpoint;
-  const pathParams = parameters.filter(p => p.paramType === 'path');
-  const queryParams = parameters.filter(p => p.paramType === 'query');
+  const pathParams = parameters.filter((p) => p.paramType === 'path');
+  const queryParams = parameters.filter((p) => p.paramType === 'query');
   const bodyParams = requestBody || [];
 
   // Build URL with path parameters
@@ -310,20 +318,24 @@ function generateCurlExample(
   // Build query parameters
   let queryParamsCode = '';
   if (queryParams.length > 0) {
-    const params = queryParams.map(p => `${p.name}=${getCurlExampleValue(p.type)}`).join('&');
+    const params = queryParams
+      .map((p) => `${p.name}=${getCurlExampleValue(p.type)}`)
+      .join('&');
     queryParamsCode = `?${params}`;
   }
 
   // Build cURL command
   let curlCode = `# ${endpoint.operation}\n# ${endpoint.description}\n\ncurl -X ${method} \\\n  "${url}${queryParamsCode}" \\\n  -H "Content-Type: application/json"`;
-  
+
   if (includeAuth) {
     curlCode += ` \\\n  -H "X-API-Key: YOUR_API_KEY"`;
   }
 
   // Add body if applicable
   if (bodyParams.length > 0) {
-    const body = bodyParams.map(p => `    "${p.name}": ${getCurlExampleValue(p.type)}`).join(',\n');
+    const body = bodyParams
+      .map((p) => `    "${p.name}": ${getCurlExampleValue(p.type)}`)
+      .join(',\n');
     curlCode += ` \\\n  -d '{\n${body}\n  }'`;
   }
 
@@ -332,7 +344,7 @@ function generateCurlExample(
 # Check HTTP status code
 response=$(curl -s -w "%{http_code}" -X ${method} \\
   "${url}${queryParamsCode}" \\
-  -H "Content-Type: application/json"${includeAuth ? ' \\\n  -H "X-API-Key: YOUR_API_KEY"' : ''}${bodyParams.length > 0 ? ' \\\n  -d \'{\\n' + bodyParams.map(p => `    "${p.name}": ${getCurlExampleValue(p.type)}`).join(',\\n') + '\\n  }\'' : ''})
+  -H "Content-Type: application/json"${includeAuth ? ' \\\n  -H "X-API-Key: YOUR_API_KEY"' : ''}${bodyParams.length > 0 ? " \\\n  -d '{\\n" + bodyParams.map((p) => `    "${p.name}": ${getCurlExampleValue(p.type)}`).join(',\\n') + "\\n  }'" : ''})
 
 # Extract HTTP status code (last 3 characters)
 http_code=\${response: -3}
@@ -458,13 +470,13 @@ function getExampleValue(type: string): any {
  */
 function getExampleResponse(responses: ApiResponse[]): any {
   // Look for 200 response with example
-  const successResponse = responses.find(r => r.statusCode === 200);
+  const successResponse = responses.find((r) => r.statusCode === 200);
   if (successResponse?.example) {
     return successResponse.example;
   }
 
   // Look for any response with example
-  const responseWithExample = responses.find(r => r.example);
+  const responseWithExample = responses.find((r) => r.example);
   if (responseWithExample) {
     return responseWithExample.example;
   }
@@ -472,7 +484,7 @@ function getExampleResponse(responses: ApiResponse[]): any {
   // Return a generic example
   return {
     id: 123,
-    message: 'Success'
+    message: 'Success',
   };
 }
 
@@ -504,12 +516,14 @@ export function generateCodeExample(
 
   // Validate language
   if (!['javascript', 'python', 'curl'].includes(language)) {
-    throw new Error(`Unsupported language: ${language}. Supported languages: javascript, python, curl`);
+    throw new Error(
+      `Unsupported language: ${language}. Supported languages: javascript, python, curl`
+    );
   }
 
   // Lookup endpoint
   const endpoint = getEndpointByPath(index, endpointPath, method.toUpperCase());
-  
+
   if (!endpoint) {
     throw new Error(`Endpoint not found: ${method} ${endpointPath}`);
   }
@@ -551,14 +565,15 @@ export function generateCodeExample(
       operation: endpoint.operation,
       description: endpoint.description,
       method: endpoint.method,
-      path: endpoint.path
+      path: endpoint.path,
     },
     code,
     language,
     includesAuth: includeAuth,
-    exampleRequest: Object.keys(exampleRequest).length > 0 ? exampleRequest : undefined,
+    exampleRequest:
+      Object.keys(exampleRequest).length > 0 ? exampleRequest : undefined,
     exampleResponse,
-    errorHandling
+    errorHandling,
   };
 }
 
@@ -567,7 +582,7 @@ export function generateCodeExample(
  */
 function extractExampleRequest(endpoint: ApiEndpoint): any {
   const bodyParams = endpoint.requestBody || [];
-  
+
   if (bodyParams.length === 0) {
     return {};
   }
@@ -602,8 +617,8 @@ export function generateCodeExamplesForAllLanguages(
   index: MetadataIndex
 ): CodeExampleResult[] {
   const languages: CodeLanguage[] = ['javascript', 'python', 'curl'];
-  
-  return languages.map(language => 
+
+  return languages.map((language) =>
     generateCodeExample({ ...params, language }, index)
   );
 }

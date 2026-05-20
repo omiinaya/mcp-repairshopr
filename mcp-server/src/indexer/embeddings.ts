@@ -119,13 +119,16 @@ export function chunkText(text: string, maxChunkSize: number = 500): string[] {
  * @param chunks - Array of text chunks
  * @returns Array of vector representations for each chunk
  */
-export async function generateEmbeddings(chunks: string[]): Promise<number[][]> {
+export async function generateEmbeddings(
+  chunks: string[]
+): Promise<number[][]> {
   if (!chunks || chunks.length === 0) {
     return [];
   }
 
   // Define the character set for embedding (ASCII printable characters)
-  const characterSet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 .,!?;:()-\'"/';
+  const characterSet =
+    'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 .,!?;:()-\'"/';
   const embeddingDimension = characterSet.length;
 
   const embeddings: number[][] = [];
@@ -168,7 +171,7 @@ export function createTextChunks(endpoint: ApiEndpoint): TextChunk[] {
     endpointId: `${endpoint.method}:${endpoint.path}`,
     resource: endpoint.resource,
     method: endpoint.method,
-    path: endpoint.path
+    path: endpoint.path,
   };
 
   // Create chunks from endpoint description
@@ -180,8 +183,8 @@ export function createTextChunks(endpoint: ApiEndpoint): TextChunk[] {
         text: descriptionChunks[i],
         metadata: {
           ...baseMetadata,
-          type: 'description' as const
-        }
+          type: 'description' as const,
+        },
       });
     }
   }
@@ -196,8 +199,8 @@ export function createTextChunks(endpoint: ApiEndpoint): TextChunk[] {
           text: `${param.name}: ${paramChunks[i]}`,
           metadata: {
             ...baseMetadata,
-            type: 'parameter' as const
-          }
+            type: 'parameter' as const,
+          },
         });
       }
     }
@@ -214,8 +217,8 @@ export function createTextChunks(endpoint: ApiEndpoint): TextChunk[] {
             text: `${param.name}: ${paramChunks[i]}`,
             metadata: {
               ...baseMetadata,
-              type: 'parameter' as const
-            }
+              type: 'parameter' as const,
+            },
           });
         }
       }
@@ -232,8 +235,8 @@ export function createTextChunks(endpoint: ApiEndpoint): TextChunk[] {
           text: `Response ${response.statusCode}: ${responseChunks[i]}`,
           metadata: {
             ...baseMetadata,
-            type: 'response' as const
-          }
+            type: 'response' as const,
+          },
         });
       }
     }
@@ -248,8 +251,8 @@ export function createTextChunks(endpoint: ApiEndpoint): TextChunk[] {
         text: `Permission: ${permissionChunks[i]}`,
         metadata: {
           ...baseMetadata,
-          type: 'permission' as const
-        }
+          type: 'permission' as const,
+        },
       });
     }
   }

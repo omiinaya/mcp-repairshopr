@@ -6,9 +6,9 @@
 import { logger } from './logger';
 
 export enum CircuitState {
-  CLOSED = 'CLOSED',       // Normal operation
-  OPEN = 'OPEN',           // Failing, rejecting requests
-  HALF_OPEN = 'HALF_OPEN'  // Testing if service is back
+  CLOSED = 'CLOSED', // Normal operation
+  OPEN = 'OPEN', // Failing, rejecting requests
+  HALF_OPEN = 'HALF_OPEN', // Testing if service is back
 }
 
 export interface CircuitBreakerConfig {
@@ -24,7 +24,7 @@ const DEFAULT_CONFIG: CircuitBreakerConfig = {
   successThreshold: 3,
   timeout: 30000,
   halfOpenMaxCalls: 3,
-  resetTimeout: 60000
+  resetTimeout: 60000,
 };
 
 export interface CircuitBreakerStats {
@@ -77,7 +77,10 @@ export class CircuitBreaker {
       this.transitionTo(CircuitState.HALF_OPEN);
     }
 
-    if (this.state === CircuitState.HALF_OPEN && this.halfOpenCalls >= this.config.halfOpenMaxCalls) {
+    if (
+      this.state === CircuitState.HALF_OPEN &&
+      this.halfOpenCalls >= this.config.halfOpenMaxCalls
+    ) {
       this.rejectedCalls++;
       throw new CircuitBreakerError(
         `Circuit breaker HALF_OPEN limit reached for ${this.name}`,
@@ -113,11 +116,11 @@ export class CircuitBreaker {
       }, this.config.timeout);
 
       fn()
-        .then(result => {
+        .then((result) => {
           clearTimeout(timeoutId);
           resolve(result);
         })
-        .catch(error => {
+        .catch((error) => {
           clearTimeout(timeoutId);
           reject(error);
         });
@@ -141,7 +144,7 @@ export class CircuitBreaker {
 
     logger.debug(`Circuit breaker success: ${this.name}`, {
       state: this.state,
-      consecutiveSuccesses: this.consecutiveSuccesses
+      consecutiveSuccesses: this.consecutiveSuccesses,
     });
   }
 
@@ -165,7 +168,7 @@ export class CircuitBreaker {
     logger.warn(`Circuit breaker failure: ${this.name}`, {
       state: this.state,
       consecutiveFailures: this.consecutiveFailures,
-      threshold: this.config.failureThreshold
+      threshold: this.config.failureThreshold,
     });
   }
 
@@ -191,7 +194,10 @@ export class CircuitBreaker {
     logger.info(`Circuit breaker state transition: ${this.name}`, {
       from: oldState,
       to: newState,
-      nextAttempt: this.state === CircuitState.OPEN ? new Date(this.nextAttempt).toISOString() : null
+      nextAttempt:
+        this.state === CircuitState.OPEN
+          ? new Date(this.nextAttempt).toISOString()
+          : null,
     });
   }
 
@@ -208,7 +214,7 @@ export class CircuitBreaker {
       consecutiveSuccesses: this.consecutiveSuccesses,
       consecutiveFailures: this.consecutiveFailures,
       totalCalls: this.totalCalls,
-      rejectedCalls: this.rejectedCalls
+      rejectedCalls: this.rejectedCalls,
     };
   }
 
@@ -316,6 +322,6 @@ export function createRepairShoprCircuitBreaker(): CircuitBreaker {
     failureThreshold: 3,
     successThreshold: 2,
     timeout: 30000,
-    resetTimeout: 30000
+    resetTimeout: 30000,
   });
 }

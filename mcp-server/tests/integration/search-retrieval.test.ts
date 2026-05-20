@@ -4,12 +4,19 @@
  */
 
 import { createMockMetadataIndex } from '../utils/test-helpers';
-import { generateEndpoint, generateParameter, generateResponse } from '../utils/data-generators';
+import {
+  generateEndpoint,
+  generateParameter,
+  generateResponse,
+} from '../utils/data-generators';
 import { searchApiDocs } from '../../src/tools/search';
 import { VectorStore } from '../../src/indexer/vector';
 import { QueryUnderstanding } from '../../src/retrieval/query';
 import { RelevanceScorer, SearchResult } from '../../src/retrieval/scoring';
-import { ContextManager, formatSearchResults } from '../../src/retrieval/formatter';
+import {
+  ContextManager,
+  formatSearchResults,
+} from '../../src/retrieval/formatter';
 
 describe('Search and Retrieval Integration Tests', () => {
   let metadataIndex: any;
@@ -30,11 +37,20 @@ describe('Search and Retrieval Integration Tests', () => {
         path: '/customers/{id}',
         permission: 'customer.view',
         parameters: [
-          generateParameter({ name: 'id', type: 'integer', required: true, description: 'Customer ID', paramType: 'path' })
+          generateParameter({
+            name: 'id',
+            type: 'integer',
+            required: true,
+            description: 'Customer ID',
+            paramType: 'path',
+          }),
         ],
         responses: [
-          generateResponse({ statusCode: 200, description: 'Successful response' })
-        ]
+          generateResponse({
+            statusCode: 200,
+            description: 'Successful response',
+          }),
+        ],
       }),
       generateEndpoint({
         resource: 'Customer',
@@ -45,12 +61,27 @@ describe('Search and Retrieval Integration Tests', () => {
         permission: 'customer.create',
         parameters: [],
         requestBody: [
-          generateParameter({ name: 'name', type: 'string', required: true, description: 'Customer name', paramType: 'body' }),
-          generateParameter({ name: 'email', type: 'string', required: true, description: 'Customer email', paramType: 'body' })
+          generateParameter({
+            name: 'name',
+            type: 'string',
+            required: true,
+            description: 'Customer name',
+            paramType: 'body',
+          }),
+          generateParameter({
+            name: 'email',
+            type: 'string',
+            required: true,
+            description: 'Customer email',
+            paramType: 'body',
+          }),
         ],
         responses: [
-          generateResponse({ statusCode: 201, description: 'Customer created' })
-        ]
+          generateResponse({
+            statusCode: 201,
+            description: 'Customer created',
+          }),
+        ],
       }),
       generateEndpoint({
         resource: 'Customer',
@@ -60,14 +91,29 @@ describe('Search and Retrieval Integration Tests', () => {
         path: '/customers/{id}',
         permission: 'customer.update',
         parameters: [
-          generateParameter({ name: 'id', type: 'integer', required: true, description: 'Customer ID', paramType: 'path' })
+          generateParameter({
+            name: 'id',
+            type: 'integer',
+            required: true,
+            description: 'Customer ID',
+            paramType: 'path',
+          }),
         ],
         requestBody: [
-          generateParameter({ name: 'name', type: 'string', required: false, description: 'Customer name', paramType: 'body' })
+          generateParameter({
+            name: 'name',
+            type: 'string',
+            required: false,
+            description: 'Customer name',
+            paramType: 'body',
+          }),
         ],
         responses: [
-          generateResponse({ statusCode: 200, description: 'Customer updated' })
-        ]
+          generateResponse({
+            statusCode: 200,
+            description: 'Customer updated',
+          }),
+        ],
       }),
       generateEndpoint({
         resource: 'Customer',
@@ -77,11 +123,20 @@ describe('Search and Retrieval Integration Tests', () => {
         path: '/customers/{id}',
         permission: 'customer.delete',
         parameters: [
-          generateParameter({ name: 'id', type: 'integer', required: true, description: 'Customer ID', paramType: 'path' })
+          generateParameter({
+            name: 'id',
+            type: 'integer',
+            required: true,
+            description: 'Customer ID',
+            paramType: 'path',
+          }),
         ],
         responses: [
-          generateResponse({ statusCode: 204, description: 'Customer deleted' })
-        ]
+          generateResponse({
+            statusCode: 204,
+            description: 'Customer deleted',
+          }),
+        ],
       }),
       // Invoice endpoints
       generateEndpoint({
@@ -92,11 +147,20 @@ describe('Search and Retrieval Integration Tests', () => {
         path: '/invoices/{id}',
         permission: 'invoice.view',
         parameters: [
-          generateParameter({ name: 'id', type: 'integer', required: true, description: 'Invoice ID', paramType: 'path' })
+          generateParameter({
+            name: 'id',
+            type: 'integer',
+            required: true,
+            description: 'Invoice ID',
+            paramType: 'path',
+          }),
         ],
         responses: [
-          generateResponse({ statusCode: 200, description: 'Successful response' })
-        ]
+          generateResponse({
+            statusCode: 200,
+            description: 'Successful response',
+          }),
+        ],
       }),
       generateEndpoint({
         resource: 'Invoice',
@@ -106,12 +170,27 @@ describe('Search and Retrieval Integration Tests', () => {
         path: '/invoices',
         permission: 'invoice.view',
         parameters: [
-          generateParameter({ name: 'page', type: 'integer', required: false, description: 'Page number', paramType: 'query' }),
-          generateParameter({ name: 'limit', type: 'integer', required: false, description: 'Results per page', paramType: 'query' })
+          generateParameter({
+            name: 'page',
+            type: 'integer',
+            required: false,
+            description: 'Page number',
+            paramType: 'query',
+          }),
+          generateParameter({
+            name: 'limit',
+            type: 'integer',
+            required: false,
+            description: 'Results per page',
+            paramType: 'query',
+          }),
         ],
         responses: [
-          generateResponse({ statusCode: 200, description: 'Successful response' })
-        ]
+          generateResponse({
+            statusCode: 200,
+            description: 'Successful response',
+          }),
+        ],
       }),
       generateEndpoint({
         resource: 'Invoice',
@@ -122,11 +201,17 @@ describe('Search and Retrieval Integration Tests', () => {
         permission: 'invoice.create',
         parameters: [],
         requestBody: [
-          generateParameter({ name: 'customer_id', type: 'integer', required: true, description: 'Customer ID', paramType: 'body' })
+          generateParameter({
+            name: 'customer_id',
+            type: 'integer',
+            required: true,
+            description: 'Customer ID',
+            paramType: 'body',
+          }),
         ],
         responses: [
-          generateResponse({ statusCode: 201, description: 'Invoice created' })
-        ]
+          generateResponse({ statusCode: 201, description: 'Invoice created' }),
+        ],
       }),
       // Ticket endpoints
       generateEndpoint({
@@ -138,12 +223,24 @@ describe('Search and Retrieval Integration Tests', () => {
         permission: 'ticket.create',
         parameters: [],
         requestBody: [
-          generateParameter({ name: 'subject', type: 'string', required: true, description: 'Ticket subject', paramType: 'body' }),
-          generateParameter({ name: 'description', type: 'string', required: true, description: 'Ticket description', paramType: 'body' })
+          generateParameter({
+            name: 'subject',
+            type: 'string',
+            required: true,
+            description: 'Ticket subject',
+            paramType: 'body',
+          }),
+          generateParameter({
+            name: 'description',
+            type: 'string',
+            required: true,
+            description: 'Ticket description',
+            paramType: 'body',
+          }),
         ],
         responses: [
-          generateResponse({ statusCode: 201, description: 'Ticket created' })
-        ]
+          generateResponse({ statusCode: 201, description: 'Ticket created' }),
+        ],
       }),
       generateEndpoint({
         resource: 'Ticket',
@@ -153,11 +250,20 @@ describe('Search and Retrieval Integration Tests', () => {
         path: '/tickets/{id}',
         permission: 'ticket.view',
         parameters: [
-          generateParameter({ name: 'id', type: 'integer', required: true, description: 'Ticket ID', paramType: 'path' })
+          generateParameter({
+            name: 'id',
+            type: 'integer',
+            required: true,
+            description: 'Ticket ID',
+            paramType: 'path',
+          }),
         ],
         responses: [
-          generateResponse({ statusCode: 200, description: 'Successful response' })
-        ]
+          generateResponse({
+            statusCode: 200,
+            description: 'Successful response',
+          }),
+        ],
       }),
       generateEndpoint({
         resource: 'Ticket',
@@ -167,14 +273,26 @@ describe('Search and Retrieval Integration Tests', () => {
         path: '/tickets/{id}/status',
         permission: 'ticket.update',
         parameters: [
-          generateParameter({ name: 'id', type: 'integer', required: true, description: 'Ticket ID', paramType: 'path' })
+          generateParameter({
+            name: 'id',
+            type: 'integer',
+            required: true,
+            description: 'Ticket ID',
+            paramType: 'path',
+          }),
         ],
         requestBody: [
-          generateParameter({ name: 'status', type: 'string', required: true, description: 'New status', paramType: 'body' })
+          generateParameter({
+            name: 'status',
+            type: 'string',
+            required: true,
+            description: 'New status',
+            paramType: 'body',
+          }),
         ],
         responses: [
-          generateResponse({ statusCode: 200, description: 'Ticket updated' })
-        ]
+          generateResponse({ statusCode: 200, description: 'Ticket updated' }),
+        ],
       }),
       // Product endpoints
       generateEndpoint({
@@ -185,12 +303,21 @@ describe('Search and Retrieval Integration Tests', () => {
         path: '/products',
         permission: 'product.view',
         parameters: [
-          generateParameter({ name: 'category', type: 'string', required: false, description: 'Filter by category', paramType: 'query' })
+          generateParameter({
+            name: 'category',
+            type: 'string',
+            required: false,
+            description: 'Filter by category',
+            paramType: 'query',
+          }),
         ],
         responses: [
-          generateResponse({ statusCode: 200, description: 'Successful response' })
-        ]
-      })
+          generateResponse({
+            statusCode: 200,
+            description: 'Successful response',
+          }),
+        ],
+      }),
     ];
 
     metadataIndex = createMockMetadataIndex(endpoints);
@@ -203,7 +330,10 @@ describe('Search and Retrieval Integration Tests', () => {
         vector: (vectorStore as any).generateQueryEmbedding(
           `${endpoint.resource} ${endpoint.operation} ${endpoint.description}`
         ),
-        metadata: { endpointId: `${endpoint.method}:${endpoint.path}`, resource: endpoint.resource }
+        metadata: {
+          endpointId: `${endpoint.method}:${endpoint.path}`,
+          resource: endpoint.resource,
+        },
       };
       vectorStore.addVectors([embedding]);
     }
@@ -229,7 +359,9 @@ describe('Search and Retrieval Integration Tests', () => {
       expect(results).toBeDefined();
       expect(Array.isArray(results)).toBe(true);
       expect(results.length).toBeGreaterThan(0);
-      expect(results.every(r => r.endpoint && r.score !== undefined)).toBe(true);
+      expect(results.every((r) => r.endpoint && r.score !== undefined)).toBe(
+        true
+      );
     });
 
     test('should find semantically similar endpoints', () => {
@@ -242,7 +374,9 @@ describe('Search and Retrieval Integration Tests', () => {
       expect(results).toBeDefined();
       expect(results.length).toBeGreaterThan(0);
       // Should find create endpoints
-      const createEndpoints = results.filter(r => r.endpoint.operation.toLowerCase().includes('create'));
+      const createEndpoints = results.filter((r) =>
+        r.endpoint.operation.toLowerCase().includes('create')
+      );
       expect(createEndpoints.length).toBeGreaterThan(0);
     });
 
@@ -294,7 +428,9 @@ describe('Search and Retrieval Integration Tests', () => {
 
       expect(results).toBeDefined();
       expect(results.length).toBeGreaterThan(0);
-      expect(results.every(r => r.endpoint.resource === 'Customer')).toBe(true);
+      expect(results.every((r) => r.endpoint.resource === 'Customer')).toBe(
+        true
+      );
     });
 
     test('should find endpoints by operation name', () => {
@@ -306,7 +442,11 @@ describe('Search and Retrieval Integration Tests', () => {
 
       expect(results).toBeDefined();
       expect(results.length).toBeGreaterThan(0);
-      expect(results.some(r => r.endpoint.operation.toLowerCase().includes('create'))).toBe(true);
+      expect(
+        results.some((r) =>
+          r.endpoint.operation.toLowerCase().includes('create')
+        )
+      ).toBe(true);
     });
 
     test('should search in descriptions', () => {
@@ -318,7 +458,11 @@ describe('Search and Retrieval Integration Tests', () => {
 
       expect(results).toBeDefined();
       expect(results.length).toBeGreaterThan(0);
-      expect(results.some(r => r.endpoint.description.toLowerCase().includes('specific'))).toBe(true);
+      expect(
+        results.some((r) =>
+          r.endpoint.description.toLowerCase().includes('specific')
+        )
+      ).toBe(true);
     });
 
     test('should search in parameters', () => {
@@ -331,9 +475,9 @@ describe('Search and Retrieval Integration Tests', () => {
       expect(results).toBeDefined();
       expect(results.length).toBeGreaterThan(0);
       // Should find endpoints with 'id' parameter
-      expect(results.some(r => 
-        r.endpoint.parameters.some(p => p.name === 'id')
-      )).toBe(true);
+      expect(
+        results.some((r) => r.endpoint.parameters.some((p) => p.name === 'id'))
+      ).toBe(true);
     });
 
     test('should search in paths', () => {
@@ -345,7 +489,9 @@ describe('Search and Retrieval Integration Tests', () => {
 
       expect(results).toBeDefined();
       expect(results.length).toBeGreaterThan(0);
-      expect(results.some(r => r.endpoint.path.includes('customers'))).toBe(true);
+      expect(results.some((r) => r.endpoint.path.includes('customers'))).toBe(
+        true
+      );
     });
 
     test('should handle case-insensitive keyword search', () => {
@@ -383,7 +529,14 @@ describe('Search and Retrieval Integration Tests', () => {
 
       expect(results).toBeDefined();
       expect(results.length).toBeGreaterThan(0);
-      expect(results.every(r => r.matchType === 'semantic' || r.matchType === 'keyword' || r.matchType === 'hybrid')).toBe(true);
+      expect(
+        results.every(
+          (r) =>
+            r.matchType === 'semantic' ||
+            r.matchType === 'keyword' ||
+            r.matchType === 'hybrid'
+        )
+      ).toBe(true);
     });
 
     test('should prioritize semantic matches when appropriate', () => {
@@ -421,7 +574,9 @@ describe('Search and Retrieval Integration Tests', () => {
 
       expect(results).toBeDefined();
       // Check for duplicates (same endpoint should not appear twice)
-      const endpointKeys = results.map(r => `${r.endpoint.method}:${r.endpoint.path}`);
+      const endpointKeys = results.map(
+        (r) => `${r.endpoint.method}:${r.endpoint.path}`
+      );
       const uniqueKeys = new Set(endpointKeys);
       expect(uniqueKeys.size).toBe(endpointKeys.length);
     });
@@ -436,7 +591,7 @@ describe('Search and Retrieval Integration Tests', () => {
       expect(results).toBeDefined();
       expect(results.length).toBeGreaterThan(0);
       // Scores should be between 0 and 1
-      results.forEach(r => {
+      results.forEach((r) => {
         expect(r.score).toBeGreaterThanOrEqual(0);
         expect(r.score).toBeLessThanOrEqual(1);
       });
@@ -462,8 +617,8 @@ describe('Search and Retrieval Integration Tests', () => {
 
     test('should calculate detailed relevance scores', () => {
       const query = 'get customer';
-      const endpoint = metadataIndex.allEndpoints.find((e: any) => 
-        e.resource === 'Customer' && e.method === 'GET'
+      const endpoint = metadataIndex.allEndpoints.find(
+        (e: any) => e.resource === 'Customer' && e.method === 'GET'
       );
 
       if (endpoint) {
@@ -511,7 +666,7 @@ describe('Search and Retrieval Integration Tests', () => {
 
       const ranked = relevanceScorer.rankResults(searchResults, query);
 
-      ranked.forEach(result => {
+      ranked.forEach((result) => {
         expect(['semantic', 'keyword', 'hybrid']).toContain(result.matchType);
       });
     });
@@ -527,7 +682,7 @@ describe('Search and Retrieval Integration Tests', () => {
 
     test('should update popularity scores based on usage', () => {
       const endpoint = metadataIndex.allEndpoints[0];
-      
+
       // Record multiple uses
       for (let i = 0; i < 5; i++) {
         relevanceScorer.recordEndpointUsage(endpoint);
@@ -581,7 +736,9 @@ describe('Search and Retrieval Integration Tests', () => {
 
       expect(optimized).toBeDefined();
       expect(optimized.truncated).toBe(optimized.resultCount < results.length);
-      expect(optimized.excludedCount).toBe(results.length - optimized.resultCount);
+      expect(optimized.excludedCount).toBe(
+        results.length - optimized.resultCount
+      );
     });
 
     test('should generate summary for excluded results', () => {
@@ -623,7 +780,9 @@ describe('Search and Retrieval Integration Tests', () => {
       expect(progressive.details).toBeDefined();
       expect(progressive.full).toBeDefined();
       expect(progressive.summaryTokens).toBeLessThan(progressive.detailsTokens);
-      expect(progressive.detailsTokens).toBeLessThanOrEqual(progressive.fullTokens);
+      expect(progressive.detailsTokens).toBeLessThanOrEqual(
+        progressive.fullTokens
+      );
     });
 
     test('should cache optimized context', () => {
@@ -658,7 +817,7 @@ describe('Search and Retrieval Integration Tests', () => {
       contextManager.cacheContext(cacheKey, optimized);
 
       // Wait for cache to expire
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         setTimeout(() => {
           const cached = contextManager.getCachedContext(cacheKey);
           expect(cached).toBeNull();
@@ -723,7 +882,10 @@ describe('Search and Retrieval Integration Tests', () => {
     test('should disambiguate ambiguous queries', () => {
       const query = 'get customer invoice';
       const analysis = queryUnderstanding.analyzeQuery(query);
-      const disambiguation = queryUnderstanding.disambiguateQuery(query, analysis.entities);
+      const disambiguation = queryUnderstanding.disambiguateQuery(
+        query,
+        analysis.entities
+      );
 
       expect(disambiguation).toBeDefined();
       expect(typeof disambiguation.needsDisambiguation).toBe('boolean');
@@ -736,7 +898,13 @@ describe('Search and Retrieval Integration Tests', () => {
       const analysis = queryUnderstanding.analyzeQuery(query);
 
       expect(analysis.queryType).toBeDefined();
-      expect(['resource_query', 'endpoint_query', 'parameter_query', 'permission_query', 'general_query']).toContain(analysis.queryType);
+      expect([
+        'resource_query',
+        'endpoint_query',
+        'parameter_query',
+        'permission_query',
+        'general_query',
+      ]).toContain(analysis.queryType);
     });
 
     test('should detect query intent', () => {
@@ -744,7 +912,9 @@ describe('Search and Retrieval Integration Tests', () => {
       const analysis = queryUnderstanding.analyzeQuery(query);
 
       expect(analysis.intent).toBeDefined();
-      expect(['search', 'lookup', 'list', 'compare', 'validate']).toContain(analysis.intent);
+      expect(['search', 'lookup', 'list', 'compare', 'validate']).toContain(
+        analysis.intent
+      );
     });
   });
 
@@ -777,7 +947,7 @@ describe('Search and Retrieval Integration Tests', () => {
       expect(formatted).toBeDefined();
       expect(formatted.json).toBeDefined();
       expect(typeof formatted.json).toBe('string');
-      
+
       // Verify valid JSON
       const parsed = JSON.parse(formatted.json);
       expect(parsed).toBeDefined();
@@ -932,7 +1102,9 @@ describe('Search and Retrieval Integration Tests', () => {
       );
 
       expect(results).toBeDefined();
-      expect(results.length).toBeLessThanOrEqual(metadataIndex.allEndpoints.length);
+      expect(results.length).toBeLessThanOrEqual(
+        metadataIndex.allEndpoints.length
+      );
     });
 
     test('should handle non-existent resource filter', () => {
@@ -1027,14 +1199,18 @@ describe('Search and Retrieval Integration Tests', () => {
       const limit = 5;
 
       const promises = Array.from({ length: 10 }, () =>
-        Promise.resolve(searchApiDocs({ query, limit }, vectorStore, metadataIndex))
+        Promise.resolve(
+          searchApiDocs({ query, limit }, vectorStore, metadataIndex)
+        )
       );
 
       const results = await Promise.all(promises);
 
       // All searches should return the same number of results
-      const resultCounts = results.map(r => r.length);
-      expect(resultCounts.every(count => count === resultCounts[0])).toBe(true);
+      const resultCounts = results.map((r) => r.length);
+      expect(resultCounts.every((count) => count === resultCounts[0])).toBe(
+        true
+      );
     });
   });
 });

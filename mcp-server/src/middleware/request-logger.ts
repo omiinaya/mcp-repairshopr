@@ -28,7 +28,7 @@ const DEFAULT_CONFIG: RequestLoggerConfig = {
     'cookie',
     'x-api-key',
     'x-csrf-token',
-    'x-request-id'
+    'x-request-id',
   ],
   sensitiveFields: [
     'password',
@@ -36,8 +36,8 @@ const DEFAULT_CONFIG: RequestLoggerConfig = {
     'apiKey',
     'secret',
     'credential',
-    'privateKey'
-  ]
+    'privateKey',
+  ],
 };
 
 /**
@@ -51,7 +51,11 @@ function maskSensitiveData(obj: any, sensitiveFields: string[]): any {
   const masked: any = Array.isArray(obj) ? [...obj] : { ...obj };
 
   for (const key of Object.keys(masked)) {
-    if (sensitiveFields.some(field => key.toLowerCase().includes(field.toLowerCase()))) {
+    if (
+      sensitiveFields.some((field) =>
+        key.toLowerCase().includes(field.toLowerCase())
+      )
+    ) {
       masked[key] = '***REDACTED***';
     } else if (typeof masked[key] === 'object') {
       masked[key] = maskSensitiveData(masked[key], sensitiveFields);
@@ -66,9 +70,13 @@ function maskSensitiveData(obj: any, sensitiveFields: string[]): any {
  */
 function filterHeaders(headers: any, sensitiveHeaders: string[]): any {
   const filtered: any = {};
-  
+
   for (const [key, value] of Object.entries(headers)) {
-    if (!sensitiveHeaders.some(sh => key.toLowerCase().includes(sh.toLowerCase()))) {
+    if (
+      !sensitiveHeaders.some((sh) =>
+        key.toLowerCase().includes(sh.toLowerCase())
+      )
+    ) {
       filtered[key] = value;
     } else {
       filtered[key] = '***REDACTED***';
@@ -96,11 +104,14 @@ export function requestLogger(
       method: req.method,
       path: req.path,
       ip: req.ip,
-      userAgent: req.headers['user-agent']
+      userAgent: req.headers['user-agent'],
     };
 
     if (loggerConfig.logQuery && Object.keys(req.query).length > 0) {
-      requestLog.query = maskSensitiveData(req.query, loggerConfig.sensitiveFields);
+      requestLog.query = maskSensitiveData(
+        req.query,
+        loggerConfig.sensitiveFields
+      );
     }
 
     if (loggerConfig.logParams && Object.keys(req.params).length > 0) {
@@ -108,7 +119,10 @@ export function requestLogger(
     }
 
     if (loggerConfig.logHeaders) {
-      requestLog.headers = filterHeaders(req.headers, loggerConfig.sensitiveHeaders);
+      requestLog.headers = filterHeaders(
+        req.headers,
+        loggerConfig.sensitiveHeaders
+      );
     }
 
     if (loggerConfig.logBody && req.body) {
@@ -116,10 +130,11 @@ export function requestLogger(
       if (typeof body === 'object') {
         body = maskSensitiveData(body, loggerConfig.sensitiveFields);
       }
-      
+
       const bodyStr = JSON.stringify(body);
       if (bodyStr.length > loggerConfig.maxBodyLength) {
-        requestLog.body = bodyStr.substring(0, loggerConfig.maxBodyLength) + '...[truncated]';
+        requestLog.body =
+          bodyStr.substring(0, loggerConfig.maxBodyLength) + '...[truncated]';
       } else {
         requestLog.body = body;
       }
@@ -132,7 +147,7 @@ export function requestLogger(
     let responseBody = '';
 
     // Override end to capture response
-    res.end = function(chunk: any, encoding?: any): Response {
+    res.end = function (chunk: any, encoding?: any): Response {
       if (chunk) {
         responseBody += chunk.toString();
       }
@@ -142,21 +157,24 @@ export function requestLogger(
     // Log response on finish
     res.on('finish', () => {
       const duration = Date.now() - startTime;
-      
+
       const responseLog: any = {
         correlationId,
         method: req.method,
         path: req.path,
         statusCode: res.statusCode,
         duration: `${duration}ms`,
-        contentLength: res.get('content-length')
+        contentLength: res.get('content-length'),
       };
 
       // Log response body for errors
       if (res.statusCode >= 400 && responseBody) {
         try {
           const body = JSON.parse(responseBody);
-          responseLog.responseBody = maskSensitiveData(body, loggerConfig.sensitiveFields);
+          responseLog.responseBody = maskSensitiveData(
+            body,
+            loggerConfig.sensitiveFields
+          );
         } catch {
           responseLog.responseBody = responseBody.substring(0, 200);
         }
@@ -180,25 +198,33 @@ export function requestLogger(
  * Performance metrics collector
  */
 export class PerformanceMetrics {
-  private metrics: Map<string, {
-    count: number;
-    totalDuration: number;
-    minDuration: number;
-    maxDuration: number;
-    errors: number;
-  }> = new Map();
+  private metrics: Map<
+    string,
+    {
+      count: number;
+      totalDuration: number;
+      minDuration: number;
+      maxDuration: number;
+      errors: number;
+    }
+  > = new Map();
 
   /**
    * Record a request metric
    */
-  record(path: string, method: string, statusCode: number, duration: number): void {
+  record(
+    path: string,
+    method: string,
+    statusCode: number,
+    duration: number
+  ): void {
     const key = `${method} ${path}`;
     const existing = this.metrics.get(key) || {
       count: 0,
       totalDuration: 0,
       minDuration: Infinity,
       maxDuration: 0,
-      errors: 0
+      errors: 0,
     };
 
     existing.count++;
@@ -218,12 +244,12 @@ export class PerformanceMetrics {
    */
   getMetrics(): Map<string, any> {
     const result = new Map();
-    
+
     for (const [key, data] of this.metrics.entries()) {
       result.set(key, {
         ...data,
         averageDuration: data.count > 0 ? data.totalDuration / data.count : 0,
-        errorRate: data.count > 0 ? (data.errors / data.count) * 100 : 0
+        errorRate: data.count > 0 ? (data.errors / data.count) * 100 : 0,
       });
     }
 
@@ -259,8 +285,9 @@ export class PerformanceMetrics {
     return {
       totalRequests,
       totalErrors,
-      averageResponseTime: totalRequests > 0 ? totalDuration / totalRequests : 0,
-      errorRate: totalRequests > 0 ? (totalErrors / totalRequests) * 100 : 0
+      averageResponseTime:
+        totalRequests > 0 ? totalDuration / totalRequests : 0,
+      errorRate: totalRequests > 0 ? (totalErrors / totalRequests) * 100 : 0,
     };
   }
 

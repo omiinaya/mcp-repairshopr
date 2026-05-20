@@ -93,7 +93,7 @@ export class IndexBuilder {
       chunks.push(...endpointChunks);
     }
 
-    const embeddings = await generateEmbeddings(chunks.map(c => c.text));
+    const embeddings = await generateEmbeddings(chunks.map((c) => c.text));
 
     // Save index files
     await this.saveMetadataIndex(outputPath, metadataIndex);
@@ -104,10 +104,12 @@ export class IndexBuilder {
       fileCount: files.length,
       endpointCount: metadataIndex.allEndpoints.length,
       chunkCount: chunks.length,
-      hash
+      hash,
     });
 
-    console.log(`Index built successfully: ${files.length} files, ${metadataIndex.allEndpoints.length} endpoints, ${chunks.length} chunks`);
+    console.log(
+      `Index built successfully: ${files.length} files, ${metadataIndex.allEndpoints.length} endpoints, ${chunks.length} chunks`
+    );
 
     return {
       version: '1.0.0',
@@ -115,7 +117,7 @@ export class IndexBuilder {
       fileCount: files.length,
       endpointCount: metadataIndex.allEndpoints.length,
       chunkCount: chunks.length,
-      hash
+      hash,
     };
   }
 
@@ -143,7 +145,10 @@ export class IndexBuilder {
    * @param outputPath - Path where the index files are saved
    * @returns Promise<IndexInfo> - Information about the updated index
    */
-  async incrementalUpdate(docsPath: string, outputPath: string): Promise<IndexInfo> {
+  async incrementalUpdate(
+    docsPath: string,
+    outputPath: string
+  ): Promise<IndexInfo> {
     console.log('Performing incremental update...');
 
     // Get current index info
@@ -256,7 +261,11 @@ export class IndexBuilder {
           }
 
           // Validate counts are non-negative
-          if (indexInfo.fileCount < 0 || indexInfo.endpointCount < 0 || indexInfo.chunkCount < 0) {
+          if (
+            indexInfo.fileCount < 0 ||
+            indexInfo.endpointCount < 0 ||
+            indexInfo.chunkCount < 0
+          ) {
             issues.push('Index info contains invalid count values');
           }
         }
@@ -265,7 +274,11 @@ export class IndexBuilder {
         try {
           const metadataContent = fs.readFileSync(metadataPath, 'utf-8');
           const metadata = JSON.parse(metadataContent);
-          if (!metadata.resources || !metadata.endpointsByPath || !metadata.allEndpoints) {
+          if (
+            !metadata.resources ||
+            !metadata.endpointsByPath ||
+            !metadata.allEndpoints
+          ) {
             issues.push('Metadata index is missing required fields');
           }
         } catch (error) {
@@ -300,7 +313,7 @@ export class IndexBuilder {
 
     return {
       healthy: issues.length === 0,
-      issues
+      issues,
     };
   }
 
@@ -314,7 +327,9 @@ export class IndexBuilder {
     const files: string[] = [];
 
     async function walk(currentPath: string) {
-      const entries = await fsPromises.readdir(currentPath, { withFileTypes: true });
+      const entries = await fsPromises.readdir(currentPath, {
+        withFileTypes: true,
+      });
 
       for (const entry of entries) {
         const fullPath = path.join(currentPath, entry.name);
@@ -358,19 +373,28 @@ export class IndexBuilder {
    * @param outputPath - Path to the output directory
    * @param metadataIndex - Metadata index to save
    */
-  private async saveMetadataIndex(outputPath: string, metadataIndex: MetadataIndex): Promise<void> {
+  private async saveMetadataIndex(
+    outputPath: string,
+    metadataIndex: MetadataIndex
+  ): Promise<void> {
     const filePath = path.join(outputPath, this.METADATA_INDEX_FILE);
 
     // Convert Maps to plain objects for JSON serialization
     const serialized = {
       resources: Object.fromEntries(metadataIndex.resources),
       endpointsByPath: Object.fromEntries(metadataIndex.endpointsByPath),
-      endpointsByPermission: Object.fromEntries(metadataIndex.endpointsByPermission),
+      endpointsByPermission: Object.fromEntries(
+        metadataIndex.endpointsByPermission
+      ),
       endpointsByMethod: Object.fromEntries(metadataIndex.endpointsByMethod),
-      allEndpoints: metadataIndex.allEndpoints
+      allEndpoints: metadataIndex.allEndpoints,
     };
 
-    await fsPromises.writeFile(filePath, JSON.stringify(serialized, null, 2), 'utf-8');
+    await fsPromises.writeFile(
+      filePath,
+      JSON.stringify(serialized, null, 2),
+      'utf-8'
+    );
   }
 
   /**
@@ -388,8 +412,16 @@ export class IndexBuilder {
     const chunksPath = path.join(outputPath, this.CHUNKS_FILE);
     const embeddingsPath = path.join(outputPath, this.EMBEDDINGS_FILE);
 
-    await fsPromises.writeFile(chunksPath, JSON.stringify(chunks, null, 2), 'utf-8');
-    await fsPromises.writeFile(embeddingsPath, JSON.stringify(embeddings), 'utf-8');
+    await fsPromises.writeFile(
+      chunksPath,
+      JSON.stringify(chunks, null, 2),
+      'utf-8'
+    );
+    await fsPromises.writeFile(
+      embeddingsPath,
+      JSON.stringify(embeddings),
+      'utf-8'
+    );
   }
 
   /**
@@ -398,9 +430,16 @@ export class IndexBuilder {
    * @param outputPath - Path to the output directory
    * @param indexInfo - Index information to save
    */
-  private async saveIndexInfo(outputPath: string, indexInfo: IndexInfo): Promise<void> {
+  private async saveIndexInfo(
+    outputPath: string,
+    indexInfo: IndexInfo
+  ): Promise<void> {
     const filePath = path.join(outputPath, this.INDEX_INFO_FILE);
-    await fsPromises.writeFile(filePath, JSON.stringify(indexInfo, null, 2), 'utf-8');
+    await fsPromises.writeFile(
+      filePath,
+      JSON.stringify(indexInfo, null, 2),
+      'utf-8'
+    );
   }
 
   /**
@@ -413,7 +452,7 @@ export class IndexBuilder {
       this.INDEX_INFO_FILE,
       this.METADATA_INDEX_FILE,
       this.EMBEDDINGS_FILE,
-      this.CHUNKS_FILE
+      this.CHUNKS_FILE,
     ];
 
     for (const file of files) {

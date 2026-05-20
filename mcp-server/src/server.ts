@@ -10,7 +10,14 @@ import { ToolRegistry, ToolDefinition } from './server/tool-registry';
 import { monitoringService } from './server/monitoring';
 import { structuredLogger } from './server/structured-logger';
 import { searchApiDocs, SearchParams } from './tools/search';
-import { getEndpoint, getEndpointsBatch, findRelatedEndpoints, getEndpointDetails, EndpointLookupParams, BatchEndpointLookupParams } from './tools/endpoint';
+import {
+  getEndpoint,
+  getEndpointsBatch,
+  findRelatedEndpoints,
+  getEndpointDetails,
+  EndpointLookupParams,
+  BatchEndpointLookupParams,
+} from './tools/endpoint';
 import { getParameters, ParameterLookupParams } from './tools/parameters';
 import { getResponses, ResponseLookupParams } from './tools/responses';
 import { getPermissions, PermissionLookupParams } from './tools/permissions';
@@ -20,7 +27,13 @@ import { VectorStore } from './indexer/vector';
 import { MetadataIndex } from './parser/metadata';
 import { QueryUnderstanding } from './retrieval/query';
 import { RelevanceScorer, SearchResult } from './retrieval/scoring';
-import { ContextManager, formatSearchResults, formatEndpoint, formatParameters, formatResponses } from './retrieval/formatter';
+import {
+  ContextManager,
+  formatSearchResults,
+  formatEndpoint,
+  formatParameters,
+  formatResponses,
+} from './retrieval/formatter';
 import { Cache } from './cache/cache';
 
 export interface HealthCheckResult {
@@ -51,7 +64,7 @@ class MCPServer {
       maxSize: 10 * 1024 * 1024, // 10MB
       defaultTTL: 5 * 60 * 1000, // 5 minutes
       maxEntries: 1000,
-      enableWarming: true
+      enableWarming: true,
     });
   }
 
@@ -63,17 +76,17 @@ class MCPServer {
 
     try {
       this.startTime = Date.now();
-this.server = new Server(
-      {
-        name: this.config.serverName,
-        version: this.config.serverVersion
-      },
-      {
-        capabilities: {
-          tools: { listChanged: true }
+      this.server = new Server(
+        {
+          name: this.config.serverName,
+          version: this.config.serverVersion,
+        },
+        {
+          capabilities: {
+            tools: { listChanged: true },
+          },
         }
-      }
-    );
+      );
 
       // Start monitoring service
       monitoringService.startMonitoring();
@@ -87,34 +100,38 @@ this.server = new Server(
       this.toolRegistry = new ToolRegistry();
       logger.info('Tool registry initialized');
 
-// Initialize vector store and metadata index
-    this.vectorStore = new VectorStore();
-    logger.info('Vector store initialized');
+      // Initialize vector store and metadata index
+      this.vectorStore = new VectorStore();
+      logger.info('Vector store initialized');
 
-    // Load metadata index from file
-    try {
-      const fs = require('fs');
-      const path = require('path');
-      const metadataPath = path.join(process.cwd(), 'data', 'metadata-index.json');
-      
-      if (fs.existsSync(metadataPath)) {
-        const metadataContent = fs.readFileSync(metadataPath, 'utf-8');
-        const metadataIndex = JSON.parse(metadataContent);
-        this.setMetadataIndex(metadataIndex);
-        logger.info('Metadata index loaded', { 
-          endpoints: metadataIndex.endpoints?.length || 0,
-          resources: Object.keys(metadataIndex.resources || {}).length 
-        });
-      } else {
-        logger.warn('Metadata index file not found', { path: metadataPath });
+      // Load metadata index from file
+      try {
+        const fs = require('fs');
+        const path = require('path');
+        const metadataPath = path.join(
+          process.cwd(),
+          'data',
+          'metadata-index.json'
+        );
+
+        if (fs.existsSync(metadataPath)) {
+          const metadataContent = fs.readFileSync(metadataPath, 'utf-8');
+          const metadataIndex = JSON.parse(metadataContent);
+          this.setMetadataIndex(metadataIndex);
+          logger.info('Metadata index loaded', {
+            endpoints: metadataIndex.endpoints?.length || 0,
+            resources: Object.keys(metadataIndex.resources || {}).length,
+          });
+        } else {
+          logger.warn('Metadata index file not found', { path: metadataPath });
+        }
+      } catch (error) {
+        logger.error('Failed to load metadata index', { error });
       }
-    } catch (error) {
-      logger.error('Failed to load metadata index', { error });
-    }
 
-    // Initialize query understanding
-    this.queryUnderstanding = new QueryUnderstanding();
-    logger.info('Query understanding initialized');
+      // Initialize query understanding
+      this.queryUnderstanding = new QueryUnderstanding();
+      logger.info('Query understanding initialized');
 
       // Initialize relevance scorer
       this.relevanceScorer = new RelevanceScorer(this.vectorStore);
@@ -168,7 +185,7 @@ this.server = new Server(
         port: this.config.port,
         logLevel: this.config.logLevel,
         enableHotReload: this.config.enableHotReload,
-        enableMetrics: this.config.enableMetrics
+        enableMetrics: this.config.enableMetrics,
       });
     } catch (error) {
       logger.error('Failed to start MCP server', { error });
@@ -226,15 +243,19 @@ this.server = new Server(
   healthCheck(): HealthCheckResult {
     const uptime = this.startTime > 0 ? Date.now() - this.startTime : 0;
     const healthStatus = monitoringService.getHealthStatus();
-    
+
     const result: HealthCheckResult = {
       status: this.isRunning && healthStatus.healthy ? 'healthy' : 'unhealthy',
       uptime,
-      metrics: healthStatus.metrics
+      metrics: healthStatus.metrics,
     };
 
     // Log health check
-    structuredLogger.logHealthCheck(result.status, uptime, healthStatus.metrics);
+    structuredLogger.logHealthCheck(
+      result.status,
+      uptime,
+      healthStatus.metrics
+    );
 
     return result;
   }
@@ -260,7 +281,9 @@ this.server = new Server(
    */
   registerTool(tool: MCPTool): void {
     if (!this.protocolHandler) {
-      throw new Error('Protocol handler not initialized. Server must be started first.');
+      throw new Error(
+        'Protocol handler not initialized. Server must be started first.'
+      );
     }
     this.protocolHandler.registerTool(tool);
     monitoringService.recordToolCall(tool.name);
@@ -271,9 +294,14 @@ this.server = new Server(
    * @param definition - Tool definition
    * @param handler - Tool handler function
    */
-  registerToolWithRegistry(definition: ToolDefinition, handler: Function): void {
+  registerToolWithRegistry(
+    definition: ToolDefinition,
+    handler: Function
+  ): void {
     if (!this.toolRegistry) {
-      throw new Error('Tool registry not initialized. Server must be started first.');
+      throw new Error(
+        'Tool registry not initialized. Server must be started first.'
+      );
     }
     this.toolRegistry.registerTool(definition, handler);
     monitoringService.recordToolCall(definition.name);
@@ -284,7 +312,9 @@ this.server = new Server(
    */
   unregisterTool(toolName: string): boolean {
     if (!this.protocolHandler) {
-      throw new Error('Protocol handler not initialized. Server must be started first.');
+      throw new Error(
+        'Protocol handler not initialized. Server must be started first.'
+      );
     }
     return this.protocolHandler.unregisterTool(toolName);
   }
@@ -295,7 +325,9 @@ this.server = new Server(
    */
   unregisterToolFromRegistry(toolName: string): boolean {
     if (!this.toolRegistry) {
-      throw new Error('Tool registry not initialized. Server must be started first.');
+      throw new Error(
+        'Tool registry not initialized. Server must be started first.'
+      );
     }
     return this.toolRegistry.unregisterTool(toolName);
   }
@@ -346,7 +378,10 @@ this.server = new Server(
    * Discover tools with optional filters
    * @param filter - Optional filter criteria
    */
-  discoverTools(filter?: { deprecated?: boolean; version?: string }): ToolDefinition[] {
+  discoverTools(filter?: {
+    deprecated?: boolean;
+    version?: string;
+  }): ToolDefinition[] {
     if (!this.toolRegistry) {
       return [];
     }
@@ -357,7 +392,10 @@ this.server = new Server(
    * Check if tool dependencies are satisfied
    * @param toolName - Name of the tool to check
    */
-  checkToolDependencies(toolName: string): { satisfied: boolean; missing: string[] } {
+  checkToolDependencies(toolName: string): {
+    satisfied: boolean;
+    missing: string[];
+  } {
     if (!this.toolRegistry) {
       return { satisfied: false, missing: [] };
     }
@@ -400,7 +438,7 @@ this.server = new Server(
         totalTools: 0,
         activeTools: 0,
         deprecatedTools: 0,
-        toolsWithDependencies: 0
+        toolsWithDependencies: 0,
       };
     }
     return this.toolRegistry.getStats();
@@ -433,7 +471,7 @@ this.server = new Server(
       const oldConfig = this.config;
       logger.info('Configuration changed via hot-reload', {
         oldConfig,
-        newConfig
+        newConfig,
       });
 
       // Log configuration change
@@ -452,7 +490,9 @@ this.server = new Server(
    */
   private applyConfiguration(): void {
     // Update logger level
-    logger.setLevel(this.config.logLevel as 'error' | 'warn' | 'info' | 'debug' | 'trace');
+    logger.setLevel(
+      this.config.logLevel as 'error' | 'warn' | 'info' | 'debug' | 'trace'
+    );
 
     // Note: Server name and version cannot be changed while running
     // These would require a server restart
@@ -461,7 +501,7 @@ this.server = new Server(
       logLevel: this.config.logLevel,
       enableMetrics: this.config.enableMetrics,
       maxConcurrentRequests: this.config.maxConcurrentRequests,
-      requestTimeout: this.config.requestTimeout
+      requestTimeout: this.config.requestTimeout,
     });
   }
 
@@ -548,7 +588,7 @@ this.server = new Server(
       'ticket',
       'estimate',
       'product',
-      'appointment'
+      'appointment',
     ];
 
     // Pre-warm cache with common queries
@@ -559,7 +599,7 @@ this.server = new Server(
     }
 
     logger.info('Cache warming completed', {
-      queriesPrepared: commonQueries.length
+      queriesPrepared: commonQueries.length,
     });
   }
 
@@ -573,7 +613,8 @@ this.server = new Server(
 
     const searchToolDefinition: ToolDefinition = {
       name: 'search_api_docs',
-      description: 'Search RepairShopr API documentation using semantic and keyword search',
+      description:
+        'Search RepairShopr API documentation using semantic and keyword search',
       version: '1.0.0',
       deprecated: false,
       dependencies: [],
@@ -582,27 +623,27 @@ this.server = new Server(
         properties: {
           query: {
             type: 'string',
-            description: 'Search query'
+            description: 'Search query',
           },
           resource: {
             type: 'string',
-            description: 'Filter by resource name (optional)'
+            description: 'Filter by resource name (optional)',
           },
           method: {
             type: 'string',
-            description: 'Filter by HTTP method (optional)'
+            description: 'Filter by HTTP method (optional)',
           },
           permission: {
             type: 'string',
-            description: 'Filter by permission (optional)'
+            description: 'Filter by permission (optional)',
           },
           limit: {
             type: 'number',
-            description: 'Maximum results to return (default: 5)'
-          }
+            description: 'Maximum results to return (default: 5)',
+          },
         },
-        required: ['query']
-      }
+        required: ['query'],
+      },
     };
 
     const searchToolHandler = async (args: any) => {
@@ -612,46 +653,54 @@ this.server = new Server(
 
       // Use query understanding to analyze and improve the search
       let searchQuery = args.query;
-      let queryAnalysis: import('./retrieval/query').QueryAnalysis | null = null;
-      
+      let queryAnalysis: import('./retrieval/query').QueryAnalysis | null =
+        null;
+
       if (this.queryUnderstanding) {
         queryAnalysis = this.queryUnderstanding.analyzeQuery(args.query);
-        
+
         // Use expanded queries for better results
         const expandedQueries = this.queryUnderstanding.expandQuery(
           args.query,
           queryAnalysis.entities
         );
-        
+
         // Use the first expanded query if available, otherwise use original
         searchQuery = expandedQueries[0] || args.query;
-        
+
         // Override filters with extracted entities if not explicitly provided
-        const resourceFilter = args.resource || queryAnalysis.entities.resources[0];
-        const methodFilter = args.method || queryAnalysis.entities.httpMethods[0];
-        const permissionFilter = args.permission || queryAnalysis.entities.permissions[0];
-        
+        const resourceFilter =
+          args.resource || queryAnalysis.entities.resources[0];
+        const methodFilter =
+          args.method || queryAnalysis.entities.httpMethods[0];
+        const permissionFilter =
+          args.permission || queryAnalysis.entities.permissions[0];
+
         const params: SearchParams = {
           query: searchQuery,
           resource: resourceFilter,
           method: methodFilter,
           permission: permissionFilter,
-          limit: args.limit || 5
+          limit: args.limit || 5,
         };
 
-        const results = searchApiDocs(params, this.vectorStore, this.metadataIndex);
+        const results = searchApiDocs(
+          params,
+          this.vectorStore,
+          this.metadataIndex
+        );
 
         // Apply relevance scoring to rank results
-        let scoredResults: SearchResult[] = results.map(result => ({
+        let scoredResults: SearchResult[] = results.map((result) => ({
           endpoint: result.endpoint,
           score: result.score,
           matchType: result.matchType,
-          context: result.context
+          context: result.context,
         }));
 
         // Use relevance scorer to calculate detailed scores and rank results
         if (this.relevanceScorer) {
-          scoredResults = scoredResults.map(result => {
+          scoredResults = scoredResults.map((result) => {
             const relevanceScore = this.relevanceScorer!.calculateScore(
               searchQuery,
               result.endpoint,
@@ -660,12 +709,15 @@ this.server = new Server(
             return {
               ...result,
               score: relevanceScore.overallScore,
-              relevanceScore
+              relevanceScore,
             };
           });
 
           // Rank results by relevance score
-          scoredResults = this.relevanceScorer.rankResults(scoredResults, searchQuery);
+          scoredResults = this.relevanceScorer.rankResults(
+            scoredResults,
+            searchQuery
+          );
 
           // Record usage for popularity tracking
           for (const result of scoredResults) {
@@ -675,13 +727,16 @@ this.server = new Server(
           // Apply context optimization to manage response size
           if (this.contextManager) {
             const maxTokens = this.contextManager.getConfig().defaultMaxTokens;
-            const optimizedContext = this.contextManager.optimizeContextWindow(scoredResults, maxTokens);
-            
+            const optimizedContext = this.contextManager.optimizeContextWindow(
+              scoredResults,
+              maxTokens
+            );
+
             logger.info('Context optimized', {
               resultCount: optimizedContext.resultCount,
               excludedCount: optimizedContext.excludedCount,
               tokenCount: optimizedContext.tokenCount,
-              truncated: optimizedContext.truncated
+              truncated: optimizedContext.truncated,
             });
           }
         }
@@ -690,33 +745,35 @@ this.server = new Server(
         const formattedResults = formatSearchResults(scoredResults, 'markdown');
 
         return {
-          results: scoredResults.map(result => ({
+          results: scoredResults.map((result) => ({
             endpoint: {
               resource: result.endpoint.resource,
               operation: result.endpoint.operation,
               description: result.endpoint.description,
               method: result.endpoint.method,
               path: result.endpoint.path,
-              permission: result.endpoint.permission
+              permission: result.endpoint.permission,
             },
             score: result.score,
-            relevanceScore: result.relevanceScore ? {
-              overallScore: result.relevanceScore.overallScore,
-              semanticScore: result.relevanceScore.semanticScore,
-              keywordScore: result.relevanceScore.keywordScore,
-              recencyScore: result.relevanceScore.recencyScore,
-              popularityScore: result.relevanceScore.popularityScore,
-              customScore: result.relevanceScore.customScore,
-              breakdown: result.relevanceScore.breakdown
-            } : undefined,
+            relevanceScore: result.relevanceScore
+              ? {
+                  overallScore: result.relevanceScore.overallScore,
+                  semanticScore: result.relevanceScore.semanticScore,
+                  keywordScore: result.relevanceScore.keywordScore,
+                  recencyScore: result.relevanceScore.recencyScore,
+                  popularityScore: result.relevanceScore.popularityScore,
+                  customScore: result.relevanceScore.customScore,
+                  breakdown: result.relevanceScore.breakdown,
+                }
+              : undefined,
             context: result.context,
-            matchType: result.matchType
+            matchType: result.matchType,
           })),
           formatted: {
             markdown: formattedResults.markdown,
             json: formattedResults.json,
             html: formattedResults.html,
-            tokenCount: formattedResults.tokenCount
+            tokenCount: formattedResults.tokenCount,
           },
           queryAnalysis: {
             originalQuery: queryAnalysis.originalQuery,
@@ -724,8 +781,8 @@ this.server = new Server(
             queryType: queryAnalysis.queryType,
             confidence: queryAnalysis.confidence,
             entities: queryAnalysis.entities,
-            suggestions: queryAnalysis.suggestions
-          }
+            suggestions: queryAnalysis.suggestions,
+          },
         };
       }
 
@@ -735,85 +792,100 @@ this.server = new Server(
         resource: args.resource,
         method: args.method,
         permission: args.permission,
-        limit: args.limit || 5
+        limit: args.limit || 5,
       };
 
-      const results = searchApiDocs(params, this.vectorStore, this.metadataIndex);
+      const results = searchApiDocs(
+        params,
+        this.vectorStore,
+        this.metadataIndex
+      );
 
       // Apply relevance scoring to rank results
-      let scoredResults: SearchResult[] = results.map(result => ({
+      let scoredResults: SearchResult[] = results.map((result) => ({
         endpoint: result.endpoint,
         score: result.score,
         matchType: result.matchType,
-        context: result.context
+        context: result.context,
       }));
 
       // Use relevance scorer to calculate detailed scores and rank results
       if (this.relevanceScorer) {
-        scoredResults = scoredResults.map(result => {
-          const relevanceScore = this.relevanceScorer!.calculateScore(searchQuery, result.endpoint);
+        scoredResults = scoredResults.map((result) => {
+          const relevanceScore = this.relevanceScorer!.calculateScore(
+            searchQuery,
+            result.endpoint
+          );
           return {
             ...result,
             score: relevanceScore.overallScore,
-            relevanceScore
+            relevanceScore,
           };
         });
 
-          // Rank results by relevance score
-          scoredResults = this.relevanceScorer.rankResults(scoredResults, searchQuery);
+        // Rank results by relevance score
+        scoredResults = this.relevanceScorer.rankResults(
+          scoredResults,
+          searchQuery
+        );
 
-          // Record usage for popularity tracking
-          for (const result of scoredResults) {
-            this.relevanceScorer!.recordEndpointUsage(result.endpoint);
-          }
-
-          // Apply context optimization to manage response size
-          if (this.contextManager) {
-            const maxTokens = this.contextManager.getConfig().defaultMaxTokens;
-            const optimizedContext = this.contextManager.optimizeContextWindow(scoredResults, maxTokens);
-            
-            logger.info('Context optimized', {
-              resultCount: optimizedContext.resultCount,
-              excludedCount: optimizedContext.excludedCount,
-              tokenCount: optimizedContext.tokenCount,
-              truncated: optimizedContext.truncated
-            });
-          }
+        // Record usage for popularity tracking
+        for (const result of scoredResults) {
+          this.relevanceScorer!.recordEndpointUsage(result.endpoint);
         }
 
-        // Format search results using the formatter module
-        const formattedResults = formatSearchResults(scoredResults, 'markdown');
+        // Apply context optimization to manage response size
+        if (this.contextManager) {
+          const maxTokens = this.contextManager.getConfig().defaultMaxTokens;
+          const optimizedContext = this.contextManager.optimizeContextWindow(
+            scoredResults,
+            maxTokens
+          );
 
-        return {
-          results: scoredResults.map(result => ({
-            endpoint: {
-              resource: result.endpoint.resource,
-              operation: result.endpoint.operation,
-              description: result.endpoint.description,
-              method: result.endpoint.method,
-              path: result.endpoint.path,
-              permission: result.endpoint.permission
-            },
-            score: result.score,
-            relevanceScore: result.relevanceScore ? {
-              overallScore: result.relevanceScore.overallScore,
-              semanticScore: result.relevanceScore.semanticScore,
-              keywordScore: result.relevanceScore.keywordScore,
-              recencyScore: result.relevanceScore.recencyScore,
-              popularityScore: result.relevanceScore.popularityScore,
-              customScore: result.relevanceScore.customScore,
-              breakdown: result.relevanceScore.breakdown
-            } : undefined,
-            context: result.context,
-            matchType: result.matchType
-          })),
-          formatted: {
-            markdown: formattedResults.markdown,
-            json: formattedResults.json,
-            html: formattedResults.html,
-            tokenCount: formattedResults.tokenCount
-          }
-        };
+          logger.info('Context optimized', {
+            resultCount: optimizedContext.resultCount,
+            excludedCount: optimizedContext.excludedCount,
+            tokenCount: optimizedContext.tokenCount,
+            truncated: optimizedContext.truncated,
+          });
+        }
+      }
+
+      // Format search results using the formatter module
+      const formattedResults = formatSearchResults(scoredResults, 'markdown');
+
+      return {
+        results: scoredResults.map((result) => ({
+          endpoint: {
+            resource: result.endpoint.resource,
+            operation: result.endpoint.operation,
+            description: result.endpoint.description,
+            method: result.endpoint.method,
+            path: result.endpoint.path,
+            permission: result.endpoint.permission,
+          },
+          score: result.score,
+          relevanceScore: result.relevanceScore
+            ? {
+                overallScore: result.relevanceScore.overallScore,
+                semanticScore: result.relevanceScore.semanticScore,
+                keywordScore: result.relevanceScore.keywordScore,
+                recencyScore: result.relevanceScore.recencyScore,
+                popularityScore: result.relevanceScore.popularityScore,
+                customScore: result.relevanceScore.customScore,
+                breakdown: result.relevanceScore.breakdown,
+              }
+            : undefined,
+          context: result.context,
+          matchType: result.matchType,
+        })),
+        formatted: {
+          markdown: formattedResults.markdown,
+          json: formattedResults.json,
+          html: formattedResults.html,
+          tokenCount: formattedResults.tokenCount,
+        },
+      };
     };
 
     this.registerToolWithRegistry(searchToolDefinition, searchToolHandler);
@@ -839,22 +911,22 @@ this.server = new Server(
         properties: {
           path: {
             type: 'string',
-            description: 'Endpoint path (e.g., /customers/{id})'
+            description: 'Endpoint path (e.g., /customers/{id})',
           },
           method: {
             type: 'string',
-            description: 'HTTP method (GET, POST, PUT, DELETE, PATCH)'
+            description: 'HTTP method (GET, POST, PUT, DELETE, PATCH)',
           },
           resource: {
             type: 'string',
-            description: 'Resource name (alternative to path)'
+            description: 'Resource name (alternative to path)',
           },
           includeRelated: {
             type: 'boolean',
-            description: 'Include related endpoints (default: false)'
-          }
-        }
-      }
+            description: 'Include related endpoints (default: false)',
+          },
+        },
+      },
     };
 
     const endpointToolHandler = async (args: any) => {
@@ -865,7 +937,7 @@ this.server = new Server(
       const params: EndpointLookupParams = {
         path: args.path,
         method: args.method,
-        resource: args.resource
+        resource: args.resource,
       };
 
       const result = getEndpoint(params, this.metadataIndex);
@@ -874,7 +946,7 @@ this.server = new Server(
         return {
           success: false,
           message: 'Endpoint not found',
-          endpoint: null
+          endpoint: null,
         };
       }
 
@@ -888,29 +960,32 @@ this.server = new Server(
         // Include related endpoints if requested
         let relatedEndpoints = null;
         if (args.includeRelated) {
-          const related = findRelatedEndpoints(result.endpoint, this.metadataIndex);
+          const related = findRelatedEndpoints(
+            result.endpoint,
+            this.metadataIndex
+          );
           relatedEndpoints = {
-            sameResource: related.sameResource.map(ep => ({
+            sameResource: related.sameResource.map((ep) => ({
               resource: ep.resource,
               operation: ep.operation,
               method: ep.method,
               path: ep.path,
-              permission: ep.permission
+              permission: ep.permission,
             })),
-            relatedByParameters: related.relatedByParameters.map(ep => ({
+            relatedByParameters: related.relatedByParameters.map((ep) => ({
               resource: ep.resource,
               operation: ep.operation,
               method: ep.method,
               path: ep.path,
-              permission: ep.permission
+              permission: ep.permission,
             })),
-            samePermission: related.samePermission.map(ep => ({
+            samePermission: related.samePermission.map((ep) => ({
               resource: ep.resource,
               operation: ep.operation,
               method: ep.method,
               path: ep.path,
-              permission: ep.permission
-            }))
+              permission: ep.permission,
+            })),
           };
         }
 
@@ -921,19 +996,21 @@ this.server = new Server(
           formatted: {
             markdown: formattedEndpoint,
             json: formatEndpoint(result.endpoint, 'json'),
-            html: formatEndpoint(result.endpoint, 'html')
+            html: formatEndpoint(result.endpoint, 'html'),
           },
-          relatedEndpoints
+          relatedEndpoints,
         };
       }
 
       // Handle multiple endpoints (resource lookup)
-      const endpointsDetails = result.map(r => getEndpointDetails(r.endpoint));
-      
+      const endpointsDetails = result.map((r) =>
+        getEndpointDetails(r.endpoint)
+      );
+
       return {
         success: true,
         count: endpointsDetails.length,
-        endpoints: endpointsDetails
+        endpoints: endpointsDetails,
       };
     };
 
@@ -951,7 +1028,8 @@ this.server = new Server(
 
     const parametersToolDefinition: ToolDefinition = {
       name: 'get_parameters',
-      description: 'Get parameter information for an API endpoint including types, constraints, and validation hints',
+      description:
+        'Get parameter information for an API endpoint including types, constraints, and validation hints',
       version: '1.0.0',
       deprecated: false,
       dependencies: [],
@@ -960,20 +1038,20 @@ this.server = new Server(
         properties: {
           endpoint_path: {
             type: 'string',
-            description: 'Endpoint path (e.g., /customers/{id})'
+            description: 'Endpoint path (e.g., /customers/{id})',
           },
           method: {
             type: 'string',
-            description: 'HTTP method (GET, POST, PUT, DELETE, PATCH)'
+            description: 'HTTP method (GET, POST, PUT, DELETE, PATCH)',
           },
           param_type: {
             type: 'string',
             description: 'Filter by parameter type (query, path, body)',
-            enum: ['query', 'path', 'body']
-          }
+            enum: ['query', 'path', 'body'],
+          },
         },
-        required: ['endpoint_path', 'method']
-      }
+        required: ['endpoint_path', 'method'],
+      },
     };
 
     const parametersToolHandler = async (args: any) => {
@@ -984,7 +1062,7 @@ this.server = new Server(
       const params: ParameterLookupParams = {
         endpointPath: args.endpoint_path,
         method: args.method,
-        paramType: args.param_type
+        paramType: args.param_type,
       };
 
       const result = getParameters(params, this.metadataIndex);
@@ -993,18 +1071,21 @@ this.server = new Server(
         return {
           success: false,
           message: 'Endpoint not found',
-          endpoint: null
+          endpoint: null,
         };
       }
 
       // Format parameters using the formatter module
-      const formattedParameters = formatParameters(result.parameters, 'markdown');
+      const formattedParameters = formatParameters(
+        result.parameters,
+        'markdown'
+      );
 
       return {
         success: true,
         endpointPath: result.endpointPath,
         method: result.method,
-        parameters: result.parameters.map(param => ({
+        parameters: result.parameters.map((param) => ({
           name: param.name,
           type: param.type,
           required: param.required,
@@ -1012,23 +1093,28 @@ this.server = new Server(
           paramType: param.paramType,
           constraints: param.constraints,
           validationHints: param.validationHints,
-          pattern: param.pattern ? {
-            name: param.pattern.name,
-            description: param.pattern.description
-          } : undefined
+          pattern: param.pattern
+            ? {
+                name: param.pattern.name,
+                description: param.pattern.description,
+              }
+            : undefined,
         })),
         formatted: {
           markdown: formattedParameters,
           json: formatParameters(result.parameters, 'json'),
-          html: formatParameters(result.parameters, 'html')
+          html: formatParameters(result.parameters, 'html'),
         },
         totalCount: result.totalCount,
         requiredCount: result.requiredCount,
-        optionalCount: result.optionalCount
+        optionalCount: result.optionalCount,
       };
     };
 
-    this.registerToolWithRegistry(parametersToolDefinition, parametersToolHandler);
+    this.registerToolWithRegistry(
+      parametersToolDefinition,
+      parametersToolHandler
+    );
     logger.info('Parameters tool registered successfully');
   }
 
@@ -1042,7 +1128,8 @@ this.server = new Server(
 
     const responsesToolDefinition: ToolDefinition = {
       name: 'get_responses',
-      description: 'Get response information for an API endpoint including status codes, schemas, examples, and error documentation',
+      description:
+        'Get response information for an API endpoint including status codes, schemas, examples, and error documentation',
       version: '1.0.0',
       deprecated: false,
       dependencies: [],
@@ -1051,19 +1138,19 @@ this.server = new Server(
         properties: {
           endpoint_path: {
             type: 'string',
-            description: 'Endpoint path (e.g., /customers/{id})'
+            description: 'Endpoint path (e.g., /customers/{id})',
           },
           method: {
             type: 'string',
-            description: 'HTTP method (GET, POST, PUT, DELETE, PATCH)'
+            description: 'HTTP method (GET, POST, PUT, DELETE, PATCH)',
           },
           status_code: {
             type: 'string',
-            description: 'Filter by status code (optional)'
-          }
+            description: 'Filter by status code (optional)',
+          },
         },
-        required: ['endpoint_path', 'method']
-      }
+        required: ['endpoint_path', 'method'],
+      },
     };
 
     const responsesToolHandler = async (args: any) => {
@@ -1074,7 +1161,7 @@ this.server = new Server(
       const params: ResponseLookupParams = {
         endpointPath: args.endpoint_path,
         method: args.method,
-        statusCode: args.status_code
+        statusCode: args.status_code,
       };
 
       const result = getResponses(params, this.metadataIndex);
@@ -1083,7 +1170,7 @@ this.server = new Server(
         return {
           success: false,
           message: 'Endpoint not found',
-          endpoint: null
+          endpoint: null,
         };
       }
 
@@ -1094,7 +1181,7 @@ this.server = new Server(
         success: true,
         endpointPath: result.endpointPath,
         method: result.method,
-        responses: result.responses.map(response => ({
+        responses: result.responses.map((response) => ({
           statusCode: response.statusCode,
           statusCodeInfo: {
             code: response.statusCodeInfo.code,
@@ -1103,40 +1190,45 @@ this.server = new Server(
             description: response.statusCodeInfo.description,
             isSuccess: response.statusCodeInfo.isSuccess,
             isError: response.statusCodeInfo.isError,
-            isRedirect: response.statusCodeInfo.isRedirect
+            isRedirect: response.statusCodeInfo.isRedirect,
           },
           description: response.description,
           example: response.example,
           schema: response.schema,
           errorDocumentation: response.errorDocumentation,
           formatDescription: response.formatDescription,
-          pattern: response.pattern ? {
-            name: response.pattern.name,
-            description: response.pattern.description,
-            statusCodes: response.pattern.statusCodes,
-            structure: response.pattern.structure,
-            exampleUseCase: response.pattern.exampleUseCase
-          } : undefined
+          pattern: response.pattern
+            ? {
+                name: response.pattern.name,
+                description: response.pattern.description,
+                statusCodes: response.pattern.statusCodes,
+                structure: response.pattern.structure,
+                exampleUseCase: response.pattern.exampleUseCase,
+              }
+            : undefined,
         })),
         formatted: {
           markdown: formattedResponses,
           json: formatResponses(result.responses, 'json'),
-          html: formatResponses(result.responses, 'html')
+          html: formatResponses(result.responses, 'html'),
         },
         totalCount: result.totalCount,
         successCount: result.successCount,
         errorCount: result.errorCount,
-        commonPatterns: result.commonPatterns.map(pattern => ({
+        commonPatterns: result.commonPatterns.map((pattern) => ({
           name: pattern.name,
           description: pattern.description,
           statusCodes: pattern.statusCodes,
           structure: pattern.structure,
-          exampleUseCase: pattern.exampleUseCase
-        }))
+          exampleUseCase: pattern.exampleUseCase,
+        })),
       };
     };
 
-    this.registerToolWithRegistry(responsesToolDefinition, responsesToolHandler);
+    this.registerToolWithRegistry(
+      responsesToolDefinition,
+      responsesToolHandler
+    );
     logger.info('Responses tool registered successfully');
   }
 
@@ -1150,7 +1242,8 @@ this.server = new Server(
 
     const permissionsToolDefinition: ToolDefinition = {
       name: 'get_permissions',
-      description: 'Get permission requirements for API endpoints including descriptions, hierarchy, and usage information',
+      description:
+        'Get permission requirements for API endpoints including descriptions, hierarchy, and usage information',
       version: '1.0.0',
       deprecated: false,
       dependencies: [],
@@ -1159,30 +1252,33 @@ this.server = new Server(
         properties: {
           endpoint_path: {
             type: 'string',
-            description: 'Endpoint path (e.g., /customers/{id})'
+            description: 'Endpoint path (e.g., /customers/{id})',
           },
           method: {
             type: 'string',
-            description: 'HTTP method (GET, POST, PUT, DELETE, PATCH) - required when using endpoint_path'
+            description:
+              'HTTP method (GET, POST, PUT, DELETE, PATCH) - required when using endpoint_path',
           },
           resource: {
             type: 'string',
-            description: 'Resource name (alternative to endpoint_path)'
+            description: 'Resource name (alternative to endpoint_path)',
           },
           permission: {
             type: 'string',
-            description: 'Filter by permission name (alternative to endpoint_path and resource)'
+            description:
+              'Filter by permission name (alternative to endpoint_path and resource)',
           },
           include_matrix: {
             type: 'boolean',
-            description: 'Include permission matrix (default: false)'
+            description: 'Include permission matrix (default: false)',
           },
           include_summaries: {
             type: 'boolean',
-            description: 'Include permission requirement summaries (default: false)'
-          }
-        }
-      }
+            description:
+              'Include permission requirement summaries (default: false)',
+          },
+        },
+      },
     };
 
     const permissionsToolHandler = async (args: any) => {
@@ -1196,14 +1292,14 @@ this.server = new Server(
         resource: args.resource,
         permission: args.permission,
         includeMatrix: args.include_matrix,
-        includeSummaries: args.include_summaries
+        includeSummaries: args.include_summaries,
       };
 
       const result = getPermissions(params, this.metadataIndex);
 
       // Format the response for the tool
       const formattedResult: any = {
-        totalPermissions: result.totalPermissions
+        totalPermissions: result.totalPermissions,
       };
 
       if (result.permission) {
@@ -1213,25 +1309,25 @@ this.server = new Server(
             name: result.permission.description.name,
             description: result.permission.description.description,
             category: result.permission.description.category,
-            operations: result.permission.description.operations
+            operations: result.permission.description.operations,
           },
           endpoints: result.permission.endpoints,
-          hierarchy: result.permission.hierarchy
+          hierarchy: result.permission.hierarchy,
         };
       }
 
       if (result.allPermissions) {
-        formattedResult.allPermissions = result.allPermissions.map(p => ({
+        formattedResult.allPermissions = result.allPermissions.map((p) => ({
           name: p.name,
           description: {
             name: p.description.name,
             description: p.description.description,
             category: p.description.category,
-            operations: p.description.operations
+            operations: p.description.operations,
           },
           endpointCount: p.endpoints.length,
           endpoints: p.endpoints,
-          hierarchy: p.hierarchy
+          hierarchy: p.hierarchy,
         }));
       }
 
@@ -1246,7 +1342,10 @@ this.server = new Server(
       return formattedResult;
     };
 
-    this.registerToolWithRegistry(permissionsToolDefinition, permissionsToolHandler);
+    this.registerToolWithRegistry(
+      permissionsToolDefinition,
+      permissionsToolHandler
+    );
     logger.info('Permissions tool registered successfully');
   }
 
@@ -1260,7 +1359,8 @@ this.server = new Server(
 
     const resourcesToolDefinition: ToolDefinition = {
       name: 'list_resources',
-      description: 'List all available API resources with summary information, endpoints, relationships, and statistics',
+      description:
+        'List all available API resources with summary information, endpoints, relationships, and statistics',
       version: '1.0.0',
       deprecated: false,
       dependencies: [],
@@ -1269,14 +1369,16 @@ this.server = new Server(
         properties: {
           include_endpoints: {
             type: 'boolean',
-            description: 'Include endpoint details for each resource (default: false)'
+            description:
+              'Include endpoint details for each resource (default: false)',
           },
           include_relationships: {
             type: 'boolean',
-            description: 'Include resource relationship information (default: false)'
-          }
-        }
-      }
+            description:
+              'Include resource relationship information (default: false)',
+          },
+        },
+      },
     };
 
     const resourcesToolHandler = async (args: any) => {
@@ -1286,7 +1388,7 @@ this.server = new Server(
 
       const params: ResourceListParams = {
         includeEndpoints: args.include_endpoints,
-        includeRelationships: args.include_relationships
+        includeRelationships: args.include_relationships,
       };
 
       const result = listResources(params, this.metadataIndex);
@@ -1299,15 +1401,16 @@ this.server = new Server(
           totalResponses: result.overallStatistics.totalResponses,
           uniquePermissions: result.overallStatistics.uniquePermissions,
           mostCommonMethod: result.overallStatistics.mostCommonMethod,
-          averageEndpointsPerResource: result.overallStatistics.averageEndpointsPerResource
+          averageEndpointsPerResource:
+            result.overallStatistics.averageEndpointsPerResource,
         },
-        resources: result.resources.map(resource => ({
+        resources: result.resources.map((resource) => ({
           summary: {
             name: resource.summary.name,
             description: resource.summary.description,
             endpointCount: resource.summary.endpointCount,
             methods: resource.summary.methods,
-            permissions: resource.summary.permissions
+            permissions: resource.summary.permissions,
           },
           endpoints: resource.endpoints,
           relationships: resource.relationships,
@@ -1317,18 +1420,23 @@ this.server = new Server(
             totalResponses: resource.statistics.totalResponses,
             uniquePermissions: resource.statistics.uniquePermissions,
             mostCommonMethod: resource.statistics.mostCommonMethod,
-            averageEndpointsPerResource: resource.statistics.averageEndpointsPerResource
+            averageEndpointsPerResource:
+              resource.statistics.averageEndpointsPerResource,
           },
           navigation: {
             relatedResources: resource.navigation.relatedResources,
             commonOperations: resource.navigation.commonOperations,
-            similarPermissionResources: resource.navigation.similarPermissionResources
-          }
-        }))
+            similarPermissionResources:
+              resource.navigation.similarPermissionResources,
+          },
+        })),
       };
     };
 
-    this.registerToolWithRegistry(resourcesToolDefinition, resourcesToolHandler);
+    this.registerToolWithRegistry(
+      resourcesToolDefinition,
+      resourcesToolHandler
+    );
     logger.info('Resources tool registered successfully');
   }
 
@@ -1342,7 +1450,8 @@ this.server = new Server(
 
     const codeExamplesToolDefinition: ToolDefinition = {
       name: 'generate_code_example',
-      description: 'Generate code examples for API endpoints in multiple languages (JavaScript, Python, cURL) with authentication, request/response examples, and error handling',
+      description:
+        'Generate code examples for API endpoints in multiple languages (JavaScript, Python, cURL) with authentication, request/response examples, and error handling',
       version: '1.0.0',
       deprecated: false,
       dependencies: [],
@@ -1351,24 +1460,25 @@ this.server = new Server(
         properties: {
           endpoint_path: {
             type: 'string',
-            description: 'Endpoint path (e.g., /customers/{id})'
+            description: 'Endpoint path (e.g., /customers/{id})',
           },
           method: {
             type: 'string',
-            description: 'HTTP method (GET, POST, PUT, DELETE, PATCH)'
+            description: 'HTTP method (GET, POST, PUT, DELETE, PATCH)',
           },
           language: {
             type: 'string',
             description: 'Programming language for the code example',
-            enum: ['javascript', 'python', 'curl']
+            enum: ['javascript', 'python', 'curl'],
           },
           include_auth: {
             type: 'boolean',
-            description: 'Include authentication in the example (default: true)'
-          }
+            description:
+              'Include authentication in the example (default: true)',
+          },
         },
-        required: ['endpoint_path', 'method', 'language']
-      }
+        required: ['endpoint_path', 'method', 'language'],
+      },
     };
 
     const codeExamplesToolHandler = async (args: any) => {
@@ -1380,7 +1490,7 @@ this.server = new Server(
         endpointPath: args.endpoint_path,
         method: args.method,
         language: args.language,
-        includeAuth: args.include_auth !== undefined ? args.include_auth : true
+        includeAuth: args.include_auth !== undefined ? args.include_auth : true,
       };
 
       const result = generateCodeExample(params, this.metadataIndex);
@@ -1391,18 +1501,21 @@ this.server = new Server(
           operation: result.endpoint.operation,
           description: result.endpoint.description,
           method: result.endpoint.method,
-          path: result.endpoint.path
+          path: result.endpoint.path,
         },
         code: result.code,
         language: result.language,
         includesAuth: result.includesAuth,
         exampleRequest: result.exampleRequest,
         exampleResponse: result.exampleResponse,
-        errorHandling: result.errorHandling
+        errorHandling: result.errorHandling,
       };
     };
 
-    this.registerToolWithRegistry(codeExamplesToolDefinition, codeExamplesToolHandler);
+    this.registerToolWithRegistry(
+      codeExamplesToolDefinition,
+      codeExamplesToolHandler
+    );
     logger.info('Code examples tool registered successfully');
   }
 }

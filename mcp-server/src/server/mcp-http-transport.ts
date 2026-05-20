@@ -1,7 +1,7 @@
 /**
  * MCP HTTP/SSE Transport Server
  * Implements the Model Context Protocol over HTTP with Server-Sent Events
- * 
+ *
  * Protocol Flow:
  * 1. Client makes GET request to /mcp to establish SSE connection
  * 2. Server sends endpoint URL via SSE (session ID in URL)
@@ -41,14 +41,16 @@ export class MCPHTTPTransport {
   private clients: Map<string, MCPClient> = new Map();
   private cleanupInterval: NodeJS.Timeout | null = null;
 
-  constructor(port: number = parseInt(process.env.MCP_HTTP_PORT || '6001', 10)) {
+  constructor(
+    port: number = parseInt(process.env.MCP_HTTP_PORT || '6001', 10)
+  ) {
     this.port = port;
   }
 
   async start(): Promise<void> {
     return new Promise((resolve, reject) => {
       this.server = http.createServer((req, res) => {
-        this.handleRequest(req, res).catch(error => {
+        this.handleRequest(req, res).catch((error) => {
           logger.error('Request handler error', { error });
           res.statusCode = 500;
           res.end(JSON.stringify({ error: 'Internal server error' }));
@@ -57,7 +59,9 @@ export class MCPHTTPTransport {
 
       this.server.listen(this.port, '0.0.0.0', () => {
         logger.info(`MCP HTTP transport started on port ${this.port}`);
-        logger.info(`MCP endpoint available at: http://0.0.0.0:${this.port}/mcp`);
+        logger.info(
+          `MCP endpoint available at: http://0.0.0.0:${this.port}/mcp`
+        );
         this.startCleanupInterval();
         resolve();
       });
@@ -69,7 +73,10 @@ export class MCPHTTPTransport {
     });
   }
 
-  private async handleRequest(req: http.IncomingMessage, res: http.ServerResponse): Promise<void> {
+  private async handleRequest(
+    req: http.IncomingMessage,
+    res: http.ServerResponse
+  ): Promise<void> {
     const url = new URL(req.url || '/', `http://${req.headers.host}`);
     const path = url.pathname;
     const method = req.method || 'GET';
@@ -77,7 +84,10 @@ export class MCPHTTPTransport {
     // Enable CORS for all origins
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Accept, Mcp-Session-Id');
+    res.setHeader(
+      'Access-Control-Allow-Headers',
+      'Content-Type, Accept, Mcp-Session-Id'
+    );
     res.setHeader('Access-Control-Expose-Headers', 'Mcp-Session-Id');
 
     if (method === 'OPTIONS') {
@@ -88,20 +98,27 @@ export class MCPHTTPTransport {
 
     // Rate limiting for MCP endpoints
     if (path === '/mcp') {
-      const rateLimitResult = rateLimiters.general.isAllowed(req.socket.remoteAddress || 'unknown');
-      res.setHeader('X-RateLimit-Limit', rateLimiters.general.getStats().maxRequests);
+      const rateLimitResult = rateLimiters.general.isAllowed(
+        req.socket.remoteAddress || 'unknown'
+      );
+      res.setHeader(
+        'X-RateLimit-Limit',
+        rateLimiters.general.getStats().maxRequests
+      );
       res.setHeader('X-RateLimit-Remaining', rateLimitResult.remaining);
-      
+
       if (!rateLimitResult.allowed) {
         res.statusCode = 429;
         res.setHeader('Content-Type', 'application/json');
-        res.end(JSON.stringify({
-          jsonrpc: '2.0',
-          error: {
-            code: -32000,
-            message: 'Rate limit exceeded'
-          }
-        }));
+        res.end(
+          JSON.stringify({
+            jsonrpc: '2.0',
+            error: {
+              code: -32000,
+              message: 'Rate limit exceeded',
+            },
+          })
+        );
         return;
       }
     }
@@ -127,28 +144,34 @@ export class MCPHTTPTransport {
     // 404 for unknown paths
     res.statusCode = 404;
     res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify({ 
-      jsonrpc: '2.0',
-      error: {
-        code: -32601,
-        message: 'Method not found',
-        data: { path, method }
-      }
-    }));
+    res.end(
+      JSON.stringify({
+        jsonrpc: '2.0',
+        error: {
+          code: -32601,
+          message: 'Method not found',
+          data: { path, method },
+        },
+      })
+    );
   }
 
-  private async handleSSE(req: http.IncomingMessage, res: http.ServerResponse, url: URL): Promise<void> {
+  private async handleSSE(
+    req: http.IncomingMessage,
+    res: http.ServerResponse,
+    url: URL
+  ): Promise<void> {
     // Check for Last-Event-ID header (for reconnection)
     const lastEventId = req.headers['last-event-id'] as string;
-    
+
     // Generate or restore session ID
     const sessionId = lastEventId || this.generateSessionId();
-    
+
     // Set SSE headers
     res.writeHead(200, {
       'Content-Type': 'text/event-stream',
       'Cache-Control': 'no-cache',
-      'Connection': 'keep-alive',
+      Connection: 'keep-alive',
       'Mcp-Session-Id': sessionId,
     });
 
@@ -157,19 +180,19 @@ export class MCPHTTPTransport {
       id: sessionId,
       response: res,
       initialized: false,
-      lastActivity: Date.now()
+      lastActivity: Date.now(),
     };
     this.clients.set(sessionId, client);
 
-    logger.info(`MCP client connected: ${sessionId}`, { 
+    logger.info(`MCP client connected: ${sessionId}`, {
       remoteAddress: req.socket.remoteAddress,
       userAgent: req.headers['user-agent'],
-      restored: !!lastEventId
+      restored: !!lastEventId,
     });
 
     // Send endpoint event with session ID
     this.sendSSEEvent(client, 'endpoint', {
-      uri: `/mcp?sessionId=${sessionId}`
+      uri: `/mcp?sessionId=${sessionId}`,
     });
 
     // Handle client disconnect
@@ -200,19 +223,25 @@ export class MCPHTTPTransport {
     });
   }
 
-  private async handleMessage(req: http.IncomingMessage, res: http.ServerResponse, url: URL): Promise<void> {
+  private async handleMessage(
+    req: http.IncomingMessage,
+    res: http.ServerResponse,
+    url: URL
+  ): Promise<void> {
     const sessionId = url.searchParams.get('sessionId');
-    
+
     if (!sessionId) {
       res.statusCode = 400;
       res.setHeader('Content-Type', 'application/json');
-      res.end(JSON.stringify({
-        jsonrpc: '2.0',
-        error: {
-          code: -32600,
-          message: 'Invalid Request: sessionId required'
-        }
-      }));
+      res.end(
+        JSON.stringify({
+          jsonrpc: '2.0',
+          error: {
+            code: -32600,
+            message: 'Invalid Request: sessionId required',
+          },
+        })
+      );
       return;
     }
 
@@ -220,29 +249,34 @@ export class MCPHTTPTransport {
     if (!client) {
       res.statusCode = 404;
       res.setHeader('Content-Type', 'application/json');
-      res.end(JSON.stringify({
-        jsonrpc: '2.0',
-        error: {
-          code: -32600,
-          message: 'Session not found'
-        }
-      }));
+      res.end(
+        JSON.stringify({
+          jsonrpc: '2.0',
+          error: {
+            code: -32600,
+            message: 'Session not found',
+          },
+        })
+      );
       return;
     }
 
     // Read request body
     const body = await this.readBody(req);
-    
+
     try {
       const message: JSONRPCMessage = JSON.parse(body);
-      logger.debug('MCP message received', { sessionId, method: message.method });
+      logger.debug('MCP message received', {
+        sessionId,
+        method: message.method,
+      });
 
       // Update activity timestamp
       client.lastActivity = Date.now();
 
       // Process the message
       const response = await this.processMessage(message, client);
-      
+
       // Send response via SSE if it has an ID (not a notification)
       if (message.id !== undefined && response) {
         this.sendSSEEvent(client, 'message', response);
@@ -251,38 +285,45 @@ export class MCPHTTPTransport {
       // Return 202 Accepted for successful processing
       res.statusCode = 202;
       res.setHeader('Content-Type', 'application/json');
-      res.end(JSON.stringify({ 
-        jsonrpc: '2.0',
-        result: 'accepted'
-      }));
-
+      res.end(
+        JSON.stringify({
+          jsonrpc: '2.0',
+          result: 'accepted',
+        })
+      );
     } catch (error) {
       logger.error('Failed to process MCP message', { sessionId, error });
-      
+
       // Send error via SSE
       if (client) {
         this.sendSSEEvent(client, 'error', {
           code: -32700,
           message: 'Parse error',
-          data: error instanceof Error ? error.message : 'Unknown error'
+          data: error instanceof Error ? error.message : 'Unknown error',
         });
       }
 
       res.statusCode = 400;
       res.setHeader('Content-Type', 'application/json');
-      res.end(JSON.stringify({
-        jsonrpc: '2.0',
-        error: {
-          code: -32700,
-          message: 'Parse error'
-        }
-      }));
+      res.end(
+        JSON.stringify({
+          jsonrpc: '2.0',
+          error: {
+            code: -32700,
+            message: 'Parse error',
+          },
+        })
+      );
     }
   }
 
-  private async handleDeleteSession(req: http.IncomingMessage, res: http.ServerResponse, url: URL): Promise<void> {
+  private async handleDeleteSession(
+    req: http.IncomingMessage,
+    res: http.ServerResponse,
+    url: URL
+  ): Promise<void> {
     const sessionId = url.searchParams.get('sessionId');
-    
+
     if (!sessionId) {
       res.statusCode = 400;
       res.end(JSON.stringify({ error: 'sessionId required' }));
@@ -293,7 +334,7 @@ export class MCPHTTPTransport {
     if (client) {
       this.sendSSEEvent(client, 'error', {
         code: -32000,
-        message: 'Session terminated by client'
+        message: 'Session terminated by client',
       });
       client.response.end();
       this.clients.delete(sessionId);
@@ -303,7 +344,10 @@ export class MCPHTTPTransport {
     res.end(JSON.stringify({ status: 'terminated' }));
   }
 
-  private async processMessage(message: JSONRPCMessage, client: MCPClient): Promise<JSONRPCMessage | null> {
+  private async processMessage(
+    message: JSONRPCMessage,
+    client: MCPClient
+  ): Promise<JSONRPCMessage | null> {
     const { method, params, id } = message;
 
     // Handle initialize
@@ -319,13 +363,13 @@ export class MCPHTTPTransport {
             resources: { subscribe: true, listChanged: true },
             prompts: { listChanged: true },
             logging: {},
-            experimental: {}
+            experimental: {},
           },
           serverInfo: {
             name: mcpServer.getConfig().serverName,
-            version: mcpServer.getConfig().serverVersion
-          }
-        }
+            version: mcpServer.getConfig().serverVersion,
+          },
+        },
       };
     }
 
@@ -337,16 +381,16 @@ export class MCPHTTPTransport {
 
     // Handle tools/list
     if (method === 'tools/list') {
-      const tools = mcpServer.getTools().map(tool => ({
+      const tools = mcpServer.getTools().map((tool) => ({
         name: tool.name,
         description: tool.description,
-        inputSchema: tool.inputSchema
+        inputSchema: tool.inputSchema,
       }));
 
       return {
         jsonrpc: '2.0',
         id,
-        result: { tools }
+        result: { tools },
       };
     }
 
@@ -356,20 +400,20 @@ export class MCPHTTPTransport {
         const toolName = params?.name;
         const toolArgs = params?.arguments || {};
 
-        const tool = mcpServer.getTools().find(t => t.name === toolName);
+        const tool = mcpServer.getTools().find((t) => t.name === toolName);
         if (!tool) {
           return {
             jsonrpc: '2.0',
             id,
             error: {
               code: -32601,
-              message: `Tool not found: ${toolName}`
-            }
+              message: `Tool not found: ${toolName}`,
+            },
           };
         }
 
         const result = await tool.handler(toolArgs);
-        
+
         return {
           jsonrpc: '2.0',
           id,
@@ -377,11 +421,11 @@ export class MCPHTTPTransport {
             content: [
               {
                 type: 'text',
-                text: JSON.stringify(result, null, 2)
-              }
+                text: JSON.stringify(result, null, 2),
+              },
             ],
-            isError: false
-          }
+            isError: false,
+          },
         };
       } catch (error) {
         logger.error('Tool call failed', { method, params, error });
@@ -390,9 +434,10 @@ export class MCPHTTPTransport {
           id,
           error: {
             code: -32603,
-            message: error instanceof Error ? error.message : 'Tool execution failed',
-            data: error
-          }
+            message:
+              error instanceof Error ? error.message : 'Tool execution failed',
+            data: error,
+          },
         };
       }
     }
@@ -403,8 +448,8 @@ export class MCPHTTPTransport {
       id,
       error: {
         code: -32601,
-        message: `Method not found: ${method}`
-      }
+        message: `Method not found: ${method}`,
+      },
     };
   }
 
@@ -423,7 +468,7 @@ export class MCPHTTPTransport {
   private readBody(req: http.IncomingMessage): Promise<string> {
     return new Promise((resolve, reject) => {
       let body = '';
-      req.on('data', chunk => body += chunk);
+      req.on('data', (chunk) => (body += chunk));
       req.on('end', () => resolve(body));
       req.on('error', reject);
     });
@@ -435,18 +480,21 @@ export class MCPHTTPTransport {
 
   private startCleanupInterval(): void {
     // Clean up stale sessions every 5 minutes
-    this.cleanupInterval = setInterval(() => {
-      const now = Date.now();
-      const staleTimeout = 10 * 60 * 1000; // 10 minutes
+    this.cleanupInterval = setInterval(
+      () => {
+        const now = Date.now();
+        const staleTimeout = 10 * 60 * 1000; // 10 minutes
 
-      for (const [sessionId, client] of this.clients.entries()) {
-        if (now - client.lastActivity > staleTimeout) {
-          logger.info(`Cleaning up stale session: ${sessionId}`);
-          client.response.end();
-          this.clients.delete(sessionId);
+        for (const [sessionId, client] of this.clients.entries()) {
+          if (now - client.lastActivity > staleTimeout) {
+            logger.info(`Cleaning up stale session: ${sessionId}`);
+            client.response.end();
+            this.clients.delete(sessionId);
+          }
         }
-      }
-    }, 5 * 60 * 1000);
+      },
+      5 * 60 * 1000
+    );
   }
 
   async stop(): Promise<void> {
@@ -460,7 +508,7 @@ export class MCPHTTPTransport {
         try {
           this.sendSSEEvent(client, 'error', {
             code: -32000,
-            message: 'Server shutting down'
+            message: 'Server shutting down',
           });
           client.response.end();
         } catch (error) {
@@ -484,7 +532,7 @@ export class MCPHTTPTransport {
   getStats(): { clients: number; port: number } {
     return {
       clients: this.clients.size,
-      port: this.port
+      port: this.port,
     };
   }
 }

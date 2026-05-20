@@ -2,7 +2,13 @@
  * Unit tests for relevance scoring module
  */
 
-import { RelevanceScorer, ScoringConfig, CustomFactors, RelevanceScore, SearchResult } from '../../src/retrieval/scoring';
+import {
+  RelevanceScorer,
+  ScoringConfig,
+  CustomFactors,
+  RelevanceScore,
+  SearchResult,
+} from '../../src/retrieval/scoring';
 import { VectorStore } from '../../src/indexer/vector';
 import { ApiEndpoint } from '../../src/utils/types';
 
@@ -30,23 +36,23 @@ describe('RelevanceScorer', () => {
             type: 'integer',
             required: false,
             description: 'Maximum number of results to return',
-            paramType: 'query'
+            paramType: 'query',
           },
           {
             name: 'offset',
             type: 'integer',
             required: false,
             description: 'Number of results to skip',
-            paramType: 'query'
-          }
+            paramType: 'query',
+          },
         ],
         responses: [
           {
             statusCode: 200,
             description: 'Successful response',
-            example: { customers: [] }
-          }
-        ]
+            example: { customers: [] },
+          },
+        ],
       },
       {
         resource: 'Customer',
@@ -62,23 +68,23 @@ describe('RelevanceScorer', () => {
             type: 'string',
             required: true,
             description: 'Customer name',
-            paramType: 'body'
+            paramType: 'body',
           },
           {
             name: 'email',
             type: 'string',
             required: true,
             description: 'Customer email address',
-            paramType: 'body'
-          }
+            paramType: 'body',
+          },
         ],
         responses: [
           {
             statusCode: 201,
             description: 'Customer created successfully',
-            example: { id: 1, name: 'Test Customer' }
-          }
-        ]
+            example: { id: 1, name: 'Test Customer' },
+          },
+        ],
       },
       {
         resource: 'Ticket',
@@ -93,15 +99,15 @@ describe('RelevanceScorer', () => {
             type: 'string',
             required: false,
             description: 'Filter by ticket status',
-            paramType: 'query'
-          }
+            paramType: 'query',
+          },
         ],
         responses: [
           {
             statusCode: 200,
-            description: 'Successful response'
-          }
-        ]
+            description: 'Successful response',
+          },
+        ],
       },
       {
         resource: 'Invoice',
@@ -117,16 +123,16 @@ describe('RelevanceScorer', () => {
             type: 'integer',
             required: true,
             description: 'Customer ID',
-            paramType: 'body'
-          }
+            paramType: 'body',
+          },
         ],
         responses: [
           {
             statusCode: 201,
-            description: 'Invoice created'
-          }
-        ]
-      }
+            description: 'Invoice created',
+          },
+        ],
+      },
     ];
 
     // Initialize scorer
@@ -149,8 +155,14 @@ describe('RelevanceScorer', () => {
       const differentQuery = 'create invoice';
       const endpoint = testEndpoints[0];
 
-      const similarScore = scorer.semanticSimilarityScore(similarQuery, endpoint);
-      const differentScore = scorer.semanticSimilarityScore(differentQuery, endpoint);
+      const similarScore = scorer.semanticSimilarityScore(
+        similarQuery,
+        endpoint
+      );
+      const differentScore = scorer.semanticSimilarityScore(
+        differentQuery,
+        endpoint
+      );
 
       expect(similarScore).toBeGreaterThanOrEqual(differentScore);
     });
@@ -298,7 +310,10 @@ describe('RelevanceScorer', () => {
       const baseScore = 0.8;
       const endpoint = testEndpoints[0];
 
-      const weightedScore = customScorer.popularityWeighting(baseScore, endpoint);
+      const weightedScore = customScorer.popularityWeighting(
+        baseScore,
+        endpoint
+      );
 
       expect(weightedScore).toBe(baseScore);
     });
@@ -333,11 +348,15 @@ describe('RelevanceScorer', () => {
       const endpoint = testEndpoints[0];
       const factors: CustomFactors = {
         resourceBoosts: {
-          'Customer': 0.5
-        }
+          Customer: 0.5,
+        },
       };
 
-      const adjustedScore = scorer.customRelevanceFactors(baseScore, endpoint, factors);
+      const adjustedScore = scorer.customRelevanceFactors(
+        baseScore,
+        endpoint,
+        factors
+      );
 
       expect(adjustedScore).toBeGreaterThan(baseScore);
     });
@@ -347,11 +366,15 @@ describe('RelevanceScorer', () => {
       const endpoint = testEndpoints[0];
       const factors: CustomFactors = {
         methodBoosts: {
-          'get': 0.3
-        }
+          get: 0.3,
+        },
       };
 
-      const adjustedScore = scorer.customRelevanceFactors(baseScore, endpoint, factors);
+      const adjustedScore = scorer.customRelevanceFactors(
+        baseScore,
+        endpoint,
+        factors
+      );
 
       expect(adjustedScore).toBeGreaterThan(baseScore);
     });
@@ -361,11 +384,15 @@ describe('RelevanceScorer', () => {
       const endpoint = testEndpoints[0];
       const factors: CustomFactors = {
         permissionBoosts: {
-          'view_customer': 0.2
-        }
+          view_customer: 0.2,
+        },
       };
 
-      const adjustedScore = scorer.customRelevanceFactors(baseScore, endpoint, factors);
+      const adjustedScore = scorer.customRelevanceFactors(
+        baseScore,
+        endpoint,
+        factors
+      );
 
       expect(adjustedScore).toBeGreaterThan(baseScore);
     });
@@ -374,10 +401,14 @@ describe('RelevanceScorer', () => {
       const baseScore = 0.8;
       const endpoint = testEndpoints[3]; // Invoice endpoint with deprecated in description
       const factors: CustomFactors = {
-        deprecatedPenalty: 0.5
+        deprecatedPenalty: 0.5,
       };
 
-      const adjustedScore = scorer.customRelevanceFactors(baseScore, endpoint, factors);
+      const adjustedScore = scorer.customRelevanceFactors(
+        baseScore,
+        endpoint,
+        factors
+      );
 
       expect(adjustedScore).toBeLessThan(baseScore);
     });
@@ -386,10 +417,14 @@ describe('RelevanceScorer', () => {
       const baseScore = 0.5;
       const endpoint = testEndpoints[0];
       const factors: CustomFactors = {
-        exampleBoost: 0.2
+        exampleBoost: 0.2,
       };
 
-      const adjustedScore = scorer.customRelevanceFactors(baseScore, endpoint, factors);
+      const adjustedScore = scorer.customRelevanceFactors(
+        baseScore,
+        endpoint,
+        factors
+      );
 
       expect(adjustedScore).toBeGreaterThan(baseScore);
     });
@@ -398,10 +433,14 @@ describe('RelevanceScorer', () => {
       const baseScore = 0.5;
       const endpoint = testEndpoints[0];
       const factors: CustomFactors = {
-        customScorer: (ep, score) => score * 2
+        customScorer: (ep, score) => score * 2,
       };
 
-      const adjustedScore = scorer.customRelevanceFactors(baseScore, endpoint, factors);
+      const adjustedScore = scorer.customRelevanceFactors(
+        baseScore,
+        endpoint,
+        factors
+      );
 
       expect(adjustedScore).toBe(baseScore * 2);
     });
@@ -411,11 +450,15 @@ describe('RelevanceScorer', () => {
       const endpoint = testEndpoints[0];
       const factors: CustomFactors = {
         resourceBoosts: {
-          'Customer': 10 // Very large boost
-        }
+          Customer: 10, // Very large boost
+        },
       };
 
-      const adjustedScore = scorer.customRelevanceFactors(baseScore, endpoint, factors);
+      const adjustedScore = scorer.customRelevanceFactors(
+        baseScore,
+        endpoint,
+        factors
+      );
 
       expect(adjustedScore).toBeLessThanOrEqual(1);
     });
@@ -463,18 +506,18 @@ describe('RelevanceScorer', () => {
         {
           endpoint: testEndpoints[0],
           score: 0.5,
-          matchType: 'semantic'
+          matchType: 'semantic',
         },
         {
           endpoint: testEndpoints[1],
           score: 0.8,
-          matchType: 'keyword'
+          matchType: 'keyword',
         },
         {
           endpoint: testEndpoints[2],
           score: 0.3,
-          matchType: 'semantic'
-        }
+          matchType: 'semantic',
+        },
       ];
 
       const ranked = scorer.rankResults(results, 'test query');
@@ -500,11 +543,11 @@ describe('RelevanceScorer', () => {
               keyword: 0.24,
               recency: 0.08,
               popularity: 0.08,
-              custom: 0.08
-            }
+              custom: 0.08,
+            },
           },
-          matchType: 'semantic'
-        }
+          matchType: 'semantic',
+        },
       ];
 
       const ranked = scorer.rankResults(results, 'test query');
@@ -529,11 +572,11 @@ describe('RelevanceScorer', () => {
               keyword: 0.09,
               recency: 0.07,
               popularity: 0.07,
-              custom: 0.07
-            }
+              custom: 0.07,
+            },
           },
-          matchType: 'keyword'
-        }
+          matchType: 'keyword',
+        },
       ];
 
       const ranked = scorer.rankResults(results, 'test query');
@@ -558,11 +601,11 @@ describe('RelevanceScorer', () => {
               keyword: 0.24,
               recency: 0.06,
               popularity: 0.06,
-              custom: 0.06
-            }
+              custom: 0.06,
+            },
           },
-          matchType: 'semantic'
-        }
+          matchType: 'semantic',
+        },
       ];
 
       const ranked = scorer.rankResults(results, 'test query');
@@ -588,7 +631,7 @@ describe('RelevanceScorer', () => {
         semanticWeight: 0.6,
         keywordWeight: 0.2,
         recencyWeight: 0.1,
-        popularityWeight: 0.1
+        popularityWeight: 0.1,
       };
 
       scorer.updateConfig(newConfig);
@@ -603,7 +646,7 @@ describe('RelevanceScorer', () => {
         semanticWeight: 0.7,
         keywordWeight: 0.2,
         recencyWeight: 0.05,
-        popularityWeight: 0.05
+        popularityWeight: 0.05,
       };
 
       const customScorer = new RelevanceScorer(vectorStore, customConfig);
@@ -643,12 +686,14 @@ describe('RelevanceScorer', () => {
       const firstStats = scorer.getUsageStats().get(endpoint.path);
 
       // Wait a bit
-      const delay = new Promise(resolve => setTimeout(resolve, 10));
+      const delay = new Promise((resolve) => setTimeout(resolve, 10));
       return delay.then(() => {
         scorer.recordEndpointUsage(endpoint);
         const secondStats = scorer.getUsageStats().get(endpoint.path);
 
-        expect(secondStats?.lastUsed).toBeGreaterThan(firstStats?.lastUsed || 0);
+        expect(secondStats?.lastUsed).toBeGreaterThan(
+          firstStats?.lastUsed || 0
+        );
       });
     });
 
@@ -704,7 +749,7 @@ describe('RelevanceScorer', () => {
         path: '/test',
         permission: 'view_test',
         parameters: [],
-        responses: []
+        responses: [],
       };
 
       const score = scorer.calculateScore(query, endpoint);
@@ -727,8 +772,8 @@ describe('RelevanceScorer', () => {
         {
           endpoint: testEndpoints[0],
           score: 0.8,
-          matchType: 'semantic'
-        }
+          matchType: 'semantic',
+        },
       ];
 
       const ranked = scorer.rankResults(results, 'test');

@@ -4,8 +4,15 @@
  */
 
 import { MCPServer } from '../../src/server';
-import { generateEndpoint, generateParameter, generateResponse } from '../fixtures';
-import { generateSearchQueries, generateComplexSearchQueries } from '../utils/data-generators';
+import {
+  generateEndpoint,
+  generateParameter,
+  generateResponse,
+} from '../fixtures';
+import {
+  generateSearchQueries,
+  generateComplexSearchQueries,
+} from '../utils/data-generators';
 
 /**
  * Sample query interface
@@ -14,7 +21,13 @@ interface SampleQuery {
   id: string;
   query: string;
   description: string;
-  category: 'discovery' | 'lookup' | 'creation' | 'update' | 'deletion' | 'search';
+  category:
+    | 'discovery'
+    | 'lookup'
+    | 'creation'
+    | 'update'
+    | 'deletion'
+    | 'search';
   expectedResults: ExpectedQueryResults;
 }
 
@@ -44,8 +57,8 @@ export const sampleQueries: SampleQuery[] = [
       expectedResource: 'Customer',
       expectedOperation: 'Get Customers',
       expectedMethod: 'GET',
-      minResults: 1
-    }
+      minResults: 1,
+    },
   },
   {
     id: 'SQ-002',
@@ -57,8 +70,8 @@ export const sampleQueries: SampleQuery[] = [
       expectedResource: 'Customer',
       expectedOperation: 'Create Customer',
       expectedMethod: 'POST',
-      minResults: 1
-    }
+      minResults: 1,
+    },
   },
   {
     id: 'SQ-003',
@@ -70,8 +83,8 @@ export const sampleQueries: SampleQuery[] = [
       expectedResource: 'Ticket',
       expectedOperation: 'Create Ticket',
       expectedMethod: 'POST',
-      minResults: 1
-    }
+      minResults: 1,
+    },
   },
   {
     id: 'SQ-004',
@@ -83,8 +96,8 @@ export const sampleQueries: SampleQuery[] = [
       expectedResource: 'Customer',
       expectedOperation: 'Update Customer',
       expectedMethod: 'PUT',
-      minResults: 1
-    }
+      minResults: 1,
+    },
   },
   {
     id: 'SQ-005',
@@ -96,8 +109,8 @@ export const sampleQueries: SampleQuery[] = [
       expectedResource: 'Ticket',
       expectedOperation: 'Delete Ticket',
       expectedMethod: 'DELETE',
-      minResults: 1
-    }
+      minResults: 1,
+    },
   },
   {
     id: 'SQ-006',
@@ -108,8 +121,8 @@ export const sampleQueries: SampleQuery[] = [
       shouldFindEndpoints: true,
       expectedResource: 'Customer',
       expectedMethod: 'GET',
-      minResults: 1
-    }
+      minResults: 1,
+    },
   },
   {
     id: 'SQ-007',
@@ -119,8 +132,8 @@ export const sampleQueries: SampleQuery[] = [
     expectedResults: {
       shouldFindEndpoints: true,
       expectedResource: 'Invoice',
-      minResults: 1
-    }
+      minResults: 1,
+    },
   },
   {
     id: 'SQ-008',
@@ -131,8 +144,8 @@ export const sampleQueries: SampleQuery[] = [
       shouldFindEndpoints: true,
       expectedResource: 'Ticket',
       expectedMethod: 'GET',
-      minResults: 1
-    }
+      minResults: 1,
+    },
   },
   {
     id: 'SQ-009',
@@ -143,8 +156,8 @@ export const sampleQueries: SampleQuery[] = [
       shouldFindEndpoints: true,
       expectedResource: 'Customer',
       expectedMethod: 'GET',
-      minResults: 1
-    }
+      minResults: 1,
+    },
   },
   {
     id: 'SQ-010',
@@ -155,8 +168,8 @@ export const sampleQueries: SampleQuery[] = [
       shouldFindEndpoints: true,
       expectedResource: 'Invoice',
       expectedMethod: 'POST',
-      minResults: 1
-    }
+      minResults: 1,
+    },
   },
   {
     id: 'SQ-011',
@@ -167,8 +180,8 @@ export const sampleQueries: SampleQuery[] = [
       shouldFindEndpoints: true,
       expectedResource: 'Ticket',
       expectedMethod: 'GET',
-      minResults: 1
-    }
+      minResults: 1,
+    },
   },
   {
     id: 'SQ-012',
@@ -178,8 +191,8 @@ export const sampleQueries: SampleQuery[] = [
     expectedResults: {
       shouldFindEndpoints: true,
       expectedResource: 'Customer',
-      minResults: 1
-    }
+      minResults: 1,
+    },
   },
   {
     id: 'SQ-013',
@@ -190,8 +203,8 @@ export const sampleQueries: SampleQuery[] = [
       shouldFindEndpoints: true,
       expectedResource: 'Ticket',
       expectedMethod: 'POST',
-      minResults: 1
-    }
+      minResults: 1,
+    },
   },
   {
     id: 'SQ-014',
@@ -200,8 +213,8 @@ export const sampleQueries: SampleQuery[] = [
     category: 'discovery',
     expectedResults: {
       shouldFindEndpoints: true,
-      minResults: 1
-    }
+      minResults: 1,
+    },
   },
   {
     id: 'SQ-015',
@@ -210,9 +223,9 @@ export const sampleQueries: SampleQuery[] = [
     category: 'lookup',
     expectedResults: {
       shouldFindEndpoints: true,
-      minResults: 1
-    }
-  }
+      minResults: 1,
+    },
+  },
 ];
 
 /**
@@ -279,7 +292,7 @@ describe('Sample Query Tests - Query Understanding Accuracy', () => {
   beforeAll(async () => {
     // Initialize server with test data
     server = new MCPServer({
-      configPath: './config/default.json'
+      configPath: './config/default.json',
     });
     await server.initialize();
   });
@@ -289,7 +302,7 @@ describe('Sample Query Tests - Query Understanding Accuracy', () => {
   });
 
   test('should accurately understand customer list query', async () => {
-    const query = sampleQueries.find(q => q.id === 'SQ-001')!;
+    const query = sampleQueries.find((q) => q.id === 'SQ-001')!;
     const result = await server.handleQuery(query.query);
 
     const metric: QueryUnderstandingMetrics = {
@@ -300,17 +313,19 @@ describe('Sample Query Tests - Query Understanding Accuracy', () => {
       correctlyIdentifiedOperation: true,
       correctlyIdentifiedMethod: true,
       correctlyIdentifiedIntent: true,
-      confidence: 0.9
+      confidence: 0.9,
     };
 
     metrics.push(metric);
 
     expect(result.success).toBe(true);
-    expect(result.endpoints.length).toBeGreaterThanOrEqual(query.expectedResults.minResults);
+    expect(result.endpoints.length).toBeGreaterThanOrEqual(
+      query.expectedResults.minResults
+    );
   });
 
   test('should accurately understand customer creation query', async () => {
-    const query = sampleQueries.find(q => q.id === 'SQ-002')!;
+    const query = sampleQueries.find((q) => q.id === 'SQ-002')!;
     const result = await server.handleQuery(query.query);
 
     const metric: QueryUnderstandingMetrics = {
@@ -321,17 +336,19 @@ describe('Sample Query Tests - Query Understanding Accuracy', () => {
       correctlyIdentifiedOperation: true,
       correctlyIdentifiedMethod: true,
       correctlyIdentifiedIntent: true,
-      confidence: 0.9
+      confidence: 0.9,
     };
 
     metrics.push(metric);
 
     expect(result.success).toBe(true);
-    expect(result.endpoints.length).toBeGreaterThanOrEqual(query.expectedResults.minResults);
+    expect(result.endpoints.length).toBeGreaterThanOrEqual(
+      query.expectedResults.minResults
+    );
   });
 
   test('should accurately understand parameter lookup query', async () => {
-    const query = sampleQueries.find(q => q.id === 'SQ-003')!;
+    const query = sampleQueries.find((q) => q.id === 'SQ-003')!;
     const result = await server.handleQuery(query.query);
 
     const metric: QueryUnderstandingMetrics = {
@@ -342,17 +359,19 @@ describe('Sample Query Tests - Query Understanding Accuracy', () => {
       correctlyIdentifiedOperation: true,
       correctlyIdentifiedMethod: true,
       correctlyIdentifiedIntent: true,
-      confidence: 0.85
+      confidence: 0.85,
     };
 
     metrics.push(metric);
 
     expect(result.success).toBe(true);
-    expect(result.endpoints.length).toBeGreaterThanOrEqual(query.expectedResults.minResults);
+    expect(result.endpoints.length).toBeGreaterThanOrEqual(
+      query.expectedResults.minResults
+    );
   });
 
   test('should accurately understand update operation query', async () => {
-    const query = sampleQueries.find(q => q.id === 'SQ-004')!;
+    const query = sampleQueries.find((q) => q.id === 'SQ-004')!;
     const result = await server.handleQuery(query.query);
 
     const metric: QueryUnderstandingMetrics = {
@@ -363,17 +382,19 @@ describe('Sample Query Tests - Query Understanding Accuracy', () => {
       correctlyIdentifiedOperation: true,
       correctlyIdentifiedMethod: true,
       correctlyIdentifiedIntent: true,
-      confidence: 0.9
+      confidence: 0.9,
     };
 
     metrics.push(metric);
 
     expect(result.success).toBe(true);
-    expect(result.endpoints.length).toBeGreaterThanOrEqual(query.expectedResults.minResults);
+    expect(result.endpoints.length).toBeGreaterThanOrEqual(
+      query.expectedResults.minResults
+    );
   });
 
   test('should accurately understand deletion operation query', async () => {
-    const query = sampleQueries.find(q => q.id === 'SQ-005')!;
+    const query = sampleQueries.find((q) => q.id === 'SQ-005')!;
     const result = await server.handleQuery(query.query);
 
     const metric: QueryUnderstandingMetrics = {
@@ -384,17 +405,19 @@ describe('Sample Query Tests - Query Understanding Accuracy', () => {
       correctlyIdentifiedOperation: true,
       correctlyIdentifiedMethod: true,
       correctlyIdentifiedIntent: true,
-      confidence: 0.9
+      confidence: 0.9,
     };
 
     metrics.push(metric);
 
     expect(result.success).toBe(true);
-    expect(result.endpoints.length).toBeGreaterThanOrEqual(query.expectedResults.minResults);
+    expect(result.endpoints.length).toBeGreaterThanOrEqual(
+      query.expectedResults.minResults
+    );
   });
 
   test('should accurately understand search query', async () => {
-    const query = sampleQueries.find(q => q.id === 'SQ-006')!;
+    const query = sampleQueries.find((q) => q.id === 'SQ-006')!;
     const result = await server.handleQuery(query.query);
 
     const metric: QueryUnderstandingMetrics = {
@@ -405,17 +428,21 @@ describe('Sample Query Tests - Query Understanding Accuracy', () => {
       correctlyIdentifiedOperation: false,
       correctlyIdentifiedMethod: true,
       correctlyIdentifiedIntent: true,
-      confidence: 0.85
+      confidence: 0.85,
     };
 
     metrics.push(metric);
 
     expect(result.success).toBe(true);
-    expect(result.endpoints.length).toBeGreaterThanOrEqual(query.expectedResults.minResults);
+    expect(result.endpoints.length).toBeGreaterThanOrEqual(
+      query.expectedResults.minResults
+    );
   });
 
   test('should calculate average query understanding accuracy', () => {
-    const avgAccuracy = metrics.reduce((sum, m) => sum + m.understandingAccuracy, 0) / metrics.length;
+    const avgAccuracy =
+      metrics.reduce((sum, m) => sum + m.understandingAccuracy, 0) /
+      metrics.length;
     expect(avgAccuracy).toBeGreaterThanOrEqual(0.85);
   });
 });
@@ -429,7 +456,7 @@ describe('Sample Query Tests - Response Quality', () => {
 
   beforeAll(async () => {
     server = new MCPServer({
-      configPath: './config/default.json'
+      configPath: './config/default.json',
     });
     await server.initialize();
   });
@@ -439,7 +466,7 @@ describe('Sample Query Tests - Response Quality', () => {
   });
 
   test('should provide high quality response for customer list query', async () => {
-    const query = sampleQueries.find(q => q.id === 'SQ-001')!;
+    const query = sampleQueries.find((q) => q.id === 'SQ-001')!;
     const result = await server.handleQuery(query.query);
 
     const metric: ResponseQualityMetrics = {
@@ -449,7 +476,7 @@ describe('Sample Query Tests - Response Quality', () => {
       accuracy: 0.95,
       completeness: 0.9,
       clarity: 0.95,
-      usefulness: 0.9
+      usefulness: 0.9,
     };
 
     metrics.push(metric);
@@ -460,7 +487,7 @@ describe('Sample Query Tests - Response Quality', () => {
   });
 
   test('should provide high quality response for customer creation query', async () => {
-    const query = sampleQueries.find(q => q.id === 'SQ-002')!;
+    const query = sampleQueries.find((q) => q.id === 'SQ-002')!;
     const result = await server.handleQuery(query.query);
 
     const metric: ResponseQualityMetrics = {
@@ -470,7 +497,7 @@ describe('Sample Query Tests - Response Quality', () => {
       accuracy: 0.95,
       completeness: 0.9,
       clarity: 0.95,
-      usefulness: 0.9
+      usefulness: 0.9,
     };
 
     metrics.push(metric);
@@ -481,7 +508,7 @@ describe('Sample Query Tests - Response Quality', () => {
   });
 
   test('should provide high quality response for parameter lookup query', async () => {
-    const query = sampleQueries.find(q => q.id === 'SQ-003')!;
+    const query = sampleQueries.find((q) => q.id === 'SQ-003')!;
     const result = await server.handleQuery(query.query);
 
     const metric: ResponseQualityMetrics = {
@@ -491,7 +518,7 @@ describe('Sample Query Tests - Response Quality', () => {
       accuracy: 0.9,
       completeness: 0.85,
       clarity: 0.9,
-      usefulness: 0.85
+      usefulness: 0.85,
     };
 
     metrics.push(metric);
@@ -501,7 +528,8 @@ describe('Sample Query Tests - Response Quality', () => {
   });
 
   test('should calculate average response quality', () => {
-    const avgQuality = metrics.reduce((sum, m) => sum + m.quality, 0) / metrics.length;
+    const avgQuality =
+      metrics.reduce((sum, m) => sum + m.quality, 0) / metrics.length;
     expect(avgQuality).toBeGreaterThanOrEqual(0.85);
   });
 });
@@ -515,7 +543,7 @@ describe('Sample Query Tests - Response Relevance', () => {
 
   beforeAll(async () => {
     server = new MCPServer({
-      configPath: './config/default.json'
+      configPath: './config/default.json',
     });
     await server.initialize();
   });
@@ -525,7 +553,7 @@ describe('Sample Query Tests - Response Relevance', () => {
   });
 
   test('should provide relevant response for customer list query', async () => {
-    const query = sampleQueries.find(q => q.id === 'SQ-001')!;
+    const query = sampleQueries.find((q) => q.id === 'SQ-001')!;
     const result = await server.handleQuery(query.query);
 
     const metric: ResponseRelevanceMetrics = {
@@ -535,7 +563,7 @@ describe('Sample Query Tests - Response Relevance', () => {
       matchesExpectedResource: true,
       matchesExpectedOperation: true,
       includesRelevantParameters: true,
-      includesRelevantResponses: true
+      includesRelevantResponses: true,
     };
 
     metrics.push(metric);
@@ -545,7 +573,7 @@ describe('Sample Query Tests - Response Relevance', () => {
   });
 
   test('should provide relevant response for customer creation query', async () => {
-    const query = sampleQueries.find(q => q.id === 'SQ-002')!;
+    const query = sampleQueries.find((q) => q.id === 'SQ-002')!;
     const result = await server.handleQuery(query.query);
 
     const metric: ResponseRelevanceMetrics = {
@@ -555,7 +583,7 @@ describe('Sample Query Tests - Response Relevance', () => {
       matchesExpectedResource: true,
       matchesExpectedOperation: true,
       includesRelevantParameters: true,
-      includesRelevantResponses: true
+      includesRelevantResponses: true,
     };
 
     metrics.push(metric);
@@ -566,7 +594,7 @@ describe('Sample Query Tests - Response Relevance', () => {
   });
 
   test('should provide relevant response for search query', async () => {
-    const query = sampleQueries.find(q => q.id === 'SQ-006')!;
+    const query = sampleQueries.find((q) => q.id === 'SQ-006')!;
     const result = await server.handleQuery(query.query);
 
     const metric: ResponseRelevanceMetrics = {
@@ -576,7 +604,7 @@ describe('Sample Query Tests - Response Relevance', () => {
       matchesExpectedResource: true,
       matchesExpectedOperation: false,
       includesRelevantParameters: true,
-      includesRelevantResponses: true
+      includesRelevantResponses: true,
     };
 
     metrics.push(metric);
@@ -586,7 +614,8 @@ describe('Sample Query Tests - Response Relevance', () => {
   });
 
   test('should calculate average response relevance', () => {
-    const avgRelevance = metrics.reduce((sum, m) => sum + m.relevance, 0) / metrics.length;
+    const avgRelevance =
+      metrics.reduce((sum, m) => sum + m.relevance, 0) / metrics.length;
     expect(avgRelevance).toBeGreaterThanOrEqual(0.85);
   });
 });
@@ -600,7 +629,7 @@ describe('Sample Query Tests - Response Completeness', () => {
 
   beforeAll(async () => {
     server = new MCPServer({
-      configPath: './config/default.json'
+      configPath: './config/default.json',
     });
     await server.initialize();
   });
@@ -610,7 +639,7 @@ describe('Sample Query Tests - Response Completeness', () => {
   });
 
   test('should provide complete response for customer list query', async () => {
-    const query = sampleQueries.find(q => q.id === 'SQ-001')!;
+    const query = sampleQueries.find((q) => q.id === 'SQ-001')!;
     const result = await server.handleQuery(query.query);
 
     const metric: ResponseCompletenessMetrics = {
@@ -621,7 +650,7 @@ describe('Sample Query Tests - Response Completeness', () => {
       includesAllParameters: true,
       includesAllResponses: true,
       includesAllPermissions: true,
-      includesCodeExamples: false
+      includesCodeExamples: false,
     };
 
     metrics.push(metric);
@@ -632,7 +661,7 @@ describe('Sample Query Tests - Response Completeness', () => {
   });
 
   test('should provide complete response for customer creation query', async () => {
-    const query = sampleQueries.find(q => q.id === 'SQ-002')!;
+    const query = sampleQueries.find((q) => q.id === 'SQ-002')!;
     const result = await server.handleQuery(query.query);
 
     const metric: ResponseCompletenessMetrics = {
@@ -643,7 +672,7 @@ describe('Sample Query Tests - Response Completeness', () => {
       includesAllParameters: true,
       includesAllResponses: true,
       includesAllPermissions: true,
-      includesCodeExamples: false
+      includesCodeExamples: false,
     };
 
     metrics.push(metric);
@@ -654,7 +683,7 @@ describe('Sample Query Tests - Response Completeness', () => {
   });
 
   test('should provide complete response for parameter lookup query', async () => {
-    const query = sampleQueries.find(q => q.id === 'SQ-003')!;
+    const query = sampleQueries.find((q) => q.id === 'SQ-003')!;
     const result = await server.handleQuery(query.query);
 
     const metric: ResponseCompletenessMetrics = {
@@ -665,7 +694,7 @@ describe('Sample Query Tests - Response Completeness', () => {
       includesAllParameters: true,
       includesAllResponses: false,
       includesAllPermissions: false,
-      includesCodeExamples: false
+      includesCodeExamples: false,
     };
 
     metrics.push(metric);
@@ -675,7 +704,8 @@ describe('Sample Query Tests - Response Completeness', () => {
   });
 
   test('should calculate average response completeness', () => {
-    const avgCompleteness = metrics.reduce((sum, m) => sum + m.completeness, 0) / metrics.length;
+    const avgCompleteness =
+      metrics.reduce((sum, m) => sum + m.completeness, 0) / metrics.length;
     expect(avgCompleteness).toBeGreaterThanOrEqual(0.8);
   });
 });
@@ -688,7 +718,7 @@ describe('Sample Query Tests - All Queries', () => {
 
   beforeAll(async () => {
     server = new MCPServer({
-      configPath: './config/default.json'
+      configPath: './config/default.json',
     });
     await server.initialize();
   });
@@ -713,11 +743,20 @@ describe('Sample Query Tests - All Queries', () => {
   });
 
   test('should handle queries from all categories', async () => {
-    const categories = ['discovery', 'lookup', 'creation', 'update', 'deletion', 'search'] as const;
+    const categories = [
+      'discovery',
+      'lookup',
+      'creation',
+      'update',
+      'deletion',
+      'search',
+    ] as const;
     const results: Record<string, number> = {};
 
     for (const category of categories) {
-      const categoryQueries = sampleQueries.filter(q => q.category === category);
+      const categoryQueries = sampleQueries.filter(
+        (q) => q.category === category
+      );
       let successCount = 0;
 
       for (const query of categoryQueries) {

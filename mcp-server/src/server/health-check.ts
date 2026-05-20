@@ -44,14 +44,14 @@ export const healthCheckHandler = async (
       checks: {
         server: healthStatus.healthy,
         monitoring: true,
-        cache: true
+        cache: true,
       },
       metrics: {
         requestCount: healthStatus.metrics?.requestsTotal || 0,
         errorCount: healthStatus.metrics?.requestsFailed || 0,
         averageResponseTime: healthStatus.metrics?.averageResponseTime || 0,
-        memoryUsage
-      }
+        memoryUsage,
+      },
     };
 
     const statusCode = healthStatus.healthy ? 200 : 503;
@@ -60,14 +60,14 @@ export const healthCheckHandler = async (
     logger.info('Health check completed', {
       status: response.status,
       uptime: response.uptime,
-      memoryUsage: memoryUsage.heapUsed
+      memoryUsage: memoryUsage.heapUsed,
     });
   } catch (error) {
     logger.error('Health check failed', { error });
     res.status(500).json({
       status: 'unhealthy',
       timestamp: new Date().toISOString(),
-      error: 'Health check failed'
+      error: 'Health check failed',
     });
   }
 };
@@ -85,19 +85,19 @@ export const readinessCheckHandler = async (
     if (healthStatus.healthy) {
       res.status(200).json({
         status: 'ready',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
     } else {
       res.status(503).json({
         status: 'not ready',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
     }
   } catch (error) {
     logger.error('Readiness check failed', { error });
     res.status(503).json({
       status: 'not ready',
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 };
@@ -112,7 +112,7 @@ export const livenessCheckHandler = async (
   res.status(200).json({
     status: 'alive',
     timestamp: new Date().toISOString(),
-    uptime: process.uptime()
+    uptime: process.uptime(),
   });
 };
 
@@ -159,7 +159,7 @@ export const metricsHandler = async (
       ``,
       `# HELP mcp_server_health_status Server health status (1=healthy, 0=unhealthy)`,
       `# TYPE mcp_server_health_status gauge`,
-      `mcp_server_health_status ${healthStatus.healthy ? 1 : 0}`
+      `mcp_server_health_status ${healthStatus.healthy ? 1 : 0}`,
     ].join('\n');
 
     res.set('Content-Type', 'text/plain');

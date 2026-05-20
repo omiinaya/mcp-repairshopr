@@ -11,7 +11,7 @@ import {
   searchByMethod,
   searchByPermission,
   SearchResult,
-  SearchParams
+  SearchParams,
 } from '../../src/tools/search';
 
 describe('Search Tool', () => {
@@ -38,23 +38,23 @@ describe('Search Tool', () => {
                 type: 'integer',
                 required: false,
                 description: 'Page number for pagination',
-                paramType: 'query'
+                paramType: 'query',
               },
               {
                 name: 'limit',
                 type: 'integer',
                 required: false,
                 description: 'Number of results per page',
-                paramType: 'query'
-              }
+                paramType: 'query',
+              },
             ],
             responses: [
               {
                 statusCode: 200,
                 description: 'Successful response',
-                example: { customers: [] }
-              }
-            ]
+                example: { customers: [] },
+              },
+            ],
           },
           {
             resource: 'Customer',
@@ -70,25 +70,25 @@ describe('Search Tool', () => {
                 type: 'string',
                 required: true,
                 description: 'Customer name',
-                paramType: 'body'
+                paramType: 'body',
               },
               {
                 name: 'email',
                 type: 'string',
                 required: true,
                 description: 'Customer email address',
-                paramType: 'body'
-              }
+                paramType: 'body',
+              },
             ],
             responses: [
               {
                 statusCode: 201,
                 description: 'Customer created successfully',
-                example: { id: 1, name: 'Test Customer' }
-              }
-            ]
-          }
-        ]
+                example: { id: 1, name: 'Test Customer' },
+              },
+            ],
+          },
+        ],
       },
       {
         resourceName: 'Ticket',
@@ -106,16 +106,16 @@ describe('Search Tool', () => {
                 type: 'string',
                 required: false,
                 description: 'Filter by ticket status',
-                paramType: 'query'
-              }
+                paramType: 'query',
+              },
             ],
             responses: [
               {
                 statusCode: 200,
                 description: 'Successful response',
-                example: { tickets: [] }
-              }
-            ]
+                example: { tickets: [] },
+              },
+            ],
           },
           {
             resource: 'Ticket',
@@ -131,16 +131,16 @@ describe('Search Tool', () => {
                 type: 'string',
                 required: true,
                 description: 'Ticket subject',
-                paramType: 'body'
-              }
+                paramType: 'body',
+              },
             ],
             responses: [
               {
                 statusCode: 201,
                 description: 'Ticket created successfully',
-                example: { id: 1, subject: 'Test Ticket' }
-              }
-            ]
+                example: { id: 1, subject: 'Test Ticket' },
+              },
+            ],
           },
           {
             resource: 'Ticket',
@@ -155,8 +155,8 @@ describe('Search Tool', () => {
                 type: 'integer',
                 required: true,
                 description: 'Ticket ID',
-                paramType: 'path'
-              }
+                paramType: 'path',
+              },
             ],
             requestBody: [
               {
@@ -164,18 +164,18 @@ describe('Search Tool', () => {
                 type: 'string',
                 required: false,
                 description: 'New ticket status',
-                paramType: 'body'
-              }
+                paramType: 'body',
+              },
             ],
             responses: [
               {
                 statusCode: 200,
                 description: 'Ticket updated successfully',
-                example: { id: 1, status: 'closed' }
-              }
-            ]
-          }
-        ]
+                example: { id: 1, status: 'closed' },
+              },
+            ],
+          },
+        ],
       },
       {
         resourceName: 'Invoice',
@@ -192,12 +192,12 @@ describe('Search Tool', () => {
               {
                 statusCode: 200,
                 description: 'Successful response',
-                example: { invoices: [] }
-              }
-            ]
-          }
-        ]
-      }
+                example: { invoices: [] },
+              },
+            ],
+          },
+        ],
+      },
     ];
 
     // Build metadata index
@@ -211,7 +211,7 @@ describe('Search Tool', () => {
       for (const endpoint of document.endpoints) {
         const text = `${endpoint.resource} ${endpoint.operation} ${endpoint.description}`;
         const embeddingId = `${endpoint.method}:${endpoint.path}`;
-        
+
         // Create a simple embedding vector (in real implementation, this would use actual embeddings)
         const embedding = {
           id: embeddingId,
@@ -220,10 +220,10 @@ describe('Search Tool', () => {
             endpointId: embeddingId,
             resource: endpoint.resource,
             method: endpoint.method,
-            path: endpoint.path
-          }
+            path: endpoint.path,
+          },
         };
-        
+
         vectorStore.addVectors([embedding]);
       }
     }
@@ -233,7 +233,8 @@ describe('Search Tool', () => {
    * Helper function to create a simple embedding vector for testing
    */
   function createSimpleEmbedding(text: string): number[] {
-    const characterSet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 .,!?;:()-\'"/';
+    const characterSet =
+      'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 .,!?;:()-\'"/';
     const embeddingDimension = characterSet.length;
     const vector = new Array(embeddingDimension).fill(0);
     const totalChars = text.length;
@@ -258,7 +259,7 @@ describe('Search Tool', () => {
     test('should return results for a valid query', () => {
       const params: SearchParams = {
         query: 'get customers',
-        limit: 5
+        limit: 5,
       };
 
       const results = searchApiDocs(params, vectorStore, metadataIndex);
@@ -271,7 +272,7 @@ describe('Search Tool', () => {
     test('should return results with correct structure', () => {
       const params: SearchParams = {
         query: 'create ticket',
-        limit: 5
+        limit: 5,
       };
 
       const results = searchApiDocs(params, vectorStore, metadataIndex);
@@ -282,11 +283,11 @@ describe('Search Tool', () => {
         expect(result).toHaveProperty('score');
         expect(result).toHaveProperty('context');
         expect(result).toHaveProperty('matchType');
-        
+
         expect(typeof result.score).toBe('number');
         expect(result.score).toBeGreaterThanOrEqual(0);
         expect(result.score).toBeLessThanOrEqual(1);
-        
+
         expect(typeof result.context).toBe('string');
         expect(['semantic', 'keyword', 'hybrid']).toContain(result.matchType);
       }
@@ -295,7 +296,7 @@ describe('Search Tool', () => {
     test('should rank results by relevance score', () => {
       const params: SearchParams = {
         query: 'customer',
-        limit: 10
+        limit: 10,
       };
 
       const results = searchApiDocs(params, vectorStore, metadataIndex);
@@ -313,17 +314,18 @@ describe('Search Tool', () => {
     test('should find results matching query terms in description', () => {
       const params: SearchParams = {
         query: 'support ticket',
-        limit: 5
+        limit: 5,
       };
 
       const results = searchApiDocs(params, vectorStore, metadataIndex);
 
       expect(results.length).toBeGreaterThan(0);
-      
+
       // Check that at least one result contains the query terms
-      const hasMatch = results.some(result => 
-        result.endpoint.description.toLowerCase().includes('support') ||
-        result.endpoint.description.toLowerCase().includes('ticket')
+      const hasMatch = results.some(
+        (result) =>
+          result.endpoint.description.toLowerCase().includes('support') ||
+          result.endpoint.description.toLowerCase().includes('ticket')
       );
       expect(hasMatch).toBe(true);
     });
@@ -331,15 +333,15 @@ describe('Search Tool', () => {
     test('should find results matching query terms in resource name', () => {
       const params: SearchParams = {
         query: 'invoice',
-        limit: 5
+        limit: 5,
       };
 
       const results = searchApiDocs(params, vectorStore, metadataIndex);
 
       expect(results.length).toBeGreaterThan(0);
-      
-      const hasInvoice = results.some(result => 
-        result.endpoint.resource.toLowerCase() === 'invoice'
+
+      const hasInvoice = results.some(
+        (result) => result.endpoint.resource.toLowerCase() === 'invoice'
       );
       expect(hasInvoice).toBe(true);
     });
@@ -347,14 +349,14 @@ describe('Search Tool', () => {
     test('should find results matching query terms in operation name', () => {
       const params: SearchParams = {
         query: 'create',
-        limit: 10
+        limit: 10,
       };
 
       const results = searchApiDocs(params, vectorStore, metadataIndex);
 
       expect(results.length).toBeGreaterThan(0);
-      
-      const hasCreate = results.some(result => 
+
+      const hasCreate = results.some((result) =>
         result.endpoint.operation.toLowerCase().includes('create')
       );
       expect(hasCreate).toBe(true);
@@ -365,29 +367,29 @@ describe('Search Tool', () => {
     test('should combine semantic and keyword results', () => {
       const params: SearchParams = {
         query: 'get customer list',
-        limit: 5
+        limit: 5,
       };
 
       const results = searchApiDocs(params, vectorStore, metadataIndex);
 
       expect(results.length).toBeGreaterThan(0);
-      
+
       // Check that results have hybrid match type
-      const hasHybrid = results.some(result => result.matchType === 'hybrid');
+      const hasHybrid = results.some((result) => result.matchType === 'hybrid');
       expect(hasHybrid).toBe(true);
     });
 
     test('should deduplicate results from both search methods', () => {
       const params: SearchParams = {
         query: 'ticket',
-        limit: 10
+        limit: 10,
       };
 
       const results = searchApiDocs(params, vectorStore, metadataIndex);
 
       // Check that there are no duplicate endpoints
       const endpointKeys = new Set(
-        results.map(r => `${r.endpoint.method}:${r.endpoint.path}`)
+        results.map((r) => `${r.endpoint.method}:${r.endpoint.path}`)
       );
       expect(endpointKeys.size).toBe(results.length);
     });
@@ -398,15 +400,15 @@ describe('Search Tool', () => {
       const params: SearchParams = {
         query: 'get',
         resource: 'Customer',
-        limit: 10
+        limit: 10,
       };
 
       const results = searchApiDocs(params, vectorStore, metadataIndex);
 
       expect(results.length).toBeGreaterThan(0);
-      
+
       // All results should be from Customer resource
-      results.forEach(result => {
+      results.forEach((result) => {
         expect(result.endpoint.resource).toBe('Customer');
       });
     });
@@ -415,7 +417,7 @@ describe('Search Tool', () => {
       const params: SearchParams = {
         query: 'get',
         resource: 'NonExistent',
-        limit: 10
+        limit: 10,
       };
 
       const results = searchApiDocs(params, vectorStore, metadataIndex);
@@ -427,7 +429,7 @@ describe('Search Tool', () => {
       const results = searchByResource('Customer', metadataIndex);
 
       expect(results.length).toBeGreaterThan(0);
-      results.forEach(result => {
+      results.forEach((result) => {
         expect(result.resource).toBe('Customer');
       });
     });
@@ -438,15 +440,15 @@ describe('Search Tool', () => {
       const params: SearchParams = {
         query: 'customer',
         method: 'GET',
-        limit: 10
+        limit: 10,
       };
 
       const results = searchApiDocs(params, vectorStore, metadataIndex);
 
       expect(results.length).toBeGreaterThan(0);
-      
+
       // All results should be GET requests
-      results.forEach(result => {
+      results.forEach((result) => {
         expect(result.endpoint.method).toBe('GET');
       });
     });
@@ -455,13 +457,13 @@ describe('Search Tool', () => {
       const params1: SearchParams = {
         query: 'customer',
         method: 'get',
-        limit: 10
+        limit: 10,
       };
 
       const params2: SearchParams = {
         query: 'customer',
         method: 'GET',
-        limit: 10
+        limit: 10,
       };
 
       const results1 = searchApiDocs(params1, vectorStore, metadataIndex);
@@ -474,7 +476,7 @@ describe('Search Tool', () => {
       const results = searchByMethod('POST', metadataIndex);
 
       expect(results.length).toBeGreaterThan(0);
-      results.forEach(result => {
+      results.forEach((result) => {
         expect(result.method).toBe('POST');
       });
     });
@@ -485,15 +487,15 @@ describe('Search Tool', () => {
       const params: SearchParams = {
         query: 'customer',
         permission: 'customer.view',
-        limit: 10
+        limit: 10,
       };
 
       const results = searchApiDocs(params, vectorStore, metadataIndex);
 
       expect(results.length).toBeGreaterThan(0);
-      
+
       // All results should have the specified permission
-      results.forEach(result => {
+      results.forEach((result) => {
         expect(result.endpoint.permission).toBe('customer.view');
       });
     });
@@ -502,7 +504,7 @@ describe('Search Tool', () => {
       const params: SearchParams = {
         query: 'customer',
         permission: 'nonexistent.permission',
-        limit: 10
+        limit: 10,
       };
 
       const results = searchApiDocs(params, vectorStore, metadataIndex);
@@ -514,7 +516,7 @@ describe('Search Tool', () => {
       const results = searchByPermission('ticket.view', metadataIndex);
 
       expect(results.length).toBeGreaterThan(0);
-      results.forEach(result => {
+      results.forEach((result) => {
         expect(result.permission).toBe('ticket.view');
       });
     });
@@ -524,7 +526,7 @@ describe('Search Tool', () => {
     test('should return results sorted by relevance score', () => {
       const params: SearchParams = {
         query: 'create',
-        limit: 10
+        limit: 10,
       };
 
       const results = searchApiDocs(params, vectorStore, metadataIndex);
@@ -539,7 +541,7 @@ describe('Search Tool', () => {
     test('should assign higher scores to more relevant results', () => {
       const params: SearchParams = {
         query: 'create customer',
-        limit: 5
+        limit: 5,
       };
 
       const results = searchApiDocs(params, vectorStore, metadataIndex);
@@ -547,10 +549,10 @@ describe('Search Tool', () => {
       if (results.length > 0) {
         // The top result should be related to creating customers
         const topResult = results[0];
-        const isRelevant = 
+        const isRelevant =
           topResult.endpoint.resource.toLowerCase().includes('customer') ||
           topResult.endpoint.operation.toLowerCase().includes('create');
-        
+
         expect(isRelevant).toBe(true);
       }
     });
@@ -560,7 +562,7 @@ describe('Search Tool', () => {
     test('should respect the limit parameter', () => {
       const params: SearchParams = {
         query: 'get',
-        limit: 2
+        limit: 2,
       };
 
       const results = searchApiDocs(params, vectorStore, metadataIndex);
@@ -570,7 +572,7 @@ describe('Search Tool', () => {
 
     test('should use default limit of 5 when not specified', () => {
       const params: SearchParams = {
-        query: 'get'
+        query: 'get',
       };
 
       const results = searchApiDocs(params, vectorStore, metadataIndex);
@@ -581,12 +583,12 @@ describe('Search Tool', () => {
     test('should return different results for different limit values', () => {
       const params1: SearchParams = {
         query: 'get',
-        limit: 2
+        limit: 2,
       };
 
       const params2: SearchParams = {
         query: 'get',
-        limit: 5
+        limit: 5,
       };
 
       const results1 = searchApiDocs(params1, vectorStore, metadataIndex);
@@ -600,7 +602,7 @@ describe('Search Tool', () => {
     test('should throw error for empty query', () => {
       const params: SearchParams = {
         query: '',
-        limit: 5
+        limit: 5,
       };
 
       expect(() => {
@@ -611,7 +613,7 @@ describe('Search Tool', () => {
     test('should throw error for whitespace-only query', () => {
       const params: SearchParams = {
         query: '   ',
-        limit: 5
+        limit: 5,
       };
 
       expect(() => {
@@ -623,7 +625,7 @@ describe('Search Tool', () => {
       const emptyVectorStore = new VectorStore();
       const params: SearchParams = {
         query: 'test',
-        limit: 5
+        limit: 5,
       };
 
       const results = searchApiDocs(params, emptyVectorStore, metadataIndex);
@@ -637,13 +639,13 @@ describe('Search Tool', () => {
     test('should generate context snippets for results', () => {
       const params: SearchParams = {
         query: 'customer',
-        limit: 5
+        limit: 5,
       };
 
       const results = searchApiDocs(params, vectorStore, metadataIndex);
 
       if (results.length > 0) {
-        results.forEach(result => {
+        results.forEach((result) => {
           expect(result.context).toBeDefined();
           expect(typeof result.context).toBe('string');
           expect(result.context.length).toBeGreaterThan(0);
@@ -654,13 +656,13 @@ describe('Search Tool', () => {
     test('should include query terms in context when possible', () => {
       const params: SearchParams = {
         query: 'create',
-        limit: 5
+        limit: 5,
       };
 
       const results = searchApiDocs(params, vectorStore, metadataIndex);
 
       if (results.length > 0) {
-        const hasQueryInContext = results.some(result => 
+        const hasQueryInContext = results.some((result) =>
           result.context.toLowerCase().includes('create')
         );
         expect(hasQueryInContext).toBe(true);
@@ -674,12 +676,12 @@ describe('Search Tool', () => {
         query: 'get',
         resource: 'Customer',
         method: 'GET',
-        limit: 10
+        limit: 10,
       };
 
       const results = searchApiDocs(params, vectorStore, metadataIndex);
 
-      results.forEach(result => {
+      results.forEach((result) => {
         expect(result.endpoint.resource).toBe('Customer');
         expect(result.endpoint.method).toBe('GET');
       });
@@ -690,7 +692,7 @@ describe('Search Tool', () => {
         query: 'get',
         resource: 'Customer',
         method: 'POST',
-        limit: 10
+        limit: 10,
       };
 
       const results = searchApiDocs(params, vectorStore, metadataIndex);

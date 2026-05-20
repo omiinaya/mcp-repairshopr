@@ -1,6 +1,6 @@
 /**
  * Response Formatting Tests
- * 
+ *
  * Tests to validate response formatting accuracy, context window management,
  * response summarization, response prioritization, response structure,
  * and creates formatting metrics.
@@ -16,11 +16,15 @@ import {
   formatCollapsibleSection,
   createFormattingTemplate,
   OptimizedContext,
-  FormattedResponse
+  FormattedResponse,
 } from '../../src/retrieval/formatter';
 import { SearchResult } from '../../src/retrieval/scoring';
 import { ApiEndpoint, ApiParameter, ApiResponse } from '../../src/utils/types';
-import { generateEndpoint, generateParameter, generateResponse } from '../utils/data-generators';
+import {
+  generateEndpoint,
+  generateParameter,
+  generateResponse,
+} from '../utils/data-generators';
 
 /**
  * Response formatting metrics
@@ -50,11 +54,11 @@ function createMockSearchResults(count: number): SearchResult[] {
       description: `Description for operation ${i}`,
       method: ['GET', 'POST', 'PUT', 'DELETE'][i % 4] as any,
       path: `/resource${i % 5}/${i}`,
-      permission: `resource${i % 5}.view`
+      permission: `resource${i % 5}.view`,
     }),
-    score: 1 - (i * 0.1),
+    score: 1 - i * 0.1,
     context: `Context for result ${i}`,
-    matchType: ['semantic', 'keyword', 'hybrid'][i % 3] as any
+    matchType: ['semantic', 'keyword', 'hybrid'][i % 3] as any,
   }));
 }
 
@@ -81,7 +85,7 @@ describe('Response Formatting - Accuracy', () => {
 
     expect(formatted.json).toBeDefined();
     expect(typeof formatted.json).toBe('string');
-    
+
     const parsed = JSON.parse(formatted.json);
     expect(parsed).toHaveProperty('results');
     expect(parsed).toHaveProperty('count');
@@ -254,9 +258,9 @@ describe('Response Formatting - Summarization', () => {
   });
 
   test('should respect summarization threshold', () => {
-    const contextManager = new ContextManager({ 
+    const contextManager = new ContextManager({
       enableSummarization: true,
-      summarizationThreshold: 10
+      summarizationThreshold: 10,
     });
 
     const results = createMockSearchResults(5);
@@ -295,10 +299,12 @@ describe('Response Formatting - Prioritization', () => {
     const prioritized = contextManager.prioritizeContext(results, '');
 
     expect(prioritized.length).toBe(results.length);
-    
+
     // Check that results are sorted by score in descending order
     for (let i = 1; i < prioritized.length; i++) {
-      expect(prioritized[i - 1].score).toBeGreaterThanOrEqual(prioritized[i].score);
+      expect(prioritized[i - 1].score).toBeGreaterThanOrEqual(
+        prioritized[i].score
+      );
     }
   });
 
@@ -335,7 +341,7 @@ describe('Response Formatting - Structure', () => {
   test('should format parameters as markdown table', () => {
     const parameters = [
       generateParameter({ name: 'param1', type: 'string', required: true }),
-      generateParameter({ name: 'param2', type: 'integer', required: false })
+      generateParameter({ name: 'param2', type: 'integer', required: false }),
     ];
 
     const formatted = formatParameters(parameters, 'markdown');
@@ -350,7 +356,7 @@ describe('Response Formatting - Structure', () => {
   test('should format parameters as HTML table', () => {
     const parameters = [
       generateParameter({ name: 'param1', type: 'string', required: true }),
-      generateParameter({ name: 'param2', type: 'integer', required: false })
+      generateParameter({ name: 'param2', type: 'integer', required: false }),
     ];
 
     const formatted = formatParameters(parameters, 'html');
@@ -367,7 +373,7 @@ describe('Response Formatting - Structure', () => {
   test('should format parameters as JSON', () => {
     const parameters = [
       generateParameter({ name: 'param1', type: 'string', required: true }),
-      generateParameter({ name: 'param2', type: 'integer', required: false })
+      generateParameter({ name: 'param2', type: 'integer', required: false }),
     ];
 
     const formatted = formatParameters(parameters, 'json');
@@ -383,7 +389,7 @@ describe('Response Formatting - Structure', () => {
   test('should format responses as markdown list', () => {
     const responses = [
       generateResponse({ statusCode: 200, description: 'Success' }),
-      generateResponse({ statusCode: 404, description: 'Not Found' })
+      generateResponse({ statusCode: 404, description: 'Not Found' }),
     ];
 
     const formatted = formatResponses(responses, 'markdown');
@@ -397,7 +403,7 @@ describe('Response Formatting - Structure', () => {
   test('should format responses as HTML list', () => {
     const responses = [
       generateResponse({ statusCode: 200, description: 'Success' }),
-      generateResponse({ statusCode: 404, description: 'Not Found' })
+      generateResponse({ statusCode: 404, description: 'Not Found' }),
     ];
 
     const formatted = formatResponses(responses, 'html');
@@ -410,7 +416,7 @@ describe('Response Formatting - Structure', () => {
   test('should format responses as JSON', () => {
     const responses = [
       generateResponse({ statusCode: 200, description: 'Success' }),
-      generateResponse({ statusCode: 404, description: 'Not Found' })
+      generateResponse({ statusCode: 404, description: 'Not Found' }),
     ];
 
     const formatted = formatResponses(responses, 'json');
@@ -486,7 +492,9 @@ describe('Response Formatting - Utilities', () => {
     const template = createFormattingTemplate('parameters');
 
     expect(template.type).toBe('parameters');
-    expect(template.template).toContain('| Name | Type | Required | Description |');
+    expect(template.template).toContain(
+      '| Name | Type | Required | Description |'
+    );
   });
 
   test('should create responses template correctly', () => {
@@ -510,7 +518,10 @@ describe('Response Formatting - Progressive Disclosure', () => {
   test('should create progressive disclosure layers', () => {
     const results = createMockSearchResults(10);
     const maxTokens = 5000;
-    const progressive = contextManager.progressiveDisclosure(results, maxTokens);
+    const progressive = contextManager.progressiveDisclosure(
+      results,
+      maxTokens
+    );
 
     expect(progressive).toHaveProperty('summary');
     expect(progressive).toHaveProperty('summaryTokens');
@@ -524,16 +535,24 @@ describe('Response Formatting - Progressive Disclosure', () => {
   test('should have minimal tokens in summary layer', () => {
     const results = createMockSearchResults(10);
     const maxTokens = 5000;
-    const progressive = contextManager.progressiveDisclosure(results, maxTokens);
+    const progressive = contextManager.progressiveDisclosure(
+      results,
+      maxTokens
+    );
 
     expect(progressive.summaryTokens).toBeLessThan(progressive.detailsTokens);
-    expect(progressive.detailsTokens).toBeLessThanOrEqual(progressive.fullTokens);
+    expect(progressive.detailsTokens).toBeLessThanOrEqual(
+      progressive.fullTokens
+    );
   });
 
   test('should include top 3 results in details layer', () => {
     const results = createMockSearchResults(10);
     const maxTokens = 5000;
-    const progressive = contextManager.progressiveDisclosure(results, maxTokens);
+    const progressive = contextManager.progressiveDisclosure(
+      results,
+      maxTokens
+    );
 
     expect(progressive.details).toContain('Top Results');
   });
@@ -541,7 +560,10 @@ describe('Response Formatting - Progressive Disclosure', () => {
   test('should handle empty results for progressive disclosure', () => {
     const results: SearchResult[] = [];
     const maxTokens = 5000;
-    const progressive = contextManager.progressiveDisclosure(results, maxTokens);
+    const progressive = contextManager.progressiveDisclosure(
+      results,
+      maxTokens
+    );
 
     expect(progressive.summary).toBe('');
     expect(progressive.details).toBe('');
@@ -588,7 +610,7 @@ describe('Response Formatting - Caching', () => {
     contextManager.cacheContext(cacheKey, optimized);
 
     // Wait for cache to expire
-    await new Promise(resolve => setTimeout(resolve, 150));
+    await new Promise((resolve) => setTimeout(resolve, 150));
 
     const cached = contextManager.getCachedContext(cacheKey);
     expect(cached).toBeNull();
@@ -616,7 +638,10 @@ describe('Response Formatting - Caching', () => {
 
     // Add 5 entries to cache with max size of 3
     for (let i = 0; i < 5; i++) {
-      const optimized = contextManager.optimizeContextWindow(results, maxTokens);
+      const optimized = contextManager.optimizeContextWindow(
+        results,
+        maxTokens
+      );
       contextManager.cacheContext(`key-${i}`, optimized);
     }
 
@@ -641,7 +666,7 @@ describe('Response Formatting - Metrics Generation', () => {
       summarizationAccuracy: 95,
       prioritizationAccuracy: 100,
       structureAccuracy: 99,
-      overallAccuracy: 98.3
+      overallAccuracy: 98.3,
     };
 
     expect(metrics).toHaveProperty('totalResponses');
@@ -669,9 +694,7 @@ describe('Response Formatting - Metrics Generation', () => {
       summarizationAccuracy: 95,
       prioritizationAccuracy: 100,
       structureAccuracy: 99,
-      overallAccuracy: (
-        99 + 100 + 98 + 97 + 95 + 100 + 99
-      ) / 7
+      overallAccuracy: (99 + 100 + 98 + 97 + 95 + 100 + 99) / 7,
     };
 
     expect(metrics.overallAccuracy).toBeGreaterThan(95);

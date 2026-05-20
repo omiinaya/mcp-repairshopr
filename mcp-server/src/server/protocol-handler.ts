@@ -11,15 +11,15 @@ import { config } from '../utils/config';
 // Define Zod schemas for MCP methods
 const ListToolsRequestSchema = z.object({
   method: z.literal('tools/list'),
-  params: z.object({}).optional()
+  params: z.object({}).optional(),
 });
 
 const CallToolRequestSchema = z.object({
   method: z.literal('tools/call'),
   params: z.object({
     name: z.string(),
-    arguments: z.any().optional()
-  })
+    arguments: z.any().optional(),
+  }),
 });
 
 const InitializeRequestSchema = z.object({
@@ -29,14 +29,14 @@ const InitializeRequestSchema = z.object({
     capabilities: z.object({}).optional(),
     clientInfo: z.object({
       name: z.string(),
-      version: z.string()
-    })
-  })
+      version: z.string(),
+    }),
+  }),
 });
 
 const InitializedNotificationSchema = z.object({
   method: z.literal('notifications/initialized'),
-  params: z.object({}).optional()
+  params: z.object({}).optional(),
 });
 
 /**
@@ -101,8 +101,8 @@ export class ProtocolHandler {
   constructor() {
     this.capabilities = {
       tools: {
-        listChanged: true
-      }
+        listChanged: true,
+      },
     };
   }
 
@@ -162,9 +162,12 @@ export class ProtocolHandler {
     });
 
     // Set up initialized notification handler
-    this.server.setNotificationHandler(InitializedNotificationSchema, async (notification) => {
-      return this.handleInitialized(notification);
-    });
+    this.server.setNotificationHandler(
+      InitializedNotificationSchema,
+      async (notification) => {
+        return this.handleInitialized(notification);
+      }
+    );
 
     logger.info('MCP capability handlers configured');
   }
@@ -188,8 +191,8 @@ export class ProtocolHandler {
         capabilities: this.capabilities,
         serverInfo: {
           name: config.serverName,
-          version: config.serverVersion
-        }
+          version: config.serverVersion,
+        },
       };
     } catch (error) {
       logger.error('Initialize request failed', { context, error });
@@ -202,14 +205,21 @@ export class ProtocolHandler {
    * Handle initialized notification
    */
   private async handleInitialized(request: any): Promise<any> {
-    const context = this.createRequestContext('notifications/initialized', request.params);
+    const context = this.createRequestContext(
+      'notifications/initialized',
+      request.params
+    );
 
     try {
       logger.info('Client initialized', { context });
       return { success: true };
     } catch (error) {
       logger.error('Initialized notification failed', { context, error });
-      throw this.createErrorResponse(-32603, 'Initialized notification failed', error);
+      throw this.createErrorResponse(
+        -32603,
+        'Initialized notification failed',
+        error
+      );
     }
   }
 
@@ -222,14 +232,14 @@ export class ProtocolHandler {
     try {
       logger.debug('Handling tools/list request', { context });
 
-      const tools = Array.from(this.tools.values()).map(tool => ({
+      const tools = Array.from(this.tools.values()).map((tool) => ({
         name: tool.name,
         description: tool.description,
-        inputSchema: tool.inputSchema
+        inputSchema: tool.inputSchema,
       }));
 
       return {
-        tools
+        tools,
       };
     } catch (error) {
       logger.error('Tools list request failed', { context, error });
@@ -268,16 +278,16 @@ export class ProtocolHandler {
       logger.info('Tool call completed', {
         context,
         toolName: name,
-        requestCount: this.requestCount
+        requestCount: this.requestCount,
       });
 
       return {
         content: [
           {
             type: 'text',
-            text: JSON.stringify(result, null, 2)
-          }
-        ]
+            text: JSON.stringify(result, null, 2),
+          },
+        ],
       };
     } catch (error) {
       logger.error('Tool call failed', { context, error });
@@ -299,7 +309,9 @@ export class ProtocolHandler {
     }
 
     if (this.tools.has(tool.name)) {
-      logger.warn('Tool already registered, overwriting', { toolName: tool.name });
+      logger.warn('Tool already registered, overwriting', {
+        toolName: tool.name,
+      });
     }
 
     this.tools.set(tool.name, tool);
@@ -351,19 +363,22 @@ export class ProtocolHandler {
   getRequestStats(): { count: number; toolCount: number } {
     return {
       count: this.requestCount,
-      toolCount: this.tools.size
+      toolCount: this.tools.size,
     };
   }
 
   /**
    * Create request context for logging
    */
-  private createRequestContext(method: string, params?: any): MCPRequestContext {
+  private createRequestContext(
+    method: string,
+    params?: any
+  ): MCPRequestContext {
     return {
       requestId: `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       method,
       params,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
   }
 
@@ -385,7 +400,10 @@ export class ProtocolHandler {
       // Check if there are required parameters
       const required = tool.inputSchema.required || [];
       if (required.length > 0) {
-        throw this.createErrorResponse(-32602, `Missing required parameters: ${required.join(', ')}`);
+        throw this.createErrorResponse(
+          -32602,
+          `Missing required parameters: ${required.join(', ')}`
+        );
       }
       return;
     }
@@ -394,7 +412,10 @@ export class ProtocolHandler {
     const required = tool.inputSchema.required || [];
     for (const param of required) {
       if (!(param in args)) {
-        throw this.createErrorResponse(-32602, `Missing required parameter: ${param}`);
+        throw this.createErrorResponse(
+          -32602,
+          `Missing required parameter: ${param}`
+        );
       }
     }
 
@@ -415,34 +436,62 @@ export class ProtocolHandler {
     const type = schema.type;
 
     if (type === 'string' && typeof value !== 'string') {
-      throw this.createErrorResponse(-32602, `Parameter '${name}' must be a string`);
+      throw this.createErrorResponse(
+        -32602,
+        `Parameter '${name}' must be a string`
+      );
     }
 
     if (type === 'number' && typeof value !== 'number') {
-      throw this.createErrorResponse(-32602, `Parameter '${name}' must be a number`);
+      throw this.createErrorResponse(
+        -32602,
+        `Parameter '${name}' must be a number`
+      );
     }
 
-    if (type === 'integer' && (!Number.isInteger(value) || typeof value !== 'number')) {
-      throw this.createErrorResponse(-32602, `Parameter '${name}' must be an integer`);
+    if (
+      type === 'integer' &&
+      (!Number.isInteger(value) || typeof value !== 'number')
+    ) {
+      throw this.createErrorResponse(
+        -32602,
+        `Parameter '${name}' must be an integer`
+      );
     }
 
     if (type === 'boolean' && typeof value !== 'boolean') {
-      throw this.createErrorResponse(-32602, `Parameter '${name}' must be a boolean`);
+      throw this.createErrorResponse(
+        -32602,
+        `Parameter '${name}' must be a boolean`
+      );
     }
 
     if (type === 'array' && !Array.isArray(value)) {
-      throw this.createErrorResponse(-32602, `Parameter '${name}' must be an array`);
+      throw this.createErrorResponse(
+        -32602,
+        `Parameter '${name}' must be an array`
+      );
     }
 
-    if (type === 'object' && (typeof value !== 'object' || value === null || Array.isArray(value))) {
-      throw this.createErrorResponse(-32602, `Parameter '${name}' must be an object`);
+    if (
+      type === 'object' &&
+      (typeof value !== 'object' || value === null || Array.isArray(value))
+    ) {
+      throw this.createErrorResponse(
+        -32602,
+        `Parameter '${name}' must be an object`
+      );
     }
   }
 
   /**
    * Create an error response
    */
-  private createErrorResponse(code: number, message: string, details?: any): Error {
+  private createErrorResponse(
+    code: number,
+    message: string,
+    details?: any
+  ): Error {
     const error = new Error(message) as any;
     error.code = code;
     error.details = details;

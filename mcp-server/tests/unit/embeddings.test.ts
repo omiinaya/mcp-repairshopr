@@ -7,7 +7,7 @@ import {
   generateEmbeddings,
   createTextChunks,
   TextChunk,
-  EmbeddingVector
+  EmbeddingVector,
 } from '../../src/indexer/embeddings';
 import { VectorStore } from '../../src/indexer/vector';
 import { ApiEndpoint } from '../../src/utils/types';
@@ -30,7 +30,8 @@ describe('chunkText', () => {
   });
 
   test('should split text into multiple chunks when longer than maxChunkSize', () => {
-    const text = 'This is sentence one. This is sentence two. This is sentence three. This is sentence four. This is sentence five.';
+    const text =
+      'This is sentence one. This is sentence two. This is sentence three. This is sentence four. This is sentence five.';
     const result = chunkText(text, 50);
     expect(result.length).toBeGreaterThan(1);
   });
@@ -118,7 +119,8 @@ describe('createTextChunks', () => {
   const mockEndpoint: ApiEndpoint = {
     resource: 'Customer',
     operation: 'Get Customers',
-    description: 'Retrieves a list of customers. Supports filtering and pagination.',
+    description:
+      'Retrieves a list of customers. Supports filtering and pagination.',
     method: 'GET',
     path: '/customers',
     permission: 'customers.view',
@@ -128,54 +130,58 @@ describe('createTextChunks', () => {
         type: 'integer',
         required: false,
         description: 'Page number for pagination',
-        paramType: 'query'
+        paramType: 'query',
       },
       {
         name: 'limit',
         type: 'integer',
         required: false,
         description: 'Number of results per page',
-        paramType: 'query'
-      }
+        paramType: 'query',
+      },
     ],
     responses: [
       {
         statusCode: 200,
-        description: 'List of customers retrieved successfully'
+        description: 'List of customers retrieved successfully',
       },
       {
         statusCode: 401,
-        description: 'Unauthorized access'
-      }
-    ]
+        description: 'Unauthorized access',
+      },
+    ],
   };
 
   test('should create chunks from endpoint description', () => {
     const chunks = createTextChunks(mockEndpoint);
-    const descriptionChunks = chunks.filter(c => c.metadata.type === 'description');
+    const descriptionChunks = chunks.filter(
+      (c) => c.metadata.type === 'description'
+    );
     expect(descriptionChunks.length).toBeGreaterThan(0);
     expect(descriptionChunks[0].text).toContain('Retrieves');
   });
 
   test('should create chunks from parameter descriptions', () => {
     const chunks = createTextChunks(mockEndpoint);
-    const paramChunks = chunks.filter(c => c.metadata.type === 'parameter');
+    const paramChunks = chunks.filter((c) => c.metadata.type === 'parameter');
     expect(paramChunks.length).toBeGreaterThan(0);
-    expect(paramChunks.some(c => c.text.includes('page'))).toBe(true);
-    expect(paramChunks.some(c => c.text.includes('limit'))).toBe(true);
+    expect(paramChunks.some((c) => c.text.includes('page'))).toBe(true);
+    expect(paramChunks.some((c) => c.text.includes('limit'))).toBe(true);
   });
 
   test('should create chunks from response descriptions', () => {
     const chunks = createTextChunks(mockEndpoint);
-    const responseChunks = chunks.filter(c => c.metadata.type === 'response');
+    const responseChunks = chunks.filter((c) => c.metadata.type === 'response');
     expect(responseChunks.length).toBeGreaterThan(0);
-    expect(responseChunks.some(c => c.text.includes('200'))).toBe(true);
-    expect(responseChunks.some(c => c.text.includes('401'))).toBe(true);
+    expect(responseChunks.some((c) => c.text.includes('200'))).toBe(true);
+    expect(responseChunks.some((c) => c.text.includes('401'))).toBe(true);
   });
 
   test('should create chunks from permission requirements', () => {
     const chunks = createTextChunks(mockEndpoint);
-    const permissionChunks = chunks.filter(c => c.metadata.type === 'permission');
+    const permissionChunks = chunks.filter(
+      (c) => c.metadata.type === 'permission'
+    );
     expect(permissionChunks.length).toBeGreaterThan(0);
     expect(permissionChunks[0].text).toContain('customers.view');
   });
@@ -187,13 +193,15 @@ describe('createTextChunks', () => {
       expect(chunk.metadata.resource).toBe('Customer');
       expect(chunk.metadata.method).toBe('GET');
       expect(chunk.metadata.path).toBe('/customers');
-      expect(['description', 'parameter', 'response', 'permission']).toContain(chunk.metadata.type);
+      expect(['description', 'parameter', 'response', 'permission']).toContain(
+        chunk.metadata.type
+      );
     }
   });
 
   test('should generate unique IDs for chunks', () => {
     const chunks = createTextChunks(mockEndpoint);
-    const ids = chunks.map(c => c.id);
+    const ids = chunks.map((c) => c.id);
     const uniqueIds = new Set(ids);
     expect(uniqueIds.size).toBe(ids.length);
   });
@@ -201,10 +209,12 @@ describe('createTextChunks', () => {
   test('should handle endpoint with empty description', () => {
     const emptyEndpoint: ApiEndpoint = {
       ...mockEndpoint,
-      description: ''
+      description: '',
     };
     const chunks = createTextChunks(emptyEndpoint);
-    const descriptionChunks = chunks.filter(c => c.metadata.type === 'description');
+    const descriptionChunks = chunks.filter(
+      (c) => c.metadata.type === 'description'
+    );
     expect(descriptionChunks.length).toBe(0);
   });
 
@@ -217,13 +227,13 @@ describe('createTextChunks', () => {
           type: 'string',
           required: true,
           description: 'Customer name',
-          paramType: 'body'
-        }
-      ]
+          paramType: 'body',
+        },
+      ],
     };
     const chunks = createTextChunks(endpointWithBody);
-    const paramChunks = chunks.filter(c => c.metadata.type === 'parameter');
-    expect(paramChunks.some(c => c.text.includes('name'))).toBe(true);
+    const paramChunks = chunks.filter((c) => c.metadata.type === 'parameter');
+    expect(paramChunks.some((c) => c.text.includes('name'))).toBe(true);
   });
 });
 
@@ -237,18 +247,18 @@ describe('VectorStore', () => {
       {
         id: 'vec1',
         vector: [0.5, 0.5, 0.5, 0.5],
-        metadata: { type: 'description', text: 'test description' }
+        metadata: { type: 'description', text: 'test description' },
       },
       {
         id: 'vec2',
         vector: [0.3, 0.7, 0.3, 0.7],
-        metadata: { type: 'parameter', text: 'test parameter' }
+        metadata: { type: 'parameter', text: 'test parameter' },
       },
       {
         id: 'vec3',
         vector: [0.9, 0.1, 0.9, 0.1],
-        metadata: { type: 'response', text: 'test response' }
-      }
+        metadata: { type: 'response', text: 'test response' },
+      },
     ];
   });
 
@@ -314,7 +324,7 @@ describe('VectorStore', () => {
     vectorStore.addVectors(mockVectors);
     const allVectors = vectorStore.getAllVectors();
     expect(allVectors).toHaveLength(3);
-    expect(allVectors.map(v => v.id)).toEqual(['vec1', 'vec2', 'vec3']);
+    expect(allVectors.map((v) => v.id)).toEqual(['vec1', 'vec2', 'vec3']);
   });
 
   test('should serialize to JSON', () => {
@@ -344,7 +354,7 @@ describe('VectorStore', () => {
 
     const duplicateVector = {
       ...mockVectors[0],
-      vector: [0.1, 0.2, 0.3, 0.4]
+      vector: [0.1, 0.2, 0.3, 0.4],
     };
     vectorStore.addVectors([duplicateVector]);
     expect(vectorStore.size()).toBe(1);
@@ -371,7 +381,7 @@ describe('Cosine Similarity', () => {
     const store = new VectorStore();
     store.addVectors([
       { id: 'vec1', vector: vecA, metadata: {} },
-      { id: 'vec2', vector: vecB, metadata: {} }
+      { id: 'vec2', vector: vecB, metadata: {} },
     ]);
     const results = store.search('test');
     expect(results.length).toBe(2);

@@ -103,7 +103,7 @@ const DEFAULT_SCORING_CONFIG: ScoringConfig = {
   enableRecency: true,
   enablePopularity: true,
   recencyDecayRate: 0.1,
-  baseRecencyScore: 0.8
+  baseRecencyScore: 0.8,
 };
 
 /**
@@ -138,7 +138,11 @@ export class RelevanceScorer {
     const keywordScore = this.keywordMatchScore(query, endpoint);
     const recencyScore = this.recencyWeighting(semanticScore, endpoint);
     const popularityScore = this.popularityWeighting(semanticScore, endpoint);
-    const customScore = this.customRelevanceFactors(semanticScore, endpoint, {});
+    const customScore = this.customRelevanceFactors(
+      semanticScore,
+      endpoint,
+      {}
+    );
 
     // Calculate weighted overall score
     const overallScore = this.calculateWeightedScore(
@@ -161,8 +165,8 @@ export class RelevanceScorer {
         keyword: keywordScore * this.config.keywordWeight,
         recency: recencyScore * this.config.recencyWeight,
         popularity: popularityScore * this.config.popularityWeight,
-        custom: customScore * 0.1 // Small weight for custom factors
-      }
+        custom: customScore * 0.1, // Small weight for custom factors
+      },
     };
   }
 
@@ -200,7 +204,10 @@ export class RelevanceScorer {
     }
 
     // Calculate cosine similarity
-    const similarity = this.cosineSimilarity(queryVector.vector, endpointVector.vector);
+    const similarity = this.cosineSimilarity(
+      queryVector.vector,
+      endpointVector.vector
+    );
 
     return Math.max(0, Math.min(1, similarity));
   }
@@ -221,19 +228,25 @@ export class RelevanceScorer {
     let totalWeight = 0;
 
     // Check for exact matches in resource name
-    if (queryWords.some(word => endpoint.resource.toLowerCase().includes(word))) {
+    if (
+      queryWords.some((word) => endpoint.resource.toLowerCase().includes(word))
+    ) {
       matchCount += 3;
       totalWeight += 3;
     }
 
     // Check for matches in operation name
-    if (queryWords.some(word => endpoint.operation.toLowerCase().includes(word))) {
+    if (
+      queryWords.some((word) => endpoint.operation.toLowerCase().includes(word))
+    ) {
       matchCount += 2;
       totalWeight += 2;
     }
 
     // Check for matches in description
-    const descriptionWords = this.tokenizeQuery(endpoint.description.toLowerCase());
+    const descriptionWords = this.tokenizeQuery(
+      endpoint.description.toLowerCase()
+    );
     for (const queryWord of queryWords) {
       if (descriptionWords.includes(queryWord)) {
         matchCount += 1;
@@ -243,7 +256,7 @@ export class RelevanceScorer {
 
     // Check for matches in parameters
     for (const param of endpoint.parameters) {
-      if (queryWords.some(word => param.name.toLowerCase().includes(word))) {
+      if (queryWords.some((word) => param.name.toLowerCase().includes(word))) {
         matchCount += 1;
         totalWeight += 1;
       }
@@ -259,7 +272,7 @@ export class RelevanceScorer {
     }
 
     // Check for HTTP method match
-    if (queryWords.some(word => word === endpoint.method.toLowerCase())) {
+    if (queryWords.some((word) => word === endpoint.method.toLowerCase())) {
       matchCount += 2;
       totalWeight += 2;
     }
@@ -297,7 +310,9 @@ export class RelevanceScorer {
     const daysSinceLastUse = (now - stats.lastUsed) / (1000 * 60 * 60 * 24);
 
     // Apply exponential decay
-    const recencyFactor = Math.exp(-this.config.recencyDecayRate * daysSinceLastUse);
+    const recencyFactor = Math.exp(
+      -this.config.recencyDecayRate * daysSinceLastUse
+    );
 
     // Blend with base score
     return Math.max(0, Math.min(1, score * (0.5 + 0.5 * recencyFactor)));
@@ -325,7 +340,10 @@ export class RelevanceScorer {
 
     // Calculate popularity based on usage count
     // Normalize to 0-1 range using logarithmic scaling
-    const popularityFactor = Math.min(1, Math.log(stats.count + 1) / Math.log(100));
+    const popularityFactor = Math.min(
+      1,
+      Math.log(stats.count + 1) / Math.log(100)
+    );
 
     // Blend with base score
     return Math.max(0, Math.min(1, score * (0.7 + 0.3 * popularityFactor)));
@@ -350,7 +368,7 @@ export class RelevanceScorer {
     if (factors.resourceBoosts) {
       const resourceBoost = factors.resourceBoosts[endpoint.resource];
       if (resourceBoost) {
-        adjustedScore *= (1 + resourceBoost);
+        adjustedScore *= 1 + resourceBoost;
       }
     }
 
@@ -359,7 +377,7 @@ export class RelevanceScorer {
       const method = endpoint.method.toLowerCase();
       const methodBoost = factors.methodBoosts[method];
       if (methodBoost) {
-        adjustedScore *= (1 + methodBoost);
+        adjustedScore *= 1 + methodBoost;
       }
     }
 
@@ -367,18 +385,21 @@ export class RelevanceScorer {
     if (factors.permissionBoosts) {
       const permissionBoost = factors.permissionBoosts[endpoint.permission];
       if (permissionBoost) {
-        adjustedScore *= (1 + permissionBoost);
+        adjustedScore *= 1 + permissionBoost;
       }
     }
 
     // Apply deprecated penalty
-    if (factors.deprecatedPenalty && endpoint.description.toLowerCase().includes('deprecated')) {
-      adjustedScore *= (1 - factors.deprecatedPenalty);
+    if (
+      factors.deprecatedPenalty &&
+      endpoint.description.toLowerCase().includes('deprecated')
+    ) {
+      adjustedScore *= 1 - factors.deprecatedPenalty;
     }
 
     // Apply example boost
-    if (factors.exampleBoost && endpoint.responses.some(r => r.example)) {
-      adjustedScore *= (1 + factors.exampleBoost);
+    if (factors.exampleBoost && endpoint.responses.some((r) => r.example)) {
+      adjustedScore *= 1 + factors.exampleBoost;
     }
 
     // Apply custom scorer if provided
@@ -401,7 +422,7 @@ export class RelevanceScorer {
     const ranked = results.sort((a, b) => b.score - a.score);
 
     // Determine match type for each result
-    return ranked.map(result => {
+    return ranked.map((result) => {
       if (result.relevanceScore) {
         const { semanticScore, keywordScore } = result.relevanceScore;
         if (semanticScore > 0.7 && keywordScore > 0.7) {
@@ -449,7 +470,7 @@ export class RelevanceScorer {
     } else {
       this.endpointUsageStats.set(endpoint.path, {
         count: 1,
-        lastUsed: now
+        lastUsed: now,
       });
     }
   }
@@ -517,7 +538,7 @@ export class RelevanceScorer {
       endpoint.description,
       endpoint.method,
       endpoint.path,
-      endpoint.permission
+      endpoint.permission,
     ];
 
     // Add parameter names
@@ -548,7 +569,7 @@ export class RelevanceScorer {
       .toLowerCase()
       .replace(/[^\w\s]/g, ' ')
       .split(/\s+/)
-      .filter(word => word.length > 0);
+      .filter((word) => word.length > 0);
   }
 
   /**

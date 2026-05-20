@@ -1,6 +1,6 @@
 /**
  * Parsing Accuracy Tests
- * 
+ *
  * Tests to validate parsing accuracy for all 35 API documentation files,
  * edge cases in parsing, metadata extraction, parameter extraction,
  * response extraction, and creates accuracy metrics.
@@ -9,7 +9,12 @@
 import * as fs from 'fs/promises';
 import * as path from 'path';
 import { parseMarkdownFile } from '../../src/parser/markdown';
-import { ApiDocument, ApiEndpoint, ApiParameter, ApiResponse } from '../../src/utils/types';
+import {
+  ApiDocument,
+  ApiEndpoint,
+  ApiParameter,
+  ApiResponse,
+} from '../../src/utils/types';
 
 /**
  * Accuracy metrics for parsing
@@ -41,8 +46,12 @@ const EXPECTED_CUSTOMER_DATA = {
     { operation: 'Update Customer', method: 'PUT', path: '/customers/{id}' },
     { operation: 'Delete Customer', method: 'DELETE', path: '/customers/{id}' },
     { operation: 'Get Latests', method: 'GET', path: '/customers/latest' },
-    { operation: 'Get Autocompletes', method: 'GET', path: '/customers/autocomplete' }
-  ]
+    {
+      operation: 'Get Autocompletes',
+      method: 'GET',
+      path: '/customers/autocomplete',
+    },
+  ],
 };
 
 /**
@@ -51,20 +60,28 @@ const EXPECTED_CUSTOMER_DATA = {
 async function getApiDocFiles(): Promise<string[]> {
   const apiDocsPath = path.join(__dirname, '../../../docs/api');
   const files = await fs.readdir(apiDocsPath);
-  return files.filter(file => file.endsWith('.md')).map(file => path.join(apiDocsPath, file));
+  return files
+    .filter((file) => file.endsWith('.md'))
+    .map((file) => path.join(apiDocsPath, file));
 }
 
 /**
  * Validate resource name extraction
  */
-function validateResourceName(document: ApiDocument, expectedName: string): boolean {
+function validateResourceName(
+  document: ApiDocument,
+  expectedName: string
+): boolean {
   return document.resourceName === expectedName;
 }
 
 /**
  * Validate endpoint extraction
  */
-function validateEndpoints(document: ApiDocument, expectedCount: number): boolean {
+function validateEndpoints(
+  document: ApiDocument,
+  expectedCount: number
+): boolean {
   return document.endpoints.length === expectedCount;
 }
 
@@ -131,7 +148,7 @@ Success
 
     const tempPath = path.join(__dirname, 'temp-test.md');
     await fs.writeFile(tempPath, markdown);
-    
+
     try {
       const document = await parseMarkdownFile(tempPath);
       expect(document.endpoints).toHaveLength(1);
@@ -157,7 +174,7 @@ Success
 
     const tempPath = path.join(__dirname, 'temp-test.md');
     await fs.writeFile(tempPath, markdown);
-    
+
     try {
       await expect(parseMarkdownFile(tempPath)).rejects.toThrow();
     } finally {
@@ -183,7 +200,7 @@ Success
 
     const tempPath = path.join(__dirname, 'temp-test.md');
     await fs.writeFile(tempPath, markdown);
-    
+
     try {
       const document = await parseMarkdownFile(tempPath);
       expect(document.endpoints).toHaveLength(1);
@@ -207,7 +224,7 @@ Success
 
     const tempPath = path.join(__dirname, 'temp-test.md');
     await fs.writeFile(tempPath, markdown);
-    
+
     try {
       const document = await parseMarkdownFile(tempPath);
       expect(document.endpoints).toHaveLength(1);
@@ -239,7 +256,7 @@ Success
 
     const tempPath = path.join(__dirname, 'temp-test.md');
     await fs.writeFile(tempPath, markdown);
-    
+
     try {
       const document = await parseMarkdownFile(tempPath);
       expect(document.endpoints).toHaveLength(1);
@@ -269,7 +286,7 @@ Success
 
     const tempPath = path.join(__dirname, 'temp-test.md');
     await fs.writeFile(tempPath, markdown);
-    
+
     try {
       const document = await parseMarkdownFile(tempPath);
       expect(document.endpoints).toHaveLength(1);
@@ -287,21 +304,25 @@ describe('Parsing Accuracy - Metadata Extraction', () => {
   test('should extract resource name accurately', async () => {
     const customerPath = path.join(__dirname, '../../../docs/api/customer.md');
     const document = await parseMarkdownFile(customerPath);
-    
-    expect(validateResourceName(document, EXPECTED_CUSTOMER_DATA.resourceName)).toBe(true);
+
+    expect(
+      validateResourceName(document, EXPECTED_CUSTOMER_DATA.resourceName)
+    ).toBe(true);
   });
 
   test('should extract endpoint count accurately', async () => {
     const customerPath = path.join(__dirname, '../../../docs/api/customer.md');
     const document = await parseMarkdownFile(customerPath);
-    
-    expect(validateEndpoints(document, EXPECTED_CUSTOMER_DATA.endpointCount)).toBe(true);
+
+    expect(
+      validateEndpoints(document, EXPECTED_CUSTOMER_DATA.endpointCount)
+    ).toBe(true);
   });
 
   test('should extract endpoint methods accurately', async () => {
     const customerPath = path.join(__dirname, '../../../docs/api/customer.md');
     const document = await parseMarkdownFile(customerPath);
-    
+
     EXPECTED_CUSTOMER_DATA.endpoints.forEach((expected, index) => {
       expect(document.endpoints[index].method).toBe(expected.method);
     });
@@ -310,7 +331,7 @@ describe('Parsing Accuracy - Metadata Extraction', () => {
   test('should extract endpoint paths accurately', async () => {
     const customerPath = path.join(__dirname, '../../../docs/api/customer.md');
     const document = await parseMarkdownFile(customerPath);
-    
+
     EXPECTED_CUSTOMER_DATA.endpoints.forEach((expected, index) => {
       expect(document.endpoints[index].path).toBe(expected.path);
     });
@@ -319,7 +340,7 @@ describe('Parsing Accuracy - Metadata Extraction', () => {
   test('should extract operation names accurately', async () => {
     const customerPath = path.join(__dirname, '../../../docs/api/customer.md');
     const document = await parseMarkdownFile(customerPath);
-    
+
     EXPECTED_CUSTOMER_DATA.endpoints.forEach((expected, index) => {
       expect(document.endpoints[index].operation).toBe(expected.operation);
     });
@@ -333,14 +354,18 @@ describe('Parsing Accuracy - Parameter Extraction', () => {
   test('should extract all query parameters accurately', async () => {
     const customerPath = path.join(__dirname, '../../../docs/api/customer.md');
     const document = await parseMarkdownFile(customerPath);
-    
-    const getCustomersEndpoint = document.endpoints.find(e => e.operation === 'Get Customers');
+
+    const getCustomersEndpoint = document.endpoints.find(
+      (e) => e.operation === 'Get Customers'
+    );
     expect(getCustomersEndpoint).toBeDefined();
-    
-    const queryParams = getCustomersEndpoint!.parameters.filter(p => p.paramType === 'query');
+
+    const queryParams = getCustomersEndpoint!.parameters.filter(
+      (p) => p.paramType === 'query'
+    );
     expect(queryParams.length).toBeGreaterThan(0);
-    
-    queryParams.forEach(param => {
+
+    queryParams.forEach((param) => {
       expect(validateParameterStructure(param)).toBe(true);
     });
   });
@@ -348,11 +373,15 @@ describe('Parsing Accuracy - Parameter Extraction', () => {
   test('should extract path parameters accurately', async () => {
     const customerPath = path.join(__dirname, '../../../docs/api/customer.md');
     const document = await parseMarkdownFile(customerPath);
-    
-    const getCustomerByIdEndpoint = document.endpoints.find(e => e.operation === 'Get Customer by ID');
+
+    const getCustomerByIdEndpoint = document.endpoints.find(
+      (e) => e.operation === 'Get Customer by ID'
+    );
     expect(getCustomerByIdEndpoint).toBeDefined();
-    
-    const pathParams = getCustomerByIdEndpoint!.parameters.filter(p => p.paramType === 'path');
+
+    const pathParams = getCustomerByIdEndpoint!.parameters.filter(
+      (p) => p.paramType === 'path'
+    );
     expect(pathParams.length).toBe(1);
     expect(pathParams[0].name).toBe('id');
     expect(pathParams[0].type).toBe('integer');
@@ -362,15 +391,19 @@ describe('Parsing Accuracy - Parameter Extraction', () => {
   test('should extract parameter types accurately', async () => {
     const customerPath = path.join(__dirname, '../../../docs/api/customer.md');
     const document = await parseMarkdownFile(customerPath);
-    
-    const getCustomersEndpoint = document.endpoints.find(e => e.operation === 'Get Customers');
-    const queryParams = getCustomersEndpoint!.parameters.filter(p => p.paramType === 'query');
-    
+
+    const getCustomersEndpoint = document.endpoints.find(
+      (e) => e.operation === 'Get Customers'
+    );
+    const queryParams = getCustomersEndpoint!.parameters.filter(
+      (p) => p.paramType === 'query'
+    );
+
     // Check for various parameter types
-    const stringParam = queryParams.find(p => p.type === 'string');
-    const integerParam = queryParams.find(p => p.type === 'integer');
-    const arrayParam = queryParams.find(p => p.type === 'array');
-    
+    const stringParam = queryParams.find((p) => p.type === 'string');
+    const integerParam = queryParams.find((p) => p.type === 'integer');
+    const arrayParam = queryParams.find((p) => p.type === 'array');
+
     expect(stringParam).toBeDefined();
     expect(integerParam).toBeDefined();
     expect(arrayParam).toBeDefined();
@@ -379,20 +412,28 @@ describe('Parsing Accuracy - Parameter Extraction', () => {
   test('should extract required flags accurately', async () => {
     const customerPath = path.join(__dirname, '../../../docs/api/customer.md');
     const document = await parseMarkdownFile(customerPath);
-    
-    const getCustomerByIdEndpoint = document.endpoints.find(e => e.operation === 'Get Customer by ID');
-    const pathParams = getCustomerByIdEndpoint!.parameters.filter(p => p.paramType === 'path');
-    
+
+    const getCustomerByIdEndpoint = document.endpoints.find(
+      (e) => e.operation === 'Get Customer by ID'
+    );
+    const pathParams = getCustomerByIdEndpoint!.parameters.filter(
+      (p) => p.paramType === 'path'
+    );
+
     expect(pathParams[0].required).toBe(true);
   });
 
   test('should extract parameter descriptions accurately', async () => {
     const customerPath = path.join(__dirname, '../../../docs/api/customer.md');
     const document = await parseMarkdownFile(customerPath);
-    
-    const getCustomersEndpoint = document.endpoints.find(e => e.operation === 'Get Customers');
-    const sortParam = getCustomersEndpoint!.parameters.find(p => p.name === 'sort');
-    
+
+    const getCustomersEndpoint = document.endpoints.find(
+      (e) => e.operation === 'Get Customers'
+    );
+    const sortParam = getCustomersEndpoint!.parameters.find(
+      (p) => p.name === 'sort'
+    );
+
     expect(sortParam).toBeDefined();
     expect(sortParam!.description).toContain('order by');
   });
@@ -405,11 +446,15 @@ describe('Parsing Accuracy - Response Extraction', () => {
   test('should extract all response status codes accurately', async () => {
     const customerPath = path.join(__dirname, '../../../docs/api/customer.md');
     const document = await parseMarkdownFile(customerPath);
-    
-    const createCustomerEndpoint = document.endpoints.find(e => e.operation === 'Create Customer');
+
+    const createCustomerEndpoint = document.endpoints.find(
+      (e) => e.operation === 'Create Customer'
+    );
     expect(createCustomerEndpoint).toBeDefined();
-    
-    const statusCodes = createCustomerEndpoint!.responses.map(r => r.statusCode);
+
+    const statusCodes = createCustomerEndpoint!.responses.map(
+      (r) => r.statusCode
+    );
     expect(statusCodes).toContain(200);
     expect(statusCodes).toContain(422);
   });
@@ -417,10 +462,14 @@ describe('Parsing Accuracy - Response Extraction', () => {
   test('should extract response descriptions accurately', async () => {
     const customerPath = path.join(__dirname, '../../../docs/api/customer.md');
     const document = await parseMarkdownFile(customerPath);
-    
-    const getCustomersEndpoint = document.endpoints.find(e => e.operation === 'Get Customers');
-    const successResponse = getCustomersEndpoint!.responses.find(r => r.statusCode === 200);
-    
+
+    const getCustomersEndpoint = document.endpoints.find(
+      (e) => e.operation === 'Get Customers'
+    );
+    const successResponse = getCustomersEndpoint!.responses.find(
+      (r) => r.statusCode === 200
+    );
+
     expect(successResponse).toBeDefined();
     expect(successResponse!.description).toBe('successful');
   });
@@ -428,10 +477,14 @@ describe('Parsing Accuracy - Response Extraction', () => {
   test('should extract response examples accurately', async () => {
     const customerPath = path.join(__dirname, '../../../docs/api/customer.md');
     const document = await parseMarkdownFile(customerPath);
-    
-    const getCustomersEndpoint = document.endpoints.find(e => e.operation === 'Get Customers');
-    const successResponse = getCustomersEndpoint!.responses.find(r => r.statusCode === 200);
-    
+
+    const getCustomersEndpoint = document.endpoints.find(
+      (e) => e.operation === 'Get Customers'
+    );
+    const successResponse = getCustomersEndpoint!.responses.find(
+      (r) => r.statusCode === 200
+    );
+
     expect(successResponse).toBeDefined();
     expect(successResponse!.example).toBeDefined();
     expect(successResponse!.example).toHaveProperty('customers');
@@ -440,10 +493,14 @@ describe('Parsing Accuracy - Response Extraction', () => {
   test('should handle responses without examples', async () => {
     const customerPath = path.join(__dirname, '../../../docs/api/customer.md');
     const document = await parseMarkdownFile(customerPath);
-    
-    const deleteCustomerEndpoint = document.endpoints.find(e => e.operation === 'Delete Customer');
-    const notFoundResponse = deleteCustomerEndpoint!.responses.find(r => r.statusCode === 404);
-    
+
+    const deleteCustomerEndpoint = document.endpoints.find(
+      (e) => e.operation === 'Delete Customer'
+    );
+    const notFoundResponse = deleteCustomerEndpoint!.responses.find(
+      (r) => r.statusCode === 404
+    );
+
     expect(notFoundResponse).toBeDefined();
     expect(notFoundResponse!.example).toBeUndefined();
   });
@@ -472,20 +529,20 @@ describe('Parsing Accuracy - All API Files', () => {
         const document = await parseMarkdownFile(filePath);
         allDocuments.push(document);
         successfullyParsed++;
-        
+
         totalEndpoints += document.endpoints.length;
-        document.endpoints.forEach(endpoint => {
+        document.endpoints.forEach((endpoint) => {
           if (validateEndpointStructure(endpoint)) {
             validEndpoints++;
           }
           totalParameters += endpoint.parameters.length;
-          endpoint.parameters.forEach(param => {
+          endpoint.parameters.forEach((param) => {
             if (validateParameterStructure(param)) {
               validParameters++;
             }
           });
           totalResponses += endpoint.responses.length;
-          endpoint.responses.forEach(response => {
+          endpoint.responses.forEach((response) => {
             if (validateResponseStructure(response)) {
               validResponses++;
             }
@@ -505,15 +562,17 @@ describe('Parsing Accuracy - All API Files', () => {
       totalParameters,
       totalResponses,
       metadataAccuracy: (successfullyParsed / apiFiles.length) * 100,
-      parameterAccuracy: totalParameters > 0 ? (validParameters / totalParameters) * 100 : 100,
-      responseAccuracy: totalResponses > 0 ? (validResponses / totalResponses) * 100 : 100,
+      parameterAccuracy:
+        totalParameters > 0 ? (validParameters / totalParameters) * 100 : 100,
+      responseAccuracy:
+        totalResponses > 0 ? (validResponses / totalResponses) * 100 : 100,
       edgeCaseAccuracy: (validEndpoints / totalEndpoints) * 100,
-      overallAccuracy: (
-        (successfullyParsed / apiFiles.length) * 0.25 +
-        (validEndpoints / totalEndpoints) * 0.25 +
-        (validParameters / totalParameters) * 0.25 +
-        (validResponses / totalResponses) * 0.25
-      ) * 100
+      overallAccuracy:
+        ((successfullyParsed / apiFiles.length) * 0.25 +
+          (validEndpoints / totalEndpoints) * 0.25 +
+          (validParameters / totalParameters) * 0.25 +
+          (validResponses / totalResponses) * 0.25) *
+        100,
     };
   });
 
@@ -569,7 +628,7 @@ describe('Parsing Accuracy - Metrics Generation', () => {
       parameterAccuracy: 0,
       responseAccuracy: 0,
       edgeCaseAccuracy: 0,
-      overallAccuracy: 0
+      overallAccuracy: 0,
     };
 
     expect(metrics).toHaveProperty('totalFiles');

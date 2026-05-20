@@ -17,17 +17,20 @@ const DEFAULT_CONFIG: AuthConfig = {
   apiKeys: process.env.API_KEYS?.split(',') || [],
   enabled: process.env.AUTH_ENABLED === 'true',
   protectedPaths: ['/admin', '/debug', '/config'],
-  headerName: 'X-API-Key'
+  headerName: 'X-API-Key',
 };
 
 /**
  * Parse API keys from environment variable
  * Format: key1:description1,key2:description2
  */
-function parseApiKeys(): Map<string, { key: string; description: string; createdAt: Date }> {
+function parseApiKeys(): Map<
+  string,
+  { key: string; description: string; createdAt: Date }
+> {
   const keys = new Map();
   const envKeys = process.env.API_KEYS || '';
-  
+
   if (!envKeys) {
     return keys;
   }
@@ -36,12 +39,12 @@ function parseApiKeys(): Map<string, { key: string; description: string; created
     const parts = entry.split(':');
     const key = parts[0].trim();
     const description = parts[1]?.trim() || `Key ${index + 1}`;
-    
+
     if (key) {
       keys.set(key, {
         key,
         description,
-        createdAt: new Date()
+        createdAt: new Date(),
       });
     }
   });
@@ -66,10 +69,10 @@ export function authenticateApiKey(
     }
 
     // Skip auth for non-protected paths
-    const isProtected = authConfig.protectedPaths.some(path => 
+    const isProtected = authConfig.protectedPaths.some((path) =>
       req.path.startsWith(path)
     );
-    
+
     if (!isProtected) {
       return next();
     }
@@ -78,45 +81,45 @@ export function authenticateApiKey(
     const apiKey = req.headers[authConfig.headerName.toLowerCase()] as string;
 
     if (!apiKey) {
-      logger.warn('API key missing', { 
-        path: req.path, 
+      logger.warn('API key missing', {
+        path: req.path,
         ip: req.ip,
-        headers: Object.keys(req.headers)
+        headers: Object.keys(req.headers),
       });
-      
+
       res.status(401).json({
         error: 'Unauthorized',
-        message: 'API key is required'
+        message: 'API key is required',
       });
       return;
     }
 
     // Validate API key
     if (!validApiKeys.has(apiKey)) {
-      logger.warn('Invalid API key', { 
-        path: req.path, 
+      logger.warn('Invalid API key', {
+        path: req.path,
         ip: req.ip,
-        keyPrefix: apiKey.substring(0, 4) + '...'
+        keyPrefix: apiKey.substring(0, 4) + '...',
       });
-      
+
       res.status(401).json({
         error: 'Unauthorized',
-        message: 'Invalid API key'
+        message: 'Invalid API key',
       });
       return;
     }
 
     // Log successful authentication
     const keyInfo = validApiKeys.get(apiKey);
-    logger.debug('API key authenticated', { 
+    logger.debug('API key authenticated', {
       path: req.path,
-      description: keyInfo?.description
+      description: keyInfo?.description,
     });
 
     // Attach user info to request
     (req as any).user = {
       apiKey: apiKey.substring(0, 4) + '...',
-      description: keyInfo?.description
+      description: keyInfo?.description,
     };
 
     next();
@@ -154,7 +157,7 @@ export function requireAuth(
   if (!apiKey || !validApiKeys.has(apiKey)) {
     res.status(401).json({
       error: 'Unauthorized',
-      message: 'Valid API key is required'
+      message: 'Valid API key is required',
     });
     return;
   }

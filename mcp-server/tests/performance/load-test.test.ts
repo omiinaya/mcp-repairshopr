@@ -6,14 +6,19 @@
  * and server stability under load.
  */
 
-import { searchApiDocs, searchByResource, searchByMethod, searchByPermission } from '../../src/tools/search';
+import {
+  searchApiDocs,
+  searchByResource,
+  searchByMethod,
+  searchByPermission,
+} from '../../src/tools/search';
 import { VectorStore } from '../../src/indexer/vector';
 import { MetadataIndex } from '../../src/parser/metadata';
 import {
   generateEndpoints,
   generateSearchQueries,
   generateComplexSearchQueries,
-  createMockMetadataIndex
+  createMockMetadataIndex,
 } from '../utils/data-generators';
 import { createMockVectorStore } from '../fixtures/mock-vector-store';
 import { measureTime } from '../utils/test-helpers';
@@ -91,18 +96,24 @@ describe('Load Tests', () => {
 
       // Log load test results
       console.log('\n=== Server Under Load - Concurrent Requests ===');
-      results.forEach(result => {
+      results.forEach((result) => {
         console.log(`\n${result.testName}:`);
         console.log(`  Concurrency: ${result.metrics.concurrency}`);
         console.log(`  Total Requests: ${result.metrics.totalRequests}`);
         console.log(`  Successful: ${result.metrics.successfulRequests}`);
         console.log(`  Failed: ${result.metrics.failedRequests}`);
         console.log(`  Total Time: ${result.metrics.totalTime.toFixed(2)}ms`);
-        console.log(`  Average Time: ${result.metrics.averageTime.toFixed(2)}ms`);
+        console.log(
+          `  Average Time: ${result.metrics.averageTime.toFixed(2)}ms`
+        );
         console.log(`  P95: ${result.metrics.p95.toFixed(2)}ms`);
         console.log(`  P99: ${result.metrics.p99.toFixed(2)}ms`);
-        console.log(`  Requests/sec: ${result.metrics.requestsPerSecond.toFixed(2)}`);
-        console.log(`  Memory Delta: ${(result.metrics.memoryDelta / 1024 / 1024).toFixed(2)}MB`);
+        console.log(
+          `  Requests/sec: ${result.metrics.requestsPerSecond.toFixed(2)}`
+        );
+        console.log(
+          `  Memory Delta: ${(result.metrics.memoryDelta / 1024 / 1024).toFixed(2)}MB`
+        );
         console.log(`  Passed: ${result.passed}`);
       });
     });
@@ -156,7 +167,7 @@ describe('Load Tests', () => {
         memoryBefore,
         memoryAfter,
         memoryDelta: memoryAfter - memoryBefore,
-        errors
+        errors,
       };
 
       console.log('\n=== Sustained Load Test (5 seconds) ===');
@@ -169,7 +180,9 @@ describe('Load Tests', () => {
       console.log(`P95: ${metrics.p95.toFixed(2)}ms`);
       console.log(`P99: ${metrics.p99.toFixed(2)}ms`);
       console.log(`Requests/sec: ${metrics.requestsPerSecond.toFixed(2)}`);
-      console.log(`Memory Delta: ${(metrics.memoryDelta / 1024 / 1024).toFixed(2)}MB`);
+      console.log(
+        `Memory Delta: ${(metrics.memoryDelta / 1024 / 1024).toFixed(2)}MB`
+      );
 
       // Performance assertions
       expect(metrics.failedRequests).toBe(0);
@@ -193,23 +206,30 @@ describe('Load Tests', () => {
       // Measure baseline performance (single request)
       for (const query of queries.slice(0, 5)) {
         const { time } = await measureTime(() =>
-          Promise.resolve(searchApiDocs({ query, limit: 5 }, vectorStore, metadataIndex))
+          Promise.resolve(
+            searchApiDocs({ query, limit: 5 }, vectorStore, metadataIndex)
+          )
         );
         baselineTimes.push(time);
       }
 
       // Measure performance under load
       for (let i = 0; i < iterations; i++) {
-        const promises = queries.slice(0, 5).map(query =>
-          measureTime(() =>
-            Promise.resolve(searchApiDocs({ query, limit: 5 }, vectorStore, metadataIndex))
-          )
-        );
+        const promises = queries
+          .slice(0, 5)
+          .map((query) =>
+            measureTime(() =>
+              Promise.resolve(
+                searchApiDocs({ query, limit: 5 }, vectorStore, metadataIndex)
+              )
+            )
+          );
         const results = await Promise.all(promises);
-        loadTimes.push(...results.map(r => r.time));
+        loadTimes.push(...results.map((r) => r.time));
       }
 
-      const avgBaseline = baselineTimes.reduce((a, b) => a + b, 0) / baselineTimes.length;
+      const avgBaseline =
+        baselineTimes.reduce((a, b) => a + b, 0) / baselineTimes.length;
       const avgLoad = loadTimes.reduce((a, b) => a + b, 0) / loadTimes.length;
       const degradationRatio = avgLoad / avgBaseline;
 
@@ -232,8 +252,13 @@ describe('Load Tests', () => {
         'Mixed Search Queries Under Load',
         concurrency,
         () => {
-          const query = allQueries[Math.floor(Math.random() * allQueries.length)];
-          return searchApiDocs({ query, limit: 10 }, vectorStore, metadataIndex);
+          const query =
+            allQueries[Math.floor(Math.random() * allQueries.length)];
+          return searchApiDocs(
+            { query, limit: 10 },
+            vectorStore,
+            metadataIndex
+          );
         }
       );
 
@@ -244,7 +269,9 @@ describe('Load Tests', () => {
       console.log(`Failed: ${metrics.metrics.failedRequests}`);
       console.log(`Average Time: ${metrics.metrics.averageTime.toFixed(2)}ms`);
       console.log(`P95: ${metrics.metrics.p95.toFixed(2)}ms`);
-      console.log(`Requests/sec: ${metrics.metrics.requestsPerSecond.toFixed(2)}`);
+      console.log(
+        `Requests/sec: ${metrics.metrics.requestsPerSecond.toFixed(2)}`
+      );
 
       // Performance assertions
       expect(metrics.metrics.failedRequests).toBe(0);
@@ -260,20 +287,25 @@ describe('Load Tests', () => {
       const tools = [
         {
           name: 'searchApiDocs',
-          fn: () => searchApiDocs({ query: 'get customers', limit: 5 }, vectorStore, metadataIndex)
+          fn: () =>
+            searchApiDocs(
+              { query: 'get customers', limit: 5 },
+              vectorStore,
+              metadataIndex
+            ),
         },
         {
           name: 'searchByResource',
-          fn: () => searchByResource('Customer', metadataIndex)
+          fn: () => searchByResource('Customer', metadataIndex),
         },
         {
           name: 'searchByMethod',
-          fn: () => searchByMethod('GET', metadataIndex)
+          fn: () => searchByMethod('GET', metadataIndex),
         },
         {
           name: 'searchByPermission',
-          fn: () => searchByPermission('customer.view', metadataIndex)
-        }
+          fn: () => searchByPermission('customer.view', metadataIndex),
+        },
       ];
 
       const concurrency = 20;
@@ -294,21 +326,30 @@ describe('Load Tests', () => {
       }
 
       console.log('\n=== Tool Execution Under Load ===');
-      results.forEach(result => {
+      results.forEach((result) => {
         console.log(`\n${result.testName}:`);
-        console.log(`  Average Time: ${result.metrics.averageTime.toFixed(2)}ms`);
+        console.log(
+          `  Average Time: ${result.metrics.averageTime.toFixed(2)}ms`
+        );
         console.log(`  P95: ${result.metrics.p95.toFixed(2)}ms`);
-        console.log(`  Requests/sec: ${result.metrics.requestsPerSecond.toFixed(2)}`);
+        console.log(
+          `  Requests/sec: ${result.metrics.requestsPerSecond.toFixed(2)}`
+        );
         console.log(`  Passed: ${result.passed}`);
       });
     });
 
     it('should handle rapid tool switching under load', async () => {
       const tools = [
-        () => searchApiDocs({ query: 'get customers', limit: 5 }, vectorStore, metadataIndex),
+        () =>
+          searchApiDocs(
+            { query: 'get customers', limit: 5 },
+            vectorStore,
+            metadataIndex
+          ),
         () => searchByResource('Customer', metadataIndex),
         () => searchByMethod('GET', metadataIndex),
-        () => searchByPermission('customer.view', metadataIndex)
+        () => searchByPermission('customer.view', metadataIndex),
       ];
 
       const concurrency = 50;
@@ -371,7 +412,9 @@ describe('Load Tests', () => {
 
       for (let i = 0; i < iterations; i++) {
         const promises = Array.from({ length: concurrency }, () =>
-          Promise.resolve(searchApiDocs({ query, limit: 5 }, vectorStore, metadataIndex))
+          Promise.resolve(
+            searchApiDocs({ query, limit: 5 }, vectorStore, metadataIndex)
+          )
         );
 
         await Promise.all(promises);
@@ -388,10 +431,16 @@ describe('Load Tests', () => {
       const avgMemoryPerIteration = memoryGrowth / iterations;
 
       console.log('\n=== Memory Usage Under Load ===');
-      console.log(`Initial Memory: ${(initialMemory / 1024 / 1024).toFixed(2)}MB`);
+      console.log(
+        `Initial Memory: ${(initialMemory / 1024 / 1024).toFixed(2)}MB`
+      );
       console.log(`Final Memory: ${(finalMemory / 1024 / 1024).toFixed(2)}MB`);
-      console.log(`Memory Growth: ${(memoryGrowth / 1024 / 1024).toFixed(2)}MB`);
-      console.log(`Average Memory per Iteration: ${(avgMemoryPerIteration / 1024).toFixed(2)}KB`);
+      console.log(
+        `Memory Growth: ${(memoryGrowth / 1024 / 1024).toFixed(2)}MB`
+      );
+      console.log(
+        `Average Memory per Iteration: ${(avgMemoryPerIteration / 1024).toFixed(2)}KB`
+      );
 
       // Performance assertion: memory growth should be minimal
       expect(avgMemoryPerIteration).toBeLessThan(100 * 1024); // Less than 100KB per iteration
@@ -415,7 +464,13 @@ describe('Load Tests', () => {
 
       for (let i = 0; i < iterations; i++) {
         const promises = Array.from({ length: concurrency }, () =>
-          Promise.resolve(searchApiDocs({ query, limit: 10 }, largeVectorStore, largeMetadataIndex))
+          Promise.resolve(
+            searchApiDocs(
+              { query, limit: 10 },
+              largeVectorStore,
+              largeMetadataIndex
+            )
+          )
         );
 
         await Promise.all(promises);
@@ -430,7 +485,9 @@ describe('Load Tests', () => {
       const memoryDelta = memoryAfter - memoryBefore;
 
       console.log('\n=== Memory Pressure with Large Dataset ===');
-      console.log(`Memory Before: ${(memoryBefore / 1024 / 1024).toFixed(2)}MB`);
+      console.log(
+        `Memory Before: ${(memoryBefore / 1024 / 1024).toFixed(2)}MB`
+      );
       console.log(`Memory After: ${(memoryAfter / 1024 / 1024).toFixed(2)}MB`);
       console.log(`Memory Delta: ${(memoryDelta / 1024 / 1024).toFixed(2)}MB`);
 
@@ -465,7 +522,10 @@ describe('Load Tests', () => {
           } catch (error) {
             failedRequests++;
             const errorMessage = (error as Error).message;
-            errorCounts.set(errorMessage, (errorCounts.get(errorMessage) || 0) + 1);
+            errorCounts.set(
+              errorMessage,
+              (errorCounts.get(errorMessage) || 0) + 1
+            );
           }
         });
 
@@ -474,7 +534,8 @@ describe('Load Tests', () => {
       }
 
       const successRate = (successfulRequests / totalRequests) * 100;
-      const avgResponseTime = responseTimes.reduce((a, b) => a + b, 0) / responseTimes.length;
+      const avgResponseTime =
+        responseTimes.reduce((a, b) => a + b, 0) / responseTimes.length;
 
       console.log('\n=== Server Stability Under Sustained High Load ===');
       console.log(`Duration: ${duration}ms`);
@@ -484,8 +545,12 @@ describe('Load Tests', () => {
       console.log(`Failed: ${failedRequests}`);
       console.log(`Success Rate: ${successRate.toFixed(2)}%`);
       console.log(`Average Response Time: ${avgResponseTime.toFixed(2)}ms`);
-      console.log(`P95: ${calculatePercentile(responseTimes, 95).toFixed(2)}ms`);
-      console.log(`P99: ${calculatePercentile(responseTimes, 99).toFixed(2)}ms`);
+      console.log(
+        `P95: ${calculatePercentile(responseTimes, 95).toFixed(2)}ms`
+      );
+      console.log(
+        `P99: ${calculatePercentile(responseTimes, 99).toFixed(2)}ms`
+      );
 
       if (errorCounts.size > 0) {
         console.log('\nErrors:');
@@ -531,7 +596,9 @@ describe('Load Tests', () => {
 
       console.log('\n=== Server Recovery from Load Spike ===');
       console.log(`Baseline Average: ${baselineAvg.toFixed(2)}ms`);
-      console.log(`Spike Average: ${spikeMetrics.metrics.averageTime.toFixed(2)}ms`);
+      console.log(
+        `Spike Average: ${spikeMetrics.metrics.averageTime.toFixed(2)}ms`
+      );
       console.log(`Recovery Average: ${recoveryAvg.toFixed(2)}ms`);
       console.log(`Recovery Ratio: ${recoveryRatio.toFixed(2)}x`);
 
@@ -547,17 +614,22 @@ describe('Load Tests', () => {
       let failedRequests = 0;
       const errors: string[] = [];
 
-      const promises = invalidQueries.map(query => {
-        return Array.from({ length: concurrency / invalidQueries.length }, () => {
-          try {
-            searchApiDocs({ query, limit: 5 }, vectorStore, metadataIndex);
-            successfulRequests++;
-          } catch (error) {
-            failedRequests++;
-            errors.push((error as Error).message);
-          }
-        });
-      }).flat();
+      const promises = invalidQueries
+        .map((query) => {
+          return Array.from(
+            { length: concurrency / invalidQueries.length },
+            () => {
+              try {
+                searchApiDocs({ query, limit: 5 }, vectorStore, metadataIndex);
+                successfulRequests++;
+              } catch (error) {
+                failedRequests++;
+                errors.push((error as Error).message);
+              }
+            }
+          );
+        })
+        .flat();
 
       await Promise.all(promises);
 
@@ -581,37 +653,45 @@ describe('Load Tests', () => {
 
       // Load test 1: Low concurrency
       loadTestResults.push(
-        await runLoadTest(
-          'Low Concurrency (10 requests)',
-          10,
-          () => searchApiDocs({ query: 'get customers', limit: 5 }, vectorStore, metadataIndex)
+        await runLoadTest('Low Concurrency (10 requests)', 10, () =>
+          searchApiDocs(
+            { query: 'get customers', limit: 5 },
+            vectorStore,
+            metadataIndex
+          )
         )
       );
 
       // Load test 2: Medium concurrency
       loadTestResults.push(
-        await runLoadTest(
-          'Medium Concurrency (50 requests)',
-          50,
-          () => searchApiDocs({ query: 'get customers', limit: 5 }, vectorStore, metadataIndex)
+        await runLoadTest('Medium Concurrency (50 requests)', 50, () =>
+          searchApiDocs(
+            { query: 'get customers', limit: 5 },
+            vectorStore,
+            metadataIndex
+          )
         )
       );
 
       // Load test 3: High concurrency
       loadTestResults.push(
-        await runLoadTest(
-          'High Concurrency (100 requests)',
-          100,
-          () => searchApiDocs({ query: 'get customers', limit: 5 }, vectorStore, metadataIndex)
+        await runLoadTest('High Concurrency (100 requests)', 100, () =>
+          searchApiDocs(
+            { query: 'get customers', limit: 5 },
+            vectorStore,
+            metadataIndex
+          )
         )
       );
 
       // Load test 4: Very high concurrency
       loadTestResults.push(
-        await runLoadTest(
-          'Very High Concurrency (200 requests)',
-          200,
-          () => searchApiDocs({ query: 'get customers', limit: 5 }, vectorStore, metadataIndex)
+        await runLoadTest('Very High Concurrency (200 requests)', 200, () =>
+          searchApiDocs(
+            { query: 'get customers', limit: 5 },
+            vectorStore,
+            metadataIndex
+          )
         )
       );
 
@@ -619,21 +699,27 @@ describe('Load Tests', () => {
       console.log('\n=== COMPREHENSIVE LOAD TEST REPORT ===');
       console.log('=====================================\n');
 
-      loadTestResults.forEach(result => {
+      loadTestResults.forEach((result) => {
         console.log(`Load Test: ${result.testName}`);
         console.log(`  Concurrency: ${result.metrics.concurrency}`);
         console.log(`  Total Requests: ${result.metrics.totalRequests}`);
         console.log(`  Successful: ${result.metrics.successfulRequests}`);
         console.log(`  Failed: ${result.metrics.failedRequests}`);
         console.log(`  Total Time: ${result.metrics.totalTime.toFixed(2)}ms`);
-        console.log(`  Average Time: ${result.metrics.averageTime.toFixed(2)}ms`);
+        console.log(
+          `  Average Time: ${result.metrics.averageTime.toFixed(2)}ms`
+        );
         console.log(`  Min Time: ${result.metrics.minTime.toFixed(2)}ms`);
         console.log(`  Max Time: ${result.metrics.maxTime.toFixed(2)}ms`);
         console.log(`  P50: ${result.metrics.p50.toFixed(2)}ms`);
         console.log(`  P95: ${result.metrics.p95.toFixed(2)}ms`);
         console.log(`  P99: ${result.metrics.p99.toFixed(2)}ms`);
-        console.log(`  Requests/sec: ${result.metrics.requestsPerSecond.toFixed(2)}`);
-        console.log(`  Memory Delta: ${(result.metrics.memoryDelta / 1024 / 1024).toFixed(2)}MB`);
+        console.log(
+          `  Requests/sec: ${result.metrics.requestsPerSecond.toFixed(2)}`
+        );
+        console.log(
+          `  Memory Delta: ${(result.metrics.memoryDelta / 1024 / 1024).toFixed(2)}MB`
+        );
         console.log(`  Passed: ${result.passed}`);
         if (result.notes.length > 0) {
           console.log(`  Notes: ${result.notes.join(', ')}`);
@@ -642,7 +728,7 @@ describe('Load Tests', () => {
       });
 
       // Performance assertions
-      loadTestResults.forEach(result => {
+      loadTestResults.forEach((result) => {
         expect(result.metrics.failedRequests).toBe(0);
         expect(result.metrics.averageTime).toBeLessThan(500);
         expect(result.metrics.p95).toBeLessThan(1000);
@@ -703,7 +789,7 @@ async function runLoadTest(
     memoryBefore,
     memoryAfter,
     memoryDelta: memoryAfter - memoryBefore,
-    errors
+    errors,
   };
 
   const notes: string[] = [];
@@ -723,14 +809,17 @@ async function runLoadTest(
     testName,
     metrics,
     passed,
-    notes
+    notes,
   };
 }
 
 /**
  * Calculate percentile from sorted array of times
  */
-function calculatePercentile(sortedTimes: number[], percentile: number): number {
+function calculatePercentile(
+  sortedTimes: number[],
+  percentile: number
+): number {
   if (sortedTimes.length === 0) return 0;
   const index = Math.ceil((percentile / 100) * sortedTimes.length) - 1;
   return sortedTimes[Math.max(0, Math.min(index, sortedTimes.length - 1))];

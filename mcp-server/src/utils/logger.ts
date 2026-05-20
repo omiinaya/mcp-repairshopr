@@ -13,7 +13,7 @@ const LOG_LEVELS: Record<LogLevel, number> = {
   warn: 1,
   info: 2,
   debug: 3,
-  trace: 4
+  trace: 4,
 };
 
 class Logger {
@@ -23,7 +23,11 @@ class Logger {
     return new Date().toISOString();
   }
 
-  private formatMessage(level: string, message: string, metadata?: LogMetadata): string {
+  private formatMessage(
+    level: string,
+    message: string,
+    metadata?: LogMetadata
+  ): string {
     const timestamp = this.formatTimestamp();
     const logLine = `[${timestamp}] [${level}] ${message}`;
 

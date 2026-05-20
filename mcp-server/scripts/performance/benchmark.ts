@@ -6,14 +6,19 @@
  * bottlenecks, and generates a performance report.
  */
 
-import { searchApiDocs, searchByResource, searchByMethod, searchByPermission } from '../../src/tools/search';
+import {
+  searchApiDocs,
+  searchByResource,
+  searchByMethod,
+  searchByPermission,
+} from '../../src/tools/search';
 import { VectorStore } from '../../src/indexer/vector';
 import { MetadataIndex } from '../../src/parser/metadata';
 import {
   generateEndpoints,
   generateSearchQueries,
   generateComplexSearchQueries,
-  createMockMetadataIndex
+  createMockMetadataIndex,
 } from '../../tests/utils/data-generators';
 import { createMockVectorStore } from '../../tests/fixtures/mock-vector-store';
 
@@ -66,7 +71,9 @@ interface PerformanceReport {
 /**
  * Measure execution time of a function
  */
-async function measureTime<T>(fn: () => Promise<T>): Promise<{ result: T; time: number }> {
+async function measureTime<T>(
+  fn: () => Promise<T>
+): Promise<{ result: T; time: number }> {
   const start = Date.now();
   const result = await fn();
   const time = Date.now() - start;
@@ -86,7 +93,10 @@ function measureTimeSync<T>(fn: () => T): { result: T; time: number } {
 /**
  * Calculate percentile from sorted array of times
  */
-function calculatePercentile(sortedTimes: number[], percentile: number): number {
+function calculatePercentile(
+  sortedTimes: number[],
+  percentile: number
+): number {
   if (sortedTimes.length === 0) return 0;
   const index = Math.ceil((percentile / 100) * sortedTimes.length) - 1;
   return sortedTimes[Math.max(0, Math.min(index, sortedTimes.length - 1))];
@@ -140,14 +150,16 @@ async function runBenchmark(
     memoryBefore,
     memoryAfter,
     memoryDelta: memoryAfter - memoryBefore,
-    throughput: (iterations / totalTime) * 1000
+    throughput: (iterations / totalTime) * 1000,
   };
 }
 
 /**
  * Identify performance bottlenecks
  */
-function identifyBottlenecks(benchmarks: BenchmarkResult[]): PerformanceReport['bottlenecks'] {
+function identifyBottlenecks(
+  benchmarks: BenchmarkResult[]
+): PerformanceReport['bottlenecks'] {
   const bottlenecks: PerformanceReport['bottlenecks'] = [];
 
   for (const benchmark of benchmarks) {
@@ -157,7 +169,8 @@ function identifyBottlenecks(benchmarks: BenchmarkResult[]): PerformanceReport['
         operation: benchmark.name,
         issue: `High average response time: ${benchmark.averageTime.toFixed(2)}ms`,
         severity: benchmark.averageTime > 500 ? 'high' : 'medium',
-        recommendation: 'Consider optimizing the operation or implementing caching'
+        recommendation:
+          'Consider optimizing the operation or implementing caching',
       });
     }
 
@@ -167,7 +180,8 @@ function identifyBottlenecks(benchmarks: BenchmarkResult[]): PerformanceReport['
         operation: benchmark.name,
         issue: `High P99 latency: ${benchmark.p99.toFixed(2)}ms`,
         severity: benchmark.p99 > 1000 ? 'high' : 'medium',
-        recommendation: 'Investigate tail latency issues and optimize slow paths'
+        recommendation:
+          'Investigate tail latency issues and optimize slow paths',
       });
     }
 
@@ -177,7 +191,8 @@ function identifyBottlenecks(benchmarks: BenchmarkResult[]): PerformanceReport['
         operation: benchmark.name,
         issue: `High memory usage: ${(benchmark.memoryDelta / 1024 / 1024).toFixed(2)}MB`,
         severity: benchmark.memoryDelta > 50 * 1024 * 1024 ? 'high' : 'medium',
-        recommendation: 'Review memory allocation patterns and consider memory pooling'
+        recommendation:
+          'Review memory allocation patterns and consider memory pooling',
       });
     }
 
@@ -189,7 +204,8 @@ function identifyBottlenecks(benchmarks: BenchmarkResult[]): PerformanceReport['
           benchmark.p99 / benchmark.p50
         ).toFixed(1)}x P50 (${benchmark.p50.toFixed(2)}ms)`,
         severity: 'medium',
-        recommendation: 'Investigate inconsistent performance and optimize variable paths'
+        recommendation:
+          'Investigate inconsistent performance and optimize variable paths',
       });
     }
 
@@ -199,7 +215,8 @@ function identifyBottlenecks(benchmarks: BenchmarkResult[]): PerformanceReport['
         operation: benchmark.name,
         issue: `Low throughput: ${benchmark.throughput.toFixed(2)} ops/sec`,
         severity: benchmark.throughput < 50 ? 'high' : 'medium',
-        recommendation: 'Consider parallelization or batching to improve throughput'
+        recommendation:
+          'Consider parallelization or batching to improve throughput',
       });
     }
   }
@@ -210,18 +227,24 @@ function identifyBottlenecks(benchmarks: BenchmarkResult[]): PerformanceReport['
 /**
  * Generate performance report
  */
-function generatePerformanceReport(benchmarks: BenchmarkResult[]): PerformanceReport {
+function generatePerformanceReport(
+  benchmarks: BenchmarkResult[]
+): PerformanceReport {
   const bottlenecks = identifyBottlenecks(benchmarks);
 
   const totalBenchmarks = benchmarks.length;
   const passedBenchmarks = benchmarks.filter(
-    b => b.averageTime < 200 && b.p95 < 500 && b.memoryDelta < 10 * 1024 * 1024
+    (b) =>
+      b.averageTime < 200 && b.p95 < 500 && b.memoryDelta < 10 * 1024 * 1024
   ).length;
   const failedBenchmarks = totalBenchmarks - passedBenchmarks;
 
   const averageResponseTime =
     benchmarks.reduce((sum, b) => sum + b.averageTime, 0) / benchmarks.length;
-  const totalMemoryUsage = benchmarks.reduce((sum, b) => sum + b.memoryDelta, 0);
+  const totalMemoryUsage = benchmarks.reduce(
+    (sum, b) => sum + b.memoryDelta,
+    0
+  );
 
   return {
     timestamp: new Date().toISOString(),
@@ -229,7 +252,7 @@ function generatePerformanceReport(benchmarks: BenchmarkResult[]): PerformanceRe
       platform: process.platform,
       nodeVersion: process.version,
       cpuCount: require('os').cpus().length,
-      totalMemory: require('os').totalmem()
+      totalMemory: require('os').totalmem(),
     },
     benchmarks,
     bottlenecks,
@@ -238,8 +261,8 @@ function generatePerformanceReport(benchmarks: BenchmarkResult[]): PerformanceRe
       passedBenchmarks,
       failedBenchmarks,
       averageResponseTime,
-      totalMemoryUsage
-    }
+      totalMemoryUsage,
+    },
   };
 }
 
@@ -254,7 +277,9 @@ function printPerformanceReport(report: PerformanceReport): void {
   console.log(`Platform: ${report.systemInfo.platform}`);
   console.log(`Node Version: ${report.systemInfo.nodeVersion}`);
   console.log(`CPU Count: ${report.systemInfo.cpuCount}`);
-  console.log(`Total Memory: ${(report.systemInfo.totalMemory / 1024 / 1024 / 1024).toFixed(2)}GB`);
+  console.log(
+    `Total Memory: ${(report.systemInfo.totalMemory / 1024 / 1024 / 1024).toFixed(2)}GB`
+  );
   console.log('='.repeat(80));
 
   console.log('\n--- BENCHMARK RESULTS ---\n');
@@ -269,9 +294,15 @@ function printPerformanceReport(report: PerformanceReport): void {
     console.log(`  P50: ${benchmark.p50.toFixed(2)}ms`);
     console.log(`  P95: ${benchmark.p95.toFixed(2)}ms`);
     console.log(`  P99: ${benchmark.p99.toFixed(2)}ms`);
-    console.log(`  Memory Before: ${(benchmark.memoryBefore / 1024 / 1024).toFixed(2)}MB`);
-    console.log(`  Memory After: ${(benchmark.memoryAfter / 1024 / 1024).toFixed(2)}MB`);
-    console.log(`  Memory Delta: ${(benchmark.memoryDelta / 1024 / 1024).toFixed(2)}MB`);
+    console.log(
+      `  Memory Before: ${(benchmark.memoryBefore / 1024 / 1024).toFixed(2)}MB`
+    );
+    console.log(
+      `  Memory After: ${(benchmark.memoryAfter / 1024 / 1024).toFixed(2)}MB`
+    );
+    console.log(
+      `  Memory Delta: ${(benchmark.memoryDelta / 1024 / 1024).toFixed(2)}MB`
+    );
     console.log(`  Throughput: ${benchmark.throughput.toFixed(2)} ops/sec`);
     console.log('');
   }
@@ -282,7 +313,9 @@ function printPerformanceReport(report: PerformanceReport): void {
     console.log('No significant bottlenecks detected!\n');
   } else {
     for (const bottleneck of report.bottlenecks) {
-      console.log(`[${bottleneck.severity.toUpperCase()}] ${bottleneck.operation}`);
+      console.log(
+        `[${bottleneck.severity.toUpperCase()}] ${bottleneck.operation}`
+      );
       console.log(`  Issue: ${bottleneck.issue}`);
       console.log(`  Recommendation: ${bottleneck.recommendation}`);
       console.log('');
@@ -293,8 +326,12 @@ function printPerformanceReport(report: PerformanceReport): void {
   console.log(`Total Benchmarks: ${report.summary.totalBenchmarks}`);
   console.log(`Passed: ${report.summary.passedBenchmarks}`);
   console.log(`Failed: ${report.summary.failedBenchmarks}`);
-  console.log(`Average Response Time: ${report.summary.averageResponseTime.toFixed(2)}ms`);
-  console.log(`Total Memory Usage: ${(report.summary.totalMemoryUsage / 1024 / 1024).toFixed(2)}MB`);
+  console.log(
+    `Average Response Time: ${report.summary.averageResponseTime.toFixed(2)}ms`
+  );
+  console.log(
+    `Total Memory Usage: ${(report.summary.totalMemoryUsage / 1024 / 1024).toFixed(2)}MB`
+  );
   console.log('');
   console.log('='.repeat(80) + '\n');
 }
@@ -302,7 +339,10 @@ function printPerformanceReport(report: PerformanceReport): void {
 /**
  * Save performance report to file
  */
-function savePerformanceReport(report: PerformanceReport, outputPath: string): void {
+function savePerformanceReport(
+  report: PerformanceReport,
+  outputPath: string
+): void {
   const fs = require('fs');
   const path = require('path');
 
@@ -360,7 +400,11 @@ async function main(): Promise<void> {
   const limits = [1, 5, 10, 20, 50, 100];
   for (const limit of limits) {
     const result = await runBenchmark(`Search (limit=${limit})`, 100, () =>
-      searchApiDocs({ query: 'get customers', limit }, vectorStore, metadataIndex)
+      searchApiDocs(
+        { query: 'get customers', limit },
+        vectorStore,
+        metadataIndex
+      )
     );
     benchmarks.push(result);
   }
@@ -371,7 +415,7 @@ async function main(): Promise<void> {
     { query: 'get customers', resource: 'Customer' },
     { query: 'create ticket', method: 'POST' },
     { query: 'get data', permission: 'customer.view' },
-    { query: 'search', resource: 'Customer', method: 'GET' }
+    { query: 'search', resource: 'Customer', method: 'GET' },
   ];
   for (const params of filterTests) {
     const result = await runBenchmark(
@@ -386,8 +430,10 @@ async function main(): Promise<void> {
   console.log('Running: searchByResource...');
   const resources = ['Customer', 'Ticket', 'Invoice', 'TestResource'];
   for (const resource of resources) {
-    const result = await runBenchmark(`searchByResource: ${resource}`, 100, () =>
-      searchByResource(resource, metadataIndex)
+    const result = await runBenchmark(
+      `searchByResource: ${resource}`,
+      100,
+      () => searchByResource(resource, metadataIndex)
     );
     benchmarks.push(result);
   }
@@ -404,10 +450,17 @@ async function main(): Promise<void> {
 
   // Benchmark 7: searchByPermission
   console.log('Running: searchByPermission...');
-  const permissions = ['customer.view', 'ticket.create', 'invoice.update', 'test.view'];
+  const permissions = [
+    'customer.view',
+    'ticket.create',
+    'invoice.update',
+    'test.view',
+  ];
   for (const permission of permissions) {
-    const result = await runBenchmark(`searchByPermission: ${permission}`, 100, () =>
-      searchByPermission(permission, metadataIndex)
+    const result = await runBenchmark(
+      `searchByPermission: ${permission}`,
+      100,
+      () => searchByPermission(permission, metadataIndex)
     );
     benchmarks.push(result);
   }
@@ -417,8 +470,15 @@ async function main(): Promise<void> {
   const largeEndpoints = generateEndpoints(2000);
   const largeMetadataIndex = createMockMetadataIndex(largeEndpoints);
   const largeVectorStore = createMockVectorStore(largeEndpoints);
-  const result = await runBenchmark('Large Dataset Search (2000 endpoints)', 50, () =>
-    searchApiDocs({ query: 'get customers', limit: 10 }, largeVectorStore, largeMetadataIndex)
+  const result = await runBenchmark(
+    'Large Dataset Search (2000 endpoints)',
+    50,
+    () =>
+      searchApiDocs(
+        { query: 'get customers', limit: 10 },
+        largeVectorStore,
+        largeMetadataIndex
+      )
   );
   benchmarks.push(result);
 
@@ -440,7 +500,7 @@ async function main(): Promise<void> {
 }
 
 // Run main function
-main().catch(error => {
+main().catch((error) => {
   console.error('Error running benchmarks:', error);
   process.exit(1);
 });

@@ -14,7 +14,7 @@ export const mockDefaultConfig: ServerConfig = {
   enableHotReload: true,
   enableMetrics: false,
   maxConcurrentRequests: 100,
-  requestTimeout: 30000
+  requestTimeout: 30000,
 };
 
 export const mockCustomConfig: ServerConfig = {
@@ -27,12 +27,12 @@ export const mockCustomConfig: ServerConfig = {
   enableHotReload: false,
   enableMetrics: true,
   maxConcurrentRequests: 200,
-  requestTimeout: 60000
+  requestTimeout: 60000,
 };
 
 export const mockMinimalConfig: Partial<ServerConfig> = {
   serverName: 'minimal-server',
-  port: 5000
+  port: 5000,
 };
 
 export const mockInvalidConfigs: Partial<ServerConfig>[] = [
@@ -46,7 +46,7 @@ export const mockInvalidConfigs: Partial<ServerConfig>[] = [
     enableHotReload: true,
     enableMetrics: false,
     maxConcurrentRequests: 100,
-    requestTimeout: 30000
+    requestTimeout: 30000,
   },
   {
     serverName: 'test-server',
@@ -58,7 +58,7 @@ export const mockInvalidConfigs: Partial<ServerConfig>[] = [
     enableHotReload: true,
     enableMetrics: false,
     maxConcurrentRequests: 100,
-    requestTimeout: 30000
+    requestTimeout: 30000,
   },
   {
     serverName: 'test-server',
@@ -70,7 +70,7 @@ export const mockInvalidConfigs: Partial<ServerConfig>[] = [
     enableHotReload: true,
     enableMetrics: false,
     maxConcurrentRequests: 100,
-    requestTimeout: 30000
+    requestTimeout: 30000,
   },
   {
     serverName: 'test-server',
@@ -82,7 +82,7 @@ export const mockInvalidConfigs: Partial<ServerConfig>[] = [
     enableHotReload: true,
     enableMetrics: false,
     maxConcurrentRequests: -1,
-    requestTimeout: 30000
+    requestTimeout: 30000,
   },
   {
     serverName: 'test-server',
@@ -94,8 +94,8 @@ export const mockInvalidConfigs: Partial<ServerConfig>[] = [
     enableHotReload: true,
     enableMetrics: false,
     maxConcurrentRequests: 100,
-    requestTimeout: -1000
-  }
+    requestTimeout: -1000,
+  },
 ];
 
 export const mockEnvVars = {
@@ -108,7 +108,7 @@ export const mockEnvVars = {
   ENABLE_HOT_RELOAD: 'false',
   ENABLE_METRICS: 'true',
   MAX_CONCURRENT_REQUESTS: '150',
-  REQUEST_TIMEOUT: '45000'
+  REQUEST_TIMEOUT: '45000',
 };
 
 export const mockInvalidEnvVars = {
@@ -116,5 +116,5 @@ export const mockInvalidEnvVars = {
   ENABLE_HOT_RELOAD: 'not-a-boolean',
   ENABLE_METRICS: 'not-a-boolean',
   MAX_CONCURRENT_REQUESTS: 'not-a-number',
-  REQUEST_TIMEOUT: 'not-a-number'
+  REQUEST_TIMEOUT: 'not-a-number',
 };

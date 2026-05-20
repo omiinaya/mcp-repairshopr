@@ -36,7 +36,10 @@ export class VectorStore {
    * @param limit - Maximum number of results to return (default: 5)
    * @returns Array of search results with id, score, and metadata
    */
-  search(query: string, limit: number = 5): Array<{ id: string; score: number; metadata: any }> {
+  search(
+    query: string,
+    limit: number = 5
+  ): Array<{ id: string; score: number; metadata: any }> {
     if (this.vectors.size === 0) {
       return [];
     }
@@ -52,7 +55,7 @@ export class VectorStore {
       results.push({
         id,
         score,
-        metadata: vector.metadata
+        metadata: vector.metadata,
       });
     }
 
@@ -137,7 +140,8 @@ export class VectorStore {
    */
   private generateQueryEmbedding(query: string): number[] {
     // Define the character set for embedding (must match embeddings.ts)
-    const characterSet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 .,!?;:()-\'"/';
+    const characterSet =
+      'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 .,!?;:()-\'"/';
     const embeddingDimension = characterSet.length;
 
     const vector = new Array(embeddingDimension).fill(0);
@@ -168,7 +172,7 @@ export class VectorStore {
    */
   toJSON(): string {
     const data = {
-      vectors: Array.from(this.vectors.entries())
+      vectors: Array.from(this.vectors.entries()),
     };
     return JSON.stringify(data);
   }

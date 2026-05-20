@@ -2,14 +2,21 @@
  * Test helpers and utilities for unit tests
  */
 
-import { ApiEndpoint, ApiParameter, ApiResponse, ApiDocument } from '../../src/utils/types';
+import {
+  ApiEndpoint,
+  ApiParameter,
+  ApiResponse,
+  ApiDocument,
+} from '../../src/utils/types';
 import { MetadataIndex } from '../../src/parser/metadata';
 import { buildMetadataIndex } from '../../src/parser/metadata';
 
 /**
  * Create a mock metadata index from endpoints
  */
-export function createMockMetadataIndex(endpoints: ApiEndpoint[]): MetadataIndex {
+export function createMockMetadataIndex(
+  endpoints: ApiEndpoint[]
+): MetadataIndex {
   const documents: ApiDocument[] = [];
   const resourceMap = new Map<string, ApiEndpoint[]>();
 
@@ -25,7 +32,7 @@ export function createMockMetadataIndex(endpoints: ApiEndpoint[]): MetadataIndex
   for (const [resourceName, resourceEndpoints] of resourceMap) {
     documents.push({
       resourceName,
-      endpoints: resourceEndpoints
+      endpoints: resourceEndpoints,
     });
   }
 
@@ -47,9 +54,9 @@ export function createMinimalMetadataIndex(): MetadataIndex {
     responses: [
       {
         statusCode: 200,
-        description: 'Success'
-      }
-    ]
+        description: 'Success',
+      },
+    ],
   };
 
   return createMockMetadataIndex([endpoint]);
@@ -64,7 +71,7 @@ export function createEmptyMetadataIndex(): MetadataIndex {
     endpointsByPath: new Map(),
     endpointsByPermission: new Map(),
     endpointsByMethod: new Map(),
-    allEndpoints: []
+    allEndpoints: [],
   };
 }
 
@@ -72,7 +79,7 @@ export function createEmptyMetadataIndex(): MetadataIndex {
  * Wait for a specified amount of time
  */
 export function wait(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 /**
@@ -91,7 +98,9 @@ export function createMockFunction<T>(...returns: T[]): jest.Mock<() => T> {
 /**
  * Create a mock async function
  */
-export function createMockAsyncFunction<T>(...returns: T[]): jest.Mock<() => Promise<T>> {
+export function createMockAsyncFunction<T>(
+  ...returns: T[]
+): jest.Mock<() => Promise<T>> {
   let callCount = 0;
   const mockFn = jest.fn(async () => {
     const result = returns[callCount % returns.length];
@@ -200,7 +209,7 @@ export function createMockFileSystem(files: Record<string, string>): any {
       fs.readFile = originalReadFile;
       fs.existsSync = originalExistsSync;
       fs.exists = originalExists;
-    }
+    },
   };
 }
 
@@ -234,7 +243,7 @@ export function createMockConsole(): {
     originalConsole,
     restore: () => {
       Object.assign(console, originalConsole);
-    }
+    },
   };
 }
 
@@ -293,7 +302,7 @@ export function createMockEventEmitter(): {
     }),
     emit: jest.fn((event: string, ...args: any[]) => {
       if (listeners.has(event)) {
-        listeners.get(event)!.forEach(listener => listener(...args));
+        listeners.get(event)!.forEach((listener) => listener(...args));
       }
     }),
     off: jest.fn((event: string, listener: Function) => {
@@ -303,7 +312,7 @@ export function createMockEventEmitter(): {
           listeners.get(event)!.splice(index, 1);
         }
       }
-    })
+    }),
   };
 }
 
@@ -331,7 +340,7 @@ export function createMockStream(): {
     end: jest.fn(() => {
       ended = true;
     }),
-    on: jest.fn()
+    on: jest.fn(),
   };
 }
 
@@ -339,7 +348,8 @@ export function createMockStream(): {
  * Generate a random string
  */
 export function randomString(length: number = 10): string {
-  const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  const chars =
+    'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   let result = '';
   for (let i = 0; i < length; i++) {
     result += chars.charAt(Math.floor(Math.random() * chars.length));
@@ -364,8 +374,13 @@ export function randomBoolean(): boolean {
 /**
  * Generate a random date
  */
-export function randomDate(start: Date = new Date(2020, 0, 1), end: Date = new Date()): Date {
-  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+export function randomDate(
+  start: Date = new Date(2020, 0, 1),
+  end: Date = new Date()
+): Date {
+  return new Date(
+    start.getTime() + Math.random() * (end.getTime() - start.getTime())
+  );
 }
 
 /**
@@ -394,8 +409,8 @@ export function randomUrl(): string {
  */
 export function randomUUID(): string {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-    const r = Math.random() * 16 | 0;
-    const v = c === 'x' ? r : (r & 0x3 | 0x8);
+    const r = (Math.random() * 16) | 0;
+    const v = c === 'x' ? r : (r & 0x3) | 0x8;
     return v.toString(16);
   });
 }
@@ -417,7 +432,9 @@ export function deepEqual(a: any, b: any): boolean {
 /**
  * Measure execution time of a function
  */
-export async function measureTime<T>(fn: () => Promise<T>): Promise<{ result: T; time: number }> {
+export async function measureTime<T>(
+  fn: () => Promise<T>
+): Promise<{ result: T; time: number }> {
   const start = Date.now();
   const result = await fn();
   const time = Date.now() - start;
@@ -433,7 +450,7 @@ export async function retry<T>(
   delay: number = 100
 ): Promise<T> {
   let lastError: Error | null = null;
-  
+
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
       return await fn();
@@ -444,7 +461,7 @@ export async function retry<T>(
       }
     }
   }
-  
+
   throw lastError;
 }
 
@@ -468,7 +485,7 @@ export function createMockCacheEntry<T>(
     value,
     timestamp,
     ttl,
-    expired: Date.now() - timestamp > ttl
+    expired: Date.now() - timestamp > ttl,
   };
 }
 
