@@ -23,8 +23,12 @@ class RepairShoprDocGenerator:
     
     def __init__(self):
         self.swagger_data = None
-        self.output_dir = Path(self.OUTPUT_DIR)
-        self.output_dir.mkdir(parents=True, exist_ok=True)
+        self._output_dir = Path(self.OUTPUT_DIR)
+        self._output_dir.mkdir(parents=True, exist_ok=True)
+    
+    @property
+    def output_dir(self):
+        return self._output_dir
     
     def fetch_swagger_json(self) -> bool:
         """Fetch the swagger.json from RepairShopr API docs"""
@@ -373,7 +377,7 @@ class RepairShoprDocGenerator:
         for section_name, endpoints in sections.items():
             # Generate filename
             filename = self._generate_filename(section_name)
-            filepath = self.output_dir / filename
+            filepath = self._output_dir / filename
             
             # Generate documentation
             doc_content = self.generate_section_doc(section_name, endpoints)
