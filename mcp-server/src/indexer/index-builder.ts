@@ -339,9 +339,10 @@ export class IndexBuilder {
    */
   private async calculateDocsHash(files: string[]): Promise<string> {
     const hash = crypto.createHash('sha256');
+    const collator = new Intl.Collator();
 
     // Sort files for consistent hashing
-    const sortedFiles = [...files].sort((a, b) => a.localeCompare(b));
+    const sortedFiles = [...files].sort(collator.compare);
 
     for (const file of sortedFiles) {
       const content = await fsPromises.readFile(file, 'utf-8');

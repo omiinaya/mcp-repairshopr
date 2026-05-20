@@ -184,8 +184,8 @@ function createResourceSummary(resource: string, endpoints: ApiEndpoint[]): Reso
     name: resource,
     description: generateResourceDescription(resource, endpoints),
     endpointCount: endpoints.length,
-    methods: Array.from(methods).sort((a, b) => a.localeCompare(b)),
-    permissions: Array.from(permissions).sort((a, b) => a.localeCompare(b)),
+    methods: [...methods].sort((a, b) => String(a).localeCompare(b)),
+    permissions: [...permissions].sort((a, b) => String(a).localeCompare(b)),
   };
 }
 
@@ -556,7 +556,8 @@ export function getResource(
  * @returns Array of resource names
  */
 export function getResourceNames(index: MetadataIndex): string[] {
-    return Array.from(index.resources.keys()).sort((a, b) => a.localeCompare(b));
+    const collator = new Intl.Collator();
+    return [...index.resources.keys()].sort(collator.compare);
 }
 
 /**
@@ -568,6 +569,7 @@ export function getResourceNames(index: MetadataIndex): string[] {
  */
 export function getResourcesByMethod(method: string, index: MetadataIndex): string[] {
   const resources = new Set<string>();
+  const collator = new Intl.Collator();
 
   for (const endpoint of index.allEndpoints) {
     if (endpoint.method.toUpperCase() === method.toUpperCase()) {
@@ -575,7 +577,7 @@ export function getResourcesByMethod(method: string, index: MetadataIndex): stri
     }
   }
 
-  return Array.from(resources).sort((a, b) => a.localeCompare(b));
+  return [...resources].sort(collator.compare);
 }
 
 /**
@@ -587,6 +589,7 @@ export function getResourcesByMethod(method: string, index: MetadataIndex): stri
  */
 export function getResourcesByPermission(permission: string, index: MetadataIndex): string[] {
   const resources = new Set<string>();
+  const collator = new Intl.Collator();
 
   for (const endpoint of index.allEndpoints) {
     if (endpoint.permission === permission) {
@@ -594,5 +597,5 @@ export function getResourcesByPermission(permission: string, index: MetadataInde
     }
   }
 
-  return Array.from(resources).sort((a, b) => a.localeCompare(b));
+  return [...resources].sort(collator.compare);
 }
