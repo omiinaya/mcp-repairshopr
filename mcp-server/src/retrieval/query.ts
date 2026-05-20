@@ -469,7 +469,7 @@ export class QueryUnderstanding {
     if (interpretations.length > 0) {
       recommendedInterpretation = interpretations.reduce((best, current) => 
         current.confidence > best.confidence ? current : best
-      );
+      , interpretations[0]);
     }
 
     return {

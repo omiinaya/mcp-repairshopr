@@ -184,8 +184,8 @@ function createResourceSummary(resource: string, endpoints: ApiEndpoint[]): Reso
     name: resource,
     description: generateResourceDescription(resource, endpoints),
     endpointCount: endpoints.length,
-    methods: Array.from(methods).sort(),
-    permissions: Array.from(permissions).sort()
+    methods: Array.from(methods).sort((a, b) => a.localeCompare(b)),
+    permissions: Array.from(permissions).sort((a, b) => a.localeCompare(b)),
   };
 }
 
@@ -556,7 +556,7 @@ export function getResource(
  * @returns Array of resource names
  */
 export function getResourceNames(index: MetadataIndex): string[] {
-  return Array.from(index.resources.keys()).sort();
+    return Array.from(index.resources.keys()).sort((a, b) => a.localeCompare(b));
 }
 
 /**
@@ -575,7 +575,7 @@ export function getResourcesByMethod(method: string, index: MetadataIndex): stri
     }
   }
 
-  return Array.from(resources).sort();
+  return Array.from(resources).sort((a, b) => a.localeCompare(b));
 }
 
 /**
@@ -594,5 +594,5 @@ export function getResourcesByPermission(permission: string, index: MetadataInde
     }
   }
 
-  return Array.from(resources).sort();
+  return Array.from(resources).sort((a, b) => a.localeCompare(b));
 }

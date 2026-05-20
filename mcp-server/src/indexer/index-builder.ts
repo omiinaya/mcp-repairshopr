@@ -341,7 +341,7 @@ export class IndexBuilder {
     const hash = crypto.createHash('sha256');
 
     // Sort files for consistent hashing
-    const sortedFiles = [...files].sort();
+    const sortedFiles = [...files].sort((a, b) => a.localeCompare(b));
 
     for (const file of sortedFiles) {
       const content = await fsPromises.readFile(file, 'utf-8');
