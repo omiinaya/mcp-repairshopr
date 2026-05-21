@@ -8,35 +8,25 @@
 
 #### Get Ticket Timers
 
-
 Returns a paginated list of Ticket Timers
-
 
 Required permission: Ticket Timers - Overview
 
-
-
 **Endpoint:** `GET /ticket_timers`
-
 
 **Required Permission:** Required permission: Ticket Timers - Overview
 
-
 **Query Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| created_at_lt | string | No | Returns Ticket Timers created before the date. Example "2019-01-22" |
-| created_at_gt | string | No | Returns Ticket Timers created after the date. Example "2019-12-22" |
-| page | integer | No | Returns provided page of results, each 'page' contains 25 results |
-
+| Parameter     | Type    | Required | Description                                                         |
+| ------------- | ------- | -------- | ------------------------------------------------------------------- |
+| created_at_lt | string  | No       | Returns Ticket Timers created before the date. Example "2019-01-22" |
+| created_at_gt | string  | No       | Returns Ticket Timers created after the date. Example "2019-12-22"  |
+| page          | integer | No       | Returns provided page of results, each 'page' contains 25 results   |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -65,4 +55,3 @@ successful
   }
 }
 ```
-

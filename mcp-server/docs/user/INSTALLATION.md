@@ -81,6 +81,7 @@ nano deploy/.env
 ```
 
 Key configuration options:
+
 - `PORT`: Server port (default: 3000)
 - `LOG_LEVEL`: Logging level (error, warn, info, debug)
 - `CACHE_MAX_SIZE`: Maximum cache size in bytes

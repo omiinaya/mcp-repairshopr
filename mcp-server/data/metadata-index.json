@@ -867,9 +867,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "message": [
-                "Asset type can't be blank"
-              ]
+              "message": ["Asset type can't be blank"]
             }
           }
         ]
@@ -2109,12 +2107,8 @@
             "statusCode": 422,
             "description": "Invalid request",
             "example": {
-              "customer_id": [
-                "can't be blank"
-              ],
-              "date": [
-                "can't be blank"
-              ]
+              "customer_id": ["can't be blank"],
+              "date": ["can't be blank"]
             }
           }
         ]
@@ -2217,9 +2211,7 @@
             "statusCode": 422,
             "description": "Invalid request",
             "example": {
-              "date": [
-                "can't be blank"
-              ]
+              "date": ["can't be blank"]
             }
           }
         ]
@@ -2441,9 +2433,7 @@
             "statusCode": 422,
             "description": "Invalid request",
             "example": {
-              "item": [
-                "can't be blank"
-              ]
+              "item": ["can't be blank"]
             }
           }
         ]
@@ -3198,9 +3188,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "message": [
-                "Ticket description can't be blank"
-              ],
+              "message": ["Ticket description can't be blank"],
               "params": {
                 "from_check_in": true
               }
@@ -3305,9 +3293,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "message": [
-                "Ticket description can't be blank"
-              ],
+              "message": ["Ticket description can't be blank"],
               "params": {
                 "ticket_description": ""
               }
@@ -3457,10 +3443,7 @@
                         "isapproved": "true",
                         "pre_diagnosed": "true"
                       },
-                      "disabled": [
-                        "subject",
-                        "problem_type"
-                      ],
+                      "disabled": ["subject", "problem_type"],
                       "position": "2"
                     },
                     "worksheets": {
@@ -3542,10 +3525,7 @@
                       "isapproved": "true",
                       "pre_diagnosed": "true"
                     },
-                    "disabled": [
-                      "subject",
-                      "problem_type"
-                    ],
+                    "disabled": ["subject", "problem_type"],
                     "position": "2"
                   },
                   "worksheets": {
@@ -3647,15 +3627,9 @@
               "success": false,
               "errors": {
                 "appointments": {
-                  "summary": [
-                    "can't be blank"
-                  ],
-                  "start_at": [
-                    "can't be blank"
-                  ],
-                  "end_at": [
-                    "can't be blank"
-                  ]
+                  "summary": ["can't be blank"],
+                  "start_at": ["can't be blank"],
+                  "end_at": ["can't be blank"]
                 }
               }
             }
@@ -3927,9 +3901,7 @@
                   "updated_at": "2019-10-28T10:18:14.061Z",
                   "success": true,
                   "payment_amount": 100,
-                  "invoice_ids": [
-                    null
-                  ],
+                  "invoice_ids": [null],
                   "ref_num": "11006",
                   "applied_at": "2019-10-26T00:00:00.000Z",
                   "payment_method": "Check",
@@ -4011,9 +3983,7 @@
                 "updated_at": "2019-10-28T12:45:24.315Z",
                 "success": true,
                 "payment_amount": 10,
-                "invoice_ids": [
-                  1
-                ],
+                "invoice_ids": [1],
                 "ref_num": null,
                 "applied_at": "2019-10-28T00:00:00.000Z",
                 "payment_method": null,
@@ -4047,9 +4017,7 @@
                 "updated_at": "2019-10-28T13:05:27.257Z",
                 "success": true,
                 "payment_amount": 100,
-                "invoice_ids": [
-                  null
-                ],
+                "invoice_ids": [null],
                 "ref_num": "11006",
                 "applied_at": "2019-10-26T00:00:00.000Z",
                 "payment_method": "Check",
@@ -4168,9 +4136,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "message": [
-                "Number can't be blank"
-              ],
+              "message": ["Number can't be blank"],
               "params": {
                 "customer_id": "1",
                 "number": ""
@@ -4206,9 +4172,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "message": [
-                "Number can't be blank"
-              ],
+              "message": ["Number can't be blank"],
               "params": {
                 "customer_id": "1",
                 "id": "9",
@@ -4365,9 +4329,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "message": [
-                "Password confirmation doesn't match Password"
-              ],
+              "message": ["Password confirmation doesn't match Password"],
               "params": {
                 "password": "does not match",
                 "password_confirmation": "the confirmation"
@@ -4551,9 +4513,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "message": [
-                "Serial number has already been taken"
-              ]
+              "message": ["Serial number has already been taken"]
             }
           }
         ]
@@ -4751,10 +4711,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "message": [
-                "Name can't be blank",
-                "Description can't be blank"
-              ],
+              "message": ["Name can't be blank", "Description can't be blank"],
               "params": {
                 "name": "",
                 "maintain_stock": false
@@ -4866,9 +4823,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "message": [
-                "Name can't be blank"
-              ]
+              "message": ["Name can't be blank"]
             }
           }
         ]
@@ -5663,9 +5618,7 @@
             "statusCode": 422,
             "description": "Invalid request",
             "example": {
-              "error": [
-                "Next run can't be blank"
-              ]
+              "error": ["Next run can't be blank"]
             }
           }
         ]
@@ -5728,9 +5681,7 @@
             "statusCode": 422,
             "description": "Invalid request",
             "example": {
-              "error": [
-                "Name can't be blank"
-              ]
+              "error": ["Name can't be blank"]
             }
           }
         ]
@@ -5801,9 +5752,7 @@
             "statusCode": 422,
             "description": "Invalid request",
             "example": {
-              "error": [
-                "Name can't be blank"
-              ]
+              "error": ["Name can't be blank"]
             }
           }
         ]
@@ -5909,13 +5858,7 @@
                   "Software",
                   "Other"
                 ],
-                "priorities": [
-                  "",
-                  "0 Urgent",
-                  "1 High",
-                  "2 Normal",
-                  "3 Low"
-                ]
+                "priorities": ["", "0 Urgent", "1 High", "2 Normal", "3 Low"]
               },
               "business_hours_enabled": true,
               "business_hours": [
@@ -6302,9 +6245,7 @@
                 "intake_form_html": null,
                 "signature_name": "Joe",
                 "signature_date": null,
-                "asset_ids": [
-                  1
-                ],
+                "asset_ids": [1],
                 "priority": "High",
                 "resolved_at": null,
                 "outtake_form_name": null,
@@ -6802,9 +6743,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "message": [
-                "Subject can't be blank"
-              ]
+              "message": ["Subject can't be blank"]
             }
           }
         ]
@@ -7005,10 +6944,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "message": [
-                "Body can't be blank",
-                "Subject can't be blank"
-              ]
+              "message": ["Body can't be blank", "Subject can't be blank"]
             }
           }
         ]
@@ -7629,12 +7565,7 @@
             "statusCode": 200,
             "description": "successful",
             "example": {
-              "users": [
-                [
-                  1,
-                  "Joe Doe"
-                ]
-              ]
+              "users": [[1, "Joe Doe"]]
             }
           }
         ]
@@ -7778,9 +7709,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "message": [
-                "Email is not an email"
-              ],
+              "message": ["Email is not an email"],
               "params": {
                 "name": "Vendor1",
                 "email": "broken_emailmail.com"
@@ -7868,9 +7797,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "message": [
-                "Email is not an email"
-              ]
+              "message": ["Email is not an email"]
             }
           }
         ]
@@ -7940,10 +7867,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "errors": [
-                "Body can't be blank",
-                "Name can't be blank"
-              ],
+              "errors": ["Body can't be blank", "Name can't be blank"],
               "params": {
                 "name": ""
               }
@@ -8008,9 +7932,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "errors": [
-                "Name can't be blank"
-              ],
+              "errors": ["Name can't be blank"],
               "params": {
                 "name": ""
               }
@@ -9067,9 +8989,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "message": [
-              "Asset type can't be blank"
-            ]
+            "message": ["Asset type can't be blank"]
           }
         }
       ]
@@ -10297,12 +10217,8 @@
           "statusCode": 422,
           "description": "Invalid request",
           "example": {
-            "customer_id": [
-              "can't be blank"
-            ],
-            "date": [
-              "can't be blank"
-            ]
+            "customer_id": ["can't be blank"],
+            "date": ["can't be blank"]
           }
         }
       ]
@@ -10405,9 +10321,7 @@
           "statusCode": 422,
           "description": "Invalid request",
           "example": {
-            "date": [
-              "can't be blank"
-            ]
+            "date": ["can't be blank"]
           }
         }
       ]
@@ -10629,9 +10543,7 @@
           "statusCode": 422,
           "description": "Invalid request",
           "example": {
-            "item": [
-              "can't be blank"
-            ]
+            "item": ["can't be blank"]
           }
         }
       ]
@@ -11378,9 +11290,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "message": [
-              "Ticket description can't be blank"
-            ],
+            "message": ["Ticket description can't be blank"],
             "params": {
               "from_check_in": true
             }
@@ -11485,9 +11395,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "message": [
-              "Ticket description can't be blank"
-            ],
+            "message": ["Ticket description can't be blank"],
             "params": {
               "ticket_description": ""
             }
@@ -11633,10 +11541,7 @@
                       "isapproved": "true",
                       "pre_diagnosed": "true"
                     },
-                    "disabled": [
-                      "subject",
-                      "problem_type"
-                    ],
+                    "disabled": ["subject", "problem_type"],
                     "position": "2"
                   },
                   "worksheets": {
@@ -11718,10 +11623,7 @@
                     "isapproved": "true",
                     "pre_diagnosed": "true"
                   },
-                  "disabled": [
-                    "subject",
-                    "problem_type"
-                  ],
+                  "disabled": ["subject", "problem_type"],
                   "position": "2"
                 },
                 "worksheets": {
@@ -11823,15 +11725,9 @@
             "success": false,
             "errors": {
               "appointments": {
-                "summary": [
-                  "can't be blank"
-                ],
-                "start_at": [
-                  "can't be blank"
-                ],
-                "end_at": [
-                  "can't be blank"
-                ]
+                "summary": ["can't be blank"],
+                "start_at": ["can't be blank"],
+                "end_at": ["can't be blank"]
               }
             }
           }
@@ -12097,9 +11993,7 @@
                 "updated_at": "2019-10-28T10:18:14.061Z",
                 "success": true,
                 "payment_amount": 100,
-                "invoice_ids": [
-                  null
-                ],
+                "invoice_ids": [null],
                 "ref_num": "11006",
                 "applied_at": "2019-10-26T00:00:00.000Z",
                 "payment_method": "Check",
@@ -12181,9 +12075,7 @@
               "updated_at": "2019-10-28T12:45:24.315Z",
               "success": true,
               "payment_amount": 10,
-              "invoice_ids": [
-                1
-              ],
+              "invoice_ids": [1],
               "ref_num": null,
               "applied_at": "2019-10-28T00:00:00.000Z",
               "payment_method": null,
@@ -12217,9 +12109,7 @@
               "updated_at": "2019-10-28T13:05:27.257Z",
               "success": true,
               "payment_amount": 100,
-              "invoice_ids": [
-                null
-              ],
+              "invoice_ids": [null],
               "ref_num": "11006",
               "applied_at": "2019-10-26T00:00:00.000Z",
               "payment_method": "Check",
@@ -12336,9 +12226,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "message": [
-              "Number can't be blank"
-            ],
+            "message": ["Number can't be blank"],
             "params": {
               "customer_id": "1",
               "number": ""
@@ -12374,9 +12262,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "message": [
-              "Number can't be blank"
-            ],
+            "message": ["Number can't be blank"],
             "params": {
               "customer_id": "1",
               "id": "9",
@@ -12531,9 +12417,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "message": [
-              "Password confirmation doesn't match Password"
-            ],
+            "message": ["Password confirmation doesn't match Password"],
             "params": {
               "password": "does not match",
               "password_confirmation": "the confirmation"
@@ -12715,9 +12599,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "message": [
-              "Serial number has already been taken"
-            ]
+            "message": ["Serial number has already been taken"]
           }
         }
       ]
@@ -12913,10 +12795,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "message": [
-              "Name can't be blank",
-              "Description can't be blank"
-            ],
+            "message": ["Name can't be blank", "Description can't be blank"],
             "params": {
               "name": "",
               "maintain_stock": false
@@ -13028,9 +12907,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "message": [
-              "Name can't be blank"
-            ]
+            "message": ["Name can't be blank"]
           }
         }
       ]
@@ -13819,9 +13696,7 @@
           "statusCode": 422,
           "description": "Invalid request",
           "example": {
-            "error": [
-              "Next run can't be blank"
-            ]
+            "error": ["Next run can't be blank"]
           }
         }
       ]
@@ -13884,9 +13759,7 @@
           "statusCode": 422,
           "description": "Invalid request",
           "example": {
-            "error": [
-              "Name can't be blank"
-            ]
+            "error": ["Name can't be blank"]
           }
         }
       ]
@@ -13957,9 +13830,7 @@
           "statusCode": 422,
           "description": "Invalid request",
           "example": {
-            "error": [
-              "Name can't be blank"
-            ]
+            "error": ["Name can't be blank"]
           }
         }
       ]
@@ -14061,13 +13932,7 @@
                 "Software",
                 "Other"
               ],
-              "priorities": [
-                "",
-                "0 Urgent",
-                "1 High",
-                "2 Normal",
-                "3 Low"
-              ]
+              "priorities": ["", "0 Urgent", "1 High", "2 Normal", "3 Low"]
             },
             "business_hours_enabled": true,
             "business_hours": [
@@ -14450,9 +14315,7 @@
               "intake_form_html": null,
               "signature_name": "Joe",
               "signature_date": null,
-              "asset_ids": [
-                1
-              ],
+              "asset_ids": [1],
               "priority": "High",
               "resolved_at": null,
               "outtake_form_name": null,
@@ -14950,9 +14813,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "message": [
-              "Subject can't be blank"
-            ]
+            "message": ["Subject can't be blank"]
           }
         }
       ]
@@ -15153,10 +15014,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "message": [
-              "Body can't be blank",
-              "Subject can't be blank"
-            ]
+            "message": ["Body can't be blank", "Subject can't be blank"]
           }
         }
       ]
@@ -15771,12 +15629,7 @@
           "statusCode": 200,
           "description": "successful",
           "example": {
-            "users": [
-              [
-                1,
-                "Joe Doe"
-              ]
-            ]
+            "users": [[1, "Joe Doe"]]
           }
         }
       ]
@@ -15918,9 +15771,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "message": [
-              "Email is not an email"
-            ],
+            "message": ["Email is not an email"],
             "params": {
               "name": "Vendor1",
               "email": "broken_emailmail.com"
@@ -16008,9 +15859,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "message": [
-              "Email is not an email"
-            ]
+            "message": ["Email is not an email"]
           }
         }
       ]
@@ -16078,10 +15927,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "errors": [
-              "Body can't be blank",
-              "Name can't be blank"
-            ],
+            "errors": ["Body can't be blank", "Name can't be blank"],
             "params": {
               "name": ""
             }
@@ -16146,9 +15992,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "errors": [
-              "Name can't be blank"
-            ],
+            "errors": ["Name can't be blank"],
             "params": {
               "name": ""
             }
@@ -16686,9 +16530,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "message": [
-                "Password confirmation doesn't match Password"
-              ],
+              "message": ["Password confirmation doesn't match Password"],
               "params": {
                 "password": "does not match",
                 "password_confirmation": "the confirmation"
@@ -17479,9 +17321,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "message": [
-                "Asset type can't be blank"
-              ]
+              "message": ["Asset type can't be blank"]
             }
           }
         ]
@@ -18133,9 +17973,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "message": [
-                "Number can't be blank"
-              ],
+              "message": ["Number can't be blank"],
               "params": {
                 "customer_id": "1",
                 "number": ""
@@ -18171,9 +18009,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "message": [
-                "Number can't be blank"
-              ],
+              "message": ["Number can't be blank"],
               "params": {
                 "customer_id": "1",
                 "id": "9",
@@ -18770,12 +18606,8 @@
             "statusCode": 422,
             "description": "Invalid request",
             "example": {
-              "customer_id": [
-                "can't be blank"
-              ],
-              "date": [
-                "can't be blank"
-              ]
+              "customer_id": ["can't be blank"],
+              "date": ["can't be blank"]
             }
           }
         ]
@@ -18918,9 +18750,7 @@
             "statusCode": 422,
             "description": "Invalid request",
             "example": {
-              "date": [
-                "can't be blank"
-              ]
+              "date": ["can't be blank"]
             }
           }
         ]
@@ -19041,9 +18871,7 @@
             "statusCode": 422,
             "description": "Invalid request",
             "example": {
-              "item": [
-                "can't be blank"
-              ]
+              "item": ["can't be blank"]
             }
           }
         ]
@@ -19781,9 +19609,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "message": [
-                "Ticket description can't be blank"
-              ],
+              "message": ["Ticket description can't be blank"],
               "params": {
                 "from_check_in": true
               }
@@ -19839,9 +19665,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "message": [
-                "Ticket description can't be blank"
-              ],
+              "message": ["Ticket description can't be blank"],
               "params": {
                 "ticket_description": ""
               }
@@ -19918,10 +19742,7 @@
                         "isapproved": "true",
                         "pre_diagnosed": "true"
                       },
-                      "disabled": [
-                        "subject",
-                        "problem_type"
-                      ],
+                      "disabled": ["subject", "problem_type"],
                       "position": "2"
                     },
                     "worksheets": {
@@ -20005,10 +19826,7 @@
                       "isapproved": "true",
                       "pre_diagnosed": "true"
                     },
-                    "disabled": [
-                      "subject",
-                      "problem_type"
-                    ],
+                    "disabled": ["subject", "problem_type"],
                     "position": "2"
                   },
                   "worksheets": {
@@ -20110,15 +19928,9 @@
               "success": false,
               "errors": {
                 "appointments": {
-                  "summary": [
-                    "can't be blank"
-                  ],
-                  "start_at": [
-                    "can't be blank"
-                  ],
-                  "end_at": [
-                    "can't be blank"
-                  ]
+                  "summary": ["can't be blank"],
+                  "start_at": ["can't be blank"],
+                  "end_at": ["can't be blank"]
                 }
               }
             }
@@ -20161,9 +19973,7 @@
                 "intake_form_html": null,
                 "signature_name": "Joe",
                 "signature_date": null,
-                "asset_ids": [
-                  1
-                ],
+                "asset_ids": [1],
                 "priority": "High",
                 "resolved_at": null,
                 "outtake_form_name": null,
@@ -20457,9 +20267,7 @@
                   "updated_at": "2019-10-28T10:18:14.061Z",
                   "success": true,
                   "payment_amount": 100,
-                  "invoice_ids": [
-                    null
-                  ],
+                  "invoice_ids": [null],
                   "ref_num": "11006",
                   "applied_at": "2019-10-26T00:00:00.000Z",
                   "payment_method": "Check",
@@ -20532,9 +20340,7 @@
                 "updated_at": "2019-10-28T13:05:27.257Z",
                 "success": true,
                 "payment_amount": 100,
-                "invoice_ids": [
-                  null
-                ],
+                "invoice_ids": [null],
                 "ref_num": "11006",
                 "applied_at": "2019-10-26T00:00:00.000Z",
                 "payment_method": "Check",
@@ -20617,9 +20423,7 @@
                 "updated_at": "2019-10-28T12:45:24.315Z",
                 "success": true,
                 "payment_amount": 10,
-                "invoice_ids": [
-                  1
-                ],
+                "invoice_ids": [1],
                 "ref_num": null,
                 "applied_at": "2019-10-28T00:00:00.000Z",
                 "payment_method": null,
@@ -21031,9 +20835,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "message": [
-                "Serial number has already been taken"
-              ]
+              "message": ["Serial number has already been taken"]
             }
           }
         ]
@@ -21089,9 +20891,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "message": [
-                "Name can't be blank"
-              ]
+              "message": ["Name can't be blank"]
             }
           }
         ]
@@ -21174,10 +20974,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "message": [
-                "Name can't be blank",
-                "Description can't be blank"
-              ],
+              "message": ["Name can't be blank", "Description can't be blank"],
               "params": {
                 "name": "",
                 "maintain_stock": false
@@ -21858,9 +21655,7 @@
             "statusCode": 422,
             "description": "Invalid request",
             "example": {
-              "error": [
-                "Next run can't be blank"
-              ]
+              "error": ["Next run can't be blank"]
             }
           }
         ]
@@ -21904,9 +21699,7 @@
             "statusCode": 422,
             "description": "Invalid request",
             "example": {
-              "error": [
-                "Name can't be blank"
-              ]
+              "error": ["Name can't be blank"]
             }
           }
         ]
@@ -21977,9 +21770,7 @@
             "statusCode": 422,
             "description": "Invalid request",
             "example": {
-              "error": [
-                "Name can't be blank"
-              ]
+              "error": ["Name can't be blank"]
             }
           }
         ]
@@ -22935,9 +22726,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "message": [
-                "Subject can't be blank"
-              ]
+              "message": ["Subject can't be blank"]
             }
           }
         ]
@@ -22973,10 +22762,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "message": [
-                "Body can't be blank",
-                "Subject can't be blank"
-              ]
+              "message": ["Body can't be blank", "Subject can't be blank"]
             }
           }
         ]
@@ -23382,9 +23168,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "message": [
-                "Email is not an email"
-              ],
+              "message": ["Email is not an email"],
               "params": {
                 "name": "Vendor1",
                 "email": "broken_emailmail.com"
@@ -23476,9 +23260,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "message": [
-                "Email is not an email"
-              ]
+              "message": ["Email is not an email"]
             }
           }
         ]
@@ -23579,10 +23361,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "errors": [
-                "Body can't be blank",
-                "Name can't be blank"
-              ],
+              "errors": ["Body can't be blank", "Name can't be blank"],
               "params": {
                 "name": ""
               }
@@ -23620,9 +23399,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "errors": [
-                "Name can't be blank"
-              ],
+              "errors": ["Name can't be blank"],
               "params": {
                 "name": ""
               }
@@ -25351,10 +25128,7 @@
                         "isapproved": "true",
                         "pre_diagnosed": "true"
                       },
-                      "disabled": [
-                        "subject",
-                        "problem_type"
-                      ],
+                      "disabled": ["subject", "problem_type"],
                       "position": "2"
                     },
                     "worksheets": {
@@ -25436,10 +25210,7 @@
                       "isapproved": "true",
                       "pre_diagnosed": "true"
                     },
-                    "disabled": [
-                      "subject",
-                      "problem_type"
-                    ],
+                    "disabled": ["subject", "problem_type"],
                     "position": "2"
                   },
                   "worksheets": {
@@ -25616,9 +25387,7 @@
                   "updated_at": "2019-10-28T10:18:14.061Z",
                   "success": true,
                   "payment_amount": 100,
-                  "invoice_ids": [
-                    null
-                  ],
+                  "invoice_ids": [null],
                   "ref_num": "11006",
                   "applied_at": "2019-10-26T00:00:00.000Z",
                   "payment_method": "Check",
@@ -25691,9 +25460,7 @@
                 "updated_at": "2019-10-28T13:05:27.257Z",
                 "success": true,
                 "payment_amount": 100,
-                "invoice_ids": [
-                  null
-                ],
+                "invoice_ids": [null],
                 "ref_num": "11006",
                 "applied_at": "2019-10-26T00:00:00.000Z",
                 "payment_method": "Check",
@@ -26535,13 +26302,7 @@
                   "Software",
                   "Other"
                 ],
-                "priorities": [
-                  "",
-                  "0 Urgent",
-                  "1 High",
-                  "2 Normal",
-                  "3 Low"
-                ]
+                "priorities": ["", "0 Urgent", "1 High", "2 Normal", "3 Low"]
               },
               "business_hours_enabled": true,
               "business_hours": [
@@ -27324,12 +27085,7 @@
             "statusCode": 200,
             "description": "successful",
             "example": {
-              "users": [
-                [
-                  1,
-                  "Joe Doe"
-                ]
-              ]
+              "users": [[1, "Joe Doe"]]
             }
           }
         ]
@@ -28140,12 +27896,8 @@
             "statusCode": 422,
             "description": "Invalid request",
             "example": {
-              "customer_id": [
-                "can't be blank"
-              ],
-              "date": [
-                "can't be blank"
-              ]
+              "customer_id": ["can't be blank"],
+              "date": ["can't be blank"]
             }
           }
         ]
@@ -28487,9 +28239,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "message": [
-                "Ticket description can't be blank"
-              ],
+              "message": ["Ticket description can't be blank"],
               "params": {
                 "from_check_in": true
               }
@@ -28580,15 +28330,9 @@
               "success": false,
               "errors": {
                 "appointments": {
-                  "summary": [
-                    "can't be blank"
-                  ],
-                  "start_at": [
-                    "can't be blank"
-                  ],
-                  "end_at": [
-                    "can't be blank"
-                  ]
+                  "summary": ["can't be blank"],
+                  "start_at": ["can't be blank"],
+                  "end_at": ["can't be blank"]
                 }
               }
             }
@@ -28674,9 +28418,7 @@
                 "updated_at": "2019-10-28T12:45:24.315Z",
                 "success": true,
                 "payment_amount": 10,
-                "invoice_ids": [
-                  1
-                ],
+                "invoice_ids": [1],
                 "ref_num": null,
                 "applied_at": "2019-10-28T00:00:00.000Z",
                 "payment_method": null,
@@ -28718,9 +28460,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "message": [
-                "Number can't be blank"
-              ],
+              "message": ["Number can't be blank"],
               "params": {
                 "customer_id": "1",
                 "number": ""
@@ -28913,10 +28653,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "message": [
-                "Name can't be blank",
-                "Description can't be blank"
-              ],
+              "message": ["Name can't be blank", "Description can't be blank"],
               "params": {
                 "name": "",
                 "maintain_stock": false
@@ -29252,9 +28989,7 @@
             "statusCode": 422,
             "description": "Invalid request",
             "example": {
-              "error": [
-                "Name can't be blank"
-              ]
+              "error": ["Name can't be blank"]
             }
           }
         ]
@@ -29314,9 +29049,7 @@
                 "intake_form_html": null,
                 "signature_name": "Joe",
                 "signature_date": null,
-                "asset_ids": [
-                  1
-                ],
+                "asset_ids": [1],
                 "priority": "High",
                 "resolved_at": null,
                 "outtake_form_name": null,
@@ -29619,10 +29352,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "message": [
-                "Body can't be blank",
-                "Subject can't be blank"
-              ]
+              "message": ["Body can't be blank", "Subject can't be blank"]
             }
           }
         ]
@@ -29955,9 +29685,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "message": [
-                "Email is not an email"
-              ],
+              "message": ["Email is not an email"],
               "params": {
                 "name": "Vendor1",
                 "email": "broken_emailmail.com"
@@ -29994,10 +29722,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "errors": [
-                "Body can't be blank",
-                "Name can't be blank"
-              ],
+              "errors": ["Body can't be blank", "Name can't be blank"],
               "params": {
                 "name": ""
               }
@@ -30187,9 +29912,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "message": [
-                "Asset type can't be blank"
-              ]
+              "message": ["Asset type can't be blank"]
             }
           }
         ]
@@ -30445,9 +30168,7 @@
             "statusCode": 422,
             "description": "Invalid request",
             "example": {
-              "date": [
-                "can't be blank"
-              ]
+              "date": ["can't be blank"]
             }
           }
         ]
@@ -30488,9 +30209,7 @@
             "statusCode": 422,
             "description": "Invalid request",
             "example": {
-              "item": [
-                "can't be blank"
-              ]
+              "item": ["can't be blank"]
             }
           }
         ]
@@ -30629,9 +30348,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "message": [
-                "Ticket description can't be blank"
-              ],
+              "message": ["Ticket description can't be blank"],
               "params": {
                 "ticket_description": ""
               }
@@ -30694,9 +30411,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "message": [
-                "Number can't be blank"
-              ],
+              "message": ["Number can't be blank"],
               "params": {
                 "customer_id": "1",
                 "id": "9",
@@ -30734,9 +30449,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "message": [
-                "Password confirmation doesn't match Password"
-              ],
+              "message": ["Password confirmation doesn't match Password"],
               "params": {
                 "password": "does not match",
                 "password_confirmation": "the confirmation"
@@ -30777,9 +30490,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "message": [
-                "Serial number has already been taken"
-              ]
+              "message": ["Serial number has already been taken"]
             }
           }
         ]
@@ -30835,9 +30546,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "message": [
-                "Name can't be blank"
-              ]
+              "message": ["Name can't be blank"]
             }
           }
         ]
@@ -30905,9 +30614,7 @@
             "statusCode": 422,
             "description": "Invalid request",
             "example": {
-              "error": [
-                "Next run can't be blank"
-              ]
+              "error": ["Next run can't be blank"]
             }
           }
         ]
@@ -30959,9 +30666,7 @@
             "statusCode": 422,
             "description": "Invalid request",
             "example": {
-              "error": [
-                "Name can't be blank"
-              ]
+              "error": ["Name can't be blank"]
             }
           }
         ]
@@ -31086,9 +30791,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "message": [
-                "Subject can't be blank"
-              ]
+              "message": ["Subject can't be blank"]
             }
           }
         ]
@@ -31292,9 +30995,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "message": [
-                "Email is not an email"
-              ]
+              "message": ["Email is not an email"]
             }
           }
         ]
@@ -31327,9 +31028,7 @@
             "description": "Invalid request",
             "example": {
               "success": false,
-              "errors": [
-                "Name can't be blank"
-              ],
+              "errors": ["Name can't be blank"],
               "params": {
                 "name": ""
               }
@@ -32661,9 +32360,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "message": [
-              "Asset type can't be blank"
-            ]
+            "message": ["Asset type can't be blank"]
           }
         }
       ]
@@ -33891,12 +33588,8 @@
           "statusCode": 422,
           "description": "Invalid request",
           "example": {
-            "customer_id": [
-              "can't be blank"
-            ],
-            "date": [
-              "can't be blank"
-            ]
+            "customer_id": ["can't be blank"],
+            "date": ["can't be blank"]
           }
         }
       ]
@@ -33999,9 +33692,7 @@
           "statusCode": 422,
           "description": "Invalid request",
           "example": {
-            "date": [
-              "can't be blank"
-            ]
+            "date": ["can't be blank"]
           }
         }
       ]
@@ -34223,9 +33914,7 @@
           "statusCode": 422,
           "description": "Invalid request",
           "example": {
-            "item": [
-              "can't be blank"
-            ]
+            "item": ["can't be blank"]
           }
         }
       ]
@@ -34972,9 +34661,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "message": [
-              "Ticket description can't be blank"
-            ],
+            "message": ["Ticket description can't be blank"],
             "params": {
               "from_check_in": true
             }
@@ -35079,9 +34766,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "message": [
-              "Ticket description can't be blank"
-            ],
+            "message": ["Ticket description can't be blank"],
             "params": {
               "ticket_description": ""
             }
@@ -35227,10 +34912,7 @@
                       "isapproved": "true",
                       "pre_diagnosed": "true"
                     },
-                    "disabled": [
-                      "subject",
-                      "problem_type"
-                    ],
+                    "disabled": ["subject", "problem_type"],
                     "position": "2"
                   },
                   "worksheets": {
@@ -35312,10 +34994,7 @@
                     "isapproved": "true",
                     "pre_diagnosed": "true"
                   },
-                  "disabled": [
-                    "subject",
-                    "problem_type"
-                  ],
+                  "disabled": ["subject", "problem_type"],
                   "position": "2"
                 },
                 "worksheets": {
@@ -35417,15 +35096,9 @@
             "success": false,
             "errors": {
               "appointments": {
-                "summary": [
-                  "can't be blank"
-                ],
-                "start_at": [
-                  "can't be blank"
-                ],
-                "end_at": [
-                  "can't be blank"
-                ]
+                "summary": ["can't be blank"],
+                "start_at": ["can't be blank"],
+                "end_at": ["can't be blank"]
               }
             }
           }
@@ -35691,9 +35364,7 @@
                 "updated_at": "2019-10-28T10:18:14.061Z",
                 "success": true,
                 "payment_amount": 100,
-                "invoice_ids": [
-                  null
-                ],
+                "invoice_ids": [null],
                 "ref_num": "11006",
                 "applied_at": "2019-10-26T00:00:00.000Z",
                 "payment_method": "Check",
@@ -35775,9 +35446,7 @@
               "updated_at": "2019-10-28T12:45:24.315Z",
               "success": true,
               "payment_amount": 10,
-              "invoice_ids": [
-                1
-              ],
+              "invoice_ids": [1],
               "ref_num": null,
               "applied_at": "2019-10-28T00:00:00.000Z",
               "payment_method": null,
@@ -35811,9 +35480,7 @@
               "updated_at": "2019-10-28T13:05:27.257Z",
               "success": true,
               "payment_amount": 100,
-              "invoice_ids": [
-                null
-              ],
+              "invoice_ids": [null],
               "ref_num": "11006",
               "applied_at": "2019-10-26T00:00:00.000Z",
               "payment_method": "Check",
@@ -35930,9 +35597,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "message": [
-              "Number can't be blank"
-            ],
+            "message": ["Number can't be blank"],
             "params": {
               "customer_id": "1",
               "number": ""
@@ -35968,9 +35633,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "message": [
-              "Number can't be blank"
-            ],
+            "message": ["Number can't be blank"],
             "params": {
               "customer_id": "1",
               "id": "9",
@@ -36125,9 +35788,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "message": [
-              "Password confirmation doesn't match Password"
-            ],
+            "message": ["Password confirmation doesn't match Password"],
             "params": {
               "password": "does not match",
               "password_confirmation": "the confirmation"
@@ -36309,9 +35970,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "message": [
-              "Serial number has already been taken"
-            ]
+            "message": ["Serial number has already been taken"]
           }
         }
       ]
@@ -36507,10 +36166,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "message": [
-              "Name can't be blank",
-              "Description can't be blank"
-            ],
+            "message": ["Name can't be blank", "Description can't be blank"],
             "params": {
               "name": "",
               "maintain_stock": false
@@ -36622,9 +36278,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "message": [
-              "Name can't be blank"
-            ]
+            "message": ["Name can't be blank"]
           }
         }
       ]
@@ -37413,9 +37067,7 @@
           "statusCode": 422,
           "description": "Invalid request",
           "example": {
-            "error": [
-              "Next run can't be blank"
-            ]
+            "error": ["Next run can't be blank"]
           }
         }
       ]
@@ -37478,9 +37130,7 @@
           "statusCode": 422,
           "description": "Invalid request",
           "example": {
-            "error": [
-              "Name can't be blank"
-            ]
+            "error": ["Name can't be blank"]
           }
         }
       ]
@@ -37551,9 +37201,7 @@
           "statusCode": 422,
           "description": "Invalid request",
           "example": {
-            "error": [
-              "Name can't be blank"
-            ]
+            "error": ["Name can't be blank"]
           }
         }
       ]
@@ -37655,13 +37303,7 @@
                 "Software",
                 "Other"
               ],
-              "priorities": [
-                "",
-                "0 Urgent",
-                "1 High",
-                "2 Normal",
-                "3 Low"
-              ]
+              "priorities": ["", "0 Urgent", "1 High", "2 Normal", "3 Low"]
             },
             "business_hours_enabled": true,
             "business_hours": [
@@ -38044,9 +37686,7 @@
               "intake_form_html": null,
               "signature_name": "Joe",
               "signature_date": null,
-              "asset_ids": [
-                1
-              ],
+              "asset_ids": [1],
               "priority": "High",
               "resolved_at": null,
               "outtake_form_name": null,
@@ -38544,9 +38184,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "message": [
-              "Subject can't be blank"
-            ]
+            "message": ["Subject can't be blank"]
           }
         }
       ]
@@ -38747,10 +38385,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "message": [
-              "Body can't be blank",
-              "Subject can't be blank"
-            ]
+            "message": ["Body can't be blank", "Subject can't be blank"]
           }
         }
       ]
@@ -39365,12 +39000,7 @@
           "statusCode": 200,
           "description": "successful",
           "example": {
-            "users": [
-              [
-                1,
-                "Joe Doe"
-              ]
-            ]
+            "users": [[1, "Joe Doe"]]
           }
         }
       ]
@@ -39512,9 +39142,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "message": [
-              "Email is not an email"
-            ],
+            "message": ["Email is not an email"],
             "params": {
               "name": "Vendor1",
               "email": "broken_emailmail.com"
@@ -39602,9 +39230,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "message": [
-              "Email is not an email"
-            ]
+            "message": ["Email is not an email"]
           }
         }
       ]
@@ -39672,10 +39298,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "errors": [
-              "Body can't be blank",
-              "Name can't be blank"
-            ],
+            "errors": ["Body can't be blank", "Name can't be blank"],
             "params": {
               "name": ""
             }
@@ -39740,9 +39363,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "errors": [
-              "Name can't be blank"
-            ],
+            "errors": ["Name can't be blank"],
             "params": {
               "name": ""
             }
@@ -40804,9 +40425,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "message": [
-              "Asset type can't be blank"
-            ]
+            "message": ["Asset type can't be blank"]
           }
         }
       ]
@@ -42018,12 +41637,8 @@
           "statusCode": 422,
           "description": "Invalid request",
           "example": {
-            "customer_id": [
-              "can't be blank"
-            ],
-            "date": [
-              "can't be blank"
-            ]
+            "customer_id": ["can't be blank"],
+            "date": ["can't be blank"]
           }
         }
       ]
@@ -42117,9 +41732,7 @@
           "statusCode": 422,
           "description": "Invalid request",
           "example": {
-            "date": [
-              "can't be blank"
-            ]
+            "date": ["can't be blank"]
           }
         }
       ]
@@ -42341,9 +41954,7 @@
           "statusCode": 422,
           "description": "Invalid request",
           "example": {
-            "item": [
-              "can't be blank"
-            ]
+            "item": ["can't be blank"]
           }
         }
       ]
@@ -43090,9 +42701,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "message": [
-              "Ticket description can't be blank"
-            ],
+            "message": ["Ticket description can't be blank"],
             "params": {
               "from_check_in": true
             }
@@ -43197,9 +42806,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "message": [
-              "Ticket description can't be blank"
-            ],
+            "message": ["Ticket description can't be blank"],
             "params": {
               "ticket_description": ""
             }
@@ -43345,10 +42952,7 @@
                       "isapproved": "true",
                       "pre_diagnosed": "true"
                     },
-                    "disabled": [
-                      "subject",
-                      "problem_type"
-                    ],
+                    "disabled": ["subject", "problem_type"],
                     "position": "2"
                   },
                   "worksheets": {
@@ -43430,10 +43034,7 @@
                     "isapproved": "true",
                     "pre_diagnosed": "true"
                   },
-                  "disabled": [
-                    "subject",
-                    "problem_type"
-                  ],
+                  "disabled": ["subject", "problem_type"],
                   "position": "2"
                 },
                 "worksheets": {
@@ -43535,15 +43136,9 @@
             "success": false,
             "errors": {
               "appointments": {
-                "summary": [
-                  "can't be blank"
-                ],
-                "start_at": [
-                  "can't be blank"
-                ],
-                "end_at": [
-                  "can't be blank"
-                ]
+                "summary": ["can't be blank"],
+                "start_at": ["can't be blank"],
+                "end_at": ["can't be blank"]
               }
             }
           }
@@ -43793,9 +43388,7 @@
                 "updated_at": "2019-10-28T10:18:14.061Z",
                 "success": true,
                 "payment_amount": 100,
-                "invoice_ids": [
-                  null
-                ],
+                "invoice_ids": [null],
                 "ref_num": "11006",
                 "applied_at": "2019-10-26T00:00:00.000Z",
                 "payment_method": "Check",
@@ -43868,9 +43461,7 @@
               "updated_at": "2019-10-28T12:45:24.315Z",
               "success": true,
               "payment_amount": 10,
-              "invoice_ids": [
-                1
-              ],
+              "invoice_ids": [1],
               "ref_num": null,
               "applied_at": "2019-10-28T00:00:00.000Z",
               "payment_method": null,
@@ -43904,9 +43495,7 @@
               "updated_at": "2019-10-28T13:05:27.257Z",
               "success": true,
               "payment_amount": 100,
-              "invoice_ids": [
-                null
-              ],
+              "invoice_ids": [null],
               "ref_num": "11006",
               "applied_at": "2019-10-26T00:00:00.000Z",
               "payment_method": "Check",
@@ -44023,9 +43612,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "message": [
-              "Number can't be blank"
-            ],
+            "message": ["Number can't be blank"],
             "params": {
               "customer_id": "1",
               "number": ""
@@ -44061,9 +43648,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "message": [
-              "Number can't be blank"
-            ],
+            "message": ["Number can't be blank"],
             "params": {
               "customer_id": "1",
               "id": "9",
@@ -44218,9 +43803,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "message": [
-              "Password confirmation doesn't match Password"
-            ],
+            "message": ["Password confirmation doesn't match Password"],
             "params": {
               "password": "does not match",
               "password_confirmation": "the confirmation"
@@ -44402,9 +43985,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "message": [
-              "Serial number has already been taken"
-            ]
+            "message": ["Serial number has already been taken"]
           }
         }
       ]
@@ -44600,10 +44181,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "message": [
-              "Name can't be blank",
-              "Description can't be blank"
-            ],
+            "message": ["Name can't be blank", "Description can't be blank"],
             "params": {
               "name": "",
               "maintain_stock": false
@@ -44715,9 +44293,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "message": [
-              "Name can't be blank"
-            ]
+            "message": ["Name can't be blank"]
           }
         }
       ]
@@ -45506,9 +45082,7 @@
           "statusCode": 422,
           "description": "Invalid request",
           "example": {
-            "error": [
-              "Next run can't be blank"
-            ]
+            "error": ["Next run can't be blank"]
           }
         }
       ]
@@ -45571,9 +45145,7 @@
           "statusCode": 422,
           "description": "Invalid request",
           "example": {
-            "error": [
-              "Name can't be blank"
-            ]
+            "error": ["Name can't be blank"]
           }
         }
       ]
@@ -45644,9 +45216,7 @@
           "statusCode": 422,
           "description": "Invalid request",
           "example": {
-            "error": [
-              "Name can't be blank"
-            ]
+            "error": ["Name can't be blank"]
           }
         }
       ]
@@ -45748,13 +45318,7 @@
                 "Software",
                 "Other"
               ],
-              "priorities": [
-                "",
-                "0 Urgent",
-                "1 High",
-                "2 Normal",
-                "3 Low"
-              ]
+              "priorities": ["", "0 Urgent", "1 High", "2 Normal", "3 Low"]
             },
             "business_hours_enabled": true,
             "business_hours": [
@@ -46137,9 +45701,7 @@
               "intake_form_html": null,
               "signature_name": "Joe",
               "signature_date": null,
-              "asset_ids": [
-                1
-              ],
+              "asset_ids": [1],
               "priority": "High",
               "resolved_at": null,
               "outtake_form_name": null,
@@ -46637,9 +46199,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "message": [
-              "Subject can't be blank"
-            ]
+            "message": ["Subject can't be blank"]
           }
         }
       ]
@@ -46840,10 +46400,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "message": [
-              "Body can't be blank",
-              "Subject can't be blank"
-            ]
+            "message": ["Body can't be blank", "Subject can't be blank"]
           }
         }
       ]
@@ -47440,12 +46997,7 @@
           "statusCode": 200,
           "description": "successful",
           "example": {
-            "users": [
-              [
-                1,
-                "Joe Doe"
-              ]
-            ]
+            "users": [[1, "Joe Doe"]]
           }
         }
       ]
@@ -47587,9 +47139,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "message": [
-              "Email is not an email"
-            ],
+            "message": ["Email is not an email"],
             "params": {
               "name": "Vendor1",
               "email": "broken_emailmail.com"
@@ -47677,9 +47227,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "message": [
-              "Email is not an email"
-            ]
+            "message": ["Email is not an email"]
           }
         }
       ]
@@ -47747,10 +47295,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "errors": [
-              "Body can't be blank",
-              "Name can't be blank"
-            ],
+            "errors": ["Body can't be blank", "Name can't be blank"],
             "params": {
               "name": ""
             }
@@ -47815,9 +47360,7 @@
           "description": "Invalid request",
           "example": {
             "success": false,
-            "errors": [
-              "Name can't be blank"
-            ],
+            "errors": ["Name can't be blank"],
             "params": {
               "name": ""
             }

@@ -8,18 +8,13 @@
 
 #### Get Mes
 
-
 Returns the current user
-
 
 **Endpoint:** `GET /me`
 
-
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -72,57 +67,37 @@ successful
 }
 ```
 
-
 #### Get Users
-
 
 Returns a paginated list of Users
 
-
 **Endpoint:** `GET /users`
-
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
-  "users": [
-    [
-      1,
-      "Joe Doe"
-    ]
-  ]
+  "users": [[1, "Joe Doe"]]
 }
 ```
 
-
 #### Create Otp Login
-
 
 Authorize a User with One Time Password
 
-
 **Endpoint:** `POST /otp_login`
-
 
 **Request Body:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| code | string | No |  |
-
-
+| Parameter | Type   | Required | Description |
+| --------- | ------ | -------- | ----------- |
+| code      | string | No       |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -133,12 +108,9 @@ successful
 }
 ```
 
-
 **Response: 401**
 
-
 Invalid request
-
 
 ```json
 {
@@ -147,29 +119,21 @@ Invalid request
 }
 ```
 
-
 #### Get User by ID
-
 
 Retrieves an existing User by ID
 
-
 **Endpoint:** `GET /users/{id}`
-
 
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -185,4 +149,3 @@ successful
   }
 }
 ```
-

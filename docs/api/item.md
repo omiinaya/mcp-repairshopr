@@ -8,35 +8,25 @@
 
 #### Get Items
 
-
 Returns a paginated list of Part Orders
-
 
 Required permission: Parts Orders - List/Search
 
-
-
 **Endpoint:** `GET /items`
-
 
 **Required Permission:** Required permission: Parts Orders - List/Search
 
-
 **Query Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| completed | boolean | No | Returns only completed part orders |
-| query | string | No | Search query |
-| page | integer | No | Returns provided page of results, each 'page' contains 50 results |
-
+| Parameter | Type    | Required | Description                                                       |
+| --------- | ------- | -------- | ----------------------------------------------------------------- |
+| completed | boolean | No       | Returns only completed part orders                                |
+| query     | string  | No       | Search query                                                      |
+| page      | integer | No       | Returns provided page of results, each 'page' contains 50 results |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -83,4 +73,3 @@ successful
   }
 }
 ```
-

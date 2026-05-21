@@ -6,15 +6,15 @@ This document provides detailed documentation for all MCP (Model Context Protoco
 
 ## Available Tools
 
-| Tool Name | Description |
-|-----------|-------------|
-| [`search_api_docs`](#search_api_docs) | Search API documentation using semantic and keyword search |
-| [`get_endpoint`](#get_endpoint) | Get detailed information about a specific API endpoint |
-| [`get_parameters`](#get_parameters) | Get parameter information for an API endpoint |
-| [`get_responses`](#get_responses) | Get response information for an API endpoint |
-| [`get_permissions`](#get_permissions) | Get permission requirements for API endpoints |
-| [`list_resources`](#list_resources) | List all available API resources |
-| [`generate_code_example`](#generate_code_example) | Generate code examples for API endpoints |
+| Tool Name                                         | Description                                                |
+| ------------------------------------------------- | ---------------------------------------------------------- |
+| [`search_api_docs`](#search_api_docs)             | Search API documentation using semantic and keyword search |
+| [`get_endpoint`](#get_endpoint)                   | Get detailed information about a specific API endpoint     |
+| [`get_parameters`](#get_parameters)               | Get parameter information for an API endpoint              |
+| [`get_responses`](#get_responses)                 | Get response information for an API endpoint               |
+| [`get_permissions`](#get_permissions)             | Get permission requirements for API endpoints              |
+| [`list_resources`](#list_resources)               | List all available API resources                           |
+| [`generate_code_example`](#generate_code_example) | Generate code examples for API endpoints                   |
 
 ---
 
@@ -28,13 +28,13 @@ Performs intelligent search across the RepairShopr API documentation using both 
 
 ### Parameters
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `query` | string | Yes | Search query in natural language |
-| `resource` | string | No | Filter by resource name (e.g., customers, tickets, invoices) |
-| `method` | string | No | Filter by HTTP method (GET, POST, PUT, DELETE, PATCH) |
-| `permission` | string | No | Filter by permission |
-| `limit` | number | No | Maximum results to return (default: 5, max: 50) |
+| Parameter    | Type   | Required | Description                                                  |
+| ------------ | ------ | -------- | ------------------------------------------------------------ |
+| `query`      | string | Yes      | Search query in natural language                             |
+| `resource`   | string | No       | Filter by resource name (e.g., customers, tickets, invoices) |
+| `method`     | string | No       | Filter by HTTP method (GET, POST, PUT, DELETE, PATCH)        |
+| `permission` | string | No       | Filter by permission                                         |
+| `limit`      | number | No       | Maximum results to return (default: 5, max: 50)              |
 
 ### Request Example
 
@@ -139,14 +139,14 @@ Retrieves comprehensive information about a specific API endpoint including desc
 
 ### Parameters
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `path` | string | No* | Endpoint path (e.g., /customers/{id}) |
-| `method` | string | No* | HTTP method (GET, POST, PUT, DELETE, PATCH) |
-| `resource` | string | No* | Resource name (alternative to path) |
-| `includeRelated` | boolean | No | Include related endpoints (default: false) |
+| Parameter        | Type    | Required | Description                                 |
+| ---------------- | ------- | -------- | ------------------------------------------- |
+| `path`           | string  | No\*     | Endpoint path (e.g., /customers/{id})       |
+| `method`         | string  | No\*     | HTTP method (GET, POST, PUT, DELETE, PATCH) |
+| `resource`       | string  | No\*     | Resource name (alternative to path)         |
+| `includeRelated` | boolean | No       | Include related endpoints (default: false)  |
 
-*At least one of `path` or `resource` must be provided. If `path` is provided, `method` should also be provided.
+\*At least one of `path` or `resource` must be provided. If `path` is provided, `method` should also be provided.
 
 ### Request Example
 
@@ -253,11 +253,11 @@ Retrieves detailed parameter information including types, constraints, validatio
 
 ### Parameters
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `endpoint_path` | string | Yes | Endpoint path (e.g., /customers/{id}) |
-| `method` | string | Yes | HTTP method (GET, POST, PUT, DELETE, PATCH) |
-| `param_type` | string | No | Filter by parameter type (query, path, body) |
+| Parameter       | Type   | Required | Description                                  |
+| --------------- | ------ | -------- | -------------------------------------------- |
+| `endpoint_path` | string | Yes      | Endpoint path (e.g., /customers/{id})        |
+| `method`        | string | Yes      | HTTP method (GET, POST, PUT, DELETE, PATCH)  |
+| `param_type`    | string | No       | Filter by parameter type (query, path, body) |
 
 ### Request Example
 
@@ -325,9 +325,7 @@ interface Parameter {
         "minLength": 1,
         "maxLength": 255
       },
-      "validationHints": [
-        "Must be between 1 and 255 characters"
-      ]
+      "validationHints": ["Must be between 1 and 255 characters"]
     },
     {
       "name": "email",
@@ -338,9 +336,7 @@ interface Parameter {
       "constraints": {
         "pattern": "^[^@]+@[^@]+\\.[^@]+$"
       },
-      "validationHints": [
-        "Must be a valid email address"
-      ]
+      "validationHints": ["Must be a valid email address"]
     }
   ],
   "totalCount": 2,
@@ -375,11 +371,11 @@ Retrieves response information including status codes, schemas, examples, error 
 
 ### Parameters
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `endpoint_path` | string | Yes | Endpoint path (e.g., /customers/{id}) |
-| `method` | string | Yes | HTTP method (GET, POST, PUT, DELETE, PATCH) |
-| `status_code` | string | No | Filter by status code (optional) |
+| Parameter       | Type   | Required | Description                                 |
+| --------------- | ------ | -------- | ------------------------------------------- |
+| `endpoint_path` | string | Yes      | Endpoint path (e.g., /customers/{id})       |
+| `method`        | string | Yes      | HTTP method (GET, POST, PUT, DELETE, PATCH) |
+| `status_code`   | string | No       | Filter by status code (optional)            |
 
 ### Request Example
 
@@ -505,16 +501,16 @@ Retrieves permission requirements including descriptions, hierarchy, usage infor
 
 ### Parameters
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `endpoint_path` | string | No* | Endpoint path (e.g., /customers/{id}) |
-| `method` | string | No* | HTTP method (required when using endpoint_path) |
-| `resource` | string | No* | Resource name (alternative to endpoint_path) |
-| `permission` | string | No* | Filter by permission name |
-| `include_matrix` | boolean | No | Include permission matrix (default: false) |
-| `include_summaries` | boolean | No | Include permission summaries (default: false) |
+| Parameter           | Type    | Required | Description                                     |
+| ------------------- | ------- | -------- | ----------------------------------------------- |
+| `endpoint_path`     | string  | No\*     | Endpoint path (e.g., /customers/{id})           |
+| `method`            | string  | No\*     | HTTP method (required when using endpoint_path) |
+| `resource`          | string  | No\*     | Resource name (alternative to endpoint_path)    |
+| `permission`        | string  | No\*     | Filter by permission name                       |
+| `include_matrix`    | boolean | No       | Include permission matrix (default: false)      |
+| `include_summaries` | boolean | No       | Include permission summaries (default: false)   |
 
-*At least one of `endpoint_path`, `resource`, or `permission` must be provided.
+\*At least one of `endpoint_path`, `resource`, or `permission` must be provided.
 
 ### Request Example
 
@@ -609,10 +605,10 @@ Retrieves all available API resources with summary information, endpoints, relat
 
 ### Parameters
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `include_endpoints` | boolean | No | Include endpoint details (default: false) |
-| `include_relationships` | boolean | No | Include resource relationships (default: false) |
+| Parameter               | Type    | Required | Description                                     |
+| ----------------------- | ------- | -------- | ----------------------------------------------- |
+| `include_endpoints`     | boolean | No       | Include endpoint details (default: false)       |
+| `include_relationships` | boolean | No       | Include resource relationships (default: false) |
 
 ### Request Example
 
@@ -726,12 +722,12 @@ Generates code examples for API endpoints in multiple programming languages with
 
 ### Parameters
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `endpoint_path` | string | Yes | Endpoint path (e.g., /customers/{id}) |
-| `method` | string | Yes | HTTP method (GET, POST, PUT, DELETE, PATCH) |
-| `language` | string | Yes | Programming language (javascript, python, curl) |
-| `include_auth` | boolean | No | Include authentication (default: true) |
+| Parameter       | Type    | Required | Description                                     |
+| --------------- | ------- | -------- | ----------------------------------------------- |
+| `endpoint_path` | string  | Yes      | Endpoint path (e.g., /customers/{id})           |
+| `method`        | string  | Yes      | HTTP method (GET, POST, PUT, DELETE, PATCH)     |
+| `language`      | string  | Yes      | Programming language (javascript, python, curl) |
+| `include_auth`  | boolean | No       | Include authentication (default: true)          |
 
 ### Request Example
 
@@ -825,13 +821,13 @@ interface ErrorResponse {
 
 ### Common Error Codes
 
-| Code | Description |
-|------|-------------|
-| `INVALID_REQUEST` | Invalid request parameters |
-| `ENDPOINT_NOT_FOUND` | Endpoint not found |
-| `PERMISSION_DENIED` | Permission denied |
-| `INTERNAL_ERROR` | Internal server error |
-| `TIMEOUT` | Request timeout |
+| Code                 | Description                |
+| -------------------- | -------------------------- |
+| `INVALID_REQUEST`    | Invalid request parameters |
+| `ENDPOINT_NOT_FOUND` | Endpoint not found         |
+| `PERMISSION_DENIED`  | Permission denied          |
+| `INTERNAL_ERROR`     | Internal server error      |
+| `TIMEOUT`            | Request timeout            |
 
 ### Error Response Example
 
@@ -883,6 +879,7 @@ Generate code examples to understand the exact format and structure of API reque
 Use `includeRelated` parameter to discover related endpoints that might be useful.
 
 For more information, see:
+
 - [User Guide](../user/USER_GUIDE.md)
 - [Usage Examples](../user/USAGE_EXAMPLES.md)
 - [API Reference](../developer/API_REFERENCE.md)

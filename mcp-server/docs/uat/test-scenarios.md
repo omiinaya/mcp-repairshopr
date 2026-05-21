@@ -27,12 +27,14 @@ Test scenarios for discovering available API endpoints.
 **Query:** `What endpoints are available?`
 
 **Expected Behavior:**
+
 - Returns list of available endpoints
 - Each endpoint has resource name and operation
 - Response is clear and easy to understand
 - No errors occur during discovery
 
 **Acceptance Criteria:**
+
 - Response includes list of available endpoints
 - Each endpoint has resource name and operation
 - Response is clear and easy to understand
@@ -49,11 +51,13 @@ Test scenarios for discovering available API endpoints.
 **Query:** `What endpoints are available for customers?`
 
 **Expected Behavior:**
+
 - Returns only customer-related endpoints
 - Endpoints are relevant to the customer resource
 - Response is accurate and complete
 
 **Acceptance Criteria:**
+
 - Response includes only customer-related endpoints
 - Endpoints are relevant to the customer resource
 - Response is accurate and complete
@@ -69,11 +73,13 @@ Test scenarios for discovering available API endpoints.
 **Query:** `What POST endpoints are available?`
 
 **Expected Behavior:**
+
 - Returns only POST endpoints
 - All returned endpoints use POST method
 - Response is accurate
 
 **Acceptance Criteria:**
+
 - Response includes only POST endpoints
 - All returned endpoints use POST method
 - Response is accurate
@@ -89,11 +95,13 @@ Test scenarios for discovering available API endpoints.
 **Query:** `What endpoints require customer.view permission?`
 
 **Expected Behavior:**
+
 - Returns endpoints with customer.view permission
 - All returned endpoints have the specified permission
 - Permission information is clearly displayed
 
 **Acceptance Criteria:**
+
 - Response includes endpoints with customer.view permission
 - All returned endpoints have the specified permission
 - Permission information is clearly displayed
@@ -113,12 +121,14 @@ Test scenarios for looking up endpoint parameters.
 **Query:** `What parameters does the create customer endpoint require?`
 
 **Expected Behavior:**
+
 - Returns all parameters for the endpoint
 - Each parameter has name, type, and required status
 - Parameter descriptions are clear
 - Required parameters are clearly marked
 
 **Acceptance Criteria:**
+
 - Response includes all parameters for the endpoint
 - Each parameter has name, type, and required status
 - Parameter descriptions are clear
@@ -135,11 +145,13 @@ Test scenarios for looking up endpoint parameters.
 **Query:** `What are the required parameters for creating a ticket?`
 
 **Expected Behavior:**
+
 - Returns only required parameters
 - No optional parameters are included
 - Required status is clearly indicated
 
 **Acceptance Criteria:**
+
 - Response includes only required parameters
 - No optional parameters are included
 - Required status is clearly indicated
@@ -155,12 +167,14 @@ Test scenarios for looking up endpoint parameters.
 **Query:** `What are the types and constraints for customer parameters?`
 
 **Expected Behavior:**
+
 - Returns parameter types
 - Constraints (min, max, pattern) are included
 - Type information is accurate
 - Constraints are clearly explained
 
 **Acceptance Criteria:**
+
 - Response includes parameter types
 - Constraints (min, max, pattern) are included
 - Type information is accurate
@@ -177,11 +191,13 @@ Test scenarios for looking up endpoint parameters.
 **Query:** `What body parameters are needed for POST /customers?`
 
 **Expected Behavior:**
+
 - Returns body parameters
 - Body parameters are distinguished from query/path parameters
 - All body parameters are listed
 
 **Acceptance Criteria:**
+
 - Response includes body parameters
 - Body parameters are distinguished from query/path parameters
 - All body parameters are listed
@@ -201,12 +217,14 @@ Test scenarios for understanding API response formats.
 **Query:** `What does the customer endpoint return?`
 
 **Expected Behavior:**
+
 - Returns status codes
 - Response descriptions are clear
 - Response examples are provided if available
 - Multiple response codes are listed
 
 **Acceptance Criteria:**
+
 - Response includes status codes
 - Response descriptions are clear
 - Response examples are provided if available
@@ -223,11 +241,13 @@ Test scenarios for understanding API response formats.
 **Query:** `What does a successful customer creation return?`
 
 **Expected Behavior:**
+
 - Returns 200/201 status code
 - Success response example is provided
 - Response structure is clear
 
 **Acceptance Criteria:**
+
 - Response includes 200/201 status code
 - Success response example is provided
 - Response structure is clear
@@ -243,12 +263,14 @@ Test scenarios for understanding API response formats.
 **Query:** `What error responses can the customer endpoint return?`
 
 **Expected Behavior:**
+
 - Returns error status codes
 - Error response examples are provided
 - Error messages are clear
 - All possible error codes are listed
 
 **Acceptance Criteria:**
+
 - Response includes error status codes
 - Error response examples are provided
 - Error messages are clear
@@ -265,11 +287,13 @@ Test scenarios for understanding API response formats.
 **Query:** `What does a 404 response look like for customers?`
 
 **Expected Behavior:**
+
 - Returns 404 status code
 - 404 response example is provided
 - Error message is clear
 
 **Acceptance Criteria:**
+
 - Response includes 404 status code
 - 404 response example is provided
 - Error message is clear
@@ -289,11 +313,13 @@ Test scenarios for checking endpoint permissions.
 **Query:** `What permissions are required for customer endpoints?`
 
 **Expected Behavior:**
+
 - Returns required permissions
 - Permissions are clearly listed
 - Permission format is correct (resource.action)
 
 **Acceptance Criteria:**
+
 - Response includes required permissions
 - Permissions are clearly listed
 - Permission format is correct (resource.action)
@@ -309,11 +335,13 @@ Test scenarios for checking endpoint permissions.
 **Query:** `What permissions do I need for ticket operations?`
 
 **Expected Behavior:**
+
 - Returns all ticket-related permissions
 - Permissions are grouped by operation
 - All required permissions are listed
 
 **Acceptance Criteria:**
+
 - Response includes all ticket-related permissions
 - Permissions are grouped by operation
 - All required permissions are listed
@@ -329,11 +357,13 @@ Test scenarios for checking endpoint permissions.
 **Query:** `Do I need customer.view permission to get customers?`
 
 **Expected Behavior:**
+
 - Confirms or denies permission requirement
 - Answer is clear and direct
 - Relevant endpoints are listed
 
 **Acceptance Criteria:**
+
 - Response confirms or denies permission requirement
 - Answer is clear and direct
 - Relevant endpoints are listed
@@ -353,12 +383,14 @@ Test scenarios for generating code examples.
 **Query:** `Show me how to create a customer`
 
 **Expected Behavior:**
+
 - Returns code example
 - Code example is syntactically correct
 - Code example includes all required parameters
 - Code example is well-formatted
 
 **Acceptance Criteria:**
+
 - Response includes code example
 - Code example is syntactically correct
 - Code example includes all required parameters
@@ -375,11 +407,13 @@ Test scenarios for generating code examples.
 **Query:** `Show me how to get a customer in JavaScript`
 
 **Expected Behavior:**
+
 - Returns JavaScript code example
 - Code example is valid JavaScript
 - Code example uses appropriate libraries
 
 **Acceptance Criteria:**
+
 - Response includes JavaScript code example
 - Code example is valid JavaScript
 - Code example uses appropriate libraries
@@ -395,11 +429,13 @@ Test scenarios for generating code examples.
 **Query:** `Show me a complete example for creating a ticket`
 
 **Expected Behavior:**
+
 - Returns all parameters
 - Optional parameters are included with default values
 - Code example is complete and runnable
 
 **Acceptance Criteria:**
+
 - Response includes all parameters
 - Optional parameters are included with default values
 - Code example is complete and runnable
@@ -415,11 +451,13 @@ Test scenarios for generating code examples.
 **Query:** `Show me how to handle errors when creating a customer`
 
 **Expected Behavior:**
+
 - Returns error handling code
 - Common error cases are handled
 - Error messages are logged appropriately
 
 **Acceptance Criteria:**
+
 - Response includes error handling code
 - Common error cases are handled
 - Error messages are logged appropriately
@@ -439,11 +477,13 @@ Test scenarios for error handling.
 **Query:** `What endpoints are available for nonexistent?`
 
 **Expected Behavior:**
+
 - Indicates resource not found
 - Error message is clear and helpful
 - Suggestion is provided if possible
 
 **Acceptance Criteria:**
+
 - Response indicates resource not found
 - Error message is clear and helpful
 - Suggestion is provided if possible
@@ -459,11 +499,13 @@ Test scenarios for error handling.
 **Query:** `get`
 
 **Expected Behavior:**
+
 - Returns multiple possible endpoints
 - Options are clearly presented
 - User is asked to clarify if needed
 
 **Acceptance Criteria:**
+
 - Response includes multiple possible endpoints
 - Options are clearly presented
 - User is asked to clarify if needed
@@ -479,11 +521,13 @@ Test scenarios for error handling.
 **Query:** ``
 
 **Expected Behavior:**
+
 - Indicates empty query
 - Helpful message is provided
 - Suggestions are given for valid queries
 
 **Acceptance Criteria:**
+
 - Response indicates empty query
 - Helpful message is provided
 - Suggestions are given for valid queries
@@ -503,11 +547,13 @@ Test scenarios for edge cases.
 **Query:** `a` repeated 1000 times
 
 **Expected Behavior:**
+
 - Handles long query gracefully
 - Error message is clear if query is too long
 - System remains stable
 
 **Acceptance Criteria:**
+
 - Response handles long query gracefully
 - Error message is clear if query is too long
 - System remains stable
@@ -523,11 +569,13 @@ Test scenarios for edge cases.
 **Query:** `!!!@#$%`
 
 **Expected Behavior:**
+
 - Handles special characters gracefully
 - No crashes or errors occur
 - Helpful message is provided
 
 **Acceptance Criteria:**
+
 - Response handles special characters gracefully
 - No crashes or errors occur
 - Helpful message is provided
@@ -543,11 +591,13 @@ Test scenarios for edge cases.
 **Query:** `GET /customers/{id}/tickets/{ticket_id}/comments`
 
 **Expected Behavior:**
+
 - Handles nested paths correctly
 - Path parameters are identified
 - Response is accurate
 
 **Acceptance Criteria:**
+
 - Response handles nested paths correctly
 - Path parameters are identified
 - Response is accurate

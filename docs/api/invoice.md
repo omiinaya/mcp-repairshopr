@@ -8,37 +8,27 @@
 
 #### Get Invoices
 
-
 Returns a paginated list of Invoices
-
 
 Required permission: Invoices - List/Search
 
-
-
 **Endpoint:** `GET /invoices`
-
 
 **Required Permission:** Required permission: Invoices - List/Search
 
-
 **Query Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| paid | boolean | No | Whether or not the returned list of invoices has been marked as paid |
-| unpaid | boolean | No | Whether or not the returned list of invoices has been marked as unpaid |
-| ticket_id | integer | No | Any invoices attached to a Ticket ID |
-| since_updated_at | string | No | Any invoices updated since a date |
-| page | integer | No | Returns provided page of results, each 'page' contains 25 results |
-
+| Parameter        | Type    | Required | Description                                                            |
+| ---------------- | ------- | -------- | ---------------------------------------------------------------------- |
+| paid             | boolean | No       | Whether or not the returned list of invoices has been marked as paid   |
+| unpaid           | boolean | No       | Whether or not the returned list of invoices has been marked as unpaid |
+| ticket_id        | integer | No       | Any invoices attached to a Ticket ID                                   |
+| since_updated_at | string  | No       | Any invoices updated since a date                                      |
+| page             | integer | No       | Returns provided page of results, each 'page' contains 25 results      |
 
 **Response: 200**
 
-
 Invoices found
-
 
 ```json
 {
@@ -75,59 +65,47 @@ Invoices found
 }
 ```
 
-
 #### Create Invoice
-
 
 Creates an Invoice
 
-
 Required permission: Invoices - Create
-
-
 
 **Endpoint:** `POST /invoices`
 
-
 **Required Permission:** Required permission: Invoices - Create
-
 
 **Request Body:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | No |  |
-| balance_due | integer | No |  |
-| customer_id | integer | Yes |  |
-| number | string | Yes |  |
-| date | string | Yes |  |
-| customer_business_then_name | string | No |  |
-| created_at | string | No |  |
-| updated_at | string | No |  |
-| due_date | string | No |  |
-| subtotal | string | No |  |
-| total | string | No |  |
-| tax | string | No |  |
-| verified_paid | boolean | No |  |
-| tech_marked_paid | boolean | No |  |
-| ticket_id | integer | No |  |
-| pdf_url | string | No |  |
-| is_paid | boolean | No |  |
-| location_id | integer | No |  |
-| po_number | string | No |  |
-| contact_id | integer | No |  |
-| note | string | No |  |
-| hardwarecost | number | No |  |
-| line_items | array | No |  |
-
-
+| Parameter                   | Type    | Required | Description |
+| --------------------------- | ------- | -------- | ----------- |
+| id                          | integer | No       |             |
+| balance_due                 | integer | No       |             |
+| customer_id                 | integer | Yes      |             |
+| number                      | string  | Yes      |             |
+| date                        | string  | Yes      |             |
+| customer_business_then_name | string  | No       |             |
+| created_at                  | string  | No       |             |
+| updated_at                  | string  | No       |             |
+| due_date                    | string  | No       |             |
+| subtotal                    | string  | No       |             |
+| total                       | string  | No       |             |
+| tax                         | string  | No       |             |
+| verified_paid               | boolean | No       |             |
+| tech_marked_paid            | boolean | No       |             |
+| ticket_id                   | integer | No       |             |
+| pdf_url                     | string  | No       |             |
+| is_paid                     | boolean | No       |             |
+| location_id                 | integer | No       |             |
+| po_number                   | string  | No       |             |
+| contact_id                  | integer | No       |             |
+| note                        | string  | No       |             |
+| hardwarecost                | number  | No       |             |
+| line_items                  | array   | No       |             |
 
 **Response: 200**
 
-
 Invoice created
-
 
 ```json
 {
@@ -158,42 +136,29 @@ Invoice created
 }
 ```
 
-
 **Response: 422**
-
 
 Invalid request
 
-
 #### Get Invoice by ID
-
 
 Retrieves an Invoice by ID or Number
 
-
 Required permission: Invoices - View Details
-
-
 
 **Endpoint:** `GET /invoices/{id}`
 
-
 **Required Permission:** Required permission: Invoices - View Details
-
 
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes | ID or Number of Invoice to retrieve |
-
+| Parameter | Type    | Required | Description                         |
+| --------- | ------- | -------- | ----------------------------------- |
+| id        | integer | Yes      | ID or Number of Invoice to retrieve |
 
 **Response: 200**
 
-
 Invoice found
-
 
 ```json
 {
@@ -275,63 +240,49 @@ Invoice found
 }
 ```
 
-
 **Response: 404**
-
 
 Invalid request
 
-
 #### Update Invoice
-
 
 Updates an existing invoice by ID
 
-
 This updates an existing Invoice, all parameters overwrite existing params
-
 
 **Endpoint:** `PUT /invoices/{id}`
 
-
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes | ID of Invoice to update |
-
+| Parameter | Type    | Required | Description             |
+| --------- | ------- | -------- | ----------------------- |
+| id        | integer | Yes      | ID of Invoice to update |
 
 **Request Body:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| customer_id | integer | No |  |
-| number | string | No |  |
-| date | string | No |  |
-| customer_business_then_name | string | No |  |
-| created_at | string | No |  |
-| updated_at | string | No |  |
-| due_date | string | No |  |
-| subtotal | string | No |  |
-| total | string | No |  |
-| tax | string | No |  |
-| ticket_id | integer | No |  |
-| pdf_url | string | No |  |
-| location_id | integer | No |  |
-| po_number | string | No |  |
-| contact_id | integer | No |  |
-| note | string | No |  |
-| hardwarecost | number | No |  |
-
-
+| Parameter                   | Type    | Required | Description |
+| --------------------------- | ------- | -------- | ----------- |
+| customer_id                 | integer | No       |             |
+| number                      | string  | No       |             |
+| date                        | string  | No       |             |
+| customer_business_then_name | string  | No       |             |
+| created_at                  | string  | No       |             |
+| updated_at                  | string  | No       |             |
+| due_date                    | string  | No       |             |
+| subtotal                    | string  | No       |             |
+| total                       | string  | No       |             |
+| tax                         | string  | No       |             |
+| ticket_id                   | integer | No       |             |
+| pdf_url                     | string  | No       |             |
+| location_id                 | integer | No       |             |
+| po_number                   | string  | No       |             |
+| contact_id                  | integer | No       |             |
+| note                        | string  | No       |             |
+| hardwarecost                | number  | No       |             |
 
 **Response: 200**
 
-
 Invoice Updated
-
 
 ```json
 {
@@ -361,143 +312,96 @@ Invoice Updated
 }
 ```
 
-
 **Response: 404**
 
-
 Invalid request
-
 
 #### Delete Invoice
 
-
 Deletes an invoice by ID
-
 
 Returns 200 even if the delete fails
 
-
 **Endpoint:** `DELETE /invoices/{id}`
-
 
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes | ID of Invoice to delete |
-
+| Parameter | Type    | Required | Description             |
+| --------- | ------- | -------- | ----------------------- |
+| id        | integer | Yes      | ID of Invoice to delete |
 
 **Response: 200**
 
-
 Invalid request
-
 
 #### Get Invoice by ID
 
-
 Returns the associated ticket for an invoice
-
 
 Required permissions: "Invoices - View Details" and "Tickets - View Details"
 
-
-
 **Endpoint:** `GET /invoices/{id}/ticket`
-
 
 **Required Permission:** Required permissions: "Invoices - View Details" and "Tickets - View Details"
 
-
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes | ID of Invoice whose Ticket will be returned |
-
+| Parameter | Type    | Required | Description                                 |
+| --------- | ------- | -------- | ------------------------------------------- |
+| id        | integer | Yes      | ID of Invoice whose Ticket will be returned |
 
 **Response: 200**
-
 
 Invoice's ticket found
 
-
 **Response: 404**
-
 
 Invalid request
 
-
 #### Create Invoice
-
 
 Queues a print job for an invoice
 
-
 Required permission: Invoices - View Details
-
-
 
 **Endpoint:** `POST /invoices/{id}/print`
 
-
 **Required Permission:** Required permission: Invoices - View Details
-
 
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes | The ID of the Invoice to print |
-
+| Parameter | Type    | Required | Description                    |
+| --------- | ------- | -------- | ------------------------------ |
+| id        | integer | Yes      | The ID of the Invoice to print |
 
 **Response: 200**
-
 
 Invoice print job queued
 
-
 **Response: 404**
 
-
 Invalid request
-
 
 #### Create Invoice
 
-
 Sends invoice to customer
-
 
 Required permission: Invoices - View Details
 
-
-
 **Endpoint:** `POST /invoices/{id}/email`
-
 
 **Required Permission:** Required permission: Invoices - View Details
 
-
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes | ID of Invoice which will be emailed |
-
+| Parameter | Type    | Required | Description                         |
+| --------- | ------- | -------- | ----------------------------------- |
+| id        | integer | Yes      | ID of Invoice which will be emailed |
 
 **Response: 200**
 
-
 Invoice email sent
-
 
 **Response: 404**
 
-
 Invalid request
-

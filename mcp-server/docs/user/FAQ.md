@@ -34,11 +34,13 @@ See the [Installation Guide](./INSTALLATION.md) for detailed installation instru
 ### What are the system requirements?
 
 Minimum requirements:
+
 - Node.js 18 or higher
 - 512 MB RAM
 - 100 MB disk space
 
 Recommended requirements:
+
 - Node.js 20 LTS
 - 2 GB RAM
 - 1 GB disk space
@@ -46,6 +48,7 @@ Recommended requirements:
 ### Can I run MCP RepairShopr on Windows?
 
 Yes, you can run MCP RepairShopr on Windows using:
+
 - Docker Desktop (recommended)
 - Windows Subsystem for Linux (WSL2)
 - Node.js directly on Windows
@@ -53,6 +56,7 @@ Yes, you can run MCP RepairShopr on Windows using:
 ### How do I update MCP RepairShopr?
 
 For Docker installations:
+
 ```bash
 cd deploy
 ./docker-deploy.sh production stop
@@ -61,6 +65,7 @@ docker pull mcp-repairshopr:latest
 ```
 
 For manual installations:
+
 ```bash
 git pull origin main
 npm install
@@ -109,6 +114,7 @@ Use the `generate_code_example` tool:
 ### What programming languages are supported for code examples?
 
 Currently supported languages:
+
 - JavaScript
 - Python
 - cURL
@@ -116,11 +122,13 @@ Currently supported languages:
 ### How do I filter search results?
 
 You can filter by:
+
 - `resource`: Specific API resource (e.g., customers, tickets)
 - `method`: HTTP method (GET, POST, PUT, DELETE, PATCH)
 - `permission`: Required permission level
 
 Example:
+
 ```json
 {
   "query": "customer",
@@ -141,6 +149,7 @@ npm start
 ```
 
 Or in `config/default.json`:
+
 ```json
 {
   "port": 8080
@@ -157,6 +166,7 @@ npm start
 ```
 
 Or in `config/default.json`:
+
 ```json
 {
   "logLevel": "debug"
@@ -208,6 +218,7 @@ Slow searches can be caused by:
 4. Low system resources
 
 Try:
+
 - Increasing cache size
 - Using more specific queries
 - Limiting result count
@@ -215,11 +226,13 @@ Try:
 ### How much memory does MCP RepairShopr use?
 
 Memory usage depends on:
+
 - Cache size configuration
 - Number of concurrent requests
 - Data being processed
 
 Typical usage:
+
 - Minimum: ~100 MB
 - Recommended: ~200-500 MB
 - High traffic: ~1 GB+
@@ -297,6 +310,7 @@ Enable monitoring in your configuration:
 ```
 
 Then access the metrics endpoint:
+
 ```bash
 curl http://localhost:3000/metrics
 ```
@@ -329,6 +343,7 @@ Yes, in production environments you should:
 ### What data does MCP RepairShopr store?
 
 MCP RepairShopr stores:
+
 - API documentation metadata
 - Search cache (temporary)
 - Application logs
@@ -344,11 +359,13 @@ See the [Contribution Guide](../developer/CONTRIBUTING.md) for information on co
 ### How do I run tests?
 
 Run all tests:
+
 ```bash
 npm test
 ```
 
 Run specific test suites:
+
 ```bash
 npm run test:unit
 npm run test:integration
@@ -382,6 +399,7 @@ This starts the server with hot reload enabled.
 ### How do I report a bug?
 
 Report bugs on GitHub with:
+
 - Description of the issue
 - Steps to reproduce
 - Expected behavior
@@ -391,6 +409,7 @@ Report bugs on GitHub with:
 ### How do I request a feature?
 
 Request features on GitHub Issues with:
+
 - Feature description
 - Use case
 - Proposed implementation (optional)

@@ -89,17 +89,17 @@ CMD ["sh", "-c", "echo 'Starting MCP RepairShopr Server...' && node dist/index.j
 Ensure `mcp-server/deploy/docker-compose.coolify.yml` has correct build context:
 
 ```yaml
-version: '3.8'
+version: "3.8"
 
 services:
   mcp-repairshopr:
     build:
-      context: ..              # Points to mcp-server/ directory
+      context: .. # Points to mcp-server/ directory
       dockerfile: deploy/Dockerfile
     container_name: mcp-repairshopr-server
     ports:
       - "${PORT:-3000}:${PORT:-3000}"
-    
+
     environment:
       - SERVER_NAME=${SERVER_NAME:-mcp-repairshopr}
       - SERVER_VERSION=${SERVER_VERSION:-0.1.0}
@@ -108,33 +108,34 @@ services:
       - LOG_LEVEL=${LOG_LEVEL:-info}
       - LOG_FORMAT=${LOG_FORMAT:-json}
       # Add other env vars as needed...
-    
+
     volumes:
       - ./data:/app/data:ro
       - ./config:/app/config:ro
       - mcp-logs:/app/logs
-    
+
     restart: unless-stopped
-    
+
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:${PORT:-3000}/health || exit 1"]
+      test:
+        ["CMD-SHELL", "curl -f http://localhost:${PORT:-3000}/health || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 15s
-    
+
     deploy:
       resources:
         limits:
-          cpus: '${CPU_LIMIT:-1.0}'
-          memory: '${MEMORY_LIMIT:-512M}'
+          cpus: "${CPU_LIMIT:-1.0}"
+          memory: "${MEMORY_LIMIT:-512M}"
         reservations:
-          cpus: '${CPU_RESERVATION:-0.5}'
-          memory: '${MEMORY_RESERVATION:-256M}'
-    
+          cpus: "${CPU_RESERVATION:-0.5}"
+          memory: "${MEMORY_RESERVATION:-256M}"
+
     networks:
       - coolify-network
-    
+
     logging:
       driver: "json-file"
       options:
@@ -181,6 +182,7 @@ git push origin main
 ### 2.3 Configure Base Directory
 
 Set the **Base Directory** to:
+
 ```
 mcp-server/deploy
 ```
@@ -193,39 +195,40 @@ Go to **Environment Variables** tab and add these:
 
 #### Required Variables:
 
-| Variable | Value | Build Time | Description |
-|----------|-------|------------|-------------|
+| Variable   | Value        | Build Time           | Description                         |
+| ---------- | ------------ | -------------------- | ----------------------------------- |
 | `NODE_ENV` | `production` | ❌ NO (Runtime only) | Must NOT be available at build time |
-| `PORT` | `3000` | ❌ NO | Port to listen on |
+| `PORT`     | `3000`       | ❌ NO                | Port to listen on                   |
 
 #### Important Configuration:
 
 **⚠️ CRITICAL:** Make sure `NODE_ENV` is set to **Runtime only** (uncheck "Available at Buildtime")
 
 This is essential because:
+
 - `NODE_ENV=production` prevents devDependencies from being installed
 - TypeScript compiler and build tools are devDependencies
 - The build stage needs these tools
 
 #### Optional Variables:
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `SERVER_NAME` | `mcp-repairshopr` | Server instance name |
-| `SERVER_VERSION` | `0.1.0` | Server version |
-| `LOG_LEVEL` | `info` | Logging level |
-| `LOG_FORMAT` | `json` | Log format |
-| `CACHE_MAX_SIZE` | `10485760` | Cache size in bytes |
-| `CACHE_DEFAULT_TTL` | `300000` | Cache TTL in ms |
-| `MAX_CONCURRENT_REQUESTS` | `100` | Max concurrent requests |
-| `REQUEST_TIMEOUT` | `30000` | Request timeout in ms |
-| `ENABLE_METRICS` | `true` | Enable Prometheus metrics |
+| Variable                  | Default           | Description               |
+| ------------------------- | ----------------- | ------------------------- |
+| `SERVER_NAME`             | `mcp-repairshopr` | Server instance name      |
+| `SERVER_VERSION`          | `0.1.0`           | Server version            |
+| `LOG_LEVEL`               | `info`            | Logging level             |
+| `LOG_FORMAT`              | `json`            | Log format                |
+| `CACHE_MAX_SIZE`          | `10485760`        | Cache size in bytes       |
+| `CACHE_DEFAULT_TTL`       | `300000`          | Cache TTL in ms           |
+| `MAX_CONCURRENT_REQUESTS` | `100`             | Max concurrent requests   |
+| `REQUEST_TIMEOUT`         | `30000`           | Request timeout in ms     |
+| `ENABLE_METRICS`          | `true`            | Enable Prometheus metrics |
 
 #### RepairShopr API (Optional):
 
-| Variable | Description |
-|----------|-------------|
-| `REPAIRSHOPR_API_KEY` | Your RepairShopr API key |
+| Variable                | Description                |
+| ----------------------- | -------------------------- |
+| `REPAIRSHOPR_API_KEY`   | Your RepairShopr API key   |
 | `REPAIRSHOPR_SUBDOMAIN` | Your RepairShopr subdomain |
 
 ### 2.5 Configure Health Check
@@ -270,11 +273,13 @@ curl https://YOUR_DOMAIN/metrics
 ### Issue 1: "package.json: not found"
 
 **Error:**
+
 ```
 ERROR: failed to calculate checksum: "/package.json": not found
 ```
 
 **Solution:**
+
 - Check that `docker-compose.coolify.yml` has `context: ..` (points to parent `mcp-server/`)
 - Ensure `package.json` and `package-lock.json` exist in `mcp-server/` directory
 - Verify the files are committed to git
@@ -282,22 +287,26 @@ ERROR: failed to calculate checksum: "/package.json": not found
 ### Issue 2: "npm ci requires package-lock.json"
 
 **Error:**
+
 ```
 npm error The `npm ci` command can only install with an existing package-lock.json
 ```
 
 **Solution:**
+
 - Run `npm install` locally to generate `package-lock.json`
 - Commit and push it to git
 
 ### Issue 3: Build fails due to NODE_ENV=production
 
 **Error:**
+
 ```
 npm error Missing script: "build"
 ```
 
 **Solution:**
+
 - Set `NODE_ENV` as **Runtime only** (not build time)
 - The Dockerfile already has `ENV NODE_ENV=development` in builder stage
 - Coolify should not override it during build
@@ -305,11 +314,13 @@ npm error Missing script: "build"
 ### Issue 4: "Dockerfile not found"
 
 **Error:**
+
 ```
 Dockerfile not found for service mcp-repairshopr at ../deploy/Dockerfile
 ```
 
 **Solution:**
+
 - Ensure Base Directory is set to `mcp-server/deploy`
 - Or use the root `docker-compose.yml` which points to correct paths
 
@@ -318,6 +329,7 @@ Dockerfile not found for service mcp-repairshopr at ../deploy/Dockerfile
 **Symptom:** Container keeps restarting
 
 **Solution:**
+
 - Check logs: `docker logs CONTAINER_ID`
 - Verify `data/metadata-index.json` exists
 - Ensure `config/default.json` is present
@@ -326,11 +338,13 @@ Dockerfile not found for service mcp-repairshopr at ../deploy/Dockerfile
 ### Issue 6: Port already in use
 
 **Error:**
+
 ```
 Error: listen EADDRINUSE: address already in use :::3000
 ```
 
 **Solution:**
+
 - Coolify will assign a dynamic port
 - Make sure your app uses `process.env.PORT` not hardcoded `3000`
 - The HTTP server already handles this
@@ -340,12 +354,14 @@ Error: listen EADDRINUSE: address already in use :::3000
 ### 5.1 Access the Service
 
 Once deployed, Coolify will provide:
+
 - **Domain**: `https://your-service.your-domain.com`
 - **Port**: Auto-assigned by Coolify
 
 ### 5.2 Monitor Logs
 
 In Coolify:
+
 1. Go to your service
 2. Click **Logs** tab
 3. Check for any errors or warnings
@@ -353,6 +369,7 @@ In Coolify:
 ### 5.3 Scale (if needed)
 
 In the **Resources** section:
+
 - Adjust CPU/Memory limits
 - Set replicas if using Docker Swarm/Kubernetes
 
@@ -377,13 +394,13 @@ Repo Root
 
 ### Coolify Configuration Summary
 
-| Setting | Value |
-|---------|-------|
-| **Build Pack** | Docker Compose |
-| **Base Directory** | `mcp-server/deploy` |
-| **Docker Compose File** | `docker-compose.coolify.yml` |
-| **NODE_ENV** | Runtime only, value: `production` |
-| **Health Check** | HTTP, path: `/health`, port: `3000` |
+| Setting                 | Value                               |
+| ----------------------- | ----------------------------------- |
+| **Build Pack**          | Docker Compose                      |
+| **Base Directory**      | `mcp-server/deploy`                 |
+| **Docker Compose File** | `docker-compose.coolify.yml`        |
+| **NODE_ENV**            | Runtime only, value: `production`   |
+| **Health Check**        | HTTP, path: `/health`, port: `3000` |
 
 ### Useful Commands
 
@@ -413,6 +430,7 @@ If you encounter issues:
 ## Success Criteria
 
 ✅ Deployment is successful when:
+
 - [ ] Build completes without errors
 - [ ] Container starts and stays running
 - [ ] Health check returns HTTP 200

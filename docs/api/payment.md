@@ -8,34 +8,24 @@
 
 #### Get Payments
 
-
 Returns a paginated list of Payments
-
 
 Required permission: Payments - View List
 
-
-
 **Endpoint:** `GET /payments`
-
 
 **Required Permission:** Required permission: Payments - View List
 
-
 **Query Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| query | string | No | Search query |
-| page | integer | No | Returns provided page of results, each 'page' contains 25 results |
-
+| Parameter | Type    | Required | Description                                                       |
+| --------- | ------- | -------- | ----------------------------------------------------------------- |
+| query     | string  | No       | Search query                                                      |
+| page      | integer | No       | Returns provided page of results, each 'page' contains 25 results |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -46,9 +36,7 @@ successful
       "updated_at": "2019-10-28T10:18:14.061Z",
       "success": true,
       "payment_amount": 100,
-      "invoice_ids": [
-        null
-      ],
+      "invoice_ids": [null],
       "ref_num": "11006",
       "applied_at": "2019-10-26T00:00:00.000Z",
       "payment_method": "Check",
@@ -101,56 +89,44 @@ successful
 }
 ```
 
-
 #### Create Payment
-
 
 Creates a Payment
 
-
 Required permission: Payments - Create
-
-
 
 **Endpoint:** `POST /payments`
 
-
 **Required Permission:** Required permission: Payments - Create
-
 
 **Request Body:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| customer_id | integer | No |  |
-| invoice_id | integer | No |  |
-| invoice_number | string | No |  |
-| amount_cents | integer | No |  |
-| address_street | string | No |  |
-| address_city | string | No |  |
-| address_zip | string | No |  |
-| payment_method | string | No |  |
-| ref_num | string | No |  |
-| register_id | integer | No |  |
-| signature_name | string | No |  |
-| signature_data | string | No |  |
-| signature_date | string | No |  |
-| credit_card_number | string | No |  |
-| date_month | string | No |  |
-| date_year | string | No |  |
-| cvv | string | No |  |
-| lastname | string | No |  |
-| firstname | string | No |  |
-| apply_payments | object | No | Object where a key is an Invoice ID and a value is a payment amount to be applied to the invoice. |
-
-
+| Parameter          | Type    | Required | Description                                                                                       |
+| ------------------ | ------- | -------- | ------------------------------------------------------------------------------------------------- |
+| customer_id        | integer | No       |                                                                                                   |
+| invoice_id         | integer | No       |                                                                                                   |
+| invoice_number     | string  | No       |                                                                                                   |
+| amount_cents       | integer | No       |                                                                                                   |
+| address_street     | string  | No       |                                                                                                   |
+| address_city       | string  | No       |                                                                                                   |
+| address_zip        | string  | No       |                                                                                                   |
+| payment_method     | string  | No       |                                                                                                   |
+| ref_num            | string  | No       |                                                                                                   |
+| register_id        | integer | No       |                                                                                                   |
+| signature_name     | string  | No       |                                                                                                   |
+| signature_data     | string  | No       |                                                                                                   |
+| signature_date     | string  | No       |                                                                                                   |
+| credit_card_number | string  | No       |                                                                                                   |
+| date_month         | string  | No       |                                                                                                   |
+| date_year          | string  | No       |                                                                                                   |
+| cvv                | string  | No       |                                                                                                   |
+| lastname           | string  | No       |                                                                                                   |
+| firstname          | string  | No       |                                                                                                   |
+| apply_payments     | object  | No       | Object where a key is an Invoice ID and a value is a payment amount to be applied to the invoice. |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -160,9 +136,7 @@ successful
     "updated_at": "2019-10-28T12:45:24.315Z",
     "success": true,
     "payment_amount": 10,
-    "invoice_ids": [
-      1
-    ],
+    "invoice_ids": [1],
     "ref_num": null,
     "applied_at": "2019-10-28T00:00:00.000Z",
     "payment_method": null,
@@ -172,42 +146,29 @@ successful
 }
 ```
 
-
 **Response: 422**
-
 
 Invalid request
 
-
 #### Get Payment by ID
-
 
 Retrieves a Payment by ID
 
-
 Required permission: Payments - View List
-
-
 
 **Endpoint:** `GET /payments/{id}`
 
-
 **Required Permission:** Required permission: Payments - View List
-
 
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -217,9 +178,7 @@ successful
     "updated_at": "2019-10-28T13:05:27.257Z",
     "success": true,
     "payment_amount": 100,
-    "invoice_ids": [
-      null
-    ],
+    "invoice_ids": [null],
     "ref_num": "11006",
     "applied_at": "2019-10-26T00:00:00.000Z",
     "payment_method": "Check",
@@ -267,9 +226,6 @@ successful
 }
 ```
 
-
 **Response: 404**
 
-
 Invalid request
-

@@ -8,47 +8,37 @@
 
 #### Get Tickets
 
-
 Returns a paginated list of Tickets
-
 
 Required permission: Tickets - List/Search
 Single-Customer Users can only access own tickets.
 
-
-
 **Endpoint:** `GET /tickets`
-
 
 **Required Permission:** Required permission: Tickets - List/Search
 
-
 **Query Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| customer_id | integer | No | Any Ticket with customer_id equal to the parameter. |
-| contact_id | integer | No | Any Ticket with contact_id equal to the parameter. |
-| number | string | No | Any Ticket with number equal to the parameter. |
-| resolved_after | string | No | Returns Tickets resolved after the date. Example "2019-01-23". |
-| created_after | string | No | Returns Tickets created after the date. Example "2019-02-25". |
-| since_updated_at | string | No | Returns Tickets updated after the date. Example "2019-02-25". |
-| status | string | No | Any Ticket with status equal to the parameter. Examples "New", "In Progress", "Resolved", "Invoiced", "Waiting for Parts", "Waiting on Customer", "Scheduled", "Customer Reply", "Not Closed". |
-| query | string | No | Search query |
-| user_id | integer | No | Any Ticket assigned to a User ID |
-| mine | boolean | No | Any Ticket assigned to the current user |
-| ticket_search_id | integer | No | Returns results of a Ticket Search |
-| page | integer | No | Returns provided page of results, each 'page' contains 25 results |
-| comment_format | string | No | Returns comments in the specified format. Allowed values: 'plaintext', 'richtext', 'original'. Defaults to 'plaintext'. |
-| all_comments | boolean | No | When set to true, includes all ticket comments in the resposne, when set to false, only the initial comment is returned. Defaults to true. Default value will be changed to false in the near future. |
-
+| Parameter        | Type    | Required | Description                                                                                                                                                                                           |
+| ---------------- | ------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| customer_id      | integer | No       | Any Ticket with customer_id equal to the parameter.                                                                                                                                                   |
+| contact_id       | integer | No       | Any Ticket with contact_id equal to the parameter.                                                                                                                                                    |
+| number           | string  | No       | Any Ticket with number equal to the parameter.                                                                                                                                                        |
+| resolved_after   | string  | No       | Returns Tickets resolved after the date. Example "2019-01-23".                                                                                                                                        |
+| created_after    | string  | No       | Returns Tickets created after the date. Example "2019-02-25".                                                                                                                                         |
+| since_updated_at | string  | No       | Returns Tickets updated after the date. Example "2019-02-25".                                                                                                                                         |
+| status           | string  | No       | Any Ticket with status equal to the parameter. Examples "New", "In Progress", "Resolved", "Invoiced", "Waiting for Parts", "Waiting on Customer", "Scheduled", "Customer Reply", "Not Closed".        |
+| query            | string  | No       | Search query                                                                                                                                                                                          |
+| user_id          | integer | No       | Any Ticket assigned to a User ID                                                                                                                                                                      |
+| mine             | boolean | No       | Any Ticket assigned to the current user                                                                                                                                                               |
+| ticket_search_id | integer | No       | Returns results of a Ticket Search                                                                                                                                                                    |
+| page             | integer | No       | Returns provided page of results, each 'page' contains 25 results                                                                                                                                     |
+| comment_format   | string  | No       | Returns comments in the specified format. Allowed values: 'plaintext', 'richtext', 'original'. Defaults to 'plaintext'.                                                                               |
+| all_comments     | boolean | No       | When set to true, includes all ticket comments in the resposne, when set to false, only the initial comment is returned. Defaults to true. Default value will be changed to false in the near future. |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -108,32 +98,22 @@ successful
 }
 ```
 
-
 #### Create Ticket
 
-
 Creates a Ticket
-
 
 Required permission: Tickets - Create
 Single-Customer Users can only access own tickets.
 
-
-
 **Endpoint:** `POST /tickets`
-
 
 **Required Permission:** Required permission: Tickets - Create
 
-
 **Request Body:**
-
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -160,9 +140,7 @@ successful
     "intake_form_html": null,
     "signature_name": "Joe",
     "signature_date": null,
-    "asset_ids": [
-      1
-    ],
+    "asset_ids": [1],
     "priority": "High",
     "resolved_at": null,
     "outtake_form_name": null,
@@ -411,12 +389,9 @@ successful
 }
 ```
 
-
 **Response: 422**
 
-
 Invalid request
-
 
 ```json
 {
@@ -424,37 +399,26 @@ Invalid request
 }
 ```
 
-
 #### Get Ticket by ID
 
-
 Retrieves a Ticket by ID
-
 
 Required permissions: "Tickets - View Details" or "Tickets - View 'Their Ticket' Details (assigned to them)"
 Single-Customer Users can only access own tickets.
 
-
-
 **Endpoint:** `GET /tickets/{id}`
-
 
 **Required Permission:** Required permissions: "Tickets - View Details" or "Tickets - View 'Their Ticket' Details (assigned to them)"
 
-
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -561,46 +525,32 @@ successful
 }
 ```
 
-
 **Response: 404**
-
 
 Invalid request
 
-
 #### Update Ticket
 
-
 Updates an existing Ticket by ID
-
 
 Required permission: Tickets - Edit
 Single-Customer Users can only access own tickets.
 
-
-
 **Endpoint:** `PUT /tickets/{id}`
-
 
 **Required Permission:** Required permission: Tickets - Edit
 
-
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Request Body:**
 
-
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -707,53 +657,37 @@ successful
 }
 ```
 
-
 **Response: 422**
 
-
 Invalid request
-
 
 ```json
 {
   "success": false,
-  "message": [
-    "Subject can't be blank"
-  ]
+  "message": ["Subject can't be blank"]
 }
 ```
 
-
 #### Delete Ticket
 
-
 Deletes a Ticket by ID
-
 
 Required permission: Tickets - Delete
 Single-Customer Users can only access own tickets.
 
-
-
 **Endpoint:** `DELETE /tickets/{id}`
-
 
 **Required Permission:** Required permission: Tickets - Delete
 
-
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -761,12 +695,9 @@ successful
 }
 ```
 
-
 **Response: 404**
 
-
 Invalid request
-
 
 ```json
 {
@@ -774,21 +705,15 @@ Invalid request
 }
 ```
 
-
 #### Get Settings
-
 
 Returns Tickets Settings
 
-
 **Endpoint:** `GET /tickets/settings`
-
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -824,122 +749,88 @@ successful
 }
 ```
 
-
 #### Create Ticket
 
-
 Prints a Ticket by ID
-
 
 Required permission: Tickets - View Details
 Single-Customer Users can only access own tickets.
 
-
-
 **Endpoint:** `POST /tickets/{id}/print`
-
 
 **Required Permission:** Required permission: Tickets - View Details
 
-
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Response: 200**
 
-
 successful
-
 
 #### Get Ticket by ID
 
-
 Returns Comments for a Ticket
-
 
 Required permissions: "Tickets - View Details" or "Tickets - View 'Their Ticket' Details (assigned to them)"
 Single-Customer Users can only access comments for their own tickets.
 
-
-
 **Endpoint:** `GET /tickets/{id}/comments`
-
 
 **Required Permission:** Required permissions: "Tickets - View Details" or "Tickets - View 'Their Ticket' Details (assigned to them)"
 
-
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-| sort_by | string | No | Sort by field, created_at or updated_at |
-| sort_direction | string | No | Sort direction, ASC or DESC |
-| created_after | string | No | Filter comments created after this date |
-| created_before | string | No | Filter comments created before this date |
-| updated_after | string | No | Filter comments updated after this date |
-| updated_before | string | No | Filter comments updated before this date |
-| page | integer | No | Returns provided page of results, each page contains 10 comments by default, default can be changed by setting the 'per_page' parameter |
-| per_page | integer | No | Sets the number of comments per page, default is 10 |
-| comment_format | string | No | Returns comments in the specified format. Allowed values: 'plaintext', 'richtext', 'original'. Defaults to 'plaintext'. |
-
+| Parameter      | Type    | Required | Description                                                                                                                             |
+| -------------- | ------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| id             | integer | Yes      |                                                                                                                                         |
+| sort_by        | string  | No       | Sort by field, created_at or updated_at                                                                                                 |
+| sort_direction | string  | No       | Sort direction, ASC or DESC                                                                                                             |
+| created_after  | string  | No       | Filter comments created after this date                                                                                                 |
+| created_before | string  | No       | Filter comments created before this date                                                                                                |
+| updated_after  | string  | No       | Filter comments updated after this date                                                                                                 |
+| updated_before | string  | No       | Filter comments updated before this date                                                                                                |
+| page           | integer | No       | Returns provided page of results, each page contains 10 comments by default, default can be changed by setting the 'per_page' parameter |
+| per_page       | integer | No       | Sets the number of comments per page, default is 10                                                                                     |
+| comment_format | string  | No       | Returns comments in the specified format. Allowed values: 'plaintext', 'richtext', 'original'. Defaults to 'plaintext'.                 |
 
 **Response: 200**
 
-
 successful
-
 
 #### Create Ticket
 
-
 Adds a Comment to a Ticket
-
 
 Required permission: Tickets - Edit
 Single-Customer Users can only access own tickets.
 
-
-
 **Endpoint:** `POST /tickets/{id}/comment`
-
 
 **Required Permission:** Required permission: Tickets - Edit
 
-
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Request Body:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| subject | string | No |  |
-| tech | string | No |  |
-| body | string | No |  |
-| hidden | boolean | No |  |
-| sms_body | string | No |  |
-| do_not_email | boolean | No |  |
-
-
+| Parameter    | Type    | Required | Description |
+| ------------ | ------- | -------- | ----------- |
+| subject      | string  | No       |             |
+| tech         | string  | No       |             |
+| body         | string  | No       |             |
+| hidden       | boolean | No       |             |
+| sms_body     | string  | No       |             |
+| do_not_email | boolean | No       |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -957,67 +848,47 @@ successful
 }
 ```
 
-
 **Response: 422**
 
-
 Invalid request
-
 
 ```json
 {
   "success": false,
-  "message": [
-    "Body can't be blank",
-    "Subject can't be blank"
-  ]
+  "message": ["Body can't be blank", "Subject can't be blank"]
 }
 ```
 
-
 #### Create Ticket
-
 
 Create a Ticket Timer for a Ticket
 
-
 Required permission: Ticket Timers - Overview
-
-
 
 **Endpoint:** `POST /tickets/{id}/timer_entry`
 
-
 **Required Permission:** Required permission: Ticket Timers - Overview
-
 
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Request Body:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| start_at | string | No |  |
-| end_at | string | No |  |
-| duration_minutes | integer | No |  |
-| user_id | integer | No | Current user by default |
-| notes | string | No |  |
-| product_id | integer | No |  |
-
-
+| Parameter        | Type    | Required | Description             |
+| ---------------- | ------- | -------- | ----------------------- |
+| start_at         | string  | No       |                         |
+| end_at           | string  | No       |                         |
+| duration_minutes | integer | No       |                         |
+| user_id          | integer | No       | Current user by default |
+| notes            | string  | No       |                         |
+| product_id       | integer | No       |                         |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -1039,12 +910,9 @@ successful
 }
 ```
 
-
 **Response: 422**
 
-
 Invalid request
-
 
 ```json
 {
@@ -1052,53 +920,39 @@ Invalid request
 }
 ```
 
-
 #### Create Ticket
 
-
 Creates a Ticket Line Item
-
 
 Required permission: Tickets - Edit
 Single-Customer Users can only access own tickets.
 
-
-
 **Endpoint:** `POST /tickets/{id}/add_line_item`
-
 
 **Required Permission:** Required permission: Tickets - Edit
 
-
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Request Body:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| name | string | No |  |
-| upc_code | string | No |  |
-| product_id | integer | No |  |
-| description | string | No |  |
-| quantity | number | No |  |
-| price_cost | number | No |  |
-| price_retail | number | No |  |
-| taxable | boolean | No |  |
-
-
+| Parameter    | Type    | Required | Description |
+| ------------ | ------- | -------- | ----------- |
+| name         | string  | No       |             |
+| upc_code     | string  | No       |             |
+| product_id   | integer | No       |             |
+| description  | string  | No       |             |
+| quantity     | number  | No       |             |
+| price_cost   | number  | No       |             |
+| price_retail | number  | No       |             |
+| taxable      | boolean | No       |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -1129,12 +983,9 @@ successful
 }
 ```
 
-
 **Response: 422**
 
-
 Invalid request
-
 
 ```json
 {
@@ -1143,40 +994,28 @@ Invalid request
 }
 ```
 
-
 #### Create Ticket
 
-
 Attach a file to a Ticket
-
 
 Required permission: Tickets - Edit
 Single-Customer Users can only access own tickets.
 
-
-
 **Endpoint:** `POST /tickets/{id}/attach_file_url`
-
 
 **Required Permission:** Required permission: Tickets - Edit
 
-
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Request Body:**
 
-
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -1184,12 +1023,9 @@ successful
 }
 ```
 
-
 **Response: 422**
 
-
 Invalid request
-
 
 ```json
 {
@@ -1197,46 +1033,32 @@ Invalid request
 }
 ```
 
-
 #### Create Ticket
 
-
 Deletes a Ticket Line Item
-
 
 Required permission: Tickets - Edit
 Single-Customer Users can only access own tickets.
 
-
-
 **Endpoint:** `POST /tickets/{id}/remove_line_item`
-
 
 **Required Permission:** Required permission: Tickets - Edit
 
-
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Request Body:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| ticket_line_item_id | integer | No |  |
-
-
+| Parameter           | Type    | Required | Description |
+| ------------------- | ------- | -------- | ----------- |
+| ticket_line_item_id | integer | No       |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -1245,60 +1067,44 @@ successful
 }
 ```
 
-
 **Response: 404**
-
 
 Invalid request
 
-
 #### Update Ticket
 
-
 Updates an existing Ticket Line Item
-
 
 Required permission: Tickets - Edit
 Single-Customer Users can only access own tickets.
 
-
-
 **Endpoint:** `PUT /tickets/{id}/update_line_item`
-
 
 **Required Permission:** Required permission: Tickets - Edit
 
-
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Request Body:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| ticket_line_item_id | integer | No |  |
-| name | string | No |  |
-| upc_code | string | No |  |
-| product_id | integer | No |  |
-| description | string | No |  |
-| quantity | number | No |  |
-| price_cost | number | No |  |
-| price_retail | number | No |  |
-| taxable | boolean | No |  |
-
-
+| Parameter           | Type    | Required | Description |
+| ------------------- | ------- | -------- | ----------- |
+| ticket_line_item_id | integer | No       |             |
+| name                | string  | No       |             |
+| upc_code            | string  | No       |             |
+| product_id          | integer | No       |             |
+| description         | string  | No       |             |
+| quantity            | number  | No       |             |
+| price_cost          | number  | No       |             |
+| price_retail        | number  | No       |             |
+| taxable             | boolean | No       |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -1331,52 +1137,36 @@ successful
 }
 ```
 
-
 **Response: 404**
-
 
 Invalid request
 
-
 #### Create Ticket
 
-
 Deletes a Ticket Attachment
-
 
 Required permission: Tickets - Edit
 Single-Customer Users can only access own tickets.
 
-
-
 **Endpoint:** `POST /tickets/{id}/delete_attachment`
-
 
 **Required Permission:** Required permission: Tickets - Edit
 
-
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Request Body:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| attachment_id | integer | No |  |
-
-
+| Parameter     | Type    | Required | Description |
+| ------------- | ------- | -------- | ----------- |
+| attachment_id | integer | No       |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -1384,45 +1174,31 @@ successful
 }
 ```
 
-
 **Response: 404**
 
-
 Invalid request
-
 
 #### Create Ticket
 
-
 Deletes a Ticket Timer
-
 
 Required permission: Ticket Timers - Overview
 
-
-
 **Endpoint:** `POST /tickets/{id}/delete_timer_entry`
-
 
 **Required Permission:** Required permission: Ticket Timers - Overview
 
-
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Request Body:**
 
-
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -1430,56 +1206,40 @@ successful
 }
 ```
 
-
 **Response: 404**
-
 
 Invalid request
 
-
 #### Update Ticket
-
 
 Updates an existing Ticket Timer
 
-
 Required permission: Ticket Timers - Overview
-
-
 
 **Endpoint:** `PUT /tickets/{id}/update_timer_entry`
 
-
 **Required Permission:** Required permission: Ticket Timers - Overview
-
 
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Request Body:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| timer_entry_id | integer | No |  |
-| start_at | string | No |  |
-| duration_minutes | integer | No |  |
-| user_id | integer | No | Current user by default |
-| notes | string | No |  |
-| product_id | integer | No |  |
-
-
+| Parameter        | Type    | Required | Description             |
+| ---------------- | ------- | -------- | ----------------------- |
+| timer_entry_id   | integer | No       |                         |
+| start_at         | string  | No       |                         |
+| duration_minutes | integer | No       |                         |
+| user_id          | integer | No       | Current user by default |
+| notes            | string  | No       |                         |
+| product_id       | integer | No       |                         |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -1501,45 +1261,31 @@ successful
 }
 ```
 
-
 **Response: 404**
-
 
 Invalid request
 
-
 #### Create Ticket
-
 
 Charges a Ticket Timer
 
-
 Required permission: Ticket Timers - Overview
-
-
 
 **Endpoint:** `POST /tickets/{id}/charge_timer_entry`
 
-
 **Required Permission:** Required permission: Ticket Timers - Overview
-
 
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Request Body:**
 
-
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -1561,9 +1307,6 @@ successful
 }
 ```
 
-
 **Response: 404**
 
-
 Invalid request
-

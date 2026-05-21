@@ -8,35 +8,25 @@
 
 #### Get Estimates
 
-
 Returns a paginated list of Estimates
-
 
 Required permission: Estimates - List/Search
 
-
-
 **Endpoint:** `GET /estimates`
-
 
 **Required Permission:** Required permission: Estimates - List/Search
 
-
 **Query Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| mine | boolean | No | Returns estimates that belong to the current user |
-| status | string | No | Returns estimates with a given status. Possible values are 'approved' and 'declined'. |
-| page | integer | No | Returns provided page of results, each 'page' contains 50 results |
-
+| Parameter | Type    | Required | Description                                                                           |
+| --------- | ------- | -------- | ------------------------------------------------------------------------------------- |
+| mine      | boolean | No       | Returns estimates that belong to the current user                                     |
+| status    | string  | No       | Returns estimates with a given status. Possible values are 'approved' and 'declined'. |
+| page      | integer | No       | Returns provided page of results, each 'page' contains 50 results                     |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -68,47 +58,35 @@ successful
 }
 ```
 
-
 #### Create Estimate
-
 
 Creates an Estimate
 
-
 Required permission: Estimates - Create
-
-
 
 **Endpoint:** `POST /estimates`
 
-
 **Required Permission:** Required permission: Estimates - Create
-
 
 **Request Body:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| number | string | No |  |
-| name | string | No |  |
-| date | string | No |  |
-| customer_id | integer | No |  |
-| note | string | No |  |
-| status | string | No | Valid values are Fresh, Draft, Approved, Declined. |
-| ticket_id | integer | No |  |
-| location_id | integer | No |  |
-| line_items | array | No | Array of Line Items. |
-| created_at | string | No |  |
-| updated_at | string | No |  |
-
-
+| Parameter   | Type    | Required | Description                                        |
+| ----------- | ------- | -------- | -------------------------------------------------- |
+| number      | string  | No       |                                                    |
+| name        | string  | No       |                                                    |
+| date        | string  | No       |                                                    |
+| customer_id | integer | No       |                                                    |
+| note        | string  | No       |                                                    |
+| status      | string  | No       | Valid values are Fresh, Draft, Approved, Declined. |
+| ticket_id   | integer | No       |                                                    |
+| location_id | integer | No       |                                                    |
+| line_items  | array   | No       | Array of Line Items.                               |
+| created_at  | string  | No       |                                                    |
+| updated_at  | string  | No       |                                                    |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -134,55 +112,37 @@ successful
 }
 ```
 
-
 **Response: 422**
-
 
 Invalid request
 
-
 ```json
 {
-  "customer_id": [
-    "can't be blank"
-  ],
-  "date": [
-    "can't be blank"
-  ]
+  "customer_id": ["can't be blank"],
+  "date": ["can't be blank"]
 }
 ```
-
 
 #### Get Estimate by ID
 
-
 Retrieves an Estimate by ID or number
-
 
 Required permission: Estimates - View Details
 
-
-
 **Endpoint:** `GET /estimates/{id}`
-
 
 **Required Permission:** Required permission: Estimates - View Details
 
-
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes | Estimate ID |
-| number | string | No | Estimate number is used when the server cannot find an Estimate by ID |
-
+| Parameter | Type    | Required | Description                                                           |
+| --------- | ------- | -------- | --------------------------------------------------------------------- |
+| id        | integer | Yes      | Estimate ID                                                           |
+| number    | string  | No       | Estimate number is used when the server cannot find an Estimate by ID |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -207,53 +167,39 @@ successful
   }
 }
 ```
-
 
 #### Update Estimate
 
-
 Updates an existing Estimate by ID
-
 
 Required permission: Estimates - Edit
 
-
-
 **Endpoint:** `PUT /estimates/{id}`
-
 
 **Required Permission:** Required permission: Estimates - Edit
 
-
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Request Body:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| number | string | No |  |
-| name | string | No |  |
-| date | string | No |  |
-| customer_id | integer | No |  |
-| note | string | No |  |
-| status | string | No | Valid values are Fresh, Draft, Approved, Declined. |
-| ticket_id | integer | No |  |
-| location_id | integer | No |  |
-
-
+| Parameter   | Type    | Required | Description                                        |
+| ----------- | ------- | -------- | -------------------------------------------------- |
+| number      | string  | No       |                                                    |
+| name        | string  | No       |                                                    |
+| date        | string  | No       |                                                    |
+| customer_id | integer | No       |                                                    |
+| note        | string  | No       |                                                    |
+| status      | string  | No       | Valid values are Fresh, Draft, Approved, Declined. |
+| ticket_id   | integer | No       |                                                    |
+| location_id | integer | No       |                                                    |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -279,51 +225,35 @@ successful
 }
 ```
 
-
 **Response: 422**
-
 
 Invalid request
 
-
 ```json
 {
-  "date": [
-    "can't be blank"
-  ]
+  "date": ["can't be blank"]
 }
 ```
 
-
 #### Delete Estimate
-
 
 Deletes an Estimate by ID
 
-
 Required permission: Estimates - Delete
-
-
 
 **Endpoint:** `DELETE /estimates/{id}`
 
-
 **Required Permission:** Required permission: Estimates - Delete
-
 
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -331,36 +261,25 @@ successful
 }
 ```
 
-
 #### Create Estimate
-
 
 Queues a print job for an Estimate
 
-
 Required permission: Estimates - View Details
-
-
 
 **Endpoint:** `POST /estimates/{id}/print`
 
-
 **Required Permission:** Required permission: Estimates - View Details
-
 
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -368,36 +287,25 @@ successful
 }
 ```
 
-
 #### Create Estimate
-
 
 Sends an Estimate to a Customer
 
-
 Required permission: Estimates - View Details
-
-
 
 **Endpoint:** `POST /estimates/{id}/email`
 
-
 **Required Permission:** Required permission: Estimates - View Details
-
 
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -405,39 +313,27 @@ successful
 }
 ```
 
-
 #### Create Estimate
-
 
 Adds a Line Item to an Estimate
 
-
 Required permission: Estimates - Edit
-
-
 
 **Endpoint:** `POST /estimates/{id}/line_items`
 
-
 **Required Permission:** Required permission: Estimates - Edit
-
 
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Request Body:**
 
-
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -500,12 +396,9 @@ successful
 }
 ```
 
-
 **Response: 422**
 
-
 Invalid request
-
 
 ```json
 {
@@ -513,36 +406,25 @@ Invalid request
 }
 ```
 
-
 #### Create Estimate
-
 
 Convert an Estimate to an Invoice
 
-
 Required permissions: "Estimates - View Details" and "Invoices - Create"
-
-
 
 **Endpoint:** `POST /estimates/{id}/convert_to_invoice`
 
-
 **Required Permission:** Required permissions: "Estimates - View Details" and "Invoices - Create"
-
 
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -572,12 +454,9 @@ successful
 }
 ```
 
-
 **Response: 422**
 
-
 Invalid request
-
 
 ```json
 {
@@ -585,40 +464,28 @@ Invalid request
 }
 ```
 
-
 #### Update Estimate
-
 
 Updates a Line Item
 
-
 Required permission: Estimates - Edit
-
-
 
 **Endpoint:** `PUT /estimates/{id}/line_items/{line_item_id}`
 
-
 **Required Permission:** Required permission: Estimates - Edit
-
 
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-| line_item_id | integer | Yes |  |
-
+| Parameter    | Type    | Required | Description |
+| ------------ | ------- | -------- | ----------- |
+| id           | integer | Yes      |             |
+| line_item_id | integer | Yes      |             |
 
 **Request Body:**
 
-
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -642,52 +509,36 @@ successful
 }
 ```
 
-
 **Response: 422**
-
 
 Invalid request
 
-
 ```json
 {
-  "item": [
-    "can't be blank"
-  ]
+  "item": ["can't be blank"]
 }
 ```
 
-
 #### Delete Estimate
-
 
 Deletes a Line Item
 
-
 Required permission: Estimates - Edit
-
-
 
 **Endpoint:** `DELETE /estimates/{id}/line_items/{line_item_id}`
 
-
 **Required Permission:** Required permission: Estimates - Edit
-
 
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-| line_item_id | integer | Yes |  |
-
+| Parameter    | Type    | Required | Description |
+| ------------ | ------- | -------- | ----------- |
+| id           | integer | Yes      |             |
+| line_item_id | integer | Yes      |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -711,4 +562,3 @@ successful
   }
 }
 ```
-

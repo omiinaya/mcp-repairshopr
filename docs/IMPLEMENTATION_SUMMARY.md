@@ -5,6 +5,7 @@ All missing features have been implemented to make the MCP RepairShopr server fe
 ## ✅ Completed Features
 
 ### 1. CI/CD Pipeline (`.github/workflows/ci.yml`)
+
 - Automated testing on Node.js 18.x and 20.x
 - ESLint checking
 - Test coverage reporting to Codecov
@@ -14,6 +15,7 @@ All missing features have been implemented to make the MCP RepairShopr server fe
 - Coolify deployment trigger
 
 ### 2. Startup Validation (`src/utils/startup-validator.ts`)
+
 - Validates required files exist (`metadata-index.json`, config files)
 - Validates JSON integrity
 - Validates environment variables
@@ -23,6 +25,7 @@ All missing features have been implemented to make the MCP RepairShopr server fe
 - Exits on critical failures
 
 ### 3. Coolify Deployment Button (`README.md`)
+
 - Added comprehensive README with:
   - One-click deploy button for Coolify
   - Environment variable documentation
@@ -32,6 +35,7 @@ All missing features have been implemented to make the MCP RepairShopr server fe
   - Quick start guide
 
 ### 4. Enhanced Health Endpoints (`src/server/health-endpoints.ts`)
+
 - `/health` - Comprehensive health status with multiple checks:
   - Server status
   - Memory usage monitoring
@@ -43,7 +47,9 @@ All missing features have been implemented to make the MCP RepairShopr server fe
 - `/metrics` - Prometheus metrics endpoint
 
 ### 5. Prometheus Metrics (`/metrics` endpoint)
+
 Exports these metrics:
+
 - `mcp_server_uptime_seconds`
 - `mcp_server_health_status`
 - `mcp_server_memory_usage_bytes` (rss, heapTotal, heapUsed, external)
@@ -58,6 +64,7 @@ Exports these metrics:
 - `mcp_server_event_loop_lag_ms`
 
 ### 6. Rate Limiting (`src/middleware/rate-limiter.ts`)
+
 - Multiple rate limiters for different use cases:
   - General: 100 requests/minute
   - Expensive operations: 20 requests/minute
@@ -68,6 +75,7 @@ Exports these metrics:
 - Rate limit headers in responses
 
 ### 7. Secrets Management (`src/config/secrets.ts`)
+
 - Secure handling of RepairShopr API credentials
 - Environment variable validation
 - API key masking for logging
@@ -80,6 +88,7 @@ Exports these metrics:
   - `REPAIRSHOPR_RETRY_DELAY_MS`
 
 ### 8. HTTP Server (`src/server/http-server.ts`)
+
 - Runs alongside MCP stdio server
 - Exposes health endpoints on configured port
 - Rate limiting on all endpoints
@@ -88,7 +97,9 @@ Exports these metrics:
 - Proper shutdown handling
 
 ### 9. Updated Environment Variables
+
 Added to `deploy/.env.example`:
+
 ```bash
 REPAIRSHOPR_API_KEY=your_api_key_here
 REPAIRSHOPR_SUBDOMAIN=your_subdomain_here
@@ -100,6 +111,7 @@ REPAIRSHOPR_RETRY_DELAY_MS=1000
 ## 🚀 Deployment Ready
 
 The server is now fully prepared for Coolify deployment with:
+
 - ✅ Docker multi-stage build
 - ✅ Health checks configured
 - ✅ Prometheus metrics
@@ -111,6 +123,7 @@ The server is now fully prepared for Coolify deployment with:
 ## 📊 Monitoring
 
 Health endpoints available at:
+
 - `GET /health` - Overall health status (HTTP 200/503)
 - `GET /ready` - Readiness probe (HTTP 200/503)
 - `GET /live` - Liveness probe (HTTP 200/503)
@@ -127,6 +140,7 @@ Health endpoints available at:
 ## 📦 Files Created/Modified
 
 ### New Files:
+
 - `.github/workflows/ci.yml`
 - `src/utils/startup-validator.ts`
 - `src/server/health-endpoints.ts`
@@ -135,6 +149,7 @@ Health endpoints available at:
 - `src/config/secrets.ts`
 
 ### Modified Files:
+
 - `src/index.ts` - Added validation and HTTP server
 - `deploy/.env.example` - Added RepairShopr API config
 - `README.md` - Complete overhaul with deployment info
@@ -157,6 +172,7 @@ To deploy on Coolify:
 ## ✅ Verification
 
 Build completed successfully with no errors:
+
 ```bash
 npm run build  # ✓ Passed
 ```

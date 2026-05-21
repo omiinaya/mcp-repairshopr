@@ -8,25 +8,17 @@
 
 #### Get New Ticket Forms
 
-
 Returns a paginated list of Ticket Forms
-
 
 Required permission: Ticket Workflows - Manage
 
-
-
 **Endpoint:** `GET /new_ticket_forms`
-
 
 **Required Permission:** Required permission: Ticket Workflows - Manage
 
-
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -84,10 +76,7 @@ successful
             "isapproved": "true",
             "pre_diagnosed": "true"
           },
-          "disabled": [
-            "subject",
-            "problem_type"
-          ],
+          "disabled": ["subject", "problem_type"],
           "position": "2"
         },
         "worksheets": {
@@ -102,36 +91,25 @@ successful
 }
 ```
 
-
 #### Get New Ticket Form by ID
-
 
 Retrieves a Ticket Form
 
-
 Required permission: Tickets - Create
-
-
 
 **Endpoint:** `GET /new_ticket_forms/{id}`
 
-
 **Required Permission:** Required permission: Tickets - Create
-
 
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -188,10 +166,7 @@ successful
           "isapproved": "true",
           "pre_diagnosed": "true"
         },
-        "disabled": [
-          "subject",
-          "problem_type"
-        ],
+        "disabled": ["subject", "problem_type"],
         "position": "2"
       },
       "worksheets": {
@@ -205,53 +180,37 @@ successful
 }
 ```
 
-
 **Response: 404**
-
 
 Invalid request
 
-
 #### Create New Ticket Form
-
 
 Creates a new Ticket for a Ticket Form
 
-
 Required permission: Tickets - Create
-
-
 
 **Endpoint:** `POST /new_ticket_forms/{id}/process_form`
 
-
 **Required Permission:** Required permission: Tickets - Create
-
 
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Request Body:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| customer_details | object | No |  |
-| ticket_details | object | No |  |
-| appointments | object | No |  |
-
-
+| Parameter        | Type   | Required | Description |
+| ---------------- | ------ | -------- | ----------- |
+| customer_details | object | No       |             |
+| ticket_details   | object | No       |             |
+| appointments     | object | No       |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -319,29 +278,19 @@ successful
 }
 ```
 
-
 **Response: 422**
 
-
 Invalid request
-
 
 ```json
 {
   "success": false,
   "errors": {
     "appointments": {
-      "summary": [
-        "can't be blank"
-      ],
-      "start_at": [
-        "can't be blank"
-      ],
-      "end_at": [
-        "can't be blank"
-      ]
+      "summary": ["can't be blank"],
+      "start_at": ["can't be blank"],
+      "end_at": ["can't be blank"]
     }
   }
 }
 ```
-

@@ -15,76 +15,84 @@ This document defines the service level commitments for the MCP RepairShopr Serv
 ## Service Level Indicators (SLIs)
 
 ### 1. Availability
+
 **Definition**: Percentage of time the service is accessible and responsive
 
-| Metric | Target | Measurement |
-|--------|--------|-------------|
-| Uptime | 99.9% | Successful health checks / Total checks |
-| Measurement Window | 30 days | Rolling window |
-| Exclusion Period | Scheduled maintenance | Up to 4 hours/month |
+| Metric             | Target                | Measurement                             |
+| ------------------ | --------------------- | --------------------------------------- |
+| Uptime             | 99.9%                 | Successful health checks / Total checks |
+| Measurement Window | 30 days               | Rolling window                          |
+| Exclusion Period   | Scheduled maintenance | Up to 4 hours/month                     |
 
 **Calculation**:
+
 ```
 Availability = (Total Time - Downtime) / Total Time × 100
 ```
 
 ### 2. Response Time
+
 **Definition**: Time to process and respond to requests
 
-| Percentile | Target | Critical Threshold |
-|------------|--------|-------------------|
-| P50 (Median) | < 100ms | < 200ms |
-| P95 | < 500ms | < 1000ms |
-| P99 | < 1000ms | < 2000ms |
+| Percentile   | Target   | Critical Threshold |
+| ------------ | -------- | ------------------ |
+| P50 (Median) | < 100ms  | < 200ms            |
+| P95          | < 500ms  | < 1000ms           |
+| P99          | < 1000ms | < 2000ms           |
 
 **Measurement**: From request received to response sent
 
 ### 3. Error Rate
+
 **Definition**: Percentage of requests that return 5xx errors
 
-| Metric | Target | Warning | Critical |
-|--------|--------|---------|----------|
-| Error Rate | < 0.1% | 0.1-1% | > 1% |
-| Measurement Window | 5 minutes | - | - |
+| Metric             | Target    | Warning | Critical |
+| ------------------ | --------- | ------- | -------- |
+| Error Rate         | < 0.1%    | 0.1-1%  | > 1%     |
+| Measurement Window | 5 minutes | -       | -        |
 
 ### 4. Throughput
+
 **Definition**: Number of requests the service can handle
 
-| Metric | Target | Maximum |
-|--------|--------|---------|
-| Requests/sec | 100 | 500 |
-| Concurrent connections | 50 | 200 |
+| Metric                 | Target | Maximum |
+| ---------------------- | ------ | ------- |
+| Requests/sec           | 100    | 500     |
+| Concurrent connections | 50     | 200     |
 
 ---
 
 ## Service Level Objectives (SLOs)
 
 ### Tier 1: Critical Endpoints
+
 **Endpoints**: `/health`, `/ready`, `/live`
 
-| SLO | Target | Measurement |
-|-----|--------|-------------|
-| Availability | 99.99% | Monthly |
-| Response Time (P95) | < 50ms | Continuous |
-| Error Rate | < 0.01% | 5-minute window |
+| SLO                 | Target  | Measurement     |
+| ------------------- | ------- | --------------- |
+| Availability        | 99.99%  | Monthly         |
+| Response Time (P95) | < 50ms  | Continuous      |
+| Error Rate          | < 0.01% | 5-minute window |
 
 ### Tier 2: Standard API
+
 **Endpoints**: Tool calls, search, retrieval
 
-| SLO | Target | Measurement |
-|-----|--------|-------------|
-| Availability | 99.9% | Monthly |
-| Response Time (P95) | < 500ms | Continuous |
-| Error Rate | < 0.1% | 5-minute window |
+| SLO                 | Target  | Measurement     |
+| ------------------- | ------- | --------------- |
+| Availability        | 99.9%   | Monthly         |
+| Response Time (P95) | < 500ms | Continuous      |
+| Error Rate          | < 0.1%  | 5-minute window |
 
 ### Tier 3: Metrics & Admin
+
 **Endpoints**: `/metrics`, `/admin/*`
 
-| SLO | Target | Measurement |
-|-----|--------|-------------|
-| Availability | 99% | Monthly |
-| Response Time (P95) | < 1000ms | Continuous |
-| Error Rate | < 1% | 5-minute window |
+| SLO                 | Target   | Measurement     |
+| ------------------- | -------- | --------------- |
+| Availability        | 99%      | Monthly         |
+| Response Time (P95) | < 1000ms | Continuous      |
+| Error Rate          | < 1%     | 5-minute window |
 
 ---
 
@@ -93,28 +101,28 @@ Availability = (Total Time - Downtime) / Total Time × 100
 ### Commitments
 
 | Service Tier | Availability | Response Time (P95) | Support Response |
-|--------------|--------------|-------------------|------------------|
-| Enterprise | 99.99% | < 100ms | 15 minutes |
-| Business | 99.9% | < 500ms | 1 hour |
-| Basic | 99% | < 1000ms | 4 hours |
+| ------------ | ------------ | ------------------- | ---------------- |
+| Enterprise   | 99.99%       | < 100ms             | 15 minutes       |
+| Business     | 99.9%        | < 500ms             | 1 hour           |
+| Basic        | 99%          | < 1000ms            | 4 hours          |
 
 ### Downtime Budgets
 
-| Tier | Monthly Downtime | Annual Downtime |
-|------|-----------------|----------------|
-| 99.99% | 4.32 minutes | 52.6 minutes |
-| 99.9% | 43.2 minutes | 8.77 hours |
-| 99% | 7.2 hours | 3.65 days |
+| Tier   | Monthly Downtime | Annual Downtime |
+| ------ | ---------------- | --------------- |
+| 99.99% | 4.32 minutes     | 52.6 minutes    |
+| 99.9%  | 43.2 minutes     | 8.77 hours      |
+| 99%    | 7.2 hours        | 3.65 days       |
 
 ### Service Credits
 
 If availability falls below SLA:
 
-| Availability | Service Credit |
-|--------------|---------------|
-| 99.0-99.9% | 10% monthly fee |
-| 95.0-99.0% | 25% monthly fee |
-| < 95.0% | 50% monthly fee |
+| Availability | Service Credit  |
+| ------------ | --------------- |
+| 99.0-99.9%   | 10% monthly fee |
+| 95.0-99.0%   | 25% monthly fee |
+| < 95.0%      | 50% monthly fee |
 
 ---
 
@@ -122,11 +130,11 @@ If availability falls below SLA:
 
 ### Monthly Error Budget
 
-| Tier | Error Budget | Calculated As |
-|------|--------------|---------------|
-| Enterprise | 0.01% | 4.32 minutes |
-| Business | 0.1% | 43.2 minutes |
-| Basic | 1% | 7.2 hours |
+| Tier       | Error Budget | Calculated As |
+| ---------- | ------------ | ------------- |
+| Enterprise | 0.01%        | 4.32 minutes  |
+| Business   | 0.1%         | 43.2 minutes  |
+| Basic      | 1%           | 7.2 hours     |
 
 ### Error Budget Policy
 
@@ -138,6 +146,7 @@ If availability falls below SLA:
 ### Tracking
 
 Error budget is tracked in:
+
 - Grafana dashboard: `mcp-repairshopr-error-budget`
 - Alert when < 20% remaining
 - Weekly review in engineering standup
@@ -148,30 +157,30 @@ Error budget is tracked in:
 
 ### Dashboards
 
-| Dashboard | Purpose | URL |
-|-----------|---------|-----|
-| Overview | High-level health | [TBD] |
-| Performance | Response times, throughput | [TBD] |
-| Error Budget | Error budget consumption | [TBD] |
-| Infrastructure | CPU, memory, network | [TBD] |
+| Dashboard      | Purpose                    | URL   |
+| -------------- | -------------------------- | ----- |
+| Overview       | High-level health          | [TBD] |
+| Performance    | Response times, throughput | [TBD] |
+| Error Budget   | Error budget consumption   | [TBD] |
+| Infrastructure | CPU, memory, network       | [TBD] |
 
 ### Alerts
 
-| Alert | Condition | Severity | Action |
-|-------|-----------|----------|--------|
-| High Error Rate | Error rate > 0.1% for 5min | P2 | Page on-call |
-| Slow Response | P95 > 500ms for 10min | P2 | Page on-call |
-| Low Availability | Uptime < 99.9% for 1min | P1 | Page on-call |
-| Error Budget | < 20% remaining | P3 | Slack notify |
-| Circuit Breaker | Open for >5min | P2 | Page on-call |
+| Alert            | Condition                  | Severity | Action       |
+| ---------------- | -------------------------- | -------- | ------------ |
+| High Error Rate  | Error rate > 0.1% for 5min | P2       | Page on-call |
+| Slow Response    | P95 > 500ms for 10min      | P2       | Page on-call |
+| Low Availability | Uptime < 99.9% for 1min    | P1       | Page on-call |
+| Error Budget     | < 20% remaining            | P3       | Slack notify |
+| Circuit Breaker  | Open for >5min             | P2       | Page on-call |
 
 ### Alert Routing
 
-| Severity | Channel | Response Time |
-|----------|---------|---------------|
-| P1 | PagerDuty + Slack | 15 minutes |
-| P2 | PagerDuty + Slack | 30 minutes |
-| P3 | Slack only | Next business day |
+| Severity | Channel           | Response Time     |
+| -------- | ----------------- | ----------------- |
+| P1       | PagerDuty + Slack | 15 minutes        |
+| P2       | PagerDuty + Slack | 30 minutes        |
+| P3       | Slack only        | Next business day |
 
 ---
 
@@ -193,6 +202,7 @@ curl http://localhost:3000/metrics
 ### External Monitoring
 
 **Recommended Tools**:
+
 - Pingdom/PagerDuty for uptime monitoring
 - DataDog/New Relic for APM
 - Grafana for visualization
@@ -200,13 +210,13 @@ curl http://localhost:3000/metrics
 
 ### Metrics Exported
 
-| Metric | Type | Description |
-|--------|------|-------------|
-| `mcp_server_uptime_seconds` | Gauge | Server uptime |
-| `mcp_server_request_count_total` | Counter | Total requests |
-| `mcp_server_error_count_total` | Counter | Total errors |
-| `mcp_server_average_response_time_ms` | Gauge | Avg response time |
-| `mcp_server_cache_hit_ratio` | Gauge | Cache efficiency |
+| Metric                                | Type    | Description       |
+| ------------------------------------- | ------- | ----------------- |
+| `mcp_server_uptime_seconds`           | Gauge   | Server uptime     |
+| `mcp_server_request_count_total`      | Counter | Total requests    |
+| `mcp_server_error_count_total`        | Counter | Total errors      |
+| `mcp_server_average_response_time_ms` | Gauge   | Avg response time |
+| `mcp_server_cache_hit_ratio`          | Gauge   | Cache efficiency  |
 
 ---
 
@@ -215,6 +225,7 @@ curl http://localhost:3000/metrics
 ### Weekly Report
 
 Distributed every Monday:
+
 - Availability for previous week
 - P50/P95/P99 response times
 - Error rate trends
@@ -225,6 +236,7 @@ Distributed every Monday:
 ### Monthly Review
 
 Engineering team meeting:
+
 - SLO compliance review
 - Error budget analysis
 - Performance trends
@@ -234,6 +246,7 @@ Engineering team meeting:
 ### Quarterly Business Review
 
 Stakeholder presentation:
+
 - SLA compliance
 - Customer impact
 - Reliability improvements
@@ -256,6 +269,7 @@ Stakeholder presentation:
 ### SLA Breach Escalation
 
 If SLA is breached:
+
 1. Customer success notifies affected customers
 2. Engineering provides incident report
 3. Leadership reviews within 24 hours
@@ -269,28 +283,31 @@ If SLA is breached:
 ### SLO Review Process
 
 **Monthly**:
+
 - Review SLO metrics
 - Assess if targets are realistic
 - Adjust if necessary
 
 **Quarterly**:
+
 - Strategic review of SLOs
 - Align with business goals
 - Update documentation
 
 **Annually**:
+
 - Complete SLO overhaul
 - Benchmark against industry
 - Set new targets
 
 ### Improvement Targets
 
-| Quarter | Goal | Target |
-|---------|------|--------|
-| Q1 2026 | Baseline | Establish metrics |
-| Q2 2026 | Optimize | P95 < 300ms |
-| Q3 2026 | Scale | 200 req/sec |
-| Q4 2026 | Excellence | 99.99% uptime |
+| Quarter | Goal       | Target            |
+| ------- | ---------- | ----------------- |
+| Q1 2026 | Baseline   | Establish metrics |
+| Q2 2026 | Optimize   | P95 < 300ms       |
+| Q3 2026 | Scale      | 200 req/sec       |
+| Q4 2026 | Excellence | 99.99% uptime     |
 
 ---
 
@@ -299,6 +316,7 @@ If SLA is breached:
 ### Calculation Examples
 
 **Availability**:
+
 ```
 Total time in month: 30 days × 24 hours × 60 minutes = 43,200 minutes
 Allowed downtime (99.9%): 43.2 minutes
@@ -307,6 +325,7 @@ Availability: (43,200 - 15) / 43,200 × 100 = 99.965%
 ```
 
 **Error Budget**:
+
 ```
 Monthly requests: 1,000,000
 Allowed errors (0.1%): 1,000
@@ -316,6 +335,7 @@ Remaining budget: 50%
 ```
 
 **Response Time**:
+
 ```
 Requests: [50, 60, 70, 80, 90, 100, 150, 200, 300, 500] ms
 P50 (median): 90 ms

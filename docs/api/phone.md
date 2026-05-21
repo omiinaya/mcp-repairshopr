@@ -8,34 +8,24 @@
 
 #### Get Customers
 
-
 Returns a paginated list of Phones
-
 
 Required permission: Customers - View Detail
 Single-Customer Users can only access own.
 
-
-
 **Endpoint:** `GET /customers/{customer_id}/phones`
-
 
 **Required Permission:** Required permission: Customers - View Detail
 
-
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| customer_id | integer | Yes |  |
-
+| Parameter   | Type    | Required | Description |
+| ----------- | ------- | -------- | ----------- |
+| customer_id | integer | Yes      |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -62,40 +52,28 @@ successful
 }
 ```
 
-
 #### Create Customer
 
-
 Creates a Phone
-
 
 Required permission: Customers - Edit
 Single-Customer Users can only access own.
 
-
-
 **Endpoint:** `POST /customers/{customer_id}/phones`
-
 
 **Required Permission:** Required permission: Customers - Edit
 
-
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| customer_id | integer | Yes |  |
-
+| Parameter   | Type    | Required | Description |
+| ----------- | ------- | -------- | ----------- |
+| customer_id | integer | Yes      |             |
 
 **Request Body:**
 
-
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -109,19 +87,14 @@ successful
 }
 ```
 
-
 **Response: 422**
 
-
 Invalid request
-
 
 ```json
 {
   "success": false,
-  "message": [
-    "Number can't be blank"
-  ],
+  "message": ["Number can't be blank"],
   "params": {
     "customer_id": "1",
     "number": ""
@@ -129,41 +102,29 @@ Invalid request
 }
 ```
 
-
 #### Update Customer
 
-
 Updates an existing Phone by ID
-
 
 Required permission: Customers - Edit
 Single-Customer Users can only access own.
 
-
-
 **Endpoint:** `PUT /customers/{customer_id}/phones/{id}`
-
 
 **Required Permission:** Required permission: Customers - Edit
 
-
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| customer_id | integer | Yes |  |
-| id | integer | Yes |  |
-
+| Parameter   | Type    | Required | Description |
+| ----------- | ------- | -------- | ----------- |
+| customer_id | integer | Yes      |             |
+| id          | integer | Yes      |             |
 
 **Request Body:**
 
-
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -177,19 +138,14 @@ successful
 }
 ```
 
-
 **Response: 422**
 
-
 Invalid request
-
 
 ```json
 {
   "success": false,
-  "message": [
-    "Number can't be blank"
-  ],
+  "message": ["Number can't be blank"],
   "params": {
     "customer_id": "1",
     "id": "9",
@@ -198,41 +154,28 @@ Invalid request
 }
 ```
 
-
 #### Delete Customer
 
-
 Deletes a Phone by ID
-
 
 Required permission: Customers - Edit
 Single-Customer Users can only access own.
 
-
-
 **Endpoint:** `DELETE /customers/{customer_id}/phones/{id}`
-
 
 **Required Permission:** Required permission: Customers - Edit
 
-
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| customer_id | integer | Yes |  |
-| id | integer | Yes |  |
-
+| Parameter   | Type    | Required | Description |
+| ----------- | ------- | -------- | ----------- |
+| customer_id | integer | Yes      |             |
+| id          | integer | Yes      |             |
 
 **Response: 200**
 
-
 successful
-
 
 **Response: 404**
 
-
 Invalid request
-

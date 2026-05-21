@@ -43,6 +43,7 @@ ls -la backups/
 ### 2. Review Release Notes
 
 Read the [Release Notes](RELEASE_NOTES.md) for:
+
 - New features
 - Breaking changes
 - Deprecations
@@ -76,6 +77,7 @@ diff config/default.json deploy/config/production.json
 ### 5. Schedule Downtime
 
 Plan for downtime during the upgrade:
+
 - Notify users
 - Schedule maintenance window
 - Prepare rollback plan
@@ -239,11 +241,13 @@ This is the initial release. No upgrade path is available.
 ### Upgrading from 0.1.x to 0.2.0 (Future)
 
 **Planned Changes**:
+
 - Enhanced query understanding with ML models
 - Distributed caching support (Redis)
 - GraphQL query interface
 
 **Upgrade Steps**:
+
 1. Backup data and configuration
 2. Review breaking changes in release notes
 3. Update configuration for new features
@@ -255,11 +259,13 @@ This is the initial release. No upgrade path is available.
 ### Upgrading from 0.2.x to 0.3.0 (Future)
 
 **Planned Changes**:
+
 - Plugin system for custom tools
 - Custom scoring algorithms
 - API rate limiting
 
 **Upgrade Steps**:
+
 1. Backup data and configuration
 2. Review breaking changes in release notes
 3. Migrate custom plugins if any
@@ -323,6 +329,7 @@ curl http://localhost:3000/metrics
 ```
 
 Check:
+
 - Request count
 - Error count
 - Average response time
@@ -435,6 +442,7 @@ curl http://localhost:3000/health
 **Symptoms**: Upgrade process fails with errors
 
 **Solutions**:
+
 1. Check error messages in logs
 2. Verify system requirements
 3. Ensure sufficient disk space
@@ -446,6 +454,7 @@ curl http://localhost:3000/health
 **Symptoms**: Service fails to start after upgrade
 
 **Solutions**:
+
 1. Check service logs for errors
 2. Verify configuration syntax
 3. Check file permissions
@@ -457,6 +466,7 @@ curl http://localhost:3000/health
 **Symptoms**: Slower performance after upgrade
 
 **Solutions**:
+
 1. Check system resources
 2. Review configuration changes
 3. Monitor metrics
@@ -468,6 +478,7 @@ curl http://localhost:3000/health
 **Symptoms**: Data appears corrupted after upgrade
 
 **Solutions**:
+
 1. Stop the service immediately
 2. Restore from backup
 3. Verify backup integrity
@@ -495,6 +506,7 @@ Test upgrades in a staging environment first:
 ### 3. Schedule Downtime
 
 Plan for downtime during upgrades:
+
 - Notify users in advance
 - Schedule during low-traffic periods
 - Have rollback plan ready
@@ -502,6 +514,7 @@ Plan for downtime during upgrades:
 ### 4. Monitor During Upgrade
 
 Monitor the upgrade process:
+
 - Watch logs for errors
 - Check system resources
 - Verify each step completes successfully
@@ -509,6 +522,7 @@ Monitor the upgrade process:
 ### 5. Verify After Upgrade
 
 Thoroughly verify after upgrade:
+
 - Health checks
 - Functionality tests
 - Performance metrics
@@ -517,6 +531,7 @@ Thoroughly verify after upgrade:
 ### 6. Document Changes
 
 Document any changes made during upgrade:
+
 - Configuration changes
 - Data migrations
 - Custom modifications

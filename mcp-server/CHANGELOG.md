@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
 - Initial release of MCP RepairShopr server
 - Semantic search functionality for API documentation
 - Vector-based similarity search
@@ -23,23 +24,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Complete documentation suite
 
 ### Changed
+
 - N/A
 
 ### Deprecated
+
 - N/A
 
 ### Removed
+
 - N/A
 
 ### Fixed
+
 - N/A
 
 ### Security
+
 - N/A
 
 ## [0.1.0] - 2024-01-01
 
 ### Added
+
 - Initial release
 - MCP protocol implementation
 - Search tool with semantic and keyword search
@@ -66,6 +73,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Version History
 
 ### Version 0.1.0 (Initial Release)
+
 - Release Date: 2024-01-01
 - Status: Stable
 - Breaking Changes: None
@@ -92,6 +100,7 @@ This is the initial release. No upgrade path is available.
 When upgrading between versions, follow these steps:
 
 1. **Backup your data**:
+
    ```bash
    ./deploy/scripts/backup.sh production
    ```
@@ -99,11 +108,13 @@ When upgrading between versions, follow these steps:
 2. **Review the changelog** for breaking changes
 
 3. **Update dependencies**:
+
    ```bash
    npm install
    ```
 
 4. **Rebuild the project**:
+
    ```bash
    npm run build
    ```
@@ -111,6 +122,7 @@ When upgrading between versions, follow these steps:
 5. **Update configuration** if needed
 
 6. **Restart the server**:
+
    ```bash
    npm restart
    ```
@@ -178,11 +190,13 @@ If you have an existing configuration, you may need to update it:
 If you have existing data files, ensure they are compatible:
 
 1. **Backup existing data**:
+
    ```bash
    cp -r data/ data.backup/
    ```
 
 2. **Verify data format**:
+
    ```bash
    cat data/metadata-index.json | jq '.'
    ```
@@ -248,6 +262,7 @@ No known issues.
 ## Support
 
 For support, please:
+
 - Check the [documentation](docs/)
 - Review the [troubleshooting guide](docs/troubleshooting/TROUBLESHOOTING.md)
 - Open an issue on GitHub

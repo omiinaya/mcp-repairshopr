@@ -44,24 +44,28 @@ This report summarizes the performance testing implementation for the MCP Repair
 ### 1. Search Performance Benchmarks
 
 #### Simple Search Queries
+
 - **Test:** 12 simple search queries (e.g., "get customers", "create ticket")
 - **Iterations:** 100 per query
 - **Performance Target:** < 100ms per query
 - **Metrics:** Duration, results count, memory delta
 
 #### Complex Search Queries
+
 - **Test:** 10 complex search queries (e.g., "GET customer by id and email")
 - **Iterations:** 100 per query
 - **Performance Target:** < 150ms per query
 - **Metrics:** Duration, results count, memory delta
 
 #### Search with Different Result Sizes
+
 - **Test:** Limits of 1, 5, 10, 20, 50, 100 results
 - **Iterations:** 100 per limit
 - **Performance Target:** Linear scaling (< 2ms per result)
 - **Metrics:** Duration, results count, memory delta
 
 #### Search with Filters
+
 - **Test:** 4 filter combinations (resource, method, permission, mixed)
 - **Iterations:** 100 per filter
 - **Performance Target:** < 100ms per query
@@ -70,18 +74,21 @@ This report summarizes the performance testing implementation for the MCP Repair
 ### 2. Tool Response Time Benchmarks
 
 #### searchByResource
+
 - **Test:** 4 different resources (Customer, Ticket, Invoice, TestResource)
 - **Iterations:** 100 per resource
 - **Performance Target:** < 50ms per query
 - **Metrics:** Duration, results count, memory delta
 
 #### searchByMethod
+
 - **Test:** 5 HTTP methods (GET, POST, PUT, DELETE, PATCH)
 - **Iterations:** 100 per method
 - **Performance Target:** < 50ms per query
 - **Metrics:** Duration, results count, memory delta
 
 #### searchByPermission
+
 - **Test:** 4 different permissions
 - **Iterations:** 100 per permission
 - **Performance Target:** < 50ms per query
@@ -90,11 +97,13 @@ This report summarizes the performance testing implementation for the MCP Repair
 ### 3. Memory Usage Tests
 
 #### Search Operations Memory
+
 - **Test:** 100 search iterations
 - **Performance Target:** < 10KB memory growth per operation
 - **Metrics:** Initial memory, final memory, memory growth, average memory per operation
 
 #### Large Dataset Memory
+
 - **Test:** 1000 endpoints, 50 search operations
 - **Performance Target:** < 50MB memory delta
 - **Metrics:** Memory before, memory after, memory delta
@@ -102,12 +111,14 @@ This report summarizes the performance testing implementation for the MCP Repair
 ### 4. Bottleneck Identification
 
 #### Component Analysis
+
 - **Semantic Search:** Measures vector store search performance
 - **Keyword Search:** Measures text matching performance
 - **Result Combination:** Measures hybrid scoring performance
 - **Performance Target:** No single component > 50% of total time
 
 #### Large Result Set Analysis
+
 - **Test:** Limits of 10, 50, 100, 200 results
 - **Performance Target:** Time increase < 10x for 20x more results
 - **Metrics:** Duration, results count, memory delta, time increase ratio
@@ -115,11 +126,13 @@ This report summarizes the performance testing implementation for the MCP Repair
 ### 5. Concurrent Request Handling
 
 #### Concurrent Search Requests
+
 - **Test:** Concurrency levels of 1, 5, 10, 20, 50
 - **Performance Target:** < 100ms per concurrent request
 - **Metrics:** Duration, results count, memory delta
 
 #### Concurrent Mixed Tool Requests
+
 - **Test:** 10 concurrent requests with random tool selection
 - **Performance Target:** < 100ms per concurrent request
 - **Metrics:** Duration, results count, memory delta
@@ -131,11 +144,13 @@ This report summarizes the performance testing implementation for the MCP Repair
 ### 1. Server Under Load
 
 #### Increasing Concurrent Requests
+
 - **Test:** Concurrency levels of 10, 25, 50, 100, 200
 - **Performance Target:** 0 failed requests, < 200ms average, < 500ms P95
 - **Metrics:** Total requests, successful, failed, average time, P95, P99, requests/sec, memory delta
 
 #### Sustained Load
+
 - **Test:** 5 seconds of sustained load at 20 concurrent requests
 - **Performance Target:** 0 failed requests, < 200ms average, > 50 requests/sec
 - **Metrics:** Total requests, successful, failed, average time, P95, P99, requests/sec, memory delta
@@ -143,11 +158,13 @@ This report summarizes the performance testing implementation for the MCP Repair
 ### 2. Search Performance Under Load
 
 #### Concurrent Load Performance
+
 - **Test:** Baseline vs load performance comparison
 - **Performance Target:** < 3x degradation under load
 - **Metrics:** Baseline average, load average, degradation ratio
 
 #### Mixed Search Queries Under Load
+
 - **Test:** 30 concurrent requests with mixed simple/complex queries
 - **Performance Target:** 0 failed requests, < 300ms average
 - **Metrics:** Total requests, successful, failed, average time, P95, requests/sec
@@ -155,12 +172,14 @@ This report summarizes the performance testing implementation for the MCP Repair
 ### 3. Tool Execution Under Load
 
 #### All Tools Under Load
+
 - **Test:** 4 tools (searchApiDocs, searchByResource, searchByMethod, searchByPermission)
 - **Concurrency:** 20 requests per tool
 - **Performance Target:** 0 failed requests, < 200ms average
 - **Metrics:** Average time, P95, requests/sec
 
 #### Rapid Tool Switching Under Load
+
 - **Test:** 50 concurrent requests, 10 iterations, random tool selection
 - **Performance Target:** 0 failed requests, < 200ms average
 - **Metrics:** Total requests, successful, failed, average time, P95
@@ -168,11 +187,13 @@ This report summarizes the performance testing implementation for the MCP Repair
 ### 4. Memory Usage Under Load
 
 #### Stable Memory Usage
+
 - **Test:** 50 concurrent requests, 20 iterations
 - **Performance Target:** < 100KB memory growth per iteration
 - **Metrics:** Initial memory, final memory, memory growth, average memory per iteration
 
 #### Memory Pressure with Large Datasets
+
 - **Test:** 2000 endpoints, 100 concurrent requests, 10 iterations
 - **Performance Target:** < 100MB memory delta
 - **Metrics:** Memory before, memory after, memory delta
@@ -180,16 +201,19 @@ This report summarizes the performance testing implementation for the MCP Repair
 ### 5. Server Stability Under Load
 
 #### Sustained High Load
+
 - **Test:** 10 seconds, 100 concurrent requests
 - **Performance Target:** > 99% success rate, < 300ms average
 - **Metrics:** Total requests, successful, failed, success rate, average time, P95, P99, errors
 
 #### Recovery from Load Spikes
+
 - **Test:** Baseline (10) → Spike (200) → Recovery (10)
 - **Performance Target:** Recovery ratio < 2x baseline
 - **Metrics:** Baseline average, spike average, recovery average, recovery ratio
 
 #### Error Handling Under Load
+
 - **Test:** 50 concurrent requests with invalid queries
 - **Performance Target:** Graceful error handling, no crashes
 - **Metrics:** Total requests, successful, failed, errors
@@ -242,31 +266,31 @@ The [`benchmark.ts`](../scripts/performance/benchmark.ts) script provides:
 
 ### Response Time Targets
 
-| Operation | Target | P95 Target | P99 Target |
-|-----------|--------|------------|------------|
-| Simple Search | < 100ms | < 200ms | < 500ms |
-| Complex Search | < 150ms | < 300ms | < 500ms |
-| Search with Filters | < 100ms | < 200ms | < 500ms |
-| searchByResource | < 50ms | < 100ms | < 200ms |
-| searchByMethod | < 50ms | < 100ms | < 200ms |
-| searchByPermission | < 50ms | < 100ms | < 200ms |
+| Operation           | Target  | P95 Target | P99 Target |
+| ------------------- | ------- | ---------- | ---------- |
+| Simple Search       | < 100ms | < 200ms    | < 500ms    |
+| Complex Search      | < 150ms | < 300ms    | < 500ms    |
+| Search with Filters | < 100ms | < 200ms    | < 500ms    |
+| searchByResource    | < 50ms  | < 100ms    | < 200ms    |
+| searchByMethod      | < 50ms  | < 100ms    | < 200ms    |
+| searchByPermission  | < 50ms  | < 100ms    | < 200ms    |
 
 ### Memory Usage Targets
 
-| Operation | Target |
-|-----------|--------|
-| Per operation memory growth | < 10KB |
-| Large dataset memory delta | < 50MB |
+| Operation                      | Target  |
+| ------------------------------ | ------- |
+| Per operation memory growth    | < 10KB  |
+| Large dataset memory delta     | < 50MB  |
 | Load test memory per iteration | < 100KB |
-| Memory pressure test delta | < 100MB |
+| Memory pressure test delta     | < 100MB |
 
 ### Throughput Targets
 
-| Operation | Target |
-|-----------|--------|
-| Simple search throughput | > 100 ops/sec |
+| Operation                   | Target            |
+| --------------------------- | ----------------- |
+| Simple search throughput    | > 100 ops/sec     |
 | Concurrent request handling | > 50 requests/sec |
-| Sustained load throughput | > 50 requests/sec |
+| Sustained load throughput   | > 50 requests/sec |
 
 ---
 
@@ -275,26 +299,31 @@ The [`benchmark.ts`](../scripts/performance/benchmark.ts) script provides:
 Based on the performance test implementation, the following potential bottlenecks have been identified:
 
 ### 1. Semantic Search Performance
+
 - **Issue:** Vector store search may be the slowest component
 - **Severity:** Medium
 - **Recommendation:** Consider implementing caching for frequently searched queries or optimizing vector similarity calculations
 
 ### 2. Large Result Set Processing
+
 - **Issue:** Performance may degrade with larger result sets
 - **Severity:** Medium
 - **Recommendation:** Implement pagination or streaming for large result sets
 
 ### 3. Memory Usage with Large Datasets
+
 - **Issue:** Memory usage may increase significantly with large datasets
 - **Severity:** Low
 - **Recommendation:** Consider implementing memory pooling or lazy loading for large datasets
 
 ### 4. Concurrent Request Overhead
+
 - **Issue:** Response times may increase under high concurrency
 - **Severity:** Low
 - **Recommendation:** Implement request queuing or connection pooling for better concurrency handling
 
 ### 5. Result Combination Overhead
+
 - **Issue:** Hybrid scoring and result combination may add overhead
 - **Severity:** Low
 - **Recommendation:** Optimize the combination algorithm or consider early termination for low-scoring results
@@ -304,21 +333,25 @@ Based on the performance test implementation, the following potential bottleneck
 ## Running Performance Tests
 
 ### Run All Performance Tests
+
 ```bash
 npm run test:performance
 ```
 
 ### Run Benchmarks Only
+
 ```bash
 npm run benchmark
 ```
 
 ### Run Load Tests Only
+
 ```bash
 npm run load-test
 ```
 
 ### Run Specific Test Suite
+
 ```bash
 # Run benchmarks
 jest tests/performance/benchmarks.test.ts
@@ -328,6 +361,7 @@ jest tests/performance/load-test.test.ts
 ```
 
 ### Generate Performance Report
+
 ```bash
 npm run benchmark
 ```

@@ -8,33 +8,23 @@
 
 #### Get Purchase Orders
 
-
 Returns a paginated list of Purchase Orders
-
 
 Required permission: Purchase Orders - List/Search
 
-
-
 **Endpoint:** `GET /purchase_orders`
-
 
 **Required Permission:** Required permission: Purchase Orders - List/Search
 
-
 **Query Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| page | integer | No | Returns provided page of results, each 'page' contains 20 results |
-
+| Parameter | Type    | Required | Description                                                       |
+| --------- | ------- | -------- | ----------------------------------------------------------------- |
+| page      | integer | No       | Returns provided page of results, each 'page' contains 20 results |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -81,49 +71,37 @@ successful
 }
 ```
 
-
 #### Create Purchase Order
-
 
 Creates a Purchase Order
 
-
 Required permission: Purchase Orders - Edit
-
-
 
 **Endpoint:** `POST /purchase_orders`
 
-
 **Required Permission:** Required permission: Purchase Orders - Edit
-
 
 **Request Body:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| discount_percent | integer | No |  |
-| expected_date | string | No |  |
-| general_notes | string | No |  |
-| other_cents | integer | No |  |
-| shipping_cents | integer | No |  |
-| shipping_notes | string | No |  |
-| user_id | integer | No |  |
-| vendor_id | integer | No |  |
-| location_id | integer | No |  |
-| due_date | string | No |  |
-| paid_date | string | No |  |
-| order_date | string | No |  |
-| delivery_tracking | string | No |  |
-
-
+| Parameter         | Type    | Required | Description |
+| ----------------- | ------- | -------- | ----------- |
+| discount_percent  | integer | No       |             |
+| expected_date     | string  | No       |             |
+| general_notes     | string  | No       |             |
+| other_cents       | integer | No       |             |
+| shipping_cents    | integer | No       |             |
+| shipping_notes    | string  | No       |             |
+| user_id           | integer | No       |             |
+| vendor_id         | integer | No       |             |
+| location_id       | integer | No       |             |
+| due_date          | string  | No       |             |
+| paid_date         | string  | No       |             |
+| order_date        | string  | No       |             |
+| delivery_tracking | string  | No       |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -167,37 +145,26 @@ successful
   }
 }
 ```
-
 
 #### Get Purchase Order by ID
 
-
 Retrieves a Purchase Order by ID
-
 
 Required permission: Purchase Orders - View Details
 
-
-
 **Endpoint:** `GET /purchase_orders/{id}`
-
 
 **Required Permission:** Required permission: Purchase Orders - View Details
 
-
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -241,52 +208,36 @@ successful
   }
 }
 ```
-
 
 **Response: 404**
 
-
 Invalid request
-
 
 #### Create Purchase Order
 
-
 receive purchase_order
-
 
 Required permission: Purchase Orders - Edit
 
-
-
 **Endpoint:** `POST /purchase_orders/{id}/receive`
-
 
 **Required Permission:** Required permission: Purchase Orders - Edit
 
-
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Request Body:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| line_item_id | integer | No |  |
-
-
+| Parameter    | Type    | Required | Description |
+| ------------ | ------- | -------- | ----------- |
+| line_item_id | integer | No       |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -331,46 +282,32 @@ successful
 }
 ```
 
-
 #### Create Purchase Order
-
 
 Adds a Product to a Purchase Order
 
-
 Required permission: Purchase Orders - Edit
-
-
 
 **Endpoint:** `POST /purchase_orders/{id}/create_po_line_item`
 
-
 **Required Permission:** Required permission: Purchase Orders - Edit
-
 
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Request Body:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| product_id | integer | No |  |
-| quantity | integer | No |  |
-
-
+| Parameter  | Type    | Required | Description |
+| ---------- | ------- | -------- | ----------- |
+| product_id | integer | No       |             |
+| quantity   | integer | No       |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -392,16 +329,12 @@ successful
 }
 ```
 
-
 **Response: 422**
 
-
 Invalid request
-
 
 ```json
 {
   "errors": "Error adding that item  - please ensure that the item you are trying to add is set to \u2018Maintain Stock\u2019."
 }
 ```
-

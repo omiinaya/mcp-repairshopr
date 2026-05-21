@@ -8,35 +8,25 @@
 
 #### Get Portal Users
 
-
 Returns a paginated list of Portal Users
-
 
 Required permission: Global Admin
 
-
-
 **Endpoint:** `GET /portal_users`
-
 
 **Required Permission:** Required permission: Global Admin
 
-
 **Query Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| customer_id | integer | No | Returns Portal Users that belong to a Customer ID |
-| email | string | No | Portal User email |
-| page | integer | No | Returns provided page of results, each 'page' contains 100 results |
-
+| Parameter   | Type    | Required | Description                                                        |
+| ----------- | ------- | -------- | ------------------------------------------------------------------ |
+| customer_id | integer | No       | Returns Portal Users that belong to a Customer ID                  |
+| email       | string  | No       | Portal User email                                                  |
+| page        | integer | No       | Returns provided page of results, each 'page' contains 100 results |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -61,31 +51,21 @@ successful
 }
 ```
 
-
 #### Create Portal User
-
 
 Creates a Portal User
 
-
 Required permission: Global Admin
-
-
 
 **Endpoint:** `POST /portal_users`
 
-
 **Required Permission:** Required permission: Global Admin
-
 
 **Request Body:**
 
-
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -100,12 +80,9 @@ successful
 }
 ```
 
-
 **Response: 422**
 
-
 Invalid request
-
 
 ```json
 {
@@ -122,39 +99,27 @@ Invalid request
 }
 ```
 
-
 #### Update Portal User
-
 
 Updates an existing Portal User by ID
 
-
 Required permission: Global Admin
-
-
 
 **Endpoint:** `PUT /portal_users/{id}`
 
-
 **Required Permission:** Required permission: Global Admin
-
 
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Request Body:**
 
-
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -169,19 +134,14 @@ successful
 }
 ```
 
-
 **Response: 422**
 
-
 Invalid request
-
 
 ```json
 {
   "success": false,
-  "message": [
-    "Password confirmation doesn't match Password"
-  ],
+  "message": ["Password confirmation doesn't match Password"],
   "params": {
     "password": "does not match",
     "password_confirmation": "the confirmation"
@@ -189,36 +149,25 @@ Invalid request
 }
 ```
 
-
 #### Delete Portal User
-
 
 Deletes a Portal User by ID
 
-
 Required permission: Global Admin
-
-
 
 **Endpoint:** `DELETE /portal_users/{id}`
 
-
 **Required Permission:** Required permission: Global Admin
-
 
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -233,43 +182,29 @@ successful
 }
 ```
 
-
 **Response: 404**
-
 
 Invalid request
 
-
 #### Create Create Invitation
-
 
 Creates an Invitation for a Portal User
 
-
 Required permission: Global Admin
-
-
 
 **Endpoint:** `POST /portal_users/create_invitation`
 
-
 **Required Permission:** Required permission: Global Admin
-
 
 **Request Body:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | No |  |
-
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | No       |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -278,12 +213,9 @@ successful
 }
 ```
 
-
 **Response: 422**
 
-
 Invalid request
-
 
 ```json
 {
@@ -291,4 +223,3 @@ Invalid request
   "message": "Invalid email, correct the contact's email and try to resend."
 }
 ```
-

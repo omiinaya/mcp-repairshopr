@@ -68,6 +68,7 @@ git checkout -b fix/your-bug-fix
 ```
 
 Branch naming conventions:
+
 - `feature/` - New features
 - `fix/` - Bug fixes
 - `docs/` - Documentation changes
@@ -162,15 +163,15 @@ interface CacheOptions {
 
 class CacheManager {
   private cache: Map<string, any>;
-  
+
   constructor(options: CacheOptions) {
     this.cache = new Map();
   }
-  
+
   public get(key: string): any {
     return this.cache.get(key);
   }
-  
+
   public set(key: string, value: any): void {
     this.cache.set(key, value);
   }
@@ -179,11 +180,11 @@ class CacheManager {
 // Bad
 class c {
   private x: Map<string, any>;
-  
+
   constructor(o: any) {
     this.x = new Map();
   }
-  
+
   public g(k: string): any {
     return this.x.get(k);
   }
@@ -204,7 +205,7 @@ try {
 } catch (error) {
   logger.error('Failed to fetch data', {
     error: error.message,
-    context: { url, params }
+    context: { url, params },
   });
   throw new Error(`Failed to fetch data: ${error.message}`);
 }
@@ -221,13 +222,13 @@ try {
 logger.info('Processing request', {
   requestId,
   endpoint,
-  method
+  method,
 });
 
 logger.error('Request failed', {
   requestId,
   error: error.message,
-  stack: error.stack
+  stack: error.stack,
 });
 ```
 
@@ -241,7 +242,7 @@ logger.error('Request failed', {
 ```typescript
 /**
  * Calculate relevance score for search results
- * 
+ *
  * @param query - The search query
  * @param endpoint - The endpoint to score
  * @param options - Scoring options
@@ -281,17 +282,17 @@ tests/
 ```typescript
 describe('CacheManager', () => {
   let cacheManager: CacheManager;
-  
+
   beforeEach(() => {
     cacheManager = new CacheManager({ maxSize: 1024 });
   });
-  
+
   describe('get', () => {
     it('should return cached value', () => {
       cacheManager.set('key', 'value');
       expect(cacheManager.get('key')).toBe('value');
     });
-    
+
     it('should return undefined for non-existent key', () => {
       expect(cacheManager.get('nonexistent')).toBeUndefined();
     });
@@ -309,11 +310,15 @@ describe('CacheManager', () => {
 ```typescript
 describe('Search Integration', () => {
   it('should search and return results', async () => {
-    const results = await searchApiDocs({
-      query: 'customer',
-      limit: 5
-    }, vectorStore, metadataIndex);
-    
+    const results = await searchApiDocs(
+      {
+        query: 'customer',
+        limit: 5,
+      },
+      vectorStore,
+      metadataIndex
+    );
+
     expect(results).toBeDefined();
     expect(results.length).toBeGreaterThan(0);
   });
@@ -333,7 +338,7 @@ describe('Search Performance', () => {
     const start = Date.now();
     await searchApiDocs({ query: 'customer' }, vectorStore, metadataIndex);
     const duration = Date.now() - start;
-    
+
     expect(duration).toBeLessThan(100);
   });
 });
@@ -342,6 +347,7 @@ describe('Search Performance', () => {
 ### Test Coverage
 
 Aim for:
+
 - **Statements**: 80%+
 - **Branches**: 75%+
 - **Functions**: 80%+
@@ -365,6 +371,7 @@ npm run test:coverage
 ### README Updates
 
 Update the README when:
+
 - Adding new features
 - Changing configuration options
 - Modifying installation steps
@@ -373,6 +380,7 @@ Update the README when:
 ### API Documentation
 
 Update API documentation when:
+
 - Adding new tools
 - Modifying tool parameters
 - Changing response formats
@@ -381,6 +389,7 @@ Update API documentation when:
 ### User Documentation
 
 Update user documentation when:
+
 - Changing user-facing functionality
 - Adding new features
 - Modifying configuration options
@@ -392,27 +401,32 @@ Update user documentation when:
 
 ```markdown
 ## Description
+
 Brief description of changes
 
 ## Type of Change
+
 - [ ] Bug fix
 - [ ] New feature
 - [ ] Breaking change
 - [ ] Documentation update
 
 ## Testing
+
 - [ ] Unit tests added/updated
 - [ ] Integration tests added/updated
 - [ ] All tests passing
 - [ ] Manual testing completed
 
 ## Documentation
+
 - [ ] Code documented
 - [ ] README updated
 - [ ] API docs updated
 - [ ] User docs updated
 
 ## Checklist
+
 - [ ] Code follows style guidelines
 - [ ] Self-review completed
 - [ ] Comments added for complex code
@@ -443,6 +457,7 @@ Brief description of changes
 ### Versioning
 
 Follow [Semantic Versioning](https://semver.org/):
+
 - **MAJOR**: Incompatible API changes
 - **MINOR**: Backwards-compatible functionality
 - **PATCH**: Backwards-compatible bug fixes
@@ -500,6 +515,7 @@ git push origin --tags
 ## Recognition
 
 Contributors will be recognized in:
+
 - CONTRIBUTORS.md file
 - Release notes
 - Project documentation

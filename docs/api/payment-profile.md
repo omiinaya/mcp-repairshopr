@@ -8,26 +8,19 @@
 
 #### Get Customers
 
-
 Returns a paginated list of Payment Profiles
-
 
 **Endpoint:** `GET /customers/{customer_id}/payment_profiles`
 
-
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| customer_id | integer | Yes |  |
-
+| Parameter   | Type    | Required | Description |
+| ----------- | ------- | -------- | ----------- |
+| customer_id | integer | Yes      |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -47,41 +40,30 @@ successful
 }
 ```
 
-
 #### Create Customer
-
 
 Creates a Payment Profile
 
-
 **Endpoint:** `POST /customers/{customer_id}/payment_profiles`
-
 
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| customer_id | integer | Yes |  |
-
+| Parameter   | Type    | Required | Description |
+| ----------- | ------- | -------- | ----------- |
+| customer_id | integer | Yes      |             |
 
 **Request Body:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| customer_external_id | string | No | Payment Gateway's Customer token |
-| payment_profile_id | string | No | Payment Gateway's stored payment profile token |
-| expiration | string | No |  |
-| last_four | string | No |  |
-
-
+| Parameter            | Type   | Required | Description                                    |
+| -------------------- | ------ | -------- | ---------------------------------------------- |
+| customer_external_id | string | No       | Payment Gateway's Customer token               |
+| payment_profile_id   | string | No       | Payment Gateway's stored payment profile token |
+| expiration           | string | No       |                                                |
+| last_four            | string | No       |                                                |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -99,12 +81,9 @@ successful
 }
 ```
 
-
 **Response: 422**
 
-
 Invalid request
-
 
 ```json
 {
@@ -112,30 +91,22 @@ Invalid request
 }
 ```
 
-
 #### Get Customer by ID
-
 
 Retrieves a Payment Profile by ID
 
-
 **Endpoint:** `GET /customers/{customer_id}/payment_profiles/{id}`
-
 
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| customer_id | integer | Yes |  |
-| id | integer | Yes |  |
-
+| Parameter   | Type    | Required | Description |
+| ----------- | ------- | -------- | ----------- |
+| customer_id | integer | Yes      |             |
+| id          | integer | Yes      |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -152,47 +123,34 @@ successful
   }
 }
 ```
-
 
 **Response: 404**
 
-
 Invalid request
-
 
 #### Update Customer
 
-
 Updates a Payment Profile
-
 
 **Endpoint:** `PUT /customers/{customer_id}/payment_profiles/{id}`
 
-
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| customer_id | integer | Yes |  |
-| id | integer | Yes |  |
-
+| Parameter   | Type    | Required | Description |
+| ----------- | ------- | -------- | ----------- |
+| customer_id | integer | Yes      |             |
+| id          | integer | Yes      |             |
 
 **Request Body:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| expiration | string | No |  |
-| last_four | string | No |  |
-
-
+| Parameter  | Type   | Required | Description |
+| ---------- | ------ | -------- | ----------- |
+| expiration | string | No       |             |
+| last_four  | string | No       |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -210,30 +168,22 @@ successful
 }
 ```
 
-
 #### Delete Customer
-
 
 Deletes a Payment Profile
 
-
 **Endpoint:** `DELETE /customers/{customer_id}/payment_profiles/{id}`
-
 
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| customer_id | integer | Yes |  |
-| id | integer | Yes |  |
-
+| Parameter   | Type    | Required | Description |
+| ----------- | ------- | -------- | ----------- |
+| customer_id | integer | Yes      |             |
+| id          | integer | Yes      |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -241,9 +191,6 @@ successful
 }
 ```
 
-
 **Response: 404**
 
-
 Invalid request
-

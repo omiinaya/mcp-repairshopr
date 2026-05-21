@@ -49,6 +49,7 @@ npm run build-indexes
 ```
 
 The script will:
+
 - Create the `data/` directory if it doesn't exist
 - Build all indexes from documentation files
 - Validate the indexes
@@ -124,6 +125,7 @@ Contains metadata about the index:
 ```
 
 **Fields:**
+
 - `version` - Index version number
 - `timestamp` - ISO 8601 timestamp when the index was created
 - `fileCount` - Number of documentation files indexed
@@ -158,6 +160,7 @@ Contains structured lookup maps for fast access:
 ```
 
 **Maps:**
+
 - `resources` - Map of resource name to array of endpoints
 - `endpointsByPath` - Map of "METHOD:path" to endpoint object
 - `endpointsByPermission` - Map of permission to array of endpoints
@@ -185,6 +188,7 @@ Contains text chunks with metadata:
 ```
 
 **Fields:**
+
 - `id` - Unique identifier for the chunk
 - `text` - The text content of the chunk
 - `metadata` - Metadata about the chunk including endpoint ID, type, resource, method, and path
@@ -220,6 +224,7 @@ npm run build-indexes update
 ```
 
 The script will:
+
 - Check if an existing index exists
 - Calculate the hash of current documentation files
 - Compare with the stored hash
@@ -229,6 +234,7 @@ The script will:
 ### When to Use Incremental Update
 
 Use incremental update when:
+
 - Documentation files have been modified
 - New documentation files have been added
 - Documentation files have been removed
@@ -286,6 +292,7 @@ npm run build-indexes health
 ```
 
 This will:
+
 - Read the current index information
 - Validate all index files exist
 - Check index structure and content
@@ -300,12 +307,14 @@ npm run build-indexes rebuild
 ```
 
 This will:
+
 - Delete all existing index files
 - Build fresh indexes from documentation
 - Validate the new indexes
 - Report comprehensive statistics
 
 Use this when:
+
 - Index files are corrupted
 - You want to ensure a clean build
 - After major changes to the indexing system
@@ -319,6 +328,7 @@ npm run build-indexes update
 ```
 
 This will:
+
 - Detect changes using content hashing
 - Rebuild only if necessary
 - Ensure indexes are synchronized with documentation
@@ -407,6 +417,7 @@ npm run build-indexes rebuild
 **Cause:** A documentation file has invalid markdown format.
 
 **Solution:**
+
 1. Check the file mentioned in the error message
 2. Ensure it follows the expected format:
    - Header: `# RepairShopr API Documentation - {Resource Name}`
@@ -430,6 +441,7 @@ npm run build-indexes rebuild
 **Cause:** One or more index files are missing or invalid.
 
 **Solution:**
+
 1. Check index health for detailed issues:
 
 ```bash
@@ -454,6 +466,7 @@ npm run build-indexes rebuild
 **Cause:** Large number of documentation files or complex content.
 
 **Solution:**
+
 1. Check the number of files being indexed
 2. Consider splitting documentation into smaller groups
 3. Optimize the chunking process if needed
@@ -463,6 +476,7 @@ npm run build-indexes rebuild
 **Cause:** File system permissions or disk issues.
 
 **Solution:**
+
 1. Check file permissions on the `data/` directory
 2. Ensure sufficient disk space
 3. Check for file system errors

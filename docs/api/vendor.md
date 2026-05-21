@@ -8,33 +8,23 @@
 
 #### Get Vendors
 
-
 Returns a paginated list of Vendors
-
 
 Required permission: Vendors - List
 
-
-
 **Endpoint:** `GET /vendors`
-
 
 **Required Permission:** Required permission: Vendors - List
 
-
 **Query Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| page | integer | No | Returns provided page of results, each 'page' contains 100 result |
-
+| Parameter | Type    | Required | Description                                                       |
+| --------- | ------- | -------- | ----------------------------------------------------------------- |
+| page      | integer | No       | Returns provided page of results, each 'page' contains 100 result |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -60,31 +50,21 @@ successful
 }
 ```
 
-
 #### Create Vendor
-
 
 Creates a Vendor
 
-
 Required permission: Vendors - New
-
-
 
 **Endpoint:** `POST /vendors`
 
-
 **Required Permission:** Required permission: Vendors - New
-
 
 **Request Body:**
 
-
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -108,19 +88,14 @@ successful
 }
 ```
 
-
 **Response: 422**
 
-
 Invalid request
-
 
 ```json
 {
   "success": false,
-  "message": [
-    "Email is not an email"
-  ],
+  "message": ["Email is not an email"],
   "params": {
     "name": "Vendor1",
     "email": "broken_emailmail.com"
@@ -128,36 +103,25 @@ Invalid request
 }
 ```
 
-
 #### Get Vendor by ID
-
 
 Retrieves a Vendor Page
 
-
 Required permission: Vendors - View Details
-
-
 
 **Endpoint:** `GET /vendors/{id}`
 
-
 **Required Permission:** Required permission: Vendors - View Details
-
 
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -181,45 +145,31 @@ successful
 }
 ```
 
-
 **Response: 404**
-
 
 Invalid request
 
-
 #### Update Vendor
-
 
 Updates an existing Vendor page by ID
 
-
 Required permission: Vendors - Edit
-
-
 
 **Endpoint:** `PUT /vendors/{id}`
 
-
 **Required Permission:** Required permission: Vendors - Edit
-
 
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Request Body:**
 
-
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -243,25 +193,17 @@ successful
 }
 ```
 
-
 **Response: 404**
-
 
 Not found
 
-
 **Response: 422**
 
-
 Invalid request
-
 
 ```json
 {
   "success": false,
-  "message": [
-    "Email is not an email"
-  ]
+  "message": ["Email is not an email"]
 }
 ```
-

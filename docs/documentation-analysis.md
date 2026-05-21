@@ -47,7 +47,7 @@ This report documents the analysis of 29 API documentation files in the `docs/ap
 
 All documentation files follow a consistent structure:
 
-```markdown
+````markdown
 # RepairShopr API Documentation - [Resource Name]
 
 > **Note:** This file was automatically generated from the RepairShopr API swagger.json.
@@ -69,8 +69,8 @@ All documentation files follow a consistent structure:
 [Optional Query Parameters section]
 
 | Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| ... | ... | ... | ... |
+| --------- | ---- | -------- | ----------- |
+| ...       | ...  | ...      | ...         |
 
 [Optional Path Parameters section]
 
@@ -83,9 +83,11 @@ All documentation files follow a consistent structure:
 ```json
 {...}
 ```
+````
 
 [Multiple response sections possible]
-```
+
+````
 
 ### Key Structural Elements
 
@@ -209,7 +211,7 @@ All documentation files follow a consistent structure:
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | name | string | Yes/No | description |
-```
+````
 
 **Extraction Strategy**: Parse the table rows, extracting name, type, required (Yes/No), and description.
 
@@ -245,7 +247,7 @@ All documentation files follow a consistent structure:
 
 **Location**: JSON code blocks after response descriptions
 
-**Extraction Strategy**: Parse the JSON content within ```json``` blocks.
+**Extraction Strategy**: Parse the JSON content within `json` blocks.
 
 ## Endpoint Relationships
 
@@ -403,7 +405,7 @@ Here's an example of how a single endpoint would be parsed:
 
 ### Original Markdown (from [`customer.md`](docs/api/customer.md:9-43))
 
-```markdown
+````markdown
 #### Get Customers
 
 Returns a paginated list of customers
@@ -417,18 +419,18 @@ Single-Customer Users can only access own customer (self).
 
 **Query Parameters:**
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| sort | string | No | A customer field to order by. Examples "firstname ASC", "city DESC". |
-| query | string | No | Search query |
-| firstname | string | No | Any customers with a first name like the parameter |
-| lastname | string | No | Any customers with a last name like the parameter |
-| business_name | string | No | Any customers with a business name like the parameter |
-| id | array | No | Any customers with ID included in the list |
-| not_id | array | No | Any customers with ID not included in the list |
-| email | string | No |  |
-| include_disabled | string | No | Whether or not the returned list of customers includes disabled customers |
-| page | integer | No | Returns provided page of results, each 'page' contains 25 results |
+| Parameter        | Type    | Required | Description                                                               |
+| ---------------- | ------- | -------- | ------------------------------------------------------------------------- |
+| sort             | string  | No       | A customer field to order by. Examples "firstname ASC", "city DESC".      |
+| query            | string  | No       | Search query                                                              |
+| firstname        | string  | No       | Any customers with a first name like the parameter                        |
+| lastname         | string  | No       | Any customers with a last name like the parameter                         |
+| business_name    | string  | No       | Any customers with a business name like the parameter                     |
+| id               | array   | No       | Any customers with ID included in the list                                |
+| not_id           | array   | No       | Any customers with ID not included in the list                            |
+| email            | string  | No       |                                                                           |
+| include_disabled | string  | No       | Whether or not the returned list of customers includes disabled customers |
+| page             | integer | No       | Returns provided page of results, each 'page' contains 25 results         |
 
 **Response: 200**
 
@@ -439,7 +441,9 @@ successful
   "customers": [...]
 }
 ```
-```
+````
+
+````
 
 ### Parsed Structure
 
@@ -533,7 +537,7 @@ successful
     }
   ]
 }
-```
+````
 
 ## Summary
 

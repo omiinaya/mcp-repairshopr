@@ -129,30 +129,30 @@ import { Cache } from '../../src/cache/cache';
 
 describe('Cache', () => {
   let cache: Cache<any>;
-  
+
   beforeEach(() => {
     cache = new Cache({
       maxSize: 1024,
       defaultTTL: 60000,
       maxEntries: 100,
-      enableWarming: false
+      enableWarming: false,
     });
   });
-  
+
   afterEach(() => {
     cache.clear();
   });
-  
+
   describe('get', () => {
     it('should return cached value', () => {
       cache.set('key', 'value');
       expect(cache.get('key')).toBe('value');
     });
-    
+
     it('should return undefined for non-existent key', () => {
       expect(cache.get('nonexistent')).toBeUndefined();
     });
-    
+
     it('should return undefined for expired entry', () => {
       cache.set('key', 'value', 1); // 1ms TTL
       setTimeout(() => {
@@ -160,30 +160,30 @@ describe('Cache', () => {
       }, 10);
     });
   });
-  
+
   describe('set', () => {
     it('should set value with default TTL', () => {
       cache.set('key', 'value');
       expect(cache.get('key')).toBe('value');
     });
-    
+
     it('should set value with custom TTL', () => {
       cache.set('key', 'value', 1000);
       expect(cache.get('key')).toBe('value');
     });
-    
+
     it('should evict oldest entry when cache is full', () => {
       const smallCache = new Cache({
         maxSize: 100,
         defaultTTL: 60000,
         maxEntries: 2,
-        enableWarming: false
+        enableWarming: false,
       });
-      
+
       smallCache.set('key1', 'value1');
       smallCache.set('key2', 'value2');
       smallCache.set('key3', 'value3'); // Should evict key1
-      
+
       expect(smallCache.get('key1')).toBeUndefined();
       expect(smallCache.get('key2')).toBe('value2');
       expect(smallCache.get('key3')).toBe('value3');
@@ -207,32 +207,40 @@ import { mockVectorStore, mockMetadataIndex } from '../fixtures';
 describe('Search Integration', () => {
   let vectorStore: VectorStore;
   let metadataIndex: MetadataIndex;
-  
+
   beforeEach(() => {
     vectorStore = mockVectorStore();
     metadataIndex = mockMetadataIndex();
   });
-  
+
   it('should search and return results', async () => {
-    const results = await searchApiDocs({
-      query: 'customer',
-      limit: 5
-    }, vectorStore, metadataIndex);
-    
+    const results = await searchApiDocs(
+      {
+        query: 'customer',
+        limit: 5,
+      },
+      vectorStore,
+      metadataIndex
+    );
+
     expect(results).toBeDefined();
     expect(results.length).toBeGreaterThan(0);
     expect(results[0]).toHaveProperty('endpoint');
     expect(results[0]).toHaveProperty('score');
   });
-  
+
   it('should filter by resource', async () => {
-    const results = await searchApiDocs({
-      query: 'customer',
-      resource: 'customers',
-      limit: 5
-    }, vectorStore, metadataIndex);
-    
-    results.forEach(result => {
+    const results = await searchApiDocs(
+      {
+        query: 'customer',
+        resource: 'customers',
+        limit: 5,
+      },
+      vectorStore,
+      metadataIndex
+    );
+
+    results.forEach((result) => {
       expect(result.endpoint.resource).toBe('customers');
     });
   });
@@ -253,36 +261,46 @@ import { MetadataIndex } from '../../src/parser/metadata';
 describe('Search Performance', () => {
   let vectorStore: VectorStore;
   let metadataIndex: MetadataIndex;
-  
+
   beforeEach(() => {
     vectorStore = new VectorStore();
     metadataIndex = new MetadataIndex();
     // Initialize with test data
   });
-  
+
   it('should complete search within 100ms', async () => {
     const start = Date.now();
-    await searchApiDocs({
-      query: 'customer',
-      limit: 5
-    }, vectorStore, metadataIndex);
+    await searchApiDocs(
+      {
+        query: 'customer',
+        limit: 5,
+      },
+      vectorStore,
+      metadataIndex
+    );
     const duration = Date.now() - start;
-    
+
     expect(duration).toBeLessThan(100);
   });
-  
+
   it('should handle 100 concurrent requests', async () => {
-    const requests = Array(100).fill(null).map(() =>
-      searchApiDocs({
-        query: 'customer',
-        limit: 5
-      }, vectorStore, metadataIndex)
-    );
-    
+    const requests = Array(100)
+      .fill(null)
+      .map(() =>
+        searchApiDocs(
+          {
+            query: 'customer',
+            limit: 5,
+          },
+          vectorStore,
+          metadataIndex
+        )
+      );
+
     const start = Date.now();
     await Promise.all(requests);
     const duration = Date.now() - start;
-    
+
     expect(duration).toBeLessThan(5000); // 50ms per request average
   });
 });
@@ -299,28 +317,36 @@ import { searchApiDocs } from '../../src/tools/search';
 
 describe('Search Accuracy', () => {
   it('should return relevant results for customer query', async () => {
-    const results = await searchApiDocs({
-      query: 'create new customer',
-      limit: 5
-    }, vectorStore, metadataIndex);
-    
+    const results = await searchApiDocs(
+      {
+        query: 'create new customer',
+        limit: 5,
+      },
+      vectorStore,
+      metadataIndex
+    );
+
     expect(results.length).toBeGreaterThan(0);
-    
+
     // Check that results are relevant
-    results.forEach(result => {
+    results.forEach((result) => {
       expect(
         result.endpoint.resource.toLowerCase().includes('customer') ||
-        result.endpoint.description.toLowerCase().includes('customer')
+          result.endpoint.description.toLowerCase().includes('customer')
       ).toBe(true);
     });
   });
-  
+
   it('should rank results by relevance', async () => {
-    const results = await searchApiDocs({
-      query: 'customer',
-      limit: 5
-    }, vectorStore, metadataIndex);
-    
+    const results = await searchApiDocs(
+      {
+        query: 'customer',
+        limit: 5,
+      },
+      vectorStore,
+      metadataIndex
+    );
+
     // Results should be sorted by score (descending)
     for (let i = 1; i < results.length; i++) {
       expect(results[i].score).toBeLessThanOrEqual(results[i - 1].score);
@@ -379,20 +405,20 @@ describe('Cache Benchmarks', () => {
       maxSize: 1024 * 1024,
       defaultTTL: 60000,
       maxEntries: 10000,
-      enableWarming: false
+      enableWarming: false,
     });
-    
+
     // Pre-populate cache
     for (let i = 0; i < 10000; i++) {
       cache.set(`key${i}`, `value${i}`);
     }
-    
+
     const start = Date.now();
     for (let i = 0; i < 10000; i++) {
       cache.get(`key${i}`);
     }
     const duration = Date.now() - start;
-    
+
     const opsPerSecond = (10000 / duration) * 1000;
     expect(opsPerSecond).toBeGreaterThan(10000);
   });
@@ -406,17 +432,23 @@ Load tests test the system under high load.
 ```typescript
 describe('Load Tests', () => {
   it('should handle 1000 concurrent search requests', async () => {
-    const requests = Array(1000).fill(null).map((_, i) =>
-      searchApiDocs({
-        query: `test query ${i % 10}`,
-        limit: 5
-      }, vectorStore, metadataIndex)
-    );
-    
+    const requests = Array(1000)
+      .fill(null)
+      .map((_, i) =>
+        searchApiDocs(
+          {
+            query: `test query ${i % 10}`,
+            limit: 5,
+          },
+          vectorStore,
+          metadataIndex
+        )
+      );
+
     const start = Date.now();
     const results = await Promise.all(requests);
     const duration = Date.now() - start;
-    
+
     expect(results.length).toBe(1000);
     expect(duration).toBeLessThan(10000); // 10 seconds for 1000 requests
   });
@@ -434,24 +466,24 @@ describe('MCP Protocol', () => {
   it('should handle tool registration', async () => {
     const server = new MCPServer();
     await server.start();
-    
+
     const tools = server.getTools();
     expect(tools.length).toBeGreaterThan(0);
-    
+
     await server.stop();
   });
-  
+
   it('should handle tool invocation', async () => {
     const server = new MCPServer();
     await server.start();
-    
+
     const result = await server.invokeTool('search_api_docs', {
-      query: 'customer'
+      query: 'customer',
     });
-    
+
     expect(result).toBeDefined();
     expect(result.success).toBe(true);
-    
+
     await server.stop();
   });
 });
@@ -465,27 +497,37 @@ Test complete workflows.
 describe('End-to-End Workflows', () => {
   it('should complete search workflow', async () => {
     // 1. Search for endpoint
-    const searchResults = await searchApiDocs({
-      query: 'create customer',
-      limit: 1
-    }, vectorStore, metadataIndex);
-    
+    const searchResults = await searchApiDocs(
+      {
+        query: 'create customer',
+        limit: 1,
+      },
+      vectorStore,
+      metadataIndex
+    );
+
     expect(searchResults.length).toBeGreaterThan(0);
-    
+
     // 2. Get endpoint details
-    const endpoint = getEndpoint({
-      path: searchResults[0].endpoint.path,
-      method: searchResults[0].endpoint.method
-    }, metadataIndex);
-    
+    const endpoint = getEndpoint(
+      {
+        path: searchResults[0].endpoint.path,
+        method: searchResults[0].endpoint.method,
+      },
+      metadataIndex
+    );
+
     expect(endpoint).toBeDefined();
-    
+
     // 3. Get parameters
-    const parameters = getParameters({
-      endpointPath: searchResults[0].endpoint.path,
-      method: searchResults[0].endpoint.method
-    }, metadataIndex);
-    
+    const parameters = getParameters(
+      {
+        endpointPath: searchResults[0].endpoint.path,
+        method: searchResults[0].endpoint.method,
+      },
+      metadataIndex
+    );
+
     expect(parameters).toBeDefined();
     expect(parameters.parameters.length).toBeGreaterThan(0);
   });
@@ -503,22 +545,26 @@ describe('Search Relevance', () => {
   const testCases = [
     { query: 'create customer', expectedResource: 'customers' },
     { query: 'list tickets', expectedResource: 'tickets' },
-    { query: 'update invoice', expectedResource: 'invoices' }
+    { query: 'update invoice', expectedResource: 'invoices' },
   ];
-  
+
   testCases.forEach(({ query, expectedResource }) => {
     it(`should return relevant results for "${query}"`, async () => {
-      const results = await searchApiDocs({
-        query,
-        limit: 5
-      }, vectorStore, metadataIndex);
-      
-      expect(results.length).toBeGreaterThan(0);
-      
-      const hasExpectedResource = results.some(result =>
-        result.endpoint.resource === expectedResource
+      const results = await searchApiDocs(
+        {
+          query,
+          limit: 5,
+        },
+        vectorStore,
+        metadataIndex
       );
-      
+
+      expect(results.length).toBeGreaterThan(0);
+
+      const hasExpectedResource = results.some(
+        (result) => result.endpoint.resource === expectedResource
+      );
+
       expect(hasExpectedResource).toBe(true);
     });
   });
@@ -532,22 +578,28 @@ Test that parameters are correctly extracted.
 ```typescript
 describe('Parameter Extraction', () => {
   it('should extract all parameters', async () => {
-    const parameters = getParameters({
-      endpointPath: '/customers',
-      method: 'POST'
-    }, metadataIndex);
-    
+    const parameters = getParameters(
+      {
+        endpointPath: '/customers',
+        method: 'POST',
+      },
+      metadataIndex
+    );
+
     expect(parameters).toBeDefined();
     expect(parameters.totalCount).toBeGreaterThan(0);
   });
-  
+
   it('should identify required parameters', async () => {
-    const parameters = getParameters({
-      endpointPath: '/customers',
-      method: 'POST'
-    }, metadataIndex);
-    
-    const requiredParams = parameters.parameters.filter(p => p.required);
+    const parameters = getParameters(
+      {
+        endpointPath: '/customers',
+        method: 'POST',
+      },
+      metadataIndex
+    );
+
+    const requiredParams = parameters.parameters.filter((p) => p.required);
     expect(requiredParams.length).toBeGreaterThan(0);
   });
 });
@@ -569,17 +621,19 @@ export function generateMockEndpoint(overrides = {}): Endpoint {
     permission: 'customer.write',
     parameters: [],
     responses: [],
-    ...overrides
+    ...overrides,
   };
 }
 
 export function generateMockSearchResults(count: number): SearchResult[] {
-  return Array(count).fill(null).map((_, i) => ({
-    endpoint: generateMockEndpoint({ resource: `resource${i}` }),
-    score: 1 - (i * 0.1),
-    context: `Context for result ${i}`,
-    matchType: 'semantic' as const
-  }));
+  return Array(count)
+    .fill(null)
+    .map((_, i) => ({
+      endpoint: generateMockEndpoint({ resource: `resource${i}` }),
+      score: 1 - i * 0.1,
+      context: `Context for result ${i}`,
+      matchType: 'semantic' as const,
+    }));
 }
 ```
 
@@ -593,14 +647,14 @@ export async function waitForCondition(
   interval: number = 100
 ): Promise<void> {
   const start = Date.now();
-  
+
   while (Date.now() - start < timeout) {
     if (condition()) {
       return;
     }
-    await new Promise(resolve => setTimeout(resolve, interval));
+    await new Promise((resolve) => setTimeout(resolve, interval));
   }
-  
+
   throw new Error(`Condition not met within ${timeout}ms`);
 }
 
@@ -609,7 +663,7 @@ export function createMockLogger() {
     info: jest.fn(),
     warn: jest.fn(),
     error: jest.fn(),
-    debug: jest.fn()
+    debug: jest.fn(),
   };
 }
 ```
@@ -628,7 +682,7 @@ describe('Cache', () => {
     cache.set('key', 'value');
     expect(cache.get('key')).toBe('value');
   });
-  
+
   it('should get value', () => {
     const cache = new Cache();
     cache.set('key', 'value');
@@ -639,12 +693,12 @@ describe('Cache', () => {
 // Bad - tests depend on each other
 describe('Cache', () => {
   let cache: Cache;
-  
+
   it('should set value', () => {
     cache = new Cache();
     cache.set('key', 'value');
   });
-  
+
   it('should get value', () => {
     expect(cache.get('key')).toBe('value'); // Depends on previous test
   });
@@ -686,8 +740,8 @@ Mock external dependencies to make tests fast and reliable.
 jest.mock('../../src/utils/logger', () => ({
   logger: {
     info: jest.fn(),
-    error: jest.fn()
-  }
+    error: jest.fn(),
+  },
 }));
 
 // Bad - tests depend on external service
@@ -700,6 +754,7 @@ it('should call external API', async () => {
 ### 5. Keep Tests Fast
 
 Tests should run quickly. Avoid:
+
 - Long delays
 - Large data sets
 - Complex setup
@@ -707,14 +762,18 @@ Tests should run quickly. Avoid:
 ```typescript
 // Good
 it('should process 100 items', () => {
-  const items = Array(100).fill(null).map((_, i) => i);
+  const items = Array(100)
+    .fill(null)
+    .map((_, i) => i);
   const result = processItems(items);
   expect(result.length).toBe(100);
 });
 
 // Bad - too slow
 it('should process 1,000,000 items', () => {
-  const items = Array(1000000).fill(null).map((_, i) => i);
+  const items = Array(1000000)
+    .fill(null)
+    .map((_, i) => i);
   const result = processItems(items);
   expect(result.length).toBe(1000000);
 });
@@ -725,6 +784,7 @@ it('should process 1,000,000 items', () => {
 ### Tests Failing Intermittently
 
 If tests fail intermittently:
+
 - Check for race conditions
 - Ensure proper cleanup in `afterEach`
 - Use proper async/await handling
@@ -733,6 +793,7 @@ If tests fail intermittently:
 ### Tests Timing Out
 
 If tests timeout:
+
 - Increase timeout in test configuration
 - Check for infinite loops
 - Verify async operations complete
@@ -741,12 +802,14 @@ If tests timeout:
 ### Coverage Not Increasing
 
 If coverage isn't increasing:
+
 - Check that test files are being included
 - Verify code paths are being executed
 - Review coverage report for uncovered lines
 - Add tests for edge cases
 
 For more information, see:
+
 - [Development Setup Guide](./DEVELOPMENT_SETUP.md)
 - [Architecture Documentation](./ARCHITECTURE.md)
 - [Contribution Guide](./CONTRIBUTING.md)

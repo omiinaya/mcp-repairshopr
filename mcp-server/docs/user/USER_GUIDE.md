@@ -82,6 +82,7 @@ Here are some example queries you can ask:
 Search for API endpoints using semantic and keyword search.
 
 **Parameters:**
+
 - `query` (required): Search query in natural language
 - `resource` (optional): Filter by resource name
 - `method` (optional): Filter by HTTP method (GET, POST, PUT, DELETE, PATCH)
@@ -89,6 +90,7 @@ Search for API endpoints using semantic and keyword search.
 - `limit` (optional): Maximum results to return (default: 5)
 
 **Example:**
+
 ```json
 {
   "query": "create new customer",
@@ -101,12 +103,14 @@ Search for API endpoints using semantic and keyword search.
 Get detailed information about a specific API endpoint.
 
 **Parameters:**
+
 - `path` (optional): Endpoint path (e.g., `/customers/{id}`)
 - `method` (optional): HTTP method
 - `resource` (optional): Resource name (alternative to path)
 - `includeRelated` (optional): Include related endpoints (default: false)
 
 **Example:**
+
 ```json
 {
   "path": "/customers/{id}",
@@ -120,11 +124,13 @@ Get detailed information about a specific API endpoint.
 Get parameter information for an API endpoint.
 
 **Parameters:**
+
 - `endpoint_path` (required): Endpoint path
 - `method` (required): HTTP method
 - `param_type` (optional): Filter by parameter type (query, path, body)
 
 **Example:**
+
 ```json
 {
   "endpoint_path": "/customers",
@@ -138,11 +144,13 @@ Get parameter information for an API endpoint.
 Get response information for an API endpoint.
 
 **Parameters:**
+
 - `endpoint_path` (required): Endpoint path
 - `method` (required): HTTP method
 - `status_code` (optional): Filter by status code
 
 **Example:**
+
 ```json
 {
   "endpoint_path": "/customers/{id}",
@@ -155,6 +163,7 @@ Get response information for an API endpoint.
 Get permission requirements for API endpoints.
 
 **Parameters:**
+
 - `endpoint_path` (optional): Endpoint path
 - `method` (optional): HTTP method
 - `resource` (optional): Resource name
@@ -163,6 +172,7 @@ Get permission requirements for API endpoints.
 - `include_summaries` (optional): Include permission summaries (default: false)
 
 **Example:**
+
 ```json
 {
   "resource": "customers",
@@ -175,10 +185,12 @@ Get permission requirements for API endpoints.
 List all available API resources with summary information.
 
 **Parameters:**
+
 - `include_endpoints` (optional): Include endpoint details (default: false)
 - `include_relationships` (optional): Include resource relationships (default: false)
 
 **Example:**
+
 ```json
 {
   "include_endpoints": true,
@@ -191,12 +203,14 @@ List all available API resources with summary information.
 Generate code examples for API endpoints.
 
 **Parameters:**
+
 - `endpoint_path` (required): Endpoint path
 - `method` (required): HTTP method
 - `language` (required): Programming language (javascript, python, curl)
 - `include_auth` (optional): Include authentication (default: true)
 
 **Example:**
+
 ```json
 {
   "endpoint_path": "/customers",
@@ -213,6 +227,7 @@ Generate code examples for API endpoints.
 The server uses semantic search to understand the intent behind your queries. This means you can search using natural language and get relevant results even if you don't know the exact terminology.
 
 **Example:**
+
 - Query: "How do I add a new ticket?"
 - Results: Will return endpoints related to creating tickets, even if the exact word "add" isn't used in the documentation.
 
@@ -221,12 +236,14 @@ The server uses semantic search to understand the intent behind your queries. Th
 The server also supports keyword-based search for more precise queries.
 
 **Example:**
+
 - Query: "POST /tickets"
 - Results: Will return the exact POST endpoint for tickets.
 
 ### Filtering
 
 You can filter search results by:
+
 - **Resource**: Specific API resource (e.g., customers, tickets, invoices)
 - **Method**: HTTP method (GET, POST, PUT, DELETE, PATCH)
 - **Permission**: Required permission level
@@ -234,6 +251,7 @@ You can filter search results by:
 ### Relevance Scoring
 
 Search results are ranked by relevance using multiple factors:
+
 - Semantic similarity to your query
 - Keyword matches
 - Recency of usage
@@ -246,6 +264,7 @@ Search results are ranked by relevance using multiple factors:
 **Question:** "How do I create a new customer?"
 
 **Tool Call:**
+
 ```json
 {
   "tool": "search_api_docs",
@@ -262,6 +281,7 @@ Search results are ranked by relevance using multiple factors:
 **Question:** "What parameters do I need to create a ticket?"
 
 **Tool Call:**
+
 ```json
 {
   "tool": "get_parameters",
@@ -279,6 +299,7 @@ Search results are ranked by relevance using multiple factors:
 **Question:** "Show me a Python example for getting customer details"
 
 **Tool Call:**
+
 ```json
 {
   "tool": "generate_code_example",
@@ -297,6 +318,7 @@ Search results are ranked by relevance using multiple factors:
 **Question:** "What permissions do I need for invoice operations?"
 
 **Tool Call:**
+
 ```json
 {
   "tool": "get_permissions",
@@ -314,6 +336,7 @@ Search results are ranked by relevance using multiple factors:
 **Question:** "What resources are available in the API?"
 
 **Tool Call:**
+
 ```json
 {
   "tool": "list_resources",
@@ -360,6 +383,7 @@ Use the `includeRelated` parameter to discover related endpoints that might be u
 ### No Results Found
 
 If your search returns no results:
+
 - Try rephrasing your query
 - Use different keywords
 - Check for typos
@@ -368,6 +392,7 @@ If your search returns no results:
 ### Unexpected Results
 
 If you get unexpected results:
+
 - Review the relevance scores
 - Check the match type (semantic vs keyword)
 - Use filters to narrow down results
@@ -375,6 +400,7 @@ If you get unexpected results:
 ### Missing Information
 
 If endpoint information seems incomplete:
+
 - Use the `get_endpoint` tool for full details
 - Check related endpoints
 - Review the original API documentation
@@ -382,6 +408,7 @@ If endpoint information seems incomplete:
 ### Permission Errors
 
 If you encounter permission errors:
+
 - Use the `get_permissions` tool to understand requirements
 - Check your API key permissions
 - Review the permission hierarchy

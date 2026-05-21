@@ -205,6 +205,7 @@ The coverage report is generated in `coverage/` directory.
 ### Coverage Thresholds
 
 The project aims for:
+
 - **Statements**: 80%+
 - **Branches**: 75%+
 - **Functions**: 80%+
@@ -344,11 +345,11 @@ interface CacheOptions {
 
 class CacheManager {
   private cache: Map<string, any>;
-  
+
   constructor(options: CacheOptions) {
     this.cache = new Map();
   }
-  
+
   public get(key: string): any {
     return this.cache.get(key);
   }
@@ -385,6 +386,7 @@ git commit -m "feat: add your feature description"
 ```
 
 Use conventional commit messages:
+
 - `feat:` New feature
 - `fix:` Bug fix
 - `docs:` Documentation changes
@@ -414,6 +416,7 @@ git push origin feature/your-feature-name
 ### 8. Merge
 
 After approval, merge the pull request:
+
 - Squash and merge for clean history
 - Delete the feature branch
 
@@ -458,6 +461,7 @@ npm run uat:report   # Generate UAT report
 **Problem**: TypeScript compilation fails
 
 **Solution**:
+
 ```bash
 rm -rf dist/ node_modules/
 npm install
@@ -469,6 +473,7 @@ npm run build
 **Problem**: Tests fail unexpectedly
 
 **Solution**:
+
 ```bash
 npm run test:watch
 # Check test output for specific failures
@@ -479,6 +484,7 @@ npm run test:watch
 **Problem**: Port 3000 is already in use
 
 **Solution**:
+
 ```bash
 # Find process using port 3000
 lsof -i :3000
@@ -496,6 +502,7 @@ npm run dev
 **Problem**: "Module not found" errors
 
 **Solution**:
+
 ```bash
 npm cache clean --force
 rm -rf node_modules package-lock.json

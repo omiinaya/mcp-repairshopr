@@ -22,6 +22,7 @@ curl -N http://192.168.1.181:6001/mcp
 ```
 
 You should see SSE events like:
+
 ```
 event: endpoint
 id: session_1234567890_abc123
@@ -38,12 +39,12 @@ Some MCP clients have native support for HTTP/SSE transport. This is the cleanes
 
 ### Supported Clients
 
-| Client | Version | Notes |
-|--------|---------|-------|
-| Claude Desktop | Latest | Use with `--mcp-server-url` flag |
-| Cursor | 0.45+ | Native HTTP support |
-| Zed | Latest | Built-in MCP HTTP support |
-| Windsurf | Latest | Via settings.json |
+| Client         | Version | Notes                            |
+| -------------- | ------- | -------------------------------- |
+| Claude Desktop | Latest  | Use with `--mcp-server-url` flag |
+| Cursor         | 0.45+   | Native HTTP support              |
+| Zed            | Latest  | Built-in MCP HTTP support        |
+| Windsurf       | Latest  | Via settings.json                |
 
 ### Configuration
 
@@ -52,18 +53,21 @@ Some MCP clients have native support for HTTP/SSE transport. This is the cleanes
 Edit Claude Desktop configuration (location varies by OS):
 
 **macOS:**
+
 ```bash
 # Edit the config file
 nano ~/Library/Application\ Support/Claude/claude_desktop_config.json
 ```
 
 **Windows:**
+
 ```powershell
 # Edit the config file
 notepad %APPDATA%\Claude\claude_desktop_config.json
 ```
 
 **Linux:**
+
 ```bash
 # Edit the config file
 nano ~/.config/Claude/claude_desktop_config.json
@@ -139,14 +143,17 @@ You should see a response listing all 7 RepairShopr tools.
 ### Troubleshooting Direct URL
 
 **Error: "URL scheme not supported"**
+
 - Your client doesn't support HTTP transport natively
 - Use Method 2 (mcp-proxy) instead
 
 **Error: "Connection refused"**
+
 - Check firewall: `curl http://192.168.1.181:6000/health`
 - Verify MCP server is running in Coolify
 
 **Error: "Session timeout"**
+
 - The session expired (10-minute idle timeout)
 - Reconnect to create a new session
 
@@ -250,16 +257,19 @@ Create/edit `~/.config/opencode/mcp.json`:
 #### For KiloCode:
 
 **macOS:**
+
 ```bash
 nano ~/Library/Application\ Support/KiloCode/mcp.json
 ```
 
 **Windows:**
+
 ```powershell
 notepad %APPDATA%\KiloCode\mcp.json
 ```
 
 **Linux:**
+
 ```bash
 nano ~/.config/KiloCode/mcp.json
 ```
@@ -355,12 +365,12 @@ RETRY_COUNT=0
 
 while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
     echo "[$(date)] Attempt $((RETRY_COUNT + 1))/$MAX_RETRIES"
-    
+
     if mcp-proxy "$MCP_URL"; then
         echo "[$(date)] Proxy exited normally"
         exit 0
     fi
-    
+
     RETRY_COUNT=$((RETRY_COUNT + 1))
     echo "[$(date)] Proxy failed, retrying in 5 seconds..."
     sleep 5
@@ -399,6 +409,7 @@ chmod +x ~/mcp-repairshopr-docker.sh
 ### Troubleshooting mcp-proxy
 
 **Error: "mcp-proxy: command not found"**
+
 ```bash
 # Check if installed
 which mcp-proxy
@@ -411,16 +422,19 @@ npx @anthropic-ai/mcp-proxy http://192.168.1.181:6001/mcp
 ```
 
 **Error: "Connection refused"**
+
 - Verify MCP server is running: `curl http://192.168.1.181:6000/health`
 - Check firewall: `sudo ufw status | grep 6001`
 - Verify the IP address is correct
 
 **Error: "Session timeout"**
+
 - This is normal if idle for 10 minutes
 - The proxy should auto-reconnect
 - Check logs: `tail -f /tmp/mcp-repairshopr.log`
 
 **Proxy keeps crashing**
+
 - Check network stability
 - Use the retry wrapper script
 - Increase retry count: `MAX_RETRIES=10`
@@ -429,18 +443,19 @@ npx @anthropic-ai/mcp-proxy http://192.168.1.181:6001/mcp
 
 ## Method Comparison
 
-| Feature | Direct URL | mcp-proxy |
-|---------|-----------|-----------|
-| **Setup Complexity** | Simple | Medium |
-| **Client Support** | Limited | Universal |
-| **Works with OpenCode** | ❌ No | ✅ Yes |
-| **Works with KiloCode** | ❌ No | ✅ Yes |
-| **Works with Claude Desktop** | ✅ Yes | ✅ Yes |
-| **Works with Cursor** | ✅ Yes | ✅ Yes |
-| **Auto-reconnect** | Depends on client | ✅ Yes |
-| **Logging** | Client-dependent | ✅ Full logs |
+| Feature                       | Direct URL        | mcp-proxy    |
+| ----------------------------- | ----------------- | ------------ |
+| **Setup Complexity**          | Simple            | Medium       |
+| **Client Support**            | Limited           | Universal    |
+| **Works with OpenCode**       | ❌ No             | ✅ Yes       |
+| **Works with KiloCode**       | ❌ No             | ✅ Yes       |
+| **Works with Claude Desktop** | ✅ Yes            | ✅ Yes       |
+| **Works with Cursor**         | ✅ Yes            | ✅ Yes       |
+| **Auto-reconnect**            | Depends on client | ✅ Yes       |
+| **Logging**                   | Client-dependent  | ✅ Full logs |
 
 **Recommendation:**
+
 - Use **Direct URL** if your client supports it (cleaner, less overhead)
 - Use **mcp-proxy** for universal compatibility (works with any client)
 
@@ -456,6 +471,7 @@ curl http://192.168.1.181:6000/health | jq .
 ```
 
 Expected output:
+
 ```json
 {
   "status": "healthy",
@@ -525,6 +541,7 @@ Expected: Should generate code example
 ### Network Security
 
 **Firewall Rules** (on Machine A):
+
 ```bash
 # Only allow from your local network
 sudo ufw allow from 192.168.1.0/24 to any port 6000:6001
@@ -534,6 +551,7 @@ sudo ufw allow from 192.168.1.100 to any port 6000:6001
 ```
 
 **Router Configuration**:
+
 - Don't forward ports 6000/6001 to the internet
 - Keep access limited to local network only
 
@@ -542,6 +560,7 @@ sudo ufw allow from 192.168.1.100 to any port 6000:6001
 If you want to add API key authentication:
 
 1. Add environment variable in Coolify:
+
    ```bash
    MCP_API_KEY=your-secret-key-here
    ```
@@ -588,15 +607,15 @@ docker ps | grep mcp
 
 ### Configuration File Locations
 
-| Client | Config Location |
-|--------|----------------|
-| OpenCode | `~/.config/opencode/mcp.json` |
-| KiloCode (macOS) | `~/Library/Application Support/KiloCode/mcp.json` |
-| KiloCode (Windows) | `%APPDATA%\KiloCode\mcp.json` |
-| Claude Desktop (macOS) | `~/Library/Application Support/Claude/claude_desktop_config.json` |
-| Claude Desktop (Windows) | `%APPDATA%\Claude\claude_desktop_config.json` |
-| Cursor | Settings → Features → MCP Servers |
-| Zed | `~/.config/zed/settings.json` |
+| Client                   | Config Location                                                   |
+| ------------------------ | ----------------------------------------------------------------- |
+| OpenCode                 | `~/.config/opencode/mcp.json`                                     |
+| KiloCode (macOS)         | `~/Library/Application Support/KiloCode/mcp.json`                 |
+| KiloCode (Windows)       | `%APPDATA%\KiloCode\mcp.json`                                     |
+| Claude Desktop (macOS)   | `~/Library/Application Support/Claude/claude_desktop_config.json` |
+| Claude Desktop (Windows) | `%APPDATA%\Claude\claude_desktop_config.json`                     |
+| Cursor                   | Settings → Features → MCP Servers                                 |
+| Zed                      | `~/.config/zed/settings.json`                                     |
 
 ---
 
@@ -621,6 +640,7 @@ If you encounter issues:
 5. ✅ Start using RepairShopr tools!
 
 **Try this prompt to get started:**
+
 ```
 Show me how to list all customers using the RepairShopr API
 ```

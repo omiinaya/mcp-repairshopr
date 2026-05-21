@@ -24,13 +24,13 @@ Search RepairShopr API documentation using semantic and keyword search.
 
 **Parameters**:
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `query` | string | Yes | Search query in natural language |
-| `resource` | string | No | Filter by resource name (e.g., customers, tickets) |
-| `method` | string | No | Filter by HTTP method (GET, POST, PUT, DELETE, PATCH) |
-| `permission` | string | No | Filter by permission |
-| `limit` | number | No | Maximum results to return (default: 5) |
+| Parameter    | Type   | Required | Description                                           |
+| ------------ | ------ | -------- | ----------------------------------------------------- |
+| `query`      | string | Yes      | Search query in natural language                      |
+| `resource`   | string | No       | Filter by resource name (e.g., customers, tickets)    |
+| `method`     | string | No       | Filter by HTTP method (GET, POST, PUT, DELETE, PATCH) |
+| `permission` | string | No       | Filter by permission                                  |
+| `limit`      | number | No       | Maximum results to return (default: 5)                |
 
 **Returns**:
 
@@ -83,14 +83,14 @@ Get detailed information about a specific API endpoint.
 
 **Parameters**:
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `path` | string | No* | Endpoint path (e.g., /customers/{id}) |
-| `method` | string | No* | HTTP method (GET, POST, PUT, DELETE, PATCH) |
-| `resource` | string | No* | Resource name (alternative to path) |
-| `includeRelated` | boolean | No | Include related endpoints (default: false) |
+| Parameter        | Type    | Required | Description                                 |
+| ---------------- | ------- | -------- | ------------------------------------------- |
+| `path`           | string  | No\*     | Endpoint path (e.g., /customers/{id})       |
+| `method`         | string  | No\*     | HTTP method (GET, POST, PUT, DELETE, PATCH) |
+| `resource`       | string  | No\*     | Resource name (alternative to path)         |
+| `includeRelated` | boolean | No       | Include related endpoints (default: false)  |
 
-*At least one of `path` or `resource` must be provided.
+\*At least one of `path` or `resource` must be provided.
 
 **Returns**:
 
@@ -148,11 +148,11 @@ Get parameter information for an API endpoint.
 
 **Parameters**:
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `endpoint_path` | string | Yes | Endpoint path (e.g., /customers/{id}) |
-| `method` | string | Yes | HTTP method (GET, POST, PUT, DELETE, PATCH) |
-| `param_type` | string | No | Filter by parameter type (query, path, body) |
+| Parameter       | Type   | Required | Description                                  |
+| --------------- | ------ | -------- | -------------------------------------------- |
+| `endpoint_path` | string | Yes      | Endpoint path (e.g., /customers/{id})        |
+| `method`        | string | Yes      | HTTP method (GET, POST, PUT, DELETE, PATCH)  |
+| `param_type`    | string | No       | Filter by parameter type (query, path, body) |
 
 **Returns**:
 
@@ -214,11 +214,11 @@ Get response information for an API endpoint.
 
 **Parameters**:
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `endpoint_path` | string | Yes | Endpoint path (e.g., /customers/{id}) |
-| `method` | string | Yes | HTTP method (GET, POST, PUT, DELETE, PATCH) |
-| `status_code` | string | No | Filter by status code (optional) |
+| Parameter       | Type   | Required | Description                                 |
+| --------------- | ------ | -------- | ------------------------------------------- |
+| `endpoint_path` | string | Yes      | Endpoint path (e.g., /customers/{id})       |
+| `method`        | string | Yes      | HTTP method (GET, POST, PUT, DELETE, PATCH) |
+| `status_code`   | string | No       | Filter by status code (optional)            |
 
 **Returns**:
 
@@ -282,16 +282,16 @@ Get permission requirements for API endpoints.
 
 **Parameters**:
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `endpoint_path` | string | No* | Endpoint path (e.g., /customers/{id}) |
-| `method` | string | No* | HTTP method (required when using endpoint_path) |
-| `resource` | string | No* | Resource name (alternative to endpoint_path) |
-| `permission` | string | No* | Filter by permission name |
-| `include_matrix` | boolean | No | Include permission matrix (default: false) |
-| `include_summaries` | boolean | No | Include permission summaries (default: false) |
+| Parameter           | Type    | Required | Description                                     |
+| ------------------- | ------- | -------- | ----------------------------------------------- |
+| `endpoint_path`     | string  | No\*     | Endpoint path (e.g., /customers/{id})           |
+| `method`            | string  | No\*     | HTTP method (required when using endpoint_path) |
+| `resource`          | string  | No\*     | Resource name (alternative to endpoint_path)    |
+| `permission`        | string  | No\*     | Filter by permission name                       |
+| `include_matrix`    | boolean | No       | Include permission matrix (default: false)      |
+| `include_summaries` | boolean | No       | Include permission summaries (default: false)   |
 
-*At least one of `endpoint_path`, `resource`, or `permission` must be provided.
+\*At least one of `endpoint_path`, `resource`, or `permission` must be provided.
 
 **Returns**:
 
@@ -344,10 +344,10 @@ List all available API resources with summary information.
 
 **Parameters**:
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `include_endpoints` | boolean | No | Include endpoint details (default: false) |
-| `include_relationships` | boolean | No | Include resource relationships (default: false) |
+| Parameter               | Type    | Required | Description                                     |
+| ----------------------- | ------- | -------- | ----------------------------------------------- |
+| `include_endpoints`     | boolean | No       | Include endpoint details (default: false)       |
+| `include_relationships` | boolean | No       | Include resource relationships (default: false) |
 
 **Returns**:
 
@@ -407,12 +407,12 @@ Generate code examples for API endpoints.
 
 **Parameters**:
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `endpoint_path` | string | Yes | Endpoint path (e.g., /customers/{id}) |
-| `method` | string | Yes | HTTP method (GET, POST, PUT, DELETE, PATCH) |
-| `language` | string | Yes | Programming language (javascript, python, curl) |
-| `include_auth` | boolean | No | Include authentication (default: true) |
+| Parameter       | Type    | Required | Description                                     |
+| --------------- | ------- | -------- | ----------------------------------------------- |
+| `endpoint_path` | string  | Yes      | Endpoint path (e.g., /customers/{id})           |
+| `method`        | string  | Yes      | HTTP method (GET, POST, PUT, DELETE, PATCH)     |
+| `language`      | string  | Yes      | Programming language (javascript, python, curl) |
+| `include_auth`  | boolean | No       | Include authentication (default: true)          |
 
 **Returns**:
 
@@ -493,7 +493,7 @@ private registerSearchTool(): void {
       required: ['query']
     }
   };
-  
+
   this.registerToolWithRegistry(searchToolDefinition, searchToolHandler);
 }
 ```
@@ -530,13 +530,13 @@ interface ErrorResponse {
 
 ### Common Error Codes
 
-| Code | Description |
-|------|-------------|
-| `INVALID_REQUEST` | Invalid request parameters |
-| `ENDPOINT_NOT_FOUND` | Endpoint not found |
-| `PERMISSION_DENIED` | Permission denied |
-| `INTERNAL_ERROR` | Internal server error |
-| `TIMEOUT` | Request timeout |
+| Code                 | Description                |
+| -------------------- | -------------------------- |
+| `INVALID_REQUEST`    | Invalid request parameters |
+| `ENDPOINT_NOT_FOUND` | Endpoint not found         |
+| `PERMISSION_DENIED`  | Permission denied          |
+| `INTERNAL_ERROR`     | Internal server error      |
+| `TIMEOUT`            | Request timeout            |
 
 ## Error Handling
 
@@ -572,11 +572,12 @@ All errors are logged with context:
 logger.error('Tool execution failed', {
   tool: toolName,
   error: error.message,
-  args: args
+  args: args,
 });
 ```
 
 For more information, see:
+
 - [Architecture Documentation](./ARCHITECTURE.md)
 - [User Guide](../user/USER_GUIDE.md)
 - [Usage Examples](../user/USAGE_EXAMPLES.md)

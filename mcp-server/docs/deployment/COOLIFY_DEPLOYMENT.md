@@ -43,15 +43,15 @@ Before deploying to Coolify, ensure you have:
 
 #### Resource Settings
 
-| Setting | Value |
-|---------|-------|
-| Name | `mcp-repairshopr` |
-| Type | Docker Compose |
-| Source | Git Repository |
-| Repository | Your fork of mcp-repairshopr |
-| Branch | `main` or your deployment branch |
-| Path | `mcp-server/deploy` |
-| Config File | `docker-compose.coolify.yml` |
+| Setting     | Value                            |
+| ----------- | -------------------------------- |
+| Name        | `mcp-repairshopr`                |
+| Type        | Docker Compose                   |
+| Source      | Git Repository                   |
+| Repository  | Your fork of mcp-repairshopr     |
+| Branch      | `main` or your deployment branch |
+| Path        | `mcp-server/deploy`              |
+| Config File | `docker-compose.coolify.yml`     |
 
 ### Port Configuration
 
@@ -65,62 +65,62 @@ Configure the following environment variables in Coolify's resource settings:
 
 ### Required Variables
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `SERVER_NAME` | `mcp-repairshopr` | Name of the server instance |
-| `SERVER_VERSION` | `0.1.0` | Version of the server |
-| `PORT` | `3000` | Port number (Coolify will override) |
-| `NODE_ENV` | `production` | Environment mode |
+| Variable         | Default           | Description                         |
+| ---------------- | ----------------- | ----------------------------------- |
+| `SERVER_NAME`    | `mcp-repairshopr` | Name of the server instance         |
+| `SERVER_VERSION` | `0.1.0`           | Version of the server               |
+| `PORT`           | `3000`            | Port number (Coolify will override) |
+| `NODE_ENV`       | `production`      | Environment mode                    |
 
 ### Optional Variables
 
 #### Logging
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `LOG_LEVEL` | `info` | Logging level (error, warn, info, debug, trace) |
-| `LOG_FORMAT` | `json` | Log format (json, plain) |
+| Variable     | Default | Description                                     |
+| ------------ | ------- | ----------------------------------------------- |
+| `LOG_LEVEL`  | `info`  | Logging level (error, warn, info, debug, trace) |
+| `LOG_FORMAT` | `json`  | Log format (json, plain)                        |
 
 #### Cache Configuration
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `CACHE_MAX_SIZE` | `10485760` | Maximum cache size in bytes (10MB) |
-| `CACHE_DEFAULT_TTL` | `300000` | Default cache TTL in milliseconds (5 minutes) |
-| `CACHE_MAX_ENTRIES` | `1000` | Maximum number of cache entries |
-| `CACHE_ENABLE_WARMING` | `true` | Enable cache warming on startup |
+| Variable               | Default    | Description                                   |
+| ---------------------- | ---------- | --------------------------------------------- |
+| `CACHE_MAX_SIZE`       | `10485760` | Maximum cache size in bytes (10MB)            |
+| `CACHE_DEFAULT_TTL`    | `300000`   | Default cache TTL in milliseconds (5 minutes) |
+| `CACHE_MAX_ENTRIES`    | `1000`     | Maximum number of cache entries               |
+| `CACHE_ENABLE_WARMING` | `true`     | Enable cache warming on startup               |
 
 #### Performance Configuration
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `MAX_CONCURRENT_REQUESTS` | `100` | Maximum concurrent requests |
-| `REQUEST_TIMEOUT` | `30000` | Request timeout in milliseconds (30 seconds) |
-| `ENABLE_METRICS` | `true` | Enable metrics collection |
-| `ENABLE_HOT_RELOAD` | `false` | Enable configuration hot-reload |
+| Variable                  | Default | Description                                  |
+| ------------------------- | ------- | -------------------------------------------- |
+| `MAX_CONCURRENT_REQUESTS` | `100`   | Maximum concurrent requests                  |
+| `REQUEST_TIMEOUT`         | `30000` | Request timeout in milliseconds (30 seconds) |
+| `ENABLE_METRICS`          | `true`  | Enable metrics collection                    |
+| `ENABLE_HOT_RELOAD`       | `false` | Enable configuration hot-reload              |
 
 #### Health Check Configuration
 
-| Variable | Default | Description |
-|----------|---------|-------------|
+| Variable                | Default | Description                           |
+| ----------------------- | ------- | ------------------------------------- |
 | `HEALTH_CHECK_INTERVAL` | `60000` | Health check interval in milliseconds |
-| `HEALTH_CHECK_TIMEOUT` | `5000` | Health check timeout in milliseconds |
+| `HEALTH_CHECK_TIMEOUT`  | `5000`  | Health check timeout in milliseconds  |
 
 #### Monitoring Configuration
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `MONITORING_ENABLED` | `true` | Enable monitoring service |
+| Variable              | Default | Description                         |
+| --------------------- | ------- | ----------------------------------- |
+| `MONITORING_ENABLED`  | `true`  | Enable monitoring service           |
 | `MONITORING_INTERVAL` | `60000` | Monitoring interval in milliseconds |
 
 #### Resource Limits (Coolify-specific)
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `CPU_LIMIT` | `1.0` | Maximum CPU usage (cores) |
-| `MEMORY_LIMIT` | `512M` | Maximum memory usage |
-| `CPU_RESERVATION` | `0.5` | Reserved CPU (cores) |
-| `MEMORY_RESERVATION` | `256M` | Reserved memory |
+| Variable             | Default | Description               |
+| -------------------- | ------- | ------------------------- |
+| `CPU_LIMIT`          | `1.0`   | Maximum CPU usage (cores) |
+| `MEMORY_LIMIT`       | `512M`  | Maximum memory usage      |
+| `CPU_RESERVATION`    | `0.5`   | Reserved CPU (cores)      |
+| `MEMORY_RESERVATION` | `256M`  | Reserved memory           |
 
 ### Example Environment Configuration
 
@@ -160,13 +160,13 @@ Coolify uses health checks to determine if your application is running correctly
 
 ### Health Check Settings
 
-| Setting | Value |
-|---------|-------|
-| Type | HTTP |
-| Endpoint | `/health` |
-| Interval | 30 seconds |
-| Timeout | 10 seconds |
-| Retries | 3 |
+| Setting      | Value      |
+| ------------ | ---------- |
+| Type         | HTTP       |
+| Endpoint     | `/health`  |
+| Interval     | 30 seconds |
+| Timeout      | 10 seconds |
+| Retries      | 3          |
 | Start Period | 10 seconds |
 
 ### Available Health Endpoints
@@ -216,11 +216,11 @@ The server provides three health check endpoints:
 
 ### Minimum Requirements
 
-| Resource | Minimum | Recommended |
-|----------|---------|-------------|
-| CPU | 0.5 cores | 1.0 core |
-| Memory | 256 MB | 512 MB |
-| Storage | 100 MB | 200 MB |
+| Resource | Minimum   | Recommended |
+| -------- | --------- | ----------- |
+| CPU      | 0.5 cores | 1.0 core    |
+| Memory   | 256 MB    | 512 MB      |
+| Storage  | 100 MB    | 200 MB      |
 
 ### Recommended Configuration
 
@@ -297,10 +297,12 @@ For production deployments:
 #### Container Fails to Start
 
 **Symptoms:**
+
 - Container exits immediately
 - Health check fails repeatedly
 
 **Solutions:**
+
 1. Check logs for startup errors
 2. Verify environment variables are set correctly
 3. Ensure port is not already in use
@@ -308,10 +310,12 @@ For production deployments:
 #### Health Check Fails
 
 **Symptoms:**
+
 - Health check returns 503
 - Container restarts repeatedly
 
 **Solutions:**
+
 1. Check if the server started successfully
 2. Verify the `/health` endpoint is accessible
 3. Check memory and CPU usage
@@ -319,10 +323,12 @@ For production deployments:
 #### High Memory Usage
 
 **Symptoms:**
+
 - Container is killed by OOM
 - Slow response times
 
 **Solutions:**
+
 1. Reduce `CACHE_MAX_SIZE` in environment variables
 2. Lower `MAX_CONCURRENT_REQUESTS`
 3. Increase memory limit in resource configuration
@@ -330,10 +336,12 @@ For production deployments:
 #### High CPU Usage
 
 **Symptoms:**
+
 - CPU usage consistently at 100%
 - Slow response times
 
 **Solutions:**
+
 1. Reduce `MAX_CONCURRENT_REQUESTS`
 2. Increase CPU limit
 3. Check for infinite loops or performance issues in logs
@@ -372,6 +380,7 @@ To view application logs in Coolify:
 ### Container Security
 
 The Dockerfile includes:
+
 - Non-root user (`mcpserver`)
 - Minimal image size (Alpine Linux)
 - No unnecessary packages installed

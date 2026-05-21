@@ -8,43 +8,33 @@
 
 #### Get Customers
 
-
 Returns a paginated list of customers
-
 
 Required permission: Customers - List/Search
 Single-Customer Users can only access own customer (self).
 
-
-
 **Endpoint:** `GET /customers`
-
 
 **Required Permission:** Required permission: Customers - List/Search
 
-
 **Query Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| sort | string | No | A customer field to order by. Examples "firstname ASC", "city DESC". |
-| query | string | No | Search query |
-| firstname | string | No | Any customers with a first name like the parameter |
-| lastname | string | No | Any customers with a last name like the parameter |
-| business_name | string | No | Any customers with a business name like the parameter |
-| id | array | No | Any customers with ID included in the list |
-| not_id | array | No | Any customers with ID not included in the list |
-| email | string | No |  |
-| include_disabled | string | No | Whether or not the returned list of customers includes disabled customers |
-| page | integer | No | Returns provided page of results, each 'page' contains 25 results |
-
+| Parameter        | Type    | Required | Description                                                               |
+| ---------------- | ------- | -------- | ------------------------------------------------------------------------- |
+| sort             | string  | No       | A customer field to order by. Examples "firstname ASC", "city DESC".      |
+| query            | string  | No       | Search query                                                              |
+| firstname        | string  | No       | Any customers with a first name like the parameter                        |
+| lastname         | string  | No       | Any customers with a last name like the parameter                         |
+| business_name    | string  | No       | Any customers with a business name like the parameter                     |
+| id               | array   | No       | Any customers with ID included in the list                                |
+| not_id           | array   | No       | Any customers with ID not included in the list                            |
+| email            | string  | No       |                                                                           |
+| include_disabled | string  | No       | Whether or not the returned list of customers includes disabled customers |
+| page             | integer | No       | Returns provided page of results, each 'page' contains 25 results         |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -97,31 +87,21 @@ successful
 }
 ```
 
-
 #### Create Customer
-
 
 Creates a Customer
 
-
 Required permission: Customers - Create
-
-
 
 **Endpoint:** `POST /customers`
 
-
 **Required Permission:** Required permission: Customers - Create
-
 
 **Request Body:**
 
-
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -166,12 +146,9 @@ successful
 }
 ```
 
-
 **Response: 422**
 
-
 Invalid request
-
 
 ```json
 {
@@ -189,37 +166,26 @@ Invalid request
 }
 ```
 
-
 #### Get Customer by ID
 
-
 Retrieves a Customer by ID
-
 
 Required permission: Customers - View Detail
 Single-Customer Users can only access own customer (self).
 
-
-
 **Endpoint:** `GET /customers/{id}`
-
 
 **Required Permission:** Required permission: Customers - View Detail
 
-
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -264,46 +230,32 @@ successful
 }
 ```
 
-
 **Response: 404**
-
 
 Invalid request
 
-
 #### Update Customer
 
-
 Updates an existing Customer by ID
-
 
 Required permission: Customers - Edit
 Single-Customer Users can only access own customer (self).
 
-
-
 **Endpoint:** `PUT /customers/{id}`
-
 
 **Required Permission:** Required permission: Customers - Edit
 
-
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Request Body:**
 
-
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -348,12 +300,9 @@ successful
 }
 ```
 
-
 **Response: 422**
 
-
 Invalid request
-
 
 ```json
 {
@@ -365,36 +314,25 @@ Invalid request
 }
 ```
 
-
 #### Delete Customer
-
 
 Deletes a Customer by ID
 
-
 Required permission: Customers - Delete
-
-
 
 **Endpoint:** `DELETE /customers/{id}`
 
-
 **Required Permission:** Required permission: Customers - Delete
-
 
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -402,35 +340,24 @@ successful
 }
 ```
 
-
 **Response: 404**
-
 
 Invalid request
 
-
 #### Get Latests
 
-
 Returns latest Customer
-
 
 Required permission: Customers - Edit
 Single-Customer Users can only access own customer (self).
 
-
-
 **Endpoint:** `GET /customers/latest`
-
 
 **Required Permission:** Required permission: Customers - Edit
 
-
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -475,29 +402,21 @@ successful
 }
 ```
 
-
 #### Get Autocompletes
-
 
 Returns a paginated list of customers for autocomplete query
 
-
 **Endpoint:** `GET /customers/autocomplete`
-
 
 **Query Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| query | string | No | Search query |
-
+| Parameter | Type   | Required | Description  |
+| --------- | ------ | -------- | ------------ |
+| query     | string | No       | Search query |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -543,4 +462,3 @@ successful
   ]
 }
 ```
-

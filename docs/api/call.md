@@ -8,27 +8,20 @@
 
 #### Get Callerids
 
-
 Get Caller ID
-
 
 **Endpoint:** `GET /callerid`
 
-
 **Query Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| did | string | Yes | Phone number |
-| outbound | boolean | No |  |
-
+| Parameter | Type    | Required | Description  |
+| --------- | ------- | -------- | ------------ |
+| did       | string  | Yes      | Phone number |
+| outbound  | boolean | No       |              |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -38,4 +31,3 @@ successful
   }
 }
 ```
-

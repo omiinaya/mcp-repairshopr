@@ -18,22 +18,24 @@ This guide provides step-by-step instructions for deploying the MCP RepairShopr 
 
 ### Deployment Options
 
-| Method | Complexity | Scalability | Recommended For |
-|--------|------------|-------------|-----------------|
-| Docker | Low | High | Production environments |
-| Manual | Medium | Medium | Development/custom setups |
+| Method | Complexity | Scalability | Recommended For           |
+| ------ | ---------- | ----------- | ------------------------- |
+| Docker | Low        | High        | Production environments   |
+| Manual | Medium     | Medium      | Development/custom setups |
 
 ## Deployment Prerequisites
 
 ### System Requirements
 
 **Minimum**:
+
 - CPU: 1 core
 - RAM: 512 MB
 - Disk: 100 MB
 - OS: Linux, macOS, or Windows (with WSL2)
 
 **Recommended**:
+
 - CPU: 2 cores
 - RAM: 2 GB
 - Disk: 1 GB
@@ -42,10 +44,12 @@ This guide provides step-by-step instructions for deploying the MCP RepairShopr 
 ### Software Requirements
 
 **For Docker Deployment**:
+
 - Docker 20.10+
 - Docker Compose 2.0+
 
 **For Manual Deployment**:
+
 - Node.js 18+
 - npm 9+
 - Git
@@ -62,6 +66,7 @@ This guide provides step-by-step instructions for deploying the MCP RepairShopr 
 ### Method 1: Docker Deployment (Recommended)
 
 Docker deployment provides:
+
 - Isolated environment
 - Easy scaling
 - Consistent behavior
@@ -70,6 +75,7 @@ Docker deployment provides:
 ### Method 2: Manual Deployment
 
 Manual deployment provides:
+
 - More control
 - Custom configurations
 - Direct system integration
@@ -84,6 +90,7 @@ Choose the method that best fits your infrastructure and requirements.
 1. **Install Docker** (if not already installed):
 
    **Ubuntu/Debian**:
+
    ```bash
    curl -fsSL https://get.docker.com -o get-docker.sh
    sudo sh get-docker.sh
@@ -255,6 +262,7 @@ server {
 1. **Install Node.js** (if not already installed):
 
    **Using nvm** (recommended):
+
    ```bash
    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
    source ~/.bashrc
@@ -263,6 +271,7 @@ server {
    ```
 
    **Using apt** (Ubuntu/Debian):
+
    ```bash
    curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
    sudo apt-get install -y nodejs
@@ -611,7 +620,7 @@ Set data directories:
            expr: mcp_server_health_status == 0
            for: 1m
            annotations:
-             summary: "MCP RepairShopr server is down"
+             summary: 'MCP RepairShopr server is down'
    ```
 
 ### Log Management

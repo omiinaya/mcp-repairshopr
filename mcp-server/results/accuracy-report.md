@@ -10,6 +10,7 @@
 ## Parsing Accuracy
 
 **Overall:** 95.0% (pass)
+
 - Metadata: 93.1%
 - Parameters: 92.2%
 - Responses: 94.0%
@@ -22,6 +23,7 @@
 ## Search Relevance
 
 **Overall:** 93.0% (pass)
+
 - Semantic: 83.7%
 - Keyword: 88.4%
 - Hybrid: 85.6%
@@ -35,6 +37,7 @@
 ## Parameter Extraction
 
 **Overall:** 95.0% (pass)
+
 - Names: 94.0%
 - Types: 93.1%
 - Required: 94.5%
@@ -47,6 +50,7 @@
 ## Response Formatting
 
 **Overall:** 95.0% (pass)
+
 - Markdown: 94.0%
 - JSON: 95.0%
 - HTML: 93.1%
@@ -62,6 +66,7 @@
 ## Manual Query Comparison
 
 **Overall:** 85.0% (pass)
+
 - Query Understanding: 76.5%
 - Query Expansion: 72.3%
 - Edge Cases: 78.2%
@@ -80,6 +85,7 @@
 ## Accuracy Thresholds
 
 ### Parsing
+
 - Overall: 95%
 - Metadata: 95%
 - Parameters: 95%
@@ -87,6 +93,7 @@
 - Edge Cases: 90%
 
 ### Search
+
 - Overall: 85%
 - Semantic: 80%
 - Keyword: 85%
@@ -94,6 +101,7 @@
 - Ranking: 80%
 
 ### Parameter Extraction
+
 - Overall: 95%
 - Names: 98%
 - Types: 98%
@@ -101,6 +109,7 @@
 - Descriptions: 95%
 
 ### Response Formatting
+
 - Overall: 95%
 - Markdown: 98%
 - JSON: 100%
@@ -111,6 +120,7 @@
 - Structure: 98%
 
 ### Manual Query Comparison
+
 - Overall: 80%
 - Query Understanding: 75%
 - Query Expansion: 70%

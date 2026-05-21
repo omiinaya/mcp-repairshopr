@@ -8,41 +8,31 @@
 
 #### Get Products
 
-
 Returns a paginated list of Products
-
 
 Required permission: Products - List/Search
 
-
-
 **Endpoint:** `GET /products`
-
 
 **Required Permission:** Required permission: Products - List/Search
 
-
 **Query Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| sort | string | No | A Product field to order by. Example "name ASC". |
-| sku | string | No | Returns Products with the SKU. |
-| name | string | No | Returns Products with the name. |
-| upc_code | string | No | Returns Products with the UPC Code. |
-| category_id | integer | No | Returns Products from the Category. |
-| id | array | No | Any product with ID included in the list. |
-| id_not | array | No | Any product with ID not included in the list. |
-| query | string | No | Search query. |
-| page | integer | No | Returns provided page of results, each 'page' contains 25 results. |
-
+| Parameter   | Type    | Required | Description                                                        |
+| ----------- | ------- | -------- | ------------------------------------------------------------------ |
+| sort        | string  | No       | A Product field to order by. Example "name ASC".                   |
+| sku         | string  | No       | Returns Products with the SKU.                                     |
+| name        | string  | No       | Returns Products with the name.                                    |
+| upc_code    | string  | No       | Returns Products with the UPC Code.                                |
+| category_id | integer | No       | Returns Products from the Category.                                |
+| id          | array   | No       | Any product with ID included in the list.                          |
+| id_not      | array   | No       | Any product with ID not included in the list.                      |
+| query       | string  | No       | Search query.                                                      |
+| page        | integer | No       | Returns provided page of results, each 'page' contains 25 results. |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -82,62 +72,50 @@ successful
 }
 ```
 
-
 #### Create Product
-
 
 Creates a Product
 
-
 Required permission: Products - Create
-
-
 
 **Endpoint:** `POST /products`
 
-
 **Required Permission:** Required permission: Products - Create
-
 
 **Request Body:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| price_cost | number | No |  |
-| price_retail | number | No |  |
-| condition | string | No |  |
-| description | string | Yes |  |
-| maintain_stock | boolean | No |  |
-| name | string | Yes |  |
-| quantity | integer | No |  |
-| warranty | string | No |  |
-| sort_order | integer | No |  |
-| reorder_at | integer | No |  |
-| disabled | boolean | No |  |
-| taxable | boolean | No |  |
-| product_category | string | No |  |
-| upc_code | string | No |  |
-| discount_percent | number | No |  |
-| warranty_template_id | integer | No |  |
-| qb_item_id | integer | No |  |
-| desired_stock_level | integer | No |  |
-| price_wholesale | number | No |  |
-| notes | string | No |  |
-| tax_rate_id | integer | No |  |
-| vendor_ids | array | No |  |
-| physical_location | string | No |  |
-| serialized | boolean | No |  |
-| category_ids | array | No |  |
-| product_skus_attributes | array | No |  |
-
-
+| Parameter               | Type    | Required | Description |
+| ----------------------- | ------- | -------- | ----------- |
+| price_cost              | number  | No       |             |
+| price_retail            | number  | No       |             |
+| condition               | string  | No       |             |
+| description             | string  | Yes      |             |
+| maintain_stock          | boolean | No       |             |
+| name                    | string  | Yes      |             |
+| quantity                | integer | No       |             |
+| warranty                | string  | No       |             |
+| sort_order              | integer | No       |             |
+| reorder_at              | integer | No       |             |
+| disabled                | boolean | No       |             |
+| taxable                 | boolean | No       |             |
+| product_category        | string  | No       |             |
+| upc_code                | string  | No       |             |
+| discount_percent        | number  | No       |             |
+| warranty_template_id    | integer | No       |             |
+| qb_item_id              | integer | No       |             |
+| desired_stock_level     | integer | No       |             |
+| price_wholesale         | number  | No       |             |
+| notes                   | string  | No       |             |
+| tax_rate_id             | integer | No       |             |
+| vendor_ids              | array   | No       |             |
+| physical_location       | string  | No       |             |
+| serialized              | boolean | No       |             |
+| category_ids            | array   | No       |             |
+| product_skus_attributes | array   | No       |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -175,20 +153,14 @@ successful
 }
 ```
 
-
 **Response: 422**
 
-
 Invalid request
-
 
 ```json
 {
   "success": false,
-  "message": [
-    "Name can't be blank",
-    "Description can't be blank"
-  ],
+  "message": ["Name can't be blank", "Description can't be blank"],
   "params": {
     "name": "",
     "maintain_stock": false
@@ -196,36 +168,25 @@ Invalid request
 }
 ```
 
-
 #### Get Product by ID
-
 
 Retrieves a Product by ID
 
-
 Required permission: Products - List/Search
-
-
 
 **Endpoint:** `GET /products/{id}`
 
-
 **Required Permission:** Required permission: Products - List/Search
-
 
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -262,77 +223,61 @@ successful
   }
 }
 ```
-
 
 **Response: 404**
 
-
 Invalid request
-
 
 #### Update Product
 
-
 Updates an existing Product by ID
-
 
 Required permission: Products - Edit
 
-
-
 **Endpoint:** `PUT /products/{id}`
-
 
 **Required Permission:** Required permission: Products - Edit
 
-
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Request Body:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| price_cost | number | No |  |
-| price_retail | number | No |  |
-| condition | string | No |  |
-| description | string | Yes |  |
-| maintain_stock | boolean | No |  |
-| name | string | Yes |  |
-| quantity | integer | No |  |
-| warranty | string | No |  |
-| sort_order | integer | No |  |
-| reorder_at | integer | No |  |
-| disabled | boolean | No |  |
-| taxable | boolean | No |  |
-| product_category | string | No |  |
-| upc_code | string | No |  |
-| discount_percent | number | No |  |
-| warranty_template_id | integer | No |  |
-| qb_item_id | integer | No |  |
-| desired_stock_level | integer | No |  |
-| price_wholesale | number | No |  |
-| notes | string | No |  |
-| tax_rate_id | integer | No |  |
-| vendor_ids | array | No |  |
-| physical_location | string | No |  |
-| serialized | boolean | No |  |
-| category_ids | array | No |  |
-| product_skus_attributes | array | No |  |
-
-
+| Parameter               | Type    | Required | Description |
+| ----------------------- | ------- | -------- | ----------- |
+| price_cost              | number  | No       |             |
+| price_retail            | number  | No       |             |
+| condition               | string  | No       |             |
+| description             | string  | Yes      |             |
+| maintain_stock          | boolean | No       |             |
+| name                    | string  | Yes      |             |
+| quantity                | integer | No       |             |
+| warranty                | string  | No       |             |
+| sort_order              | integer | No       |             |
+| reorder_at              | integer | No       |             |
+| disabled                | boolean | No       |             |
+| taxable                 | boolean | No       |             |
+| product_category        | string  | No       |             |
+| upc_code                | string  | No       |             |
+| discount_percent        | number  | No       |             |
+| warranty_template_id    | integer | No       |             |
+| qb_item_id              | integer | No       |             |
+| desired_stock_level     | integer | No       |             |
+| price_wholesale         | number  | No       |             |
+| notes                   | string  | No       |             |
+| tax_rate_id             | integer | No       |             |
+| vendor_ids              | array   | No       |             |
+| physical_location       | string  | No       |             |
+| serialized              | boolean | No       |             |
+| category_ids            | array   | No       |             |
+| product_skus_attributes | array   | No       |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -370,52 +315,36 @@ successful
 }
 ```
 
-
 **Response: 422**
 
-
 Invalid request
-
 
 ```json
 {
   "success": false,
-  "message": [
-    "Name can't be blank"
-  ]
+  "message": ["Name can't be blank"]
 }
 ```
 
-
 #### Get Barcodes
-
 
 Returns a Product by Barcode
 
-
 Required permission: Products - List/Search
-
-
 
 **Endpoint:** `GET /products/barcode`
 
-
 **Required Permission:** Required permission: Products - List/Search
-
 
 **Query Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| barcode | string | No | Product Barcode string |
-
+| Parameter | Type   | Required | Description            |
+| --------- | ------ | -------- | ---------------------- |
+| barcode   | string | No       | Product Barcode string |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -453,28 +382,19 @@ successful
 }
 ```
 
-
 #### Get Categories
-
 
 Returns a paginated list of Product Categories
 
-
 Required permission: Products - List/Search
-
-
 
 **Endpoint:** `GET /products/categories`
 
-
 **Required Permission:** Required permission: Products - List/Search
-
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -492,39 +412,27 @@ successful
 }
 ```
 
-
 #### Create Product
-
 
 Creates a Product Image
 
-
 Required permission: Products - Edit
-
-
 
 **Endpoint:** `POST /products/{id}/add_images`
 
-
 **Required Permission:** Required permission: Products - Edit
-
 
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Request Body:**
 
-
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -532,12 +440,9 @@ successful
 }
 ```
 
-
 **Response: 422**
 
-
 Invalid request
-
 
 ```json
 {
@@ -545,30 +450,22 @@ Invalid request
 }
 ```
 
-
 #### Delete Product
-
 
 Deletes a Product Image
 
-
 **Endpoint:** `DELETE /products/{id}/delete_image`
-
 
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-| photo_id | integer | No |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
+| photo_id  | integer | No       |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -576,12 +473,9 @@ successful
 }
 ```
 
-
 **Response: 404**
 
-
 Invalid request
-
 
 ```json
 {
@@ -589,46 +483,32 @@ Invalid request
 }
 ```
 
-
 #### Update Product
-
 
 Updates a Location Quantity
 
-
 Required permission: Products - Edit Quantities
-
-
 
 **Endpoint:** `PUT /products/{id}/location_quantities`
 
-
 **Required Permission:** Required permission: Products - Edit Quantities
-
 
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Request Body:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| location_quantity_id | integer | No |  |
-| quantity | integer | No |  |
-
-
+| Parameter            | Type    | Required | Description |
+| -------------------- | ------- | -------- | ----------- |
+| location_quantity_id | integer | No       |             |
+| quantity             | integer | No       |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -645,4 +525,3 @@ successful
   "desired_stock_level": 0
 }
 ```
-

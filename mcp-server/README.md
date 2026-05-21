@@ -21,6 +21,7 @@ MCP server for RepairShopr API documentation search and live API integration.
 [![Deploy on Coolify](https://coolify.io/badge.svg)](https://coolify.io/deploy?url=https://github.com/YOUR_USERNAME/mcp-repairshopr)
 
 Or manually:
+
 1. Fork this repository
 2. In Coolify, create a new service from your fork
 3. Use `docker-compose.coolify.yml` configuration
@@ -30,19 +31,19 @@ Or manually:
 
 ### Required
 
-| Variable | Description | Default |
-|----------|-------------|---------|
+| Variable   | Description      | Default      |
+| ---------- | ---------------- | ------------ |
 | `NODE_ENV` | Environment mode | `production` |
-| `PORT` | Server port | `3000` |
+| `PORT`     | Server port      | `3000`       |
 
 ### Optional
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `LOG_LEVEL` | Logging level (error/warn/info/debug) | `info` |
-| `LOG_FORMAT` | Log format (json/plain) | `json` |
-| `REPAIRSHOPR_API_KEY` | Your RepairShopr API key | - |
-| `REPAIRSHOPR_SUBDOMAIN` | Your RepairShopr subdomain | - |
+| Variable                | Description                           | Default |
+| ----------------------- | ------------------------------------- | ------- |
+| `LOG_LEVEL`             | Logging level (error/warn/info/debug) | `info`  |
+| `LOG_FORMAT`            | Log format (json/plain)               | `json`  |
+| `REPAIRSHOPR_API_KEY`   | Your RepairShopr API key              | -       |
+| `REPAIRSHOPR_SUBDOMAIN` | Your RepairShopr subdomain            | -       |
 
 See [deploy/.env.example](deploy/.env.example) for all available options.
 

@@ -8,35 +8,25 @@
 
 #### Get Rmm Alerts
 
-
 Returns a paginated list of RMM Alerts
-
 
 Required permission: RMM Alerts - List
 Single-Customer Users can only access own RMM Alerts.
 
-
-
 **Endpoint:** `GET /rmm_alerts`
-
 
 **Required Permission:** Required permission: RMM Alerts - List
 
-
 **Query Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| status | string | No | Possible values resolved, all, active. |
-| page | integer | No | Returns provided page of results, each 'page' contains 25 results |
-
+| Parameter | Type    | Required | Description                                                       |
+| --------- | ------- | -------- | ----------------------------------------------------------------- |
+| status    | string  | No       | Possible values resolved, all, active.                            |
+| page      | integer | No       | Returns provided page of results, each 'page' contains 25 results |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -65,43 +55,31 @@ successful
 }
 ```
 
-
 #### Create Rmm Alert
 
-
 Creates an RMM Alert
-
 
 Required permission: RMM Alerts - Create
 Single-Customer Users can only access own RMM Alerts.
 
-
-
 **Endpoint:** `POST /rmm_alerts`
-
 
 **Required Permission:** Required permission: RMM Alerts - Create
 
-
 **Request Body:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| customer_id | integer | No |  |
-| asset_id | integer | No |  |
-| description | string | No |  |
-| resolved | boolean | No |  |
-| status | string | No |  |
-| properties | object | No |  |
-
-
+| Parameter   | Type    | Required | Description |
+| ----------- | ------- | -------- | ----------- |
+| customer_id | integer | No       |             |
+| asset_id    | integer | No       |             |
+| description | string  | No       |             |
+| resolved    | boolean | No       |             |
+| status      | string  | No       |             |
+| properties  | object  | No       |             |
 
 **Response: 201**
 
-
 successful
-
 
 ```json
 {
@@ -125,38 +103,27 @@ successful
 }
 ```
 
-
 #### Create Rmm Alert
 
-
 Mutes an RMM Alert by ID
-
 
 Required permission: RMM Alerts - Clear/Manage
 Single-Customer Users can only access own RMM Alerts.
 
-
-
 **Endpoint:** `POST /rmm_alerts/{id}/mute`
-
 
 **Required Permission:** Required permission: RMM Alerts - Clear/Manage
 
-
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-| mute_for | string | Yes | Length of time to mute alert for. Accepted values: '1-hour', '1-day', '2-days', '1-week', '2-weeks', '1-month', 'forever' |
-
+| Parameter | Type    | Required | Description                                                                                                               |
+| --------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------- |
+| id        | integer | Yes      |                                                                                                                           |
+| mute_for  | string  | Yes      | Length of time to mute alert for. Accepted values: '1-hour', '1-day', '2-days', '1-week', '2-weeks', '1-month', 'forever' |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -164,49 +131,34 @@ successful
 }
 ```
 
-
 **Response: 404**
-
 
 Invalid request
 
-
 **Response: 422**
-
 
 Invalid Request
 
-
 #### Get Rmm Alert by ID
 
-
 Retrieves an RMM Alert by ID
-
 
 Required permission: RMM Alerts - List
 Single-Customer Users can only access own RMM Alerts.
 
-
-
 **Endpoint:** `GET /rmm_alerts/{id}`
-
 
 **Required Permission:** Required permission: RMM Alerts - List
 
-
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -229,43 +181,30 @@ successful
 }
 ```
 
-
 **Response: 404**
-
 
 Invalid request
 
-
 #### Delete Rmm Alert
 
-
 Deletes/Clears an RMM Alert by ID
-
 
 Required permission: RMM Alerts - Delete
 Single-Customer Users can only access own RMM Alerts.
 
-
-
 **Endpoint:** `DELETE /rmm_alerts/{id}`
-
 
 **Required Permission:** Required permission: RMM Alerts - Delete
 
-
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -273,9 +212,6 @@ successful
 }
 ```
 
-
 **Response: 404**
 
-
 Invalid request
-

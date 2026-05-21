@@ -8,36 +8,26 @@
 
 #### Get Line Items
 
-
 Returns a paginated list of Line Items
-
 
 Required permission: Global Admin
 
-
-
 **Endpoint:** `GET /line_items`
-
 
 **Required Permission:** Required permission: Global Admin
 
-
 **Query Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| invoice_id | integer | No | Returns Line Items that belong to an Invoice ID |
-| estimate_id | integer | No | Returns Line Items that belong to an Estimate ID |
-| invoice_id_not_null | boolean | No | Returns Line Items that belong to any Invoice |
-| estimate_id_not_null | boolean | No | Returns Line Items that belong to any Estimate |
-
+| Parameter            | Type    | Required | Description                                      |
+| -------------------- | ------- | -------- | ------------------------------------------------ |
+| invoice_id           | integer | No       | Returns Line Items that belong to an Invoice ID  |
+| estimate_id          | integer | No       | Returns Line Items that belong to an Estimate ID |
+| invoice_id_not_null  | boolean | No       | Returns Line Items that belong to any Invoice    |
+| estimate_id_not_null | boolean | No       | Returns Line Items that belong to any Estimate   |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -68,4 +58,3 @@ successful
   }
 }
 ```
-

@@ -1,4 +1,5 @@
 # MCP Server for RepairShopr API Documentation
+
 ## Comprehensive Implementation Plan
 
 ---
@@ -37,6 +38,7 @@ This document outlines a comprehensive plan to build a Model Context Protocol (M
 ### Current State
 
 The project contains:
+
 - **29 API documentation files** in `docs/api/` covering endpoints for Customer, Ticket, Invoice, Product, and other RepairShopr resources
 - **Documentation generation script** (`scripts/generate_api_docs.py`) that fetches swagger.json from RepairShopr and generates markdown files
 - **Well-structured documentation** with consistent formatting including endpoints, parameters, request bodies, and response examples
@@ -44,7 +46,8 @@ The project contains:
 ### Documentation Structure
 
 Each API documentation file follows this pattern:
-```markdown
+
+````markdown
 # RepairShopr API Documentation - {Resource Name}
 
 ## API Endpoints
@@ -71,7 +74,9 @@ Each API documentation file follows this pattern:
 ```json
 {example}
 ```
-```
+````
+
+````
 
 ### Target Audience
 
@@ -91,7 +96,7 @@ graph TB
     subgraph "MCP Client"
         A[AI Assistant/Chatbot]
     end
-    
+
     subgraph "MCP Server"
         B[MCP Protocol Handler]
         C[Tool Registry]
@@ -100,13 +105,13 @@ graph TB
         F[Query Engine]
         G[Response Formatter]
     end
-    
+
     subgraph "Data Layer"
         H[Markdown Files<br/>docs/api/*.md]
         I[Vector Embeddings]
         J[Metadata Index]
     end
-    
+
     A -->|MCP Protocol| B
     B --> C
     C --> D
@@ -117,22 +122,22 @@ graph TB
     F --> G
     G --> B
     B --> A
-    
+
     D --> H
     E --> I
-```
+````
 
 ### Technology Stack Recommendations
 
-| Component | Recommended Technology | Alternatives |
-|-----------|----------------------|--------------|
-| **Runtime** | Node.js (TypeScript) | Python, Go |
-| **MCP SDK** | `@modelcontextprotocol/sdk` | Custom implementation |
-| **Vector Database** | ChromaDB (local) | Pinecone, Weaviate, Qdrant |
-| **Embeddings** | OpenAI text-embedding-3-small | Sentence Transformers, Cohere |
-| **Markdown Parser** | `marked` or `markdown-it` | `remark`, `unified` |
-| **Search Engine** | BM25 + Vector Hybrid | Elasticsearch, Meilisearch |
-| **Testing** | Jest + Supertest | Mocha, Pytest |
+| Component           | Recommended Technology        | Alternatives                  |
+| ------------------- | ----------------------------- | ----------------------------- |
+| **Runtime**         | Node.js (TypeScript)          | Python, Go                    |
+| **MCP SDK**         | `@modelcontextprotocol/sdk`   | Custom implementation         |
+| **Vector Database** | ChromaDB (local)              | Pinecone, Weaviate, Qdrant    |
+| **Embeddings**      | OpenAI text-embedding-3-small | Sentence Transformers, Cohere |
+| **Markdown Parser** | `marked` or `markdown-it`     | `remark`, `unified`           |
+| **Search Engine**   | BM25 + Vector Hybrid          | Elasticsearch, Meilisearch    |
+| **Testing**         | Jest + Supertest              | Mocha, Pytest                 |
 
 ---
 
@@ -145,6 +150,7 @@ Establish the project foundation, set up the development environment, and define
 ### Tasks
 
 #### 1.1 Project Initialization ✅ COMPLETED
+
 - [x] Create MCP server directory structure
 - [x] Initialize package.json with dependencies
 - [x] Set up TypeScript configuration
@@ -152,6 +158,7 @@ Establish the project foundation, set up the development environment, and define
 - [x] Create .gitignore for MCP server
 
 **Deliverables:**
+
 - Project scaffold with proper directory structure
 - Configured development environment
 - README with setup instructions
@@ -159,6 +166,7 @@ Establish the project foundation, set up the development environment, and define
 **Dependencies:** None
 
 #### 1.2 MCP SDK Integration ✅ COMPLETED
+
 - [x] Install `@modelcontextprotocol/sdk`
 - [x] Create basic MCP server skeleton
 - [x] Implement server lifecycle (start, stop, health check)
@@ -166,6 +174,7 @@ Establish the project foundation, set up the development environment, and define
 - [x] Create configuration management system
 
 **Deliverables:**
+
 - Functional MCP server that can start and accept connections
 - Logging system with appropriate log levels
 - Configuration file for server settings
@@ -173,6 +182,7 @@ Establish the project foundation, set up the development environment, and define
 **Dependencies:** Task 1.1
 
 #### 1.3 Documentation Analysis ✅ COMPLETED
+
 - [x] Analyze all 29 documentation files for patterns
 - [x] Document common structures and edge cases
 - [x] Create schema for parsed documentation
@@ -180,6 +190,7 @@ Establish the project foundation, set up the development environment, and define
 - [x] Map relationships between endpoints
 
 **Deliverables:**
+
 - Documentation analysis report
 - Schema definition for parsed API docs
 - Metadata extraction specification
@@ -201,6 +212,7 @@ Build a robust system to parse markdown documentation files, extract structured 
 ### Tasks
 
 #### 2.1 Markdown Parser Implementation ✅ COMPLETED
+
 - [x] Create markdown parser for API documentation format
 - [x] Extract endpoint information (method, path, description)
 - [x] Parse parameter tables (name, type, required, description)
@@ -209,6 +221,7 @@ Build a robust system to parse markdown documentation files, extract structured 
 - [x] Extract permission requirements
 
 **Deliverables:**
+
 - Markdown parser module
 - Unit tests for parser with sample files
 - Parsed data structure documentation
@@ -216,6 +229,7 @@ Build a robust system to parse markdown documentation files, extract structured 
 **Dependencies:** Phase 1 complete
 
 #### 2.2 Metadata Extraction ✅ COMPLETED
+
 - [x] Extract resource names from file headers
 - [x] Identify HTTP methods and endpoint paths
 - [x] Extract permission requirements
@@ -224,6 +238,7 @@ Build a robust system to parse markdown documentation files, extract structured 
 - [x] Create metadata index for quick lookups
 
 **Deliverables:**
+
 - Metadata extraction module
 - Metadata index structure
 - Tests validating extraction accuracy
@@ -231,6 +246,7 @@ Build a robust system to parse markdown documentation files, extract structured 
 **Dependencies:** Task 2.1
 
 #### 2.3 Vector Embedding Generation ✅ COMPLETED
+
 - [x] Choose embedding model (OpenAI or local)
 - [x] Implement text chunking strategy for documentation
 - [x] Generate embeddings for:
@@ -242,6 +258,7 @@ Build a robust system to parse markdown documentation files, extract structured 
 - [x] Implement embedding update mechanism
 
 **Deliverables:**
+
 - Embedding generation module
 - Vector database integration
 - Chunking strategy documentation
@@ -250,6 +267,7 @@ Build a robust system to parse markdown documentation files, extract structured 
 **Dependencies:** Task 2.2
 
 #### 2.4 Index Building and Maintenance ✅ COMPLETED
+
 - [x] Create initial index from all 29 documentation files
 - [x] Implement index rebuild functionality
 - [x] Add support for incremental updates
@@ -258,6 +276,7 @@ Build a robust system to parse markdown documentation files, extract structured 
 - [x] Add monitoring for index health
 
 **Deliverables:**
+
 - Index builder module
 - Automated indexing script
 - Index validation tools
@@ -280,6 +299,7 @@ Implement the core MCP server functionality including protocol handling, tool re
 ### Tasks
 
 #### 3.1 MCP Protocol Handler ✅ COMPLETED
+
 - [x] Implement MCP protocol message handling
 - [x] Handle tool registration and discovery
 - [x] Implement request/response lifecycle
@@ -288,6 +308,7 @@ Implement the core MCP server functionality including protocol handling, tool re
 - [x] Implement capability negotiation
 
 **Deliverables:**
+
 - MCP protocol handler module
 - Protocol compliance tests
 - Error handling documentation
@@ -295,6 +316,7 @@ Implement the core MCP server functionality including protocol handling, tool re
 **Dependencies:** Phase 1 complete
 
 #### 3.2 Tool Registry ✅ COMPLETED
+
 - [x] Create tool registration system
 - [x] Define tool schemas and metadata
 - [x] Implement tool discovery endpoint
@@ -303,6 +325,7 @@ Implement the core MCP server functionality including protocol handling, tool re
 - [x] Implement tool deprecation handling
 
 **Deliverables:**
+
 - Tool registry module
 - Tool schema definitions
 - Tool discovery API
@@ -311,6 +334,7 @@ Implement the core MCP server functionality including protocol handling, tool re
 **Dependencies:** Task 3.1
 
 #### 3.3 Server Configuration ✅ COMPLETED
+
 - [x] Create configuration file structure
 - [x] Implement environment variable support
 - [x] Add configuration validation
@@ -319,6 +343,7 @@ Implement the core MCP server functionality including protocol handling, tool re
 - [x] Add configuration migration support
 
 **Deliverables:**
+
 - Configuration module
 - Configuration schema
 - Example configuration files
@@ -327,6 +352,7 @@ Implement the core MCP server functionality including protocol handling, tool re
 **Dependencies:** Task 3.1
 
 #### 3.4 Logging and Monitoring ✅ COMPLETED
+
 - [x] Implement structured logging
 - [x] Add request/response logging
 - [x] Create performance metrics collection
@@ -335,6 +361,7 @@ Implement the core MCP server functionality including protocol handling, tool re
 - [x] Create monitoring dashboard (optional)
 
 **Deliverables:**
+
 - Logging infrastructure
 - Metrics collection system
 - Health check implementation
@@ -357,6 +384,7 @@ Develop MCP tools that expose the RepairShopr API documentation through intellig
 ### Tasks
 
 #### 4.1 Search Tool ✅ COMPLETED
+
 - [x] Implement semantic search tool
 - [x] Add keyword search capability
 - [x] Implement hybrid search (semantic + keyword)
@@ -365,6 +393,7 @@ Develop MCP tools that expose the RepairShopr API documentation through intellig
 - [x] Add search result pagination
 
 **Tool Schema:**
+
 ```typescript
 {
   name: "search_api_docs",
@@ -382,6 +411,7 @@ Develop MCP tools that expose the RepairShopr API documentation through intellig
 ```
 
 **Deliverables:**
+
 - Search tool implementation
 - Search algorithm documentation
 - Performance benchmarks
@@ -390,6 +420,7 @@ Develop MCP tools that expose the RepairShopr API documentation through intellig
 **Dependencies:** Phase 2 complete, Phase 3 complete
 
 #### 4.2 Endpoint Lookup Tool ✅ COMPLETED
+
 - [x] Implement endpoint lookup by path
 - [x] Add lookup by resource name
 - [x] Implement batch endpoint lookup
@@ -398,6 +429,7 @@ Develop MCP tools that expose the RepairShopr API documentation through intellig
 - [x] Add permission information
 
 **Tool Schema:**
+
 ```typescript
 {
   name: "get_endpoint",
@@ -414,6 +446,7 @@ Develop MCP tools that expose the RepairShopr API documentation through intellig
 ```
 
 **Deliverables:**
+
 - Endpoint lookup tool
 - Related endpoint finder
 - Lookup performance tests
@@ -422,6 +455,7 @@ Develop MCP tools that expose the RepairShopr API documentation through intellig
 **Dependencies:** Task 4.1
 
 #### 4.3 Parameter Reference Tool ✅ COMPLETED
+
 - [x] Implement parameter lookup by endpoint
 - [x] Add parameter type and constraint information
 - [x] Include required/optional status
@@ -430,6 +464,7 @@ Develop MCP tools that expose the RepairShopr API documentation through intellig
 - [x] Add common parameter patterns
 
 **Tool Schema:**
+
 ```typescript
 {
   name: "get_parameters",
@@ -446,6 +481,7 @@ Develop MCP tools that expose the RepairShopr API documentation through intellig
 ```
 
 **Deliverables:**
+
 - Parameter reference tool
 - Parameter validation helper
 - Parameter documentation
@@ -454,6 +490,7 @@ Develop MCP tools that expose the RepairShopr API documentation through intellig
 **Dependencies:** Task 4.2
 
 #### 4.4 Response Reference Tool ✅ COMPLETED
+
 - [x] Implement response lookup by endpoint
 - [x] Add status code information
 - [x] Include response schema and examples
@@ -462,6 +499,7 @@ Develop MCP tools that expose the RepairShopr API documentation through intellig
 - [x] Add common response patterns
 
 **Tool Schema:**
+
 ```typescript
 {
   name: "get_responses",
@@ -478,6 +516,7 @@ Develop MCP tools that expose the RepairShopr API documentation through intellig
 ```
 
 **Deliverables:**
+
 - Response reference tool
 - Response schema documentation
 - Error response catalog
@@ -486,6 +525,7 @@ Develop MCP tools that expose the RepairShopr API documentation through intellig
 **Dependencies:** Task 4.2
 
 #### 4.5 Permission Reference Tool ✅ COMPLETED
+
 - [x] Implement permission lookup by endpoint
 - [x] Add permission descriptions
 - [x] Include permission hierarchy information
@@ -494,6 +534,7 @@ Develop MCP tools that expose the RepairShopr API documentation through intellig
 - [x] Create permission matrix
 
 **Tool Schema:**
+
 ```typescript
 {
   name: "get_permissions",
@@ -510,6 +551,7 @@ Develop MCP tools that expose the RepairShopr API documentation through intellig
 ```
 
 **Deliverables:**
+
 - Permission reference tool
 - Permission matrix documentation
 - Permission filtering implementation
@@ -518,6 +560,7 @@ Develop MCP tools that expose the RepairShopr API documentation through intellig
 **Dependencies:** Task 4.2
 
 #### 4.6 Resource Overview Tool ✅ COMPLETED
+
 - [x] Implement resource listing
 - [x] Add resource summary information
 - [x] Include available endpoints per resource
@@ -526,6 +569,7 @@ Develop MCP tools that expose the RepairShopr API documentation through intellig
 - [x] Create resource navigation helpers
 
 **Tool Schema:**
+
 ```typescript
 {
   name: "list_resources",
@@ -540,6 +584,7 @@ Develop MCP tools that expose the RepairShopr API documentation through intellig
 ```
 
 **Deliverables:**
+
 - Resource overview tool
 - Resource catalog
 - Resource relationship map
@@ -548,6 +593,7 @@ Develop MCP tools that expose the RepairShopr API documentation through intellig
 **Dependencies:** Task 4.2
 
 #### 4.7 Code Example Generator Tool ✅ COMPLETED
+
 - [x] Implement code example generation
 - [x] Support multiple languages (JavaScript, Python, cURL)
 - [x] Include authentication examples
@@ -556,6 +602,7 @@ Develop MCP tools that expose the RepairShopr API documentation through intellig
 - [x] Create example templates
 
 **Tool Schema:**
+
 ```typescript
 {
   name: "generate_code_example",
@@ -573,6 +620,7 @@ Develop MCP tools that expose the RepairShopr API documentation through intellig
 ```
 
 **Deliverables:**
+
 - Code example generator
 - Example templates for multiple languages
 - Code example documentation
@@ -595,6 +643,7 @@ Implement intelligent context retrieval and relevance scoring to provide the mos
 ### Tasks
 
 #### 5.1 Query Understanding ✅ COMPLETED
+
 - [x] Implement query intent analysis
 - [x] Add entity extraction (resources, methods, parameters)
 - [x] Implement query expansion
@@ -603,6 +652,7 @@ Implement intelligent context retrieval and relevance scoring to provide the mos
 - [x] Create query classification system
 
 **Deliverables:**
+
 - Query understanding module
 - Intent classification models
 - Entity extraction system
@@ -611,6 +661,7 @@ Implement intelligent context retrieval and relevance scoring to provide the mos
 **Dependencies:** Phase 4 complete
 
 #### 5.2 Relevance Scoring Algorithm ✅ COMPLETED
+
 - [x] Implement semantic similarity scoring
 - [x] Add keyword matching scores
 - [x] Implement recency weighting (if applicable)
@@ -619,6 +670,7 @@ Implement intelligent context retrieval and relevance scoring to provide the mos
 - [x] Create scoring configuration
 
 **Deliverables:**
+
 - Relevance scoring module
 - Scoring algorithm documentation
 - Scoring configuration system
@@ -627,6 +679,7 @@ Implement intelligent context retrieval and relevance scoring to provide the mos
 **Dependencies:** Task 5.1
 
 #### 5.3 Context Window Management ✅ COMPLETED
+
 - [x] Implement context window optimization
 - [x] Add result summarization
 - [x] Implement progressive disclosure
@@ -635,6 +688,7 @@ Implement intelligent context retrieval and relevance scoring to provide the mos
 - [x] Create context management policies
 
 **Deliverables:**
+
 - Context management module
 - Summarization implementation
 - Context optimization documentation
@@ -643,6 +697,7 @@ Implement intelligent context retrieval and relevance scoring to provide the mos
 **Dependencies:** Task 5.2
 
 #### 5.4 Result Formatting ✅ COMPLETED
+
 - [x] Implement structured response formatting
 - [x] Add markdown formatting support
 - [x] Implement code block formatting
@@ -651,6 +706,7 @@ Implement intelligent context retrieval and relevance scoring to provide the mos
 - [x] Create formatting templates
 
 **Deliverables:**
+
 - Response formatter module
 - Formatting templates
 - Formatting documentation
@@ -659,6 +715,7 @@ Implement intelligent context retrieval and relevance scoring to provide the mos
 **Dependencies:** Task 5.3
 
 #### 5.5 Caching Strategy ✅ COMPLETED
+
 - [x] Implement query result caching
 - [x] Add cache invalidation logic
 - [x] Implement cache warming
@@ -667,6 +724,7 @@ Implement intelligent context retrieval and relevance scoring to provide the mos
 - [x] Create cache monitoring
 
 **Deliverables:**
+
 - Caching module
 - Cache configuration
 - Cache monitoring tools
@@ -689,6 +747,7 @@ Comprehensive testing to ensure reliability, accuracy, and performance of the MC
 ### Tasks
 
 #### 6.1 Unit Testing ✅ COMPLETED
+
 - [x] Write unit tests for all modules
 - [x] Achieve >80% code coverage
 - [x] Test edge cases and error conditions
@@ -697,6 +756,7 @@ Comprehensive testing to ensure reliability, accuracy, and performance of the MC
 - [x] Add test data generators
 
 **Deliverables:**
+
 - Comprehensive unit test suite
 - Test coverage reports
 - Test documentation
@@ -705,6 +765,7 @@ Comprehensive testing to ensure reliability, accuracy, and performance of the MC
 **Dependencies:** Phase 5 complete
 
 #### 6.2 Integration Testing ✅ COMPLETED
+
 - [x] Test MCP protocol integration
 - [x] Test tool execution flows
 - [x] Test document parsing pipeline
@@ -713,6 +774,7 @@ Comprehensive testing to ensure reliability, accuracy, and performance of the MC
 - [x] Test concurrent requests
 
 **Deliverables:**
+
 - Integration test suite
 - End-to-end test scenarios
 - Integration test documentation
@@ -721,6 +783,7 @@ Comprehensive testing to ensure reliability, accuracy, and performance of the MC
 **Dependencies:** Task 6.1
 
 #### 6.3 Performance Testing ✅ COMPLETED
+
 - [x] Benchmark search performance
 - [x] Test under load
 - [x] Measure response times
@@ -729,6 +792,7 @@ Comprehensive testing to ensure reliability, accuracy, and performance of the MC
 - [x] Optimize critical paths
 
 **Deliverables:**
+
 - Performance benchmarks
 - Load test results
 - Optimization recommendations
@@ -737,6 +801,7 @@ Comprehensive testing to ensure reliability, accuracy, and performance of the MC
 **Dependencies:** Task 6.2
 
 #### 6.4 Accuracy Validation ✅ COMPLETED
+
 - [x] Validate parsing accuracy
 - [x] Test search result relevance
 - [x] Validate parameter extraction
@@ -745,6 +810,7 @@ Comprehensive testing to ensure reliability, accuracy, and performance of the MC
 - [x] Create accuracy metrics
 
 **Deliverables:**
+
 - Accuracy validation report
 - Relevance scoring validation
 - Accuracy metrics dashboard
@@ -753,6 +819,7 @@ Comprehensive testing to ensure reliability, accuracy, and performance of the MC
 **Dependencies:** Task 6.3
 
 #### 6.5 User Acceptance Testing ✅ COMPLETED
+
 - [x] Create test scenarios for AI assistants
 - [x] Test with sample queries
 - [x] Validate response quality
@@ -761,6 +828,7 @@ Comprehensive testing to ensure reliability, accuracy, and performance of the MC
 - [x] Iterate on improvements
 
 **Deliverables:**
+
 - UAT test plan
 - Test scenario documentation
 - Feedback collection system
@@ -777,12 +845,14 @@ Comprehensive testing to ensure reliability, accuracy, and performance of the MC
 Phase 6 (Testing and Validation) has been successfully completed with comprehensive testing across all dimensions:
 
 **Unit Testing:**
+
 - Created comprehensive unit test suite covering all modules
 - Achieved >80% code coverage across the codebase
 - Implemented test fixtures and data generators for consistent testing
 - Validated edge cases and error conditions with proper mocking
 
 **Integration Testing:**
+
 - Tested MCP protocol integration and compliance
 - Validated tool execution flows end-to-end
 - Tested document parsing pipeline with real documentation files
@@ -790,6 +860,7 @@ Phase 6 (Testing and Validation) has been successfully completed with comprehens
 - Tested error handling and concurrent request handling
 
 **Performance Testing:**
+
 - Benchmarked search performance with various query types
 - Conducted load testing to ensure scalability
 - Measured response times across all operations
@@ -797,6 +868,7 @@ Phase 6 (Testing and Validation) has been successfully completed with comprehens
 - Optimized critical paths for better performance
 
 **Accuracy Validation:**
+
 - Validated parsing accuracy against expected results
 - Tested search result relevance with sample queries
 - Validated parameter extraction from documentation
@@ -804,6 +876,7 @@ Phase 6 (Testing and Validation) has been successfully completed with comprehens
 - Created accuracy metrics and comparison reports
 
 **User Acceptance Testing:**
+
 - Created comprehensive test scenarios for AI assistants
 - Tested with real-world sample queries
 - Validated response quality and helpfulness
@@ -823,6 +896,7 @@ Prepare the MCP server for deployment and create comprehensive documentation for
 ### Tasks
 
 #### 7.1 Deployment Preparation ✅ COMPLETED
+
 - [x] Create deployment scripts
 - [x] Set up environment configuration
 - [x] Implement health checks
@@ -831,6 +905,7 @@ Prepare the MCP server for deployment and create comprehensive documentation for
 - [x] Prepare deployment documentation
 
 **Deliverables:**
+
 - Deployment scripts
 - Environment configuration templates
 - Deployment guide
@@ -839,6 +914,7 @@ Prepare the MCP server for deployment and create comprehensive documentation for
 **Dependencies:** Phase 6 complete
 
 #### 7.2 User Documentation ✅ COMPLETED
+
 - [x] Write getting started guide
 - [x] Create tool reference documentation
 - [x] Add usage examples
@@ -847,6 +923,7 @@ Prepare the MCP server for deployment and create comprehensive documentation for
 - [x] Create video tutorials (optional)
 
 **Deliverables:**
+
 - User guide
 - Tool reference documentation
 - Example queries and responses
@@ -855,6 +932,7 @@ Prepare the MCP server for deployment and create comprehensive documentation for
 **Dependencies:** Task 7.1
 
 #### 7.3 Developer Documentation ✅ COMPLETED
+
 - [x] Write architecture documentation
 - [x] Create API documentation
 - [x] Add contribution guidelines
@@ -863,6 +941,7 @@ Prepare the MCP server for deployment and create comprehensive documentation for
 - [x] Add code comments
 
 **Deliverables:**
+
 - Architecture documentation
 - Developer guide
 - Contribution guidelines
@@ -871,6 +950,7 @@ Prepare the MCP server for deployment and create comprehensive documentation for
 **Dependencies:** Task 7.1
 
 #### 7.4 Maintenance Documentation ✅ COMPLETED
+
 - [x] Create maintenance procedures
 - [x] Write update documentation
 - [x] Create backup procedures
@@ -879,6 +959,7 @@ Prepare the MCP server for deployment and create comprehensive documentation for
 - [x] Add version release notes
 
 **Deliverables:**
+
 - Maintenance guide
 - Update procedures
 - Backup documentation
@@ -887,6 +968,7 @@ Prepare the MCP server for deployment and create comprehensive documentation for
 **Dependencies:** Task 7.2
 
 #### 7.5 Packaging and Distribution ✅ COMPLETED
+
 - [x] Create npm package
 - [x] Set up CI/CD pipeline
 - [x] Create Docker image (optional)
@@ -895,6 +977,7 @@ Prepare the MCP server for deployment and create comprehensive documentation for
 - [x] Set up distribution channels
 
 **Deliverables:**
+
 - Published npm package
 - CI/CD pipeline
 - Docker image (optional)
@@ -911,6 +994,7 @@ Prepare the MCP server for deployment and create comprehensive documentation for
 Phase 7 (Deployment and Documentation) has been successfully completed with comprehensive deployment preparation and documentation:
 
 **Deployment Preparation:**
+
 - Created deployment scripts for various environments (development, staging, production)
 - Set up environment configuration templates with proper validation
 - Implemented health check endpoints and monitoring
@@ -919,6 +1003,7 @@ Phase 7 (Deployment and Documentation) has been successfully completed with comp
 - Prepared comprehensive deployment documentation
 
 **User Documentation:**
+
 - Wrote detailed getting started guide for new users
 - Created comprehensive tool reference documentation
 - Added practical usage examples and sample queries
@@ -927,6 +1012,7 @@ Phase 7 (Deployment and Documentation) has been successfully completed with comp
 - Prepared materials for optional video tutorials
 
 **Developer Documentation:**
+
 - Wrote detailed architecture documentation explaining system design
 - Created comprehensive API documentation for all modules
 - Added contribution guidelines for external contributors
@@ -935,6 +1021,7 @@ Phase 7 (Deployment and Documentation) has been successfully completed with comp
 - Added inline code comments for better code understanding
 
 **Maintenance Documentation:**
+
 - Created maintenance procedures for ongoing operations
 - Wrote update documentation for version upgrades
 - Created backup procedures for data protection
@@ -943,6 +1030,7 @@ Phase 7 (Deployment and Documentation) has been successfully completed with comp
 - Added version release notes documenting changes
 
 **Packaging and Distribution:**
+
 - Created npm package with proper configuration
 - Set up CI/CD pipeline for automated builds and deployments
 - Created Docker image for containerized deployments
@@ -988,30 +1076,30 @@ All deliverables have been completed and the MCP server is now fully deployed an
 
 ### Technical Risks
 
-| Risk | Impact | Probability | Mitigation Strategy |
-|------|--------|-------------|---------------------|
-| **Embedding model changes** | High | Medium | Use versioned embeddings, implement fallback strategies |
-| **Vector database performance** | Medium | Low | Implement caching, optimize queries, consider alternatives |
-| **Markdown format changes** | High | Low | Create robust parser, add format validation, implement graceful degradation |
-| **MCP protocol updates** | Medium | Medium | Use official SDK, implement version compatibility layer |
-| **Large context windows** | Medium | Medium | Implement summarization, progressive disclosure, result limiting |
+| Risk                            | Impact | Probability | Mitigation Strategy                                                         |
+| ------------------------------- | ------ | ----------- | --------------------------------------------------------------------------- |
+| **Embedding model changes**     | High   | Medium      | Use versioned embeddings, implement fallback strategies                     |
+| **Vector database performance** | Medium | Low         | Implement caching, optimize queries, consider alternatives                  |
+| **Markdown format changes**     | High   | Low         | Create robust parser, add format validation, implement graceful degradation |
+| **MCP protocol updates**        | Medium | Medium      | Use official SDK, implement version compatibility layer                     |
+| **Large context windows**       | Medium | Medium      | Implement summarization, progressive disclosure, result limiting            |
 
 ### Operational Risks
 
-| Risk | Impact | Probability | Mitigation Strategy |
-|------|--------|-------------|---------------------|
-| **Documentation updates** | Medium | High | Implement incremental indexing, add update notifications |
-| **Server downtime** | High | Low | Implement health checks, auto-restart, monitoring |
-| **Resource exhaustion** | Medium | Low | Implement rate limiting, resource monitoring, graceful degradation |
-| **Data corruption** | High | Low | Implement backups, validation checks, rollback procedures |
+| Risk                      | Impact | Probability | Mitigation Strategy                                                |
+| ------------------------- | ------ | ----------- | ------------------------------------------------------------------ |
+| **Documentation updates** | Medium | High        | Implement incremental indexing, add update notifications           |
+| **Server downtime**       | High   | Low         | Implement health checks, auto-restart, monitoring                  |
+| **Resource exhaustion**   | Medium | Low         | Implement rate limiting, resource monitoring, graceful degradation |
+| **Data corruption**       | High   | Low         | Implement backups, validation checks, rollback procedures          |
 
 ### Project Risks
 
-| Risk | Impact | Probability | Mitigation Strategy |
-|------|--------|-------------|---------------------|
-| **Timeline delays** | Medium | Medium | Implement agile approach, prioritize features, regular reviews |
-| **Scope creep** | Medium | Medium | Clear requirements, phased delivery, change management |
-| **Resource constraints** | High | Low | Prioritize features, leverage existing tools, seek assistance |
+| Risk                     | Impact | Probability | Mitigation Strategy                                            |
+| ------------------------ | ------ | ----------- | -------------------------------------------------------------- |
+| **Timeline delays**      | Medium | Medium      | Implement agile approach, prioritize features, regular reviews |
+| **Scope creep**          | Medium | Medium      | Clear requirements, phased delivery, change management         |
+| **Resource constraints** | High   | Low         | Prioritize features, leverage existing tools, seek assistance  |
 
 ---
 
@@ -1067,15 +1155,15 @@ All deliverables have been completed and the MCP server is now fully deployed an
 
 ## Implementation Timeline Summary
 
-| Phase | Duration | Dependencies | Key Deliverables |
-|-------|----------|--------------|------------------|
-| **Phase 1: Foundation and Setup** | 2-3 days | None | Project scaffold, MCP server skeleton, documentation analysis |
-| **Phase 2: Document Parsing and Indexing** | 4-5 days | Phase 1 | Parser, embeddings, vector index, metadata extraction |
-| **Phase 3: MCP Server Implementation** | 3-4 days | Phase 1 | Protocol handler, tool registry, configuration, logging |
-| **Phase 4: Tool Development** | 5-6 days | Phase 2, 3 | 7 functional tools with comprehensive testing |
-| **Phase 5: Context Retrieval and Scoring** | 3-4 days | Phase 4 | Query understanding, relevance scoring, caching |
-| **Phase 6: Testing and Validation** | 3-4 days | Phase 5 | Test suites, benchmarks, validation reports |
-| **Phase 7: Deployment and Documentation** | 3-4 days | Phase 6 | Deployment scripts, user/developer docs, packaging |
+| Phase                                      | Duration | Dependencies | Key Deliverables                                              |
+| ------------------------------------------ | -------- | ------------ | ------------------------------------------------------------- |
+| **Phase 1: Foundation and Setup**          | 2-3 days | None         | Project scaffold, MCP server skeleton, documentation analysis |
+| **Phase 2: Document Parsing and Indexing** | 4-5 days | Phase 1      | Parser, embeddings, vector index, metadata extraction         |
+| **Phase 3: MCP Server Implementation**     | 3-4 days | Phase 1      | Protocol handler, tool registry, configuration, logging       |
+| **Phase 4: Tool Development**              | 5-6 days | Phase 2, 3   | 7 functional tools with comprehensive testing                 |
+| **Phase 5: Context Retrieval and Scoring** | 3-4 days | Phase 4      | Query understanding, relevance scoring, caching               |
+| **Phase 6: Testing and Validation**        | 3-4 days | Phase 5      | Test suites, benchmarks, validation reports                   |
+| **Phase 7: Deployment and Documentation**  | 3-4 days | Phase 6      | Deployment scripts, user/developer docs, packaging            |
 
 **Total Estimated Duration:** 23-30 days (approximately 4-6 weeks)
 
@@ -1201,6 +1289,7 @@ mcp-repairshopr/
 Search RepairShopr API documentation using semantic and keyword search.
 
 **Parameters:**
+
 - `query` (string, required): Search query
 - `resource` (string, optional): Filter by resource name
 - `method` (string, optional): Filter by HTTP method
@@ -1214,6 +1303,7 @@ Array of matching endpoints with relevance scores and context.
 Get detailed information about a specific API endpoint.
 
 **Parameters:**
+
 - `path` (string, optional): Endpoint path
 - `method` (string, optional): HTTP method
 - `resource` (string, optional): Resource name
@@ -1226,6 +1316,7 @@ Complete endpoint details including parameters, request body, and responses.
 Get parameter information for an API endpoint.
 
 **Parameters:**
+
 - `endpoint_path` (string, required): Endpoint path
 - `method` (string, required): HTTP method
 - `param_type` (string, optional): Filter by parameter type
@@ -1238,6 +1329,7 @@ Parameter details including types, constraints, and descriptions.
 Get response information for an API endpoint.
 
 **Parameters:**
+
 - `endpoint_path` (string, required): Endpoint path
 - `method` (string, required): HTTP method
 - `status_code` (string, optional): Filter by status code
@@ -1250,6 +1342,7 @@ Response schemas, examples, and error information.
 Get permission requirements for API endpoints.
 
 **Parameters:**
+
 - `endpoint_path` (string, optional): Endpoint path
 - `resource` (string, optional): Resource name
 - `permission` (string, optional): Filter by permission name
@@ -1262,6 +1355,7 @@ Permission requirements and related endpoints.
 List all available API resources with summary information.
 
 **Parameters:**
+
 - `include_endpoints` (boolean, optional): Include endpoint details
 
 **Returns:**
@@ -1272,6 +1366,7 @@ List of resources with available endpoints and statistics.
 Generate code examples for API endpoints.
 
 **Parameters:**
+
 - `endpoint_path` (string, required): Endpoint path
 - `method` (string, required): HTTP method
 - `language` (string, required): Programming language

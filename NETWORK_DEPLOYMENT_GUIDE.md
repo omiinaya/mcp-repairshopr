@@ -28,6 +28,7 @@ This guide explains how to deploy the MCP RepairShopr server on one machine usin
 ## Network Requirements
 
 Before starting, ensure:
+
 - [ ] Both machines are on the same network
 - [ ] Machine A (server) has a static IP (e.g., 192.168.1.181)
 - [ ] Port 3000 and 3001 are not blocked by firewall
@@ -40,7 +41,7 @@ Before starting, ensure:
 Ensure it has both ports exposed:
 
 ```yaml
-version: '3.8'
+version: "3.8"
 
 services:
   mcp-repairshopr:
@@ -49,15 +50,15 @@ services:
       dockerfile: deploy/Dockerfile
     container_name: mcp-repairshopr-server
     ports:
-      - "${PORT:-3000}:${PORT:-3000}"  # Health/metrics port
-      - "${MCP_HTTP_PORT:-3001}:${MCP_HTTP_PORT:-3001}"  # MCP HTTP transport port
-    
+      - "${PORT:-3000}:${PORT:-3000}" # Health/metrics port
+      - "${MCP_HTTP_PORT:-3001}:${MCP_HTTP_PORT:-3001}" # MCP HTTP transport port
+
     environment:
       - SERVER_NAME=${SERVER_NAME:-mcp-repairshopr}
       - SERVER_VERSION=${SERVER_VERSION:-0.1.0}
       - PORT=${PORT:-3000}
       - NODE_ENV=${NODE_ENV:-production}
-      - MCP_HTTP_PORT=${MCP_HTTP_PORT:-3001}  # Important for remote access
+      - MCP_HTTP_PORT=${MCP_HTTP_PORT:-3001} # Important for remote access
       # ... other env vars
 ```
 
@@ -66,12 +67,12 @@ services:
 Ensure it starts the MCP HTTP transport (already done if following previous steps):
 
 ```typescript
-import { mcpHttpTransport } from './server/mcp-http-transport';
+import { mcpHttpTransport } from "./server/mcp-http-transport";
 
 // In startServer():
 await mcpHttpTransport.start();
-logger.info('MCP HTTP transport started for remote access', {
-  url: `http://192.168.1.181:3001/mcp`
+logger.info("MCP HTTP transport started for remote access", {
+  url: `http://192.168.1.181:3001/mcp`,
 });
 ```
 
@@ -95,22 +96,24 @@ git push origin main
 
 Add these in Coolify dashboard (your Coolify instance on 192.168.1.181):
 
-| Variable | Value | Build Time |
-|----------|-------|------------|
-| `NODE_ENV` | `production` | ❌ NO |
-| `PORT` | `3000` | ❌ NO |
-| `MCP_HTTP_PORT` | `3001` | ❌ NO |
-| `LOG_LEVEL` | `info` | ❌ NO |
+| Variable        | Value        | Build Time |
+| --------------- | ------------ | ---------- |
+| `NODE_ENV`      | `production` | ❌ NO      |
+| `PORT`          | `3000`       | ❌ NO      |
+| `MCP_HTTP_PORT` | `3001`       | ❌ NO      |
+| `LOG_LEVEL`     | `info`       | ❌ NO      |
 
 **Important**: Set all as "Runtime only" (uncheck "Available at Buildtime")
 
 ### 2.3 Port Configuration
 
 Coolify should automatically detect both ports from docker-compose:
+
 - Port 3000 (health/metrics)
 - Port 3001 (MCP HTTP transport)
 
 If not, manually add port mappings in Coolify:
+
 - Source: `3000` → Destination: `3000`
 - Source: `3001` → Destination: `3001`
 
@@ -138,6 +141,7 @@ curl -N http://localhost:3001/mcp
 Allow incoming connections on ports 3000 and 3001:
 
 ### Ubuntu/Debian (UFW):
+
 ```bash
 sudo ufw allow 3000/tcp
 sudo ufw allow 3001/tcp
@@ -145,6 +149,7 @@ sudo ufw reload
 ```
 
 ### CentOS/RHEL (firewalld):
+
 ```bash
 sudo firewall-cmd --permanent --add-port=3000/tcp
 sudo firewall-cmd --permanent --add-port=3001/tcp
@@ -152,6 +157,7 @@ sudo firewall-cmd --reload
 ```
 
 ### Check if ports are open:
+
 ```bash
 sudo netstat -tulpn | grep -E '3000|3001'
 ```
@@ -172,6 +178,7 @@ curl -N http://192.168.1.181:3001/mcp
 ```
 
 If `curl` hangs or times out:
+
 1. Check firewall on Machine A
 2. Check if ports are mapped in Coolify
 3. Check Docker network settings
@@ -190,6 +197,7 @@ npm install -g @modelcontextprotocol/mcp-remote
 ```
 
 Create wrapper script `~/mcp-remote-bridge.sh`:
+
 ```bash
 #!/bin/bash
 # Connects to remote MCP server via HTTP
@@ -197,11 +205,13 @@ exec curl -N -s http://192.168.1.181:3001/mcp
 ```
 
 Make executable:
+
 ```bash
 chmod +x ~/mcp-remote-bridge.sh
 ```
 
 Configure OpenCode/KiloCode:
+
 ```json
 {
   "mcpServers": {
@@ -224,6 +234,7 @@ ssh -L 3001:localhost:3001 user@192.168.1.181 -N
 ```
 
 Then configure OpenCode/KiloCode to use localhost:
+
 ```json
 {
   "mcpServers": {
@@ -236,6 +247,7 @@ Then configure OpenCode/KiloCode to use localhost:
 ```
 
 **For persistent tunnel**, add to `~/.ssh/config` on Machine B:
+
 ```
 Host mcp-tunnel
     HostName 192.168.1.181
@@ -261,35 +273,41 @@ docker run -d --name mcp-proxy \
 ### Option D: Build Custom HTTP-to-stdio Adapter
 
 Create `~/mcp-http-adapter.js`:
-```javascript
-const http = require('http');
 
-const REMOTE_URL = 'http://192.168.1.181:3001/mcp';
+```javascript
+const http = require("http");
+
+const REMOTE_URL = "http://192.168.1.181:3001/mcp";
 
 // Read from stdin and forward to HTTP
-process.stdin.on('data', (data) => {
-  const req = http.request(REMOTE_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' }
-  }, (res) => {
-    res.on('data', (chunk) => {
-      process.stdout.write(chunk);
-    });
-  });
-  
+process.stdin.on("data", (data) => {
+  const req = http.request(
+    REMOTE_URL,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    },
+    (res) => {
+      res.on("data", (chunk) => {
+        process.stdout.write(chunk);
+      });
+    },
+  );
+
   req.write(data);
   req.end();
 });
 
 // Read SSE from HTTP and write to stdout
 http.get(REMOTE_URL, (res) => {
-  res.on('data', (chunk) => {
+  res.on("data", (chunk) => {
     process.stdout.write(chunk);
   });
 });
 ```
 
 Configure:
+
 ```json
 {
   "mcpServers": {
@@ -311,11 +329,17 @@ Create `~/.config/opencode/mcp.json`:
     "repairshopr": {
       "command": "ssh",
       "args": [
-        "-o", "StrictHostKeyChecking=no",
-        "-o", "ServerAliveInterval=60",
-        "-L", "3001:localhost:3001",
+        "-o",
+        "StrictHostKeyChecking=no",
+        "-o",
+        "ServerAliveInterval=60",
+        "-L",
+        "3001:localhost:3001",
         "user@192.168.1.181",
-        "curl", "-N", "-s", "http://localhost:3001/mcp"
+        "curl",
+        "-N",
+        "-s",
+        "http://localhost:3001/mcp"
       ]
     }
   }
@@ -327,7 +351,9 @@ Create `~/.config/opencode/mcp.json`:
 KiloCode MCP configuration varies by OS:
 
 ### macOS:
+
 Edit `~/Library/Application Support/KiloCode/mcp.json`:
+
 ```json
 {
   "mcpServers": {
@@ -335,8 +361,12 @@ Edit `~/Library/Application Support/KiloCode/mcp.json`:
       "command": "ssh",
       "args": [
         "user@192.168.1.181",
-        "docker", "exec", "-i", "mcp-repairshopr-server",
-        "node", "dist/index.js"
+        "docker",
+        "exec",
+        "-i",
+        "mcp-repairshopr-server",
+        "node",
+        "dist/index.js"
       ]
     }
   }
@@ -344,6 +374,7 @@ Edit `~/Library/Application Support/KiloCode/mcp.json`:
 ```
 
 ### Windows:
+
 Edit `%APPDATA%\KiloCode\mcp.json` similarly.
 
 ## Step 8: Verify Connection
@@ -361,6 +392,7 @@ After configuration:
 **Error**: `curl: (7) Failed to connect to 192.168.1.181 port 3001: Connection refused`
 
 **Solutions**:
+
 ```bash
 # On Machine A, check if ports are listening
 sudo netstat -tulpn | grep -E '3000|3001'
@@ -378,6 +410,7 @@ sudo iptables -L | grep 3001
 **Error**: Request times out
 
 **Solutions**:
+
 ```bash
 # Test from Machine A locally
 curl http://localhost:3001/mcp
@@ -391,6 +424,7 @@ sudo ufw allow from 192.168.1.0/24 to any port 3001
 **Error**: Protocol mismatch or handshake failures
 
 **Solutions**:
+
 - Ensure MCP HTTP transport is properly started (check logs)
 - Verify the HTTP adapter/wrapper is correctly formatting messages
 - Check if the client supports HTTP transport
@@ -398,12 +432,14 @@ sudo ufw allow from 192.168.1.0/24 to any port 3001
 ### Issue 4: Container Keeps Restarting
 
 Check logs on Machine A:
+
 ```bash
 docker logs mcp-repairshopr-server
 docker logs --tail 100 mcp-repairshopr-server
 ```
 
 Common causes:
+
 - Missing `metadata-index.json`
 - Port conflicts
 - Missing environment variables
@@ -413,6 +449,7 @@ Common causes:
 ⚠️ **Important Security Notes**:
 
 1. **Firewall Rules**: Only allow from your local network:
+
    ```bash
    sudo ufw allow from 192.168.1.0/24 to any port 3001
    ```
@@ -430,11 +467,11 @@ Common causes:
 
 ### URLs After Setup
 
-| Service | URL on Machine A | URL from Machine B |
-|---------|------------------|-------------------|
-| Health | `http://localhost:3000/health` | `http://192.168.1.181:3000/health` |
+| Service | URL on Machine A                | URL from Machine B                  |
+| ------- | ------------------------------- | ----------------------------------- |
+| Health  | `http://localhost:3000/health`  | `http://192.168.1.181:3000/health`  |
 | Metrics | `http://localhost:3000/metrics` | `http://192.168.1.181:3000/metrics` |
-| MCP | `http://localhost:3001/mcp` | `http://192.168.1.181:3001/mcp` |
+| MCP     | `http://localhost:3001/mcp`     | `http://192.168.1.181:3001/mcp`     |
 
 ### Useful Commands
 

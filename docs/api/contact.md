@@ -8,35 +8,25 @@
 
 #### Get Contacts
 
-
 Returns a paginated list of Contacts
-
 
 Required permission: Customers - View Detail
 Single-Customer Users can only access own contacts.
 
-
-
 **Endpoint:** `GET /contacts`
-
 
 **Required Permission:** Required permission: Customers - View Detail
 
-
 **Query Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| customer_id | integer | No | Any contacts attached to a Customer ID |
-| page | integer | No | Returns provided page of results, each 'page' contains 25 results |
-
+| Parameter   | Type    | Required | Description                                                       |
+| ----------- | ------- | -------- | ----------------------------------------------------------------- |
+| customer_id | integer | No       | Any contacts attached to a Customer ID                            |
+| page        | integer | No       | Returns provided page of results, each 'page' contains 25 results |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -74,12 +64,9 @@ successful
 }
 ```
 
-
 **Response: 401**
 
-
 Requires permission: Customers - View Detail
-
 
 ```json
 {
@@ -87,48 +74,36 @@ Requires permission: Customers - View Detail
 }
 ```
 
-
 #### Create Contact
 
-
 Creates a Contact
-
 
 Required permission: Customers - Edit
 Single-Customer Users can only access own contacts.
 
-
-
 **Endpoint:** `POST /contacts`
-
 
 **Required Permission:** Required permission: Customers - Edit
 
-
 **Request Body:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| customer_id | integer | Yes |  |
-| name | string | No |  |
-| address1 | string | No |  |
-| address2 | string | No |  |
-| city | string | No |  |
-| state | string | No |  |
-| zip | string | No |  |
-| email | string | No |  |
-| phone | string | No |  |
-| mobile | string | No |  |
-| notes | string | No |  |
-
-
+| Parameter   | Type    | Required | Description |
+| ----------- | ------- | -------- | ----------- |
+| customer_id | integer | Yes      |             |
+| name        | string  | No       |             |
+| address1    | string  | No       |             |
+| address2    | string  | No       |             |
+| city        | string  | No       |             |
+| state       | string  | No       |             |
+| zip         | string  | No       |             |
+| email       | string  | No       |             |
+| phone       | string  | No       |             |
+| mobile      | string  | No       |             |
+| notes       | string  | No       |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -156,12 +131,9 @@ successful
 }
 ```
 
-
 **Response: 401**
 
-
 Requires permission: Customers - Edit
-
 
 ```json
 {
@@ -169,12 +141,9 @@ Requires permission: Customers - Edit
 }
 ```
 
-
 **Response: 404**
 
-
 Customer not found
-
 
 ```json
 {
@@ -182,12 +151,9 @@ Customer not found
 }
 ```
 
-
 **Response: 422**
 
-
 Invalid request
-
 
 ```json
 {
@@ -220,37 +186,26 @@ Invalid request
 }
 ```
 
-
 #### Get Contact by ID
 
-
 Retrieves a Contact by ID
-
 
 Required permission: Customers - View Detail
 Single-Customer Users can only access own contacts.
 
-
-
 **Endpoint:** `GET /contacts/{id}`
-
 
 **Required Permission:** Required permission: Customers - View Detail
 
-
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -278,12 +233,9 @@ successful
 }
 ```
 
-
 **Response: 401**
 
-
 Requires permission: Customers - View Detail
-
 
 ```json
 {
@@ -291,12 +243,9 @@ Requires permission: Customers - View Detail
 }
 ```
 
-
 **Response: 404**
 
-
 Single-Customer User cannot view other customers' contacts
-
 
 ```json
 {
@@ -304,57 +253,43 @@ Single-Customer User cannot view other customers' contacts
 }
 ```
 
-
 #### Update Contact
 
-
 Updates an existing Contact
-
 
 Required permission: Customers - Edit
 Single-Customer Users can only access own contacts.
 
-
-
 **Endpoint:** `PUT /contacts/{id}`
-
 
 **Required Permission:** Required permission: Customers - Edit
 
-
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Request Body:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| customer_id | integer | No |  |
-| name | string | Yes |  |
-| address1 | string | No |  |
-| address2 | string | No |  |
-| city | string | No |  |
-| state | string | No |  |
-| zip | string | No |  |
-| email | string | No |  |
-| phone | string | No |  |
-| title | string | No |  |
-| mobile | string | No |  |
-| notes | string | No |  |
-
-
+| Parameter   | Type    | Required | Description |
+| ----------- | ------- | -------- | ----------- |
+| customer_id | integer | No       |             |
+| name        | string  | Yes      |             |
+| address1    | string  | No       |             |
+| address2    | string  | No       |             |
+| city        | string  | No       |             |
+| state       | string  | No       |             |
+| zip         | string  | No       |             |
+| email       | string  | No       |             |
+| phone       | string  | No       |             |
+| title       | string  | No       |             |
+| mobile      | string  | No       |             |
+| notes       | string  | No       |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -382,12 +317,9 @@ successful
 }
 ```
 
-
 **Response: 401**
 
-
 Requires permission: Customers - Edit
-
 
 ```json
 {
@@ -395,12 +327,9 @@ Requires permission: Customers - Edit
 }
 ```
 
-
 **Response: 404**
 
-
 Single-Customer User cannot view other customers' contacts
-
 
 ```json
 {
@@ -408,12 +337,9 @@ Single-Customer User cannot view other customers' contacts
 }
 ```
 
-
 **Response: 422**
 
-
 Invalid request
-
 
 ```json
 {
@@ -444,43 +370,30 @@ Invalid request
 }
 ```
 
-
 #### Delete Contact
 
-
 Deletes a Contact
-
 
 Required permission: Customers - Edit
 Single-Customer Users can only access own contacts.
 
-
-
 **Endpoint:** `DELETE /contacts/{id}`
-
 
 **Required Permission:** Required permission: Customers - Edit
 
-
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Response: 200**
 
-
 successful
-
 
 **Response: 401**
 
-
 Requires permission: Customers - Edit
-
 
 ```json
 {
@@ -488,9 +401,6 @@ Requires permission: Customers - Edit
 }
 ```
 
-
 **Response: 404**
 
-
 Invalid request
-

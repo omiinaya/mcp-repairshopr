@@ -31,6 +31,7 @@ This document provides practical examples of using the MCP RepairShopr server.
 ```
 
 **Result:** Returns endpoints related to customers including:
+
 - GET /customers - List customers
 - POST /customers - Create customer
 - GET /customers/{id} - Get customer details
@@ -85,6 +86,7 @@ This document provides practical examples of using the MCP RepairShopr server.
 ```
 
 **Result:** Returns detailed information about the GET /customers/{id} endpoint including:
+
 - Description
 - Parameters
 - Responses
@@ -133,6 +135,7 @@ This document provides practical examples of using the MCP RepairShopr server.
 ```
 
 **Result:** Returns all parameters for creating a customer:
+
 - Required parameters: name, email
 - Optional parameters: phone, address, etc.
 - Parameter types and constraints
@@ -151,6 +154,7 @@ This document provides practical examples of using the MCP RepairShopr server.
 ```
 
 **Result:** Returns query parameters for listing customers:
+
 - page
 - per_page
 - sort
@@ -170,6 +174,7 @@ This document provides practical examples of using the MCP RepairShopr server.
 ```
 
 **Result:** Returns path parameters:
+
 - id (required)
 
 ## Response Examples
@@ -187,6 +192,7 @@ This document provides practical examples of using the MCP RepairShopr server.
 ```
 
 **Result:** Returns response information:
+
 - 200 OK - Customer object
 - 404 Not Found - Customer not found
 - Response schemas
@@ -293,10 +299,10 @@ const createCustomer = async (customerData) => {
     const response = await fetch(API_URL, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${API_KEY}`,
-        'Content-Type': 'application/json'
+        Authorization: `Bearer ${API_KEY}`,
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(customerData)
+      body: JSON.stringify(customerData),
     });
 
     if (!response.ok) {
@@ -313,8 +319,8 @@ const createCustomer = async (customerData) => {
 // Usage
 createCustomer({
   name: 'John Doe',
-  email: 'john@example.com'
-}).then(customer => console.log(customer));
+  email: 'john@example.com',
+}).then((customer) => console.log(customer));
 ```
 
 ### Example 2: Generate Python Example
@@ -344,7 +350,7 @@ def get_ticket(ticket_id):
         'Authorization': f'Bearer {API_KEY}',
         'Content-Type': 'application/json'
     }
-    
+
     try:
         response = requests.get(
             API_URL.format(ticket_id),

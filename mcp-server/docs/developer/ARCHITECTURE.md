@@ -90,12 +90,14 @@ MCP RepairShopr is a Model Context Protocol (MCP) server that provides intellige
 **Responsibility**: Handle MCP protocol communication
 
 **Key Features**:
+
 - Request parsing and validation
 - Response formatting
 - Tool registration and invocation
 - Error handling
 
 **Interfaces**:
+
 ```typescript
 interface MCPTool {
   name: string;
@@ -110,12 +112,14 @@ interface MCPTool {
 **Responsibility**: Manage tool definitions and metadata
 
 **Key Features**:
+
 - Tool registration
 - Version management
 - Dependency tracking
 - Deprecation handling
 
 **Interfaces**:
+
 ```typescript
 interface ToolDefinition {
   name: string;
@@ -132,6 +136,7 @@ interface ToolDefinition {
 **Responsibility**: Implement semantic and keyword search
 
 **Key Features**:
+
 - Vector similarity search
 - Keyword matching
 - Result ranking
@@ -142,6 +147,7 @@ interface ToolDefinition {
 **Responsibility**: Retrieve endpoint information
 
 **Key Features**:
+
 - Endpoint lookup by path or resource
 - Related endpoint discovery
 - Endpoint details extraction
@@ -151,6 +157,7 @@ interface ToolDefinition {
 **Responsibility**: Retrieve parameter information
 
 **Key Features**:
+
 - Parameter extraction
 - Type information
 - Validation hints
@@ -161,6 +168,7 @@ interface ToolDefinition {
 **Responsibility**: Retrieve response information
 
 **Key Features**:
+
 - Response schema extraction
 - Status code information
 - Error documentation
@@ -171,6 +179,7 @@ interface ToolDefinition {
 **Responsibility**: Retrieve permission information
 
 **Key Features**:
+
 - Permission lookup
 - Permission hierarchy
 - Permission matrix generation
@@ -181,6 +190,7 @@ interface ToolDefinition {
 **Responsibility**: List and explore API resources
 
 **Key Features**:
+
 - Resource listing
 - Endpoint enumeration
 - Relationship discovery
@@ -191,6 +201,7 @@ interface ToolDefinition {
 **Responsibility**: Generate code examples
 
 **Key Features**:
+
 - Multi-language support (JavaScript, Python, cURL)
 - Authentication handling
 - Error handling patterns
@@ -201,6 +212,7 @@ interface ToolDefinition {
 **Responsibility**: Analyze and understand user queries
 
 **Key Features**:
+
 - Intent classification
 - Entity extraction
 - Query expansion
@@ -211,6 +223,7 @@ interface ToolDefinition {
 **Responsibility**: Score and rank search results
 
 **Key Features**:
+
 - Semantic similarity scoring
 - Keyword matching scoring
 - Recency scoring
@@ -222,6 +235,7 @@ interface ToolDefinition {
 **Responsibility**: Format and optimize search results
 
 **Key Features**:
+
 - Multiple output formats (Markdown, JSON, HTML)
 - Context window optimization
 - Token counting
@@ -232,6 +246,7 @@ interface ToolDefinition {
 **Responsibility**: Store and query vector embeddings
 
 **Key Features**:
+
 - Vector storage
 - Similarity search
 - Batch operations
@@ -242,6 +257,7 @@ interface ToolDefinition {
 **Responsibility**: Parse and index API documentation metadata
 
 **Key Features**:
+
 - Markdown parsing
 - Metadata extraction
 - Schema validation
@@ -252,6 +268,7 @@ interface ToolDefinition {
 **Responsibility**: Cache frequently accessed data
 
 **Key Features**:
+
 - LRU eviction policy
 - TTL-based expiration
 - Cache warming
@@ -262,6 +279,7 @@ interface ToolDefinition {
 **Responsibility**: Monitor server health and performance
 
 **Key Features**:
+
 - Health checks
 - Metrics collection
 - Performance tracking
@@ -272,6 +290,7 @@ interface ToolDefinition {
 **Responsibility**: Manage server configuration
 
 **Key Features**:
+
 - Configuration loading
 - Environment-specific configs
 - Hot reload support
@@ -373,6 +392,7 @@ src/
 Used by the Tool Registry to manage tool definitions and handlers.
 
 **Benefits**:
+
 - Centralized tool management
 - Easy tool registration and lookup
 - Version and dependency tracking
@@ -382,6 +402,7 @@ Used by the Tool Registry to manage tool definitions and handlers.
 Used by the Relevance Scorer to support multiple scoring strategies.
 
 **Benefits**:
+
 - Flexible scoring algorithms
 - Easy to add new scoring methods
 - Configurable scoring weights
@@ -391,6 +412,7 @@ Used by the Relevance Scorer to support multiple scoring strategies.
 Used by the Context Manager to create different output formats.
 
 **Benefits**:
+
 - Consistent object creation
 - Easy to add new formats
 - Centralized format logic
@@ -400,6 +422,7 @@ Used by the Context Manager to create different output formats.
 Used by the Monitoring Service to track server events.
 
 **Benefits**:
+
 - Decoupled event handling
 - Easy to add new observers
 - Real-time monitoring
@@ -409,6 +432,7 @@ Used by the Monitoring Service to track server events.
 Used by the Configuration Manager to ensure single configuration instance.
 
 **Benefits**:
+
 - Consistent configuration access
 - Reduced memory usage
 - Thread-safe access
@@ -490,6 +514,7 @@ Potential architectural improvements:
 6. **Machine Learning**: Enhanced query understanding with ML models
 
 For more information, see:
+
 - [Development Setup Guide](./DEVELOPMENT_SETUP.md)
 - [API Reference](./API_REFERENCE.md)
 - [Testing Guide](./TESTING.md)

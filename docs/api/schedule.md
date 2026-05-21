@@ -8,34 +8,24 @@
 
 #### Get Schedules
 
-
 Returns a paginated list of Invoice Schedules
-
 
 Required permission: Recurring Invoices - List
 
-
-
 **Endpoint:** `GET /schedules`
-
 
 **Required Permission:** Required permission: Recurring Invoices - List
 
-
 **Query Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| customer_id | integer | No | Returns a list of Schedules that belong to a Customer ID |
-| page | integer | No | Returns provided page of results, each 'page' contains 25 results |
-
+| Parameter   | Type    | Required | Description                                                       |
+| ----------- | ------- | -------- | ----------------------------------------------------------------- |
+| customer_id | integer | No       | Returns a list of Schedules that belong to a Customer ID          |
+| page        | integer | No       | Returns provided page of results, each 'page' contains 25 results |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -60,31 +50,21 @@ successful
 }
 ```
 
-
 #### Create Schedule
-
 
 Creates an Invoice Schedule
 
-
 Required permission: Recurring Invoices - New
-
-
 
 **Endpoint:** `POST /schedules`
 
-
 **Required Permission:** Required permission: Recurring Invoices - New
-
 
 **Request Body:**
 
-
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -107,12 +87,9 @@ successful
 }
 ```
 
-
 **Response: 422**
 
-
 Invalid request
-
 
 ```json
 {
@@ -126,36 +103,25 @@ Invalid request
 }
 ```
 
-
 #### Get Schedule by ID
-
 
 Retrieves a Schedule by ID
 
-
 Required permission: Recurring Invoices - List
-
-
 
 **Endpoint:** `GET /schedules/{id}`
 
-
 **Required Permission:** Required permission: Recurring Invoices - List
-
 
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -178,45 +144,31 @@ successful
 }
 ```
 
-
 **Response: 404**
 
-
 Invalid request
-
 
 #### Update Schedule
 
-
 Updates an existing Invoice Schedule by ID
-
 
 Required permission: Recurring Invoices - Edit
 
-
-
 **Endpoint:** `PUT /schedules/{id}`
-
 
 **Required Permission:** Required permission: Recurring Invoices - Edit
 
-
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Request Body:**
 
-
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -239,90 +191,61 @@ successful
 }
 ```
 
-
 **Response: 422**
 
-
 Invalid request
-
 
 ```json
 {
-  "error": [
-    "Next run can't be blank"
-  ]
+  "error": ["Next run can't be blank"]
 }
 ```
 
-
 #### Delete Schedule
-
 
 Deletes a Schedule by ID
 
-
 Required permission: Recurring Invoices - Delete
-
-
 
 **Endpoint:** `DELETE /schedules/{id}`
 
-
 **Required Permission:** Required permission: Recurring Invoices - Delete
-
 
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Response: 200**
 
-
 successful
-
 
 **Response: 404**
 
-
 Invalid request
-
 
 #### Create Schedule
 
-
 Adds a Line Item to an Invoice Schedule
-
 
 Required permission: Recurring Invoices - Edit
 
-
-
 **Endpoint:** `POST /schedules/{id}/add_line_item`
-
 
 **Required Permission:** Required permission: Recurring Invoices - Edit
 
-
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Request Body:**
 
-
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -349,94 +272,64 @@ successful
 }
 ```
 
-
 **Response: 422**
 
-
 Invalid request
-
 
 ```json
 {
-  "error": [
-    "Name can't be blank"
-  ]
+  "error": ["Name can't be blank"]
 }
 ```
 
-
 #### Create Schedule
-
 
 Removes a Line Item from an Invoice Schedule
 
-
 Required permission: Recurring Invoices - Edit
-
-
 
 **Endpoint:** `POST /schedules/{id}/remove_line_item`
 
-
 **Required Permission:** Required permission: Recurring Invoices - Edit
-
 
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Request Body:**
 
-
 **Response: 200**
 
-
 successful
-
 
 **Response: 404**
 
-
 Invalid request
-
 
 #### Update Schedule
 
-
 Updates a Line Item
-
 
 Required permission: Recurring Invoices - Edit
 
-
-
 **Endpoint:** `PUT /schedules/{id}/line_items/{schedule_line_item_id}`
-
 
 **Required Permission:** Required permission: Recurring Invoices - Edit
 
-
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-| schedule_line_item_id | integer | Yes | ID of line item to update |
-
+| Parameter             | Type    | Required | Description               |
+| --------------------- | ------- | -------- | ------------------------- |
+| id                    | integer | Yes      |                           |
+| schedule_line_item_id | integer | Yes      | ID of line item to update |
 
 **Request Body:**
 
-
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -463,18 +356,12 @@ successful
 }
 ```
 
-
 **Response: 422**
-
 
 Invalid request
 
-
 ```json
 {
-  "error": [
-    "Name can't be blank"
-  ]
+  "error": ["Name can't be blank"]
 }
 ```
-

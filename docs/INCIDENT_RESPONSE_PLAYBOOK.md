@@ -5,15 +5,17 @@ Quick reference guide for handling production incidents with the MCP RepairShopr
 ## Incident Severity Levels
 
 ### SEV 1 - Critical
+
 - **Definition**: Complete service outage or data loss
 - **Response Time**: 15 minutes
-- **Examples**: 
+- **Examples**:
   - Server not responding
   - Database corruption
   - Security breach
 - **Actions**: Page on-call engineer immediately
 
 ### SEV 2 - High
+
 - **Definition**: Major functionality impaired
 - **Response Time**: 30 minutes
 - **Examples**:
@@ -23,6 +25,7 @@ Quick reference guide for handling production incidents with the MCP RepairShopr
 - **Actions**: Page on-call engineer
 
 ### SEV 3 - Medium
+
 - **Definition**: Minor functionality issues
 - **Response Time**: 2 hours
 - **Examples**:
@@ -32,6 +35,7 @@ Quick reference guide for handling production incidents with the MCP RepairShopr
 - **Actions**: Create ticket, address during business hours
 
 ### SEV 4 - Low
+
 - **Definition**: Cosmetic issues or monitoring gaps
 - **Response Time**: Next business day
 - **Examples**:
@@ -46,12 +50,14 @@ Quick reference guide for handling production incidents with the MCP RepairShopr
 
 ### 1. Server Not Responding
 
-**Symptoms**: 
+**Symptoms**:
+
 - Health checks failing
 - Connection timeouts
 - 503 errors
 
 **Diagnosis**:
+
 ```bash
 # Check container status
 docker ps | grep mcp-repairshopr
@@ -67,6 +73,7 @@ curl http://localhost:3000/health
 ```
 
 **Resolution**:
+
 1. Check if container is running: `docker ps`
 2. Review logs for errors: `docker logs`
 3. Check resource limits (CPU/memory)
@@ -74,6 +81,7 @@ curl http://localhost:3000/health
 5. Verify health checks pass
 
 **Prevention**:
+
 - Set appropriate resource limits
 - Monitor memory usage
 - Implement circuit breakers
@@ -84,11 +92,13 @@ curl http://localhost:3000/health
 ### 2. High Error Rate
 
 **Symptoms**:
+
 - Error rate >5%
 - 4xx/5xx responses increasing
 - Alert firing
 
 **Diagnosis**:
+
 ```bash
 # Check error logs
 docker logs CONTAINER_ID | grep ERROR
@@ -101,6 +111,7 @@ curl https://your-subdomain.repairshopr.com/api/v1/ping
 ```
 
 **Resolution**:
+
 1. Identify error type from logs
 2. Check external dependencies (RepairShopr API)
 3. Review recent deployments
@@ -108,12 +119,14 @@ curl https://your-subdomain.repairshopr.com/api/v1/ping
 5. Scale resources if needed
 
 **Common Causes**:
+
 - RepairShopr API down
 - Rate limiting exceeded
 - Invalid API credentials
 - Recent code changes
 
 **Prevention**:
+
 - Implement retry logic
 - Use circuit breakers
 - Monitor external APIs
@@ -124,11 +137,13 @@ curl https://your-subdomain.repairshopr.com/api/v1/ping
 ### 3. Slow Response Times
 
 **Symptoms**:
+
 - P95 latency >500ms
 - User complaints
 - Timeout errors
 
 **Diagnosis**:
+
 ```bash
 # Check performance metrics
 curl http://localhost:3000/admin/performance
@@ -141,6 +156,7 @@ top -p $(docker inspect -f '{{.State.Pid}}' CONTAINER_ID)
 ```
 
 **Resolution**:
+
 1. Check CPU/memory usage
 2. Review cache hit rates
 3. Analyze slow queries/endpoints
@@ -148,6 +164,7 @@ top -p $(docker inspect -f '{{.State.Pid}}' CONTAINER_ID)
 5. Scale horizontally if needed
 
 **Optimization**:
+
 - Increase cache size
 - Optimize database queries
 - Add CDN for static assets
@@ -158,11 +175,13 @@ top -p $(docker inspect -f '{{.State.Pid}}' CONTAINER_ID)
 ### 4. Security Incident
 
 **Symptoms**:
+
 - Unauthorized access attempts
 - Suspicious traffic patterns
 - Data exfiltration alerts
 
 **Immediate Actions**:
+
 1. **STOP**: Don't panic, follow protocol
 2. **CONTAIN**: Isolate affected systems
 3. **ASSESS**: Determine scope
@@ -170,6 +189,7 @@ top -p $(docker inspect -f '{{.State.Pid}}' CONTAINER_ID)
 5. **LEARN**: Document and improve
 
 **Investigation Checklist**:
+
 - [ ] Review access logs
 - [ ] Check authentication logs
 - [ ] Verify API key usage
@@ -177,6 +197,7 @@ top -p $(docker inspect -f '{{.State.Pid}}' CONTAINER_ID)
 - [ ] Check for data exfiltration
 
 **Communication**:
+
 1. Notify security team immediately
 2. Document all findings
 3. Prepare incident report
@@ -188,11 +209,13 @@ top -p $(docker inspect -f '{{.State.Pid}}' CONTAINER_ID)
 ### 5. Circuit Breaker Open
 
 **Symptoms**:
+
 - "Circuit breaker is OPEN" errors
 - External API calls failing
 - Service degraded but running
 
 **Diagnosis**:
+
 ```bash
 # Check circuit breaker status
 docker logs CONTAINER_ID | grep "Circuit breaker"
@@ -205,6 +228,7 @@ curl http://localhost:3000/admin/performance
 ```
 
 **Resolution**:
+
 1. Verify external service status
 2. Check network connectivity
 3. Review recent changes
@@ -212,9 +236,10 @@ curl http://localhost:3000/admin/performance
 5. Force close circuit if needed (emergency only)
 
 **Commands**:
+
 ```javascript
 // Force circuit closed (emergency)
-circuitBreakerRegistry.get('repairshopr-api').forceClose();
+circuitBreakerRegistry.get("repairshopr-api").forceClose();
 ```
 
 ---
@@ -222,11 +247,13 @@ circuitBreakerRegistry.get('repairshopr-api').forceClose();
 ### 6. Memory Leak
 
 **Symptoms**:
+
 - Memory usage steadily increasing
 - Container OOM killed
 - Performance degrading over time
 
 **Diagnosis**:
+
 ```bash
 # Monitor memory over time
 watch -n 5 docker stats CONTAINER_ID
@@ -239,6 +266,7 @@ docker exec CONTAINER_ID node -e "console.log(process.memoryUsage())"
 ```
 
 **Resolution**:
+
 1. Identify leak source from heap dumps
 2. Review recent code changes
 3. Restart container as temporary fix
@@ -246,6 +274,7 @@ docker exec CONTAINER_ID node -e "console.log(process.memoryUsage())"
 5. Monitor for recurrence
 
 **Prevention**:
+
 - Regular memory profiling
 - Set memory limits
 - Implement health checks
@@ -256,11 +285,13 @@ docker exec CONTAINER_ID node -e "console.log(process.memoryUsage())"
 ### 7. Database Connection Issues
 
 **Symptoms**:
+
 - Connection timeouts
 - "Too many connections" errors
 - Query failures
 
 **Diagnosis**:
+
 ```bash
 # Check connection pool status
 # Review connection limits
@@ -268,6 +299,7 @@ docker exec CONTAINER_ID node -e "console.log(process.memoryUsage())"
 ```
 
 **Resolution**:
+
 1. Check connection pool settings
 2. Verify database is accessible
 3. Kill idle connections
@@ -278,18 +310,19 @@ docker exec CONTAINER_ID node -e "console.log(process.memoryUsage())"
 
 ## Emergency Contacts
 
-| Role | Contact | Escalation Time |
-|------|---------|-----------------|
-| Primary On-call | [TBD] | Immediate |
-| Secondary On-call | [TBD] | 15 minutes |
-| Engineering Manager | [TBD] | 30 minutes |
-| CTO | [TBD] | 1 hour |
+| Role                | Contact | Escalation Time |
+| ------------------- | ------- | --------------- |
+| Primary On-call     | [TBD]   | Immediate       |
+| Secondary On-call   | [TBD]   | 15 minutes      |
+| Engineering Manager | [TBD]   | 30 minutes      |
+| CTO                 | [TBD]   | 1 hour          |
 
 ---
 
 ## Communication Templates
 
 ### Incident Started
+
 ```
 🚨 INCIDENT: [SEV X] - [Brief Description]
 
@@ -302,6 +335,7 @@ Updates in #incidents
 ```
 
 ### Status Update
+
 ```
 📊 UPDATE: [Incident ID]
 
@@ -312,6 +346,7 @@ Next: [Next steps]
 ```
 
 ### Incident Resolved
+
 ```
 ✅ RESOLVED: [Incident ID]
 
@@ -328,7 +363,9 @@ Post-mortem: [Link]
 ## Post-Incident Review
 
 ### Timeline
+
 Document minute-by-minute what happened:
+
 1. [Time] - Incident detected
 2. [Time] - Engineer paged
 3. [Time] - Issue identified
@@ -336,12 +373,15 @@ Document minute-by-minute what happened:
 5. [Time] - Service restored
 
 ### Root Cause Analysis
+
 Use 5 Whys technique:
+
 1. Why did X happen? → Because of Y
 2. Why did Y happen? → Because of Z
 3. Continue until root cause found
 
 ### Action Items
+
 - [ ] Immediate fix (within 24h)
 - [ ] Short-term improvement (within 1 week)
 - [ ] Long-term prevention (within 1 month)
@@ -351,6 +391,7 @@ Use 5 Whys technique:
 ## Run Commands
 
 ### Quick Health Check
+
 ```bash
 curl -s http://localhost:3000/health | jq .
 curl -s http://localhost:3000/ready | jq .
@@ -358,6 +399,7 @@ curl -s http://localhost:3000/metrics | head -20
 ```
 
 ### View Logs
+
 ```bash
 # Recent errors
 docker logs CONTAINER_ID --tail 100 | grep ERROR
@@ -370,6 +412,7 @@ docker logs CONTAINER_ID --since 10m
 ```
 
 ### Restart Service
+
 ```bash
 # Graceful restart
 docker restart CONTAINER_ID
@@ -380,6 +423,7 @@ docker start CONTAINER_ID
 ```
 
 ### Check Metrics
+
 ```bash
 # Performance metrics
 curl http://localhost:3000/admin/performance | jq .

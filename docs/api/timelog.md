@@ -8,34 +8,24 @@
 
 #### Get Timelogs
 
-
 Returns a paginated list of Timelogs
-
 
 Users with permission "Timelogs - Manage" may see timelogs for any/all users.
 Otherwise, results scoped to current user.
 
-
-
 **Endpoint:** `GET /timelogs`
-
 
 **Required Permission:** Users with permission "Timelogs - Manage" may see timelogs for any/all users.
 
-
 **Query Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| user_id | integer | No | Returns Timelogs that belong to a User |
-
+| Parameter | Type    | Required | Description                            |
+| --------- | ------- | -------- | -------------------------------------- |
+| user_id   | integer | No       | Returns Timelogs that belong to a User |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -57,42 +47,30 @@ successful
 }
 ```
 
-
 #### Update Timelog
-
 
 Updates a Timelog
 
-
 Users with permission "Timelogs - Manage" may see timelogs for any/all users.
 Otherwise, results scoped to current user.
-
-
 
 **Endpoint:** `PUT /timelogs`
 
-
 **Required Permission:** Users with permission "Timelogs - Manage" may see timelogs for any/all users.
-
 
 **Request Body:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| lunch | boolean | No |  |
-| in_at | string | No |  |
-| out_at | string | No |  |
-| in_note | string | No |  |
-| out_note | string | No |  |
-
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| lunch     | boolean | No       |             |
+| in_at     | string  | No       |             |
+| out_at    | string  | No       |             |
+| in_note   | string  | No       |             |
+| out_note  | string  | No       |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -110,37 +88,26 @@ successful
 }
 ```
 
-
 #### Get Lasts
 
-
 Returns last Timelog
-
 
 Users with permission "Timelogs - Manage" may see timelogs for any/all users.
 Otherwise, results scoped to current user.
 
-
-
 **Endpoint:** `GET /timelogs/last`
-
 
 **Required Permission:** Users with permission "Timelogs - Manage" may see timelogs for any/all users.
 
-
 **Query Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| user_id | integer | No | Returns Timelogs that belong to a User. The default is current user ID. |
-
+| Parameter | Type    | Required | Description                                                             |
+| --------- | ------- | -------- | ----------------------------------------------------------------------- |
+| user_id   | integer | No       | Returns Timelogs that belong to a User. The default is current user ID. |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -157,4 +124,3 @@ successful
   "manually_updated": null
 }
 ```
-

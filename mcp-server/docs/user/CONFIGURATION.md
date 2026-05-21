@@ -82,67 +82,67 @@ The server will automatically load the configuration based on the `NODE_ENV` env
 
 ### Server Configuration
 
-| Variable | Description | Default | Example |
-|----------|-------------|---------|---------|
-| `SERVER_NAME` | Server name | mcp-repairshopr | `my-mcp-server` |
-| `SERVER_VERSION` | Server version | 0.1.0 | `1.0.0` |
-| `PORT` | Server port | 3000 | `8080` |
-| `NODE_ENV` | Environment | production | `staging` |
+| Variable         | Description    | Default         | Example         |
+| ---------------- | -------------- | --------------- | --------------- |
+| `SERVER_NAME`    | Server name    | mcp-repairshopr | `my-mcp-server` |
+| `SERVER_VERSION` | Server version | 0.1.0           | `1.0.0`         |
+| `PORT`           | Server port    | 3000            | `8080`          |
+| `NODE_ENV`       | Environment    | production      | `staging`       |
 
 ### Logging Configuration
 
-| Variable | Description | Default | Example |
-|----------|-------------|---------|---------|
-| `LOG_LEVEL` | Log level | info | `debug` |
-| `LOG_FORMAT` | Log format | json | `text` |
+| Variable     | Description | Default | Example |
+| ------------ | ----------- | ------- | ------- |
+| `LOG_LEVEL`  | Log level   | info    | `debug` |
+| `LOG_FORMAT` | Log format  | json    | `text`  |
 
 ### Cache Configuration
 
-| Variable | Description | Default | Example |
-|----------|-------------|---------|---------|
-| `CACHE_MAX_SIZE` | Maximum cache size (bytes) | 10485760 | `20971520` |
-| `CACHE_DEFAULT_TTL` | Default TTL (ms) | 300000 | `600000` |
-| `CACHE_MAX_ENTRIES` | Maximum cache entries | 1000 | `2000` |
-| `CACHE_ENABLE_WARMING` | Enable cache warming | true | `false` |
+| Variable               | Description                | Default  | Example    |
+| ---------------------- | -------------------------- | -------- | ---------- |
+| `CACHE_MAX_SIZE`       | Maximum cache size (bytes) | 10485760 | `20971520` |
+| `CACHE_DEFAULT_TTL`    | Default TTL (ms)           | 300000   | `600000`   |
+| `CACHE_MAX_ENTRIES`    | Maximum cache entries      | 1000     | `2000`     |
+| `CACHE_ENABLE_WARMING` | Enable cache warming       | true     | `false`    |
 
 ### Performance Configuration
 
-| Variable | Description | Default | Example |
-|----------|-------------|---------|---------|
-| `MAX_CONCURRENT_REQUESTS` | Max concurrent requests | 100 | `50` |
-| `REQUEST_TIMEOUT` | Request timeout (ms) | 30000 | `60000` |
-| `ENABLE_METRICS` | Enable metrics | true | `false` |
-| `ENABLE_HOT_RELOAD` | Enable hot reload | false | `true` |
+| Variable                  | Description             | Default | Example |
+| ------------------------- | ----------------------- | ------- | ------- |
+| `MAX_CONCURRENT_REQUESTS` | Max concurrent requests | 100     | `50`    |
+| `REQUEST_TIMEOUT`         | Request timeout (ms)    | 30000   | `60000` |
+| `ENABLE_METRICS`          | Enable metrics          | true    | `false` |
+| `ENABLE_HOT_RELOAD`       | Enable hot reload       | false   | `true`  |
 
 ### Data Configuration
 
-| Variable | Description | Default | Example |
-|----------|-------------|---------|---------|
-| `DATA_DIR` | Data directory | ./data | `/var/lib/mcp-repairshopr` |
-| `CONFIG_DIR` | Config directory | ./config | `/etc/mcp-repairshopr` |
+| Variable              | Description         | Default                    | Example                               |
+| --------------------- | ------------------- | -------------------------- | ------------------------------------- |
+| `DATA_DIR`            | Data directory      | ./data                     | `/var/lib/mcp-repairshopr`            |
+| `CONFIG_DIR`          | Config directory    | ./config                   | `/etc/mcp-repairshopr`                |
 | `METADATA_INDEX_PATH` | Metadata index path | ./data/metadata-index.json | `/var/lib/mcp-repairshopr/index.json` |
 
 ### Health Check Configuration
 
-| Variable | Description | Default | Example |
-|----------|-------------|---------|---------|
-| `HEALTH_CHECK_INTERVAL` | Health check interval (ms) | 60000 | `30000` |
-| `HEALTH_CHECK_TIMEOUT` | Health check timeout (ms) | 5000 | `10000` |
+| Variable                | Description                | Default | Example |
+| ----------------------- | -------------------------- | ------- | ------- |
+| `HEALTH_CHECK_INTERVAL` | Health check interval (ms) | 60000   | `30000` |
+| `HEALTH_CHECK_TIMEOUT`  | Health check timeout (ms)  | 5000    | `10000` |
 
 ### Monitoring Configuration
 
-| Variable | Description | Default | Example |
-|----------|-------------|---------|---------|
-| `MONITORING_ENABLED` | Enable monitoring | true | `false` |
-| `MONITORING_INTERVAL` | Monitoring interval (ms) | 60000 | `30000` |
+| Variable              | Description              | Default | Example |
+| --------------------- | ------------------------ | ------- | ------- |
+| `MONITORING_ENABLED`  | Enable monitoring        | true    | `false` |
+| `MONITORING_INTERVAL` | Monitoring interval (ms) | 60000   | `30000` |
 
 ### API Configuration
 
-| Variable | Description | Default | Example |
-|----------|-------------|---------|---------|
-| `API_TIMEOUT` | API timeout (ms) | 30000 | `60000` |
-| `API_RETRY_ATTEMPTS` | Retry attempts | 3 | `5` |
-| `API_RETRY_DELAY` | Retry delay (ms) | 1000 | `2000` |
+| Variable             | Description      | Default | Example |
+| -------------------- | ---------------- | ------- | ------- |
+| `API_TIMEOUT`        | API timeout (ms) | 30000   | `60000` |
+| `API_RETRY_ATTEMPTS` | Retry attempts   | 3       | `5`     |
+| `API_RETRY_DELAY`    | Retry delay (ms) | 1000    | `2000`  |
 
 ## Server Configuration
 
@@ -199,6 +199,7 @@ Configure the maximum cache size:
 ```
 
 The `maxSize` is specified in bytes. Common values:
+
 - 10 MB: `10485760`
 - 50 MB: `52428800`
 - 100 MB: `104857600`
@@ -216,6 +217,7 @@ Configure the default time-to-live for cache entries:
 ```
 
 The `defaultTTL` is specified in milliseconds. Common values:
+
 - 5 minutes: `300000`
 - 10 minutes: `600000`
 - 30 minutes: `1800000`
@@ -271,6 +273,7 @@ Configure how often metrics are collected:
 ```
 
 The `interval` is specified in milliseconds. Common values:
+
 - 30 seconds: `30000`
 - 1 minute: `60000`
 - 5 minutes: `300000`
@@ -301,6 +304,7 @@ Configure the logging level:
 ```
 
 Available log levels (from most to least verbose):
+
 - `trace`: Very detailed logging
 - `debug`: Debug information
 - `info`: General information (default)
@@ -318,6 +322,7 @@ Configure the log format:
 ```
 
 Available formats:
+
 - `json`: Structured JSON logs (recommended for production)
 - `text`: Plain text logs (recommended for development)
 

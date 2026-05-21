@@ -8,22 +8,15 @@
 
 #### Get Payment Methods
 
-
 Returns a paginated list of Payment Methods
-
 
 All Users except Single Customer Users may use this action.
 
-
-
 **Endpoint:** `GET /payment_methods`
-
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -73,4 +66,3 @@ successful
   ]
 }
 ```
-

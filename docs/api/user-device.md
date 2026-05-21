@@ -8,32 +8,24 @@
 
 #### Create User Device
 
-
 Creates a User Device
-
 
 **Endpoint:** `POST /user_devices`
 
-
 **Request Body:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| device_uuid | string | No |  |
-| device_name | string | No |  |
-| registration_token_gcm | string | No |  |
-| system_name | string | No |  |
-| model | string | No |  |
-| screen_size | string | No |  |
-
-
+| Parameter              | Type   | Required | Description |
+| ---------------------- | ------ | -------- | ----------- |
+| device_uuid            | string | No       |             |
+| device_name            | string | No       |             |
+| registration_token_gcm | string | No       |             |
+| system_name            | string | No       |             |
+| model                  | string | No       |             |
+| screen_size            | string | No       |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -53,12 +45,9 @@ successful
 }
 ```
 
-
 **Response: 422**
 
-
 Invalid request
-
 
 ```json
 {
@@ -66,29 +55,21 @@ Invalid request
 }
 ```
 
-
 #### Get User Device by ID
-
 
 Retrieves an existing User Device by UUID
 
-
 **Endpoint:** `GET /user_devices/{id}`
-
 
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes | User Device UUID |
-
+| Parameter | Type    | Required | Description      |
+| --------- | ------- | -------- | ---------------- |
+| id        | integer | Yes      | User Device UUID |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -107,39 +88,28 @@ successful
   "updated_at": "2019-11-04T08:18:32.490Z"
 }
 ```
-
 
 #### Update User Device
 
-
 Updates an existing User Device by UUID
-
 
 **Endpoint:** `PUT /user_devices/{id}`
 
-
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes | Device UUID |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      | Device UUID |
 
 **Request Body:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| registration_token_gcm | string | No |  |
-
-
+| Parameter              | Type   | Required | Description |
+| ---------------------- | ------ | -------- | ----------- |
+| registration_token_gcm | string | No       |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -158,4 +128,3 @@ successful
   "updated_at": "2019-11-04T08:18:32.490Z"
 }
 ```
-

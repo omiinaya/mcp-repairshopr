@@ -12,12 +12,13 @@ Represents a complete API document file containing multiple endpoints for a sing
 
 ```typescript
 interface ApiDocument {
-  resourceName: string;      // Name of the resource (e.g., "Customer", "Ticket")
-  endpoints: ApiEndpoint[];  // Array of endpoints in this document
+  resourceName: string; // Name of the resource (e.g., "Customer", "Ticket")
+  endpoints: ApiEndpoint[]; // Array of endpoints in this document
 }
 ```
 
 **Markdown Format:**
+
 ```markdown
 # RepairShopr API Documentation - Customer
 
@@ -26,10 +27,12 @@ interface ApiDocument {
 ### Customer
 
 #### Get Customers
+
 ...
 ```
 
 **Parsed Object:**
+
 ```typescript
 {
   resourceName: "Customer",
@@ -43,20 +46,21 @@ Represents a single API endpoint with all its metadata.
 
 ```typescript
 interface ApiEndpoint {
-  resource: string;           // The resource name (e.g., "Customer")
-  operation: string;          // Operation name (e.g., "Get Customers")
-  description: string;        // Description of what the endpoint does
-  method: string;             // HTTP method (GET, POST, PUT, PATCH, DELETE)
-  path: string;               // API path (e.g., "/customers", "/tickets/{id}")
-  permission: string;         // Required permission to access this endpoint
+  resource: string; // The resource name (e.g., "Customer")
+  operation: string; // Operation name (e.g., "Get Customers")
+  description: string; // Description of what the endpoint does
+  method: string; // HTTP method (GET, POST, PUT, PATCH, DELETE)
+  path: string; // API path (e.g., "/customers", "/tickets/{id}")
+  permission: string; // Required permission to access this endpoint
   parameters: ApiParameter[]; // Array of parameters for the endpoint
   requestBody?: ApiParameter[]; // Optional request body parameters
-  responses: ApiResponse[];   // Array of possible responses
+  responses: ApiResponse[]; // Array of possible responses
 }
 ```
 
 **Markdown Format:**
-```markdown
+
+````markdown
 #### Get Customers
 
 Returns a paginated list of customers
@@ -69,9 +73,9 @@ Required permission: Customers - List/Search
 
 **Query Parameters:**
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| page | integer | No | Returns provided page of results |
+| Parameter | Type    | Required | Description                      |
+| --------- | ------- | -------- | -------------------------------- |
+| page      | integer | No       | Returns provided page of results |
 
 **Response: 200**
 
@@ -82,7 +86,9 @@ successful
   "customers": [...]
 }
 ```
-```
+````
+
+````
 
 **Parsed Object:**
 ```typescript
@@ -110,7 +116,7 @@ successful
     }
   ]
 }
-```
+````
 
 ### ApiParameter
 
@@ -118,94 +124,100 @@ Represents a parameter for an API endpoint.
 
 ```typescript
 interface ApiParameter {
-  name: string;                           // Parameter name
-  type: string;                           // Parameter type (string, integer, boolean, array, object, number)
-  required: boolean;                      // Whether the parameter is required
-  description: string;                    // Description of the parameter
-  paramType: 'query' | 'path' | 'body';   // Parameter location in the HTTP request
+  name: string; // Parameter name
+  type: string; // Parameter type (string, integer, boolean, array, object, number)
+  required: boolean; // Whether the parameter is required
+  description: string; // Description of the parameter
+  paramType: 'query' | 'path' | 'body'; // Parameter location in the HTTP request
 }
 ```
 
 **Markdown Format (Query Parameters):**
+
 ```markdown
 **Query Parameters:**
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| page | integer | No | Returns provided page of results |
-| sort | string | No | A customer field to order by |
+| Parameter | Type    | Required | Description                      |
+| --------- | ------- | -------- | -------------------------------- |
+| page      | integer | No       | Returns provided page of results |
+| sort      | string  | No       | A customer field to order by     |
 ```
 
 **Parsed Object:**
+
 ```typescript
 [
   {
-    name: "page",
-    type: "integer",
+    name: 'page',
+    type: 'integer',
     required: false,
-    description: "Returns provided page of results",
-    paramType: "query"
+    description: 'Returns provided page of results',
+    paramType: 'query',
   },
   {
-    name: "sort",
-    type: "string",
+    name: 'sort',
+    type: 'string',
     required: false,
-    description: "A customer field to order by",
-    paramType: "query"
-  }
-]
+    description: 'A customer field to order by',
+    paramType: 'query',
+  },
+];
 ```
 
 **Markdown Format (Path Parameters):**
+
 ```markdown
 **Path Parameters:**
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes | Customer ID |
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      | Customer ID |
 ```
 
 **Parsed Object:**
+
 ```typescript
 [
   {
-    name: "id",
-    type: "integer",
+    name: 'id',
+    type: 'integer',
     required: true,
-    description: "Customer ID",
-    paramType: "path"
-  }
-]
+    description: 'Customer ID',
+    paramType: 'path',
+  },
+];
 ```
 
 **Markdown Format (Request Body):**
+
 ```markdown
 **Request Body:**
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| firstname | string | No | Customer first name |
-| lastname | string | No | Customer last name |
+| Parameter | Type   | Required | Description         |
+| --------- | ------ | -------- | ------------------- |
+| firstname | string | No       | Customer first name |
+| lastname  | string | No       | Customer last name  |
 ```
 
 **Parsed Object:**
+
 ```typescript
 [
   {
-    name: "firstname",
-    type: "string",
+    name: 'firstname',
+    type: 'string',
     required: false,
-    description: "Customer first name",
-    paramType: "body"
+    description: 'Customer first name',
+    paramType: 'body',
   },
   {
-    name: "lastname",
-    type: "string",
+    name: 'lastname',
+    type: 'string',
     required: false,
-    description: "Customer last name",
-    paramType: "body"
-  }
-]
+    description: 'Customer last name',
+    paramType: 'body',
+  },
+];
 ```
 
 ### ApiResponse
@@ -214,14 +226,15 @@ Represents a response from an API endpoint.
 
 ```typescript
 interface ApiResponse {
-  statusCode: number;    // HTTP status code
-  description: string;   // Description of the response
-  example?: any;         // Optional example response body
+  statusCode: number; // HTTP status code
+  description: string; // Description of the response
+  example?: any; // Optional example response body
 }
 ```
 
 **Markdown Format:**
-```markdown
+
+````markdown
 **Response: 200**
 
 successful
@@ -235,7 +248,9 @@ successful
   }
 }
 ```
-```
+````
+
+````
 
 **Parsed Object:**
 ```typescript
@@ -250,7 +265,7 @@ successful
     }
   }
 }
-```
+````
 
 ## Parser Behavior with Edge Cases
 
@@ -264,6 +279,7 @@ The parser handles missing sections gracefully:
 - **Missing Response Example**: Returns `undefined` for example field
 
 **Example:**
+
 ```markdown
 #### Get Latests
 
@@ -277,6 +293,7 @@ successful
 ```
 
 **Parsed Object:**
+
 ```typescript
 {
   resource: "Customer",
@@ -304,12 +321,13 @@ When a parameter section exists but the table is empty or malformed:
 **Query Parameters:**
 
 | Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
+| --------- | ---- | -------- | ----------- |
 ```
 
 **Parsed Object:**
+
 ```typescript
-parameters: []
+parameters: [];
 ```
 
 ### Empty Parameter Descriptions
@@ -317,12 +335,13 @@ parameters: []
 Parameters with empty descriptions are valid:
 
 ```markdown
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| email | string | No |  |
+| Parameter | Type   | Required | Description |
+| --------- | ------ | -------- | ----------- |
+| email     | string | No       |             |
 ```
 
 **Parsed Object:**
+
 ```typescript
 {
   name: "email",
@@ -337,7 +356,7 @@ Parameters with empty descriptions are valid:
 
 Endpoints can have multiple responses with different status codes:
 
-```markdown
+````markdown
 **Response: 200**
 
 successful
@@ -347,6 +366,7 @@ successful
   "customer": {...}
 }
 ```
+````
 
 **Response: 422**
 
@@ -358,7 +378,8 @@ Invalid request
   "message": ["Email is not an email"]
 }
 ```
-```
+
+````
 
 **Parsed Object:**
 ```typescript
@@ -377,7 +398,7 @@ responses: [
     }
   }
 ]
-```
+````
 
 ### Nested Paths
 
@@ -388,6 +409,7 @@ Endpoints with nested paths are supported:
 ```
 
 **Parsed Object:**
+
 ```typescript
 {
   method: "GET",
@@ -399,7 +421,7 @@ Endpoints with nested paths are supported:
 
 The parser handles complex nested JSON structures:
 
-```markdown
+````markdown
 **Response: 200**
 
 successful
@@ -424,7 +446,9 @@ successful
   ]
 }
 ```
-```
+````
+
+````
 
 **Parsed Object:**
 ```typescript
@@ -450,7 +474,7 @@ successful
     ]
   }
 }
-```
+````
 
 ### Responses Without Examples
 
@@ -463,6 +487,7 @@ Invalid request
 ```
 
 **Parsed Object:**
+
 ```typescript
 {
   statusCode: 404,
@@ -495,19 +520,21 @@ console.log(`Method: ${firstEndpoint.method} ${firstEndpoint.path}`);
 ```typescript
 const document = await parseMarkdownFile('docs/api/customer.md');
 
-document.endpoints.forEach(endpoint => {
+document.endpoints.forEach((endpoint) => {
   console.log(`\n${endpoint.operation}`);
   console.log(`  ${endpoint.method} ${endpoint.path}`);
   console.log(`  Permission: ${endpoint.permission}`);
-  
+
   if (endpoint.parameters.length > 0) {
     console.log('  Parameters:');
-    endpoint.parameters.forEach(param => {
-      console.log(`    - ${param.name} (${param.type}): ${param.required ? 'required' : 'optional'}`);
+    endpoint.parameters.forEach((param) => {
+      console.log(
+        `    - ${param.name} (${param.type}): ${param.required ? 'required' : 'optional'}`
+      );
     });
   }
-  
-  endpoint.responses.forEach(response => {
+
+  endpoint.responses.forEach((response) => {
     console.log(`  Response ${response.statusCode}: ${response.description}`);
   });
 });
@@ -519,13 +546,15 @@ document.endpoints.forEach(endpoint => {
 const document = await parseMarkdownFile('docs/api/customer.md');
 
 // Find GET endpoints
-const getEndpoints = document.endpoints.filter(e => e.method === 'GET');
+const getEndpoints = document.endpoints.filter((e) => e.method === 'GET');
 
 // Find endpoints with specific path
-const getByIdEndpoint = document.endpoints.find(e => e.path === '/customers/{id}');
+const getByIdEndpoint = document.endpoints.find(
+  (e) => e.path === '/customers/{id}'
+);
 
 // Find endpoints requiring specific permission
-const createEndpoints = document.endpoints.filter(e => 
+const createEndpoints = document.endpoints.filter((e) =>
   e.permission.includes('Create')
 );
 ```
@@ -543,7 +572,7 @@ const isValidDocument = ApiDocumentValidation.validateDocument(document);
 console.log(`Document valid: ${isValidDocument}`);
 
 // Validate each endpoint
-document.endpoints.forEach(endpoint => {
+document.endpoints.forEach((endpoint) => {
   const isValid = ApiDocumentValidation.validateEndpoint(endpoint);
   console.log(`${endpoint.operation} valid: ${isValid}`);
 });
@@ -554,19 +583,33 @@ document.endpoints.forEach(endpoint => {
 ```typescript
 const document = await parseMarkdownFile('docs/api/customer.md');
 
-const getCustomersEndpoint = document.endpoints.find(e => e.operation === 'Get Customers');
+const getCustomersEndpoint = document.endpoints.find(
+  (e) => e.operation === 'Get Customers'
+);
 
 // Get all query parameters
-const queryParams = getCustomersEndpoint?.parameters.filter(p => p.paramType === 'query');
+const queryParams = getCustomersEndpoint?.parameters.filter(
+  (p) => p.paramType === 'query'
+);
 
 // Get required parameters
-const requiredParams = getCustomersEndpoint?.parameters.filter(p => p.required);
+const requiredParams = getCustomersEndpoint?.parameters.filter(
+  (p) => p.required
+);
 
 // Get parameters by type
-const integerParams = getCustomersEndpoint?.parameters.filter(p => p.type === 'integer');
+const integerParams = getCustomersEndpoint?.parameters.filter(
+  (p) => p.type === 'integer'
+);
 
-console.log('Query parameters:', queryParams?.map(p => p.name));
-console.log('Required parameters:', requiredParams?.map(p => p.name));
+console.log(
+  'Query parameters:',
+  queryParams?.map((p) => p.name)
+);
+console.log(
+  'Required parameters:',
+  requiredParams?.map((p) => p.name)
+);
 ```
 
 ### Working with Response Examples
@@ -574,18 +617,26 @@ console.log('Required parameters:', requiredParams?.map(p => p.name));
 ```typescript
 const document = await parseMarkdownFile('docs/api/customer.md');
 
-const getCustomersEndpoint = document.endpoints.find(e => e.operation === 'Get Customers');
+const getCustomersEndpoint = document.endpoints.find(
+  (e) => e.operation === 'Get Customers'
+);
 
-const successResponse = getCustomersEndpoint?.responses.find(r => r.statusCode === 200);
+const successResponse = getCustomersEndpoint?.responses.find(
+  (r) => r.statusCode === 200
+);
 
 if (successResponse?.example) {
   // Access the example data
   const customers = successResponse.example.customers;
   console.log(`Example has ${customers.length} customers`);
-  
+
   // Use example for testing or documentation
   const firstCustomer = customers[0];
-  console.log('First customer:', firstCustomer.firstname, firstCustomer.lastname);
+  console.log(
+    'First customer:',
+    firstCustomer.firstname,
+    firstCustomer.lastname
+  );
 }
 ```
 
@@ -598,27 +649,27 @@ import { parseMarkdownFile } from './src/parser/markdown';
 // Read all markdown files from docs/api directory
 const apiDir = 'docs/api';
 const files = await fs.readdir(apiDir);
-const markdownFiles = files.filter(f => f.endsWith('.md'));
+const markdownFiles = files.filter((f) => f.endsWith('.md'));
 
 // Parse all documents
 const documents = await Promise.all(
-  markdownFiles.map(file => parseMarkdownFile(`${apiDir}/${file}`))
+  markdownFiles.map((file) => parseMarkdownFile(`${apiDir}/${file}`))
 );
 
 // Collect all endpoints across all documents
-const allEndpoints = documents.flatMap(doc => doc.endpoints);
+const allEndpoints = documents.flatMap((doc) => doc.endpoints);
 
 console.log(`Total documents: ${documents.length}`);
 console.log(`Total endpoints: ${allEndpoints.length}`);
 
 // Group by resource
 const byResource = new Map<string, typeof allEndpoints>();
-documents.forEach(doc => {
+documents.forEach((doc) => {
   byResource.set(doc.resourceName, doc.endpoints);
 });
 
 // Find all GET endpoints
-const allGetEndpoints = allEndpoints.filter(e => e.method === 'GET');
+const allGetEndpoints = allEndpoints.filter((e) => e.method === 'GET');
 console.log(`GET endpoints: ${allGetEndpoints.length}`);
 ```
 
@@ -627,12 +678,17 @@ console.log(`GET endpoints: ${allGetEndpoints.length}`);
 The parser provides full TypeScript type safety:
 
 ```typescript
-import { ApiDocument, ApiEndpoint, ApiParameter, ApiResponse } from './src/utils/types';
+import {
+  ApiDocument,
+  ApiEndpoint,
+  ApiParameter,
+  ApiResponse,
+} from './src/utils/types';
 
 function processEndpoint(endpoint: ApiEndpoint): void {
   // TypeScript knows all these properties exist
   const { resource, operation, method, path } = endpoint;
-  
+
   // Parameters are properly typed
   endpoint.parameters.forEach((param: ApiParameter) => {
     // paramType is constrained to 'query' | 'path' | 'body'
@@ -640,7 +696,7 @@ function processEndpoint(endpoint: ApiEndpoint): void {
       console.log(`Query param: ${param.name}`);
     }
   });
-  
+
   // Responses are properly typed
   endpoint.responses.forEach((response: ApiResponse) => {
     // statusCode is a number
@@ -667,6 +723,7 @@ try {
 ```
 
 The parser will:
+
 - Throw an error if the file cannot be read
 - Throw an error if the resource name header is missing
 - Log warnings for individual endpoints that fail to parse

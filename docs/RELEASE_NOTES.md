@@ -398,10 +398,10 @@ Configure Prometheus to scrape metrics:
 
 ```yaml
 scrape_configs:
-  - job_name: 'mcp-repairshopr'
+  - job_name: "mcp-repairshopr"
     static_configs:
-      - targets: ['localhost:3000']
-    metrics_path: '/metrics'
+      - targets: ["localhost:3000"]
+    metrics_path: "/metrics"
 ```
 
 ---

@@ -4,15 +4,15 @@ This document provides a quick reference for all MCP tools available in the MCP 
 
 ## Quick Reference Table
 
-| Tool | Purpose | Required Params | Optional Params |
-|------|---------|-----------------|----------------|
-| [`search_api_docs`](#search_api_docs) | Search API docs | `query` | `resource`, `method`, `permission`, `limit` |
-| [`get_endpoint`](#get_endpoint) | Get endpoint details | `path` or `resource` | `method`, `includeRelated` |
-| [`get_parameters`](#get_parameters) | Get parameters | `endpoint_path`, `method` | `param_type` |
-| [`get_responses`](#get_responses) | Get responses | `endpoint_path`, `method` | `status_code` |
-| [`get_permissions`](#get_permissions) | Get permissions | `endpoint_path` or `resource` or `permission` | `method`, `include_matrix`, `include_summaries` |
-| [`list_resources`](#list_resources) | List resources | none | `include_endpoints`, `include_relationships` |
-| [`generate_code_example`](#generate_code_example) | Generate code | `endpoint_path`, `method`, `language` | `include_auth` |
+| Tool                                              | Purpose              | Required Params                               | Optional Params                                 |
+| ------------------------------------------------- | -------------------- | --------------------------------------------- | ----------------------------------------------- |
+| [`search_api_docs`](#search_api_docs)             | Search API docs      | `query`                                       | `resource`, `method`, `permission`, `limit`     |
+| [`get_endpoint`](#get_endpoint)                   | Get endpoint details | `path` or `resource`                          | `method`, `includeRelated`                      |
+| [`get_parameters`](#get_parameters)               | Get parameters       | `endpoint_path`, `method`                     | `param_type`                                    |
+| [`get_responses`](#get_responses)                 | Get responses        | `endpoint_path`, `method`                     | `status_code`                                   |
+| [`get_permissions`](#get_permissions)             | Get permissions      | `endpoint_path` or `resource` or `permission` | `method`, `include_matrix`, `include_summaries` |
+| [`list_resources`](#list_resources)               | List resources       | none                                          | `include_endpoints`, `include_relationships`    |
+| [`generate_code_example`](#generate_code_example) | Generate code        | `endpoint_path`, `method`, `language`         | `include_auth`                                  |
 
 ---
 
@@ -21,9 +21,11 @@ This document provides a quick reference for all MCP tools available in the MCP 
 **Purpose**: Search API documentation using semantic and keyword search
 
 **Required Parameters**:
+
 - `query` (string): Search query in natural language
 
 **Optional Parameters**:
+
 - `resource` (string): Filter by resource name
 - `method` (string): Filter by HTTP method (GET, POST, PUT, DELETE, PATCH)
 - `permission` (string): Filter by permission
@@ -32,6 +34,7 @@ This document provides a quick reference for all MCP tools available in the MCP 
 **Returns**: Ranked search results with relevance scores
 
 **Example**:
+
 ```json
 {
   "query": "create new customer",
@@ -46,15 +49,18 @@ This document provides a quick reference for all MCP tools available in the MCP 
 **Purpose**: Get detailed information about a specific API endpoint
 
 **Required Parameters**:
+
 - `path` (string) OR `resource` (string): Endpoint path or resource name
 
 **Optional Parameters**:
+
 - `method` (string): HTTP method (required when using path)
 - `includeRelated` (boolean): Include related endpoints (default: false)
 
 **Returns**: Complete endpoint documentation with parameters, responses, and related endpoints
 
 **Example**:
+
 ```json
 {
   "path": "/customers/{id}",
@@ -70,15 +76,18 @@ This document provides a quick reference for all MCP tools available in the MCP 
 **Purpose**: Get parameter information for an API endpoint
 
 **Required Parameters**:
+
 - `endpoint_path` (string): Endpoint path
 - `method` (string): HTTP method
 
 **Optional Parameters**:
+
 - `param_type` (string): Filter by parameter type (query, path, body)
 
 **Returns**: Detailed parameter information including types, constraints, and validation hints
 
 **Example**:
+
 ```json
 {
   "endpoint_path": "/customers",
@@ -94,15 +103,18 @@ This document provides a quick reference for all MCP tools available in the MCP 
 **Purpose**: Get response information for an API endpoint
 
 **Required Parameters**:
+
 - `endpoint_path` (string): Endpoint path
 - `method` (string): HTTP method
 
 **Optional Parameters**:
+
 - `status_code` (string): Filter by status code
 
 **Returns**: Response information including status codes, schemas, examples, and error documentation
 
 **Example**:
+
 ```json
 {
   "endpoint_path": "/customers/{id}",
@@ -117,9 +129,11 @@ This document provides a quick reference for all MCP tools available in the MCP 
 **Purpose**: Get permission requirements for API endpoints
 
 **Required Parameters**:
+
 - `endpoint_path` (string) OR `resource` (string) OR `permission` (string): One of these must be provided
 
 **Optional Parameters**:
+
 - `method` (string): HTTP method (required when using endpoint_path)
 - `include_matrix` (boolean): Include permission matrix (default: false)
 - `include_summaries` (boolean): Include permission summaries (default: false)
@@ -127,6 +141,7 @@ This document provides a quick reference for all MCP tools available in the MCP 
 **Returns**: Permission requirements including descriptions, hierarchy, and usage information
 
 **Example**:
+
 ```json
 {
   "resource": "customers",
@@ -143,12 +158,14 @@ This document provides a quick reference for all MCP tools available in the MCP 
 **Required Parameters**: None
 
 **Optional Parameters**:
+
 - `include_endpoints` (boolean): Include endpoint details (default: false)
 - `include_relationships` (boolean): Include resource relationships (default: false)
 
 **Returns**: All available resources with summary information, endpoints, relationships, and statistics
 
 **Example**:
+
 ```json
 {
   "include_endpoints": true,
@@ -163,16 +180,19 @@ This document provides a quick reference for all MCP tools available in the MCP 
 **Purpose**: Generate code examples for API endpoints
 
 **Required Parameters**:
+
 - `endpoint_path` (string): Endpoint path
 - `method` (string): HTTP method
 - `language` (string): Programming language (javascript, python, curl)
 
 **Optional Parameters**:
+
 - `include_auth` (boolean): Include authentication (default: true)
 
 **Returns**: Code example with authentication, request/response examples, and error handling
 
 **Example**:
+
 ```json
 {
   "endpoint_path": "/customers",
@@ -303,13 +323,13 @@ All tools return an error response with these common fields:
 
 ## Error Codes
 
-| Code | Description | Resolution |
-|------|-------------|------------|
-| `INVALID_REQUEST` | Invalid request parameters | Check parameter names and types |
-| `ENDPOINT_NOT_FOUND` | Endpoint not found | Verify endpoint path and method |
-| `PERMISSION_DENIED` | Permission denied | Check API key permissions |
-| `INTERNAL_ERROR` | Internal server error | Contact support |
-| `TIMEOUT` | Request timeout | Retry request or check network |
+| Code                 | Description                | Resolution                      |
+| -------------------- | -------------------------- | ------------------------------- |
+| `INVALID_REQUEST`    | Invalid request parameters | Check parameter names and types |
+| `ENDPOINT_NOT_FOUND` | Endpoint not found         | Verify endpoint path and method |
+| `PERMISSION_DENIED`  | Permission denied          | Check API key permissions       |
+| `INTERNAL_ERROR`     | Internal server error      | Contact support                 |
+| `TIMEOUT`            | Request timeout            | Retry request or check network  |
 
 ---
 

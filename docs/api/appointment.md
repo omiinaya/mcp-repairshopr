@@ -8,36 +8,26 @@
 
 #### Get Appointments
 
-
 Returns a paginated list of Appointments
-
 
 Required permission: Appointments - View All (see-own never restricted)
 
-
-
 **Endpoint:** `GET /appointments`
-
 
 **Required Permission:** Required permission: Appointments - View All (see-own never restricted)
 
-
 **Query Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| date_from | string | No | Returns Appointments that start after the date. Example "2019-01-25" |
-| date_to | string | No | Returns Appointments that start before the date. Example "2019-12-31" |
-| mine | boolean | No | Return only current user's appointments |
-| page | integer | No | Returns provided page of results, each 'page' contains 25 results |
-
+| Parameter | Type    | Required | Description                                                           |
+| --------- | ------- | -------- | --------------------------------------------------------------------- |
+| date_from | string  | No       | Returns Appointments that start after the date. Example "2019-01-25"  |
+| date_to   | string  | No       | Returns Appointments that start before the date. Example "2019-12-31" |
+| mine      | boolean | No       | Return only current user's appointments                               |
+| page      | integer | No       | Returns provided page of results, each 'page' contains 25 results     |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -104,50 +94,38 @@ successful
 }
 ```
 
-
 #### Create Appointment
-
 
 Creates an Appointment
 
-
 No special permissions required.
-
-
 
 **Endpoint:** `POST /appointments`
 
-
 **Required Permission:** No special permissions required.
-
 
 **Request Body:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| description | string | No |  |
-| user_ids | array | No |  |
-| ticket_id | integer | No |  |
-| do_not_email | boolean | No |  |
-| user_id | integer | No |  |
-| start_at | string | Yes |  |
-| end_at | string | No |  |
-| location | string | No |  |
-| summary | string | Yes |  |
-| email_customer | boolean | No |  |
-| appointment_duration | string | No |  |
-| appointment_type_id | integer | No |  |
-| customer_id | integer | No |  |
-| all_day | boolean | No |  |
-
-
+| Parameter            | Type    | Required | Description |
+| -------------------- | ------- | -------- | ----------- |
+| description          | string  | No       |             |
+| user_ids             | array   | No       |             |
+| ticket_id            | integer | No       |             |
+| do_not_email         | boolean | No       |             |
+| user_id              | integer | No       |             |
+| start_at             | string  | Yes      |             |
+| end_at               | string  | No       |             |
+| location             | string  | No       |             |
+| summary              | string  | Yes      |             |
+| email_customer       | boolean | No       |             |
+| appointment_duration | string  | No       |             |
+| appointment_type_id  | integer | No       |             |
+| customer_id          | integer | No       |             |
+| all_day              | boolean | No       |             |
 
 **Response: 201**
 
-
 successful
-
 
 ```json
 {
@@ -210,12 +188,9 @@ successful
 }
 ```
 
-
 **Response: 422**
 
-
 Invalid request
-
 
 ```json
 {
@@ -228,36 +203,25 @@ Invalid request
 }
 ```
 
-
 #### Get Appointment by ID
-
 
 Retrieves an Appointment by ID
 
-
 No special permissions required.
-
-
 
 **Endpoint:** `GET /appointments/{id}`
 
-
 **Required Permission:** No special permissions required.
-
 
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -317,63 +281,47 @@ successful
 }
 ```
 
-
 **Response: 404**
-
 
 Invalid request
 
-
 #### Update Appointment
-
 
 Updates an existing Appointment by ID
 
-
 No special permissions required.
-
-
 
 **Endpoint:** `PUT /appointments/{id}`
 
-
 **Required Permission:** No special permissions required.
-
 
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Request Body:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| description | string | No |  |
-| user_ids | array | No |  |
-| ticket_id | integer | No |  |
-| user_id | integer | No |  |
-| start_at | string | Yes |  |
-| end_at | string | No |  |
-| location | string | No |  |
-| summary | string | No |  |
-| email_customer | boolean | No |  |
-| appointment_duration | string | No |  |
-| appointment_type_id | integer | No |  |
-| customer_id | integer | No |  |
-| all_day | boolean | No |  |
-
-
+| Parameter            | Type    | Required | Description |
+| -------------------- | ------- | -------- | ----------- |
+| description          | string  | No       |             |
+| user_ids             | array   | No       |             |
+| ticket_id            | integer | No       |             |
+| user_id              | integer | No       |             |
+| start_at             | string  | Yes      |             |
+| end_at               | string  | No       |             |
+| location             | string  | No       |             |
+| summary              | string  | No       |             |
+| email_customer       | boolean | No       |             |
+| appointment_duration | string  | No       |             |
+| appointment_type_id  | integer | No       |             |
+| customer_id          | integer | No       |             |
+| all_day              | boolean | No       |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -436,12 +384,9 @@ successful
 }
 ```
 
-
 **Response: 422**
 
-
 Invalid request
-
 
 ```json
 {
@@ -454,39 +399,26 @@ Invalid request
 }
 ```
 
-
 #### Delete Appointment
-
 
 Deletes an Appointment by ID
 
-
 No special permissions required.
-
-
 
 **Endpoint:** `DELETE /appointments/{id}`
 
-
 **Required Permission:** No special permissions required.
-
 
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Response: 200**
 
-
 successful
-
 
 **Response: 404**
 
-
 Invalid request
-

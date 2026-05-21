@@ -68,15 +68,15 @@ This comprehensive checklist ensures successful deployment of the MCP RepairShop
 
 3. **Configure Resource Settings**
 
-   | Setting | Value | Notes |
-   |---------|-------|-------|
-   | Name | `mcp-repairshopr` | Unique identifier |
-   | Type | Docker Compose | Resource type |
-   | Source | Git Repository | Code source |
-   | Repository | Your fork URL | HTTPS or SSH |
-   | Branch | `main` | Deployment branch |
-   | Path | `mcp-server/deploy` | Docker compose location |
-   | Config File | `docker-compose.coolify.yml` | Compose file name |
+   | Setting     | Value                        | Notes                   |
+   | ----------- | ---------------------------- | ----------------------- |
+   | Name        | `mcp-repairshopr`            | Unique identifier       |
+   | Type        | Docker Compose               | Resource type           |
+   | Source      | Git Repository               | Code source             |
+   | Repository  | Your fork URL                | HTTPS or SSH            |
+   | Branch      | `main`                       | Deployment branch       |
+   | Path        | `mcp-server/deploy`          | Docker compose location |
+   | Config File | `docker-compose.coolify.yml` | Compose file name       |
 
 ### Port Configuration
 
@@ -96,48 +96,48 @@ This comprehensive checklist ensures successful deployment of the MCP RepairShop
 
 ### Required Variables
 
-| Variable | Default | Required | Description |
-|----------|---------|----------|-------------|
-| `SERVER_NAME` | `mcp-repairshopr` | Yes | Server instance name |
-| `SERVER_VERSION` | `0.1.0` | Yes | Server version |
-| `PORT` | `3000` | Yes | Port (Coolify overrides) |
-| `NODE_ENV` | `production` | Yes | Environment mode |
+| Variable         | Default           | Required | Description              |
+| ---------------- | ----------------- | -------- | ------------------------ |
+| `SERVER_NAME`    | `mcp-repairshopr` | Yes      | Server instance name     |
+| `SERVER_VERSION` | `0.1.0`           | Yes      | Server version           |
+| `PORT`           | `3000`            | Yes      | Port (Coolify overrides) |
+| `NODE_ENV`       | `production`      | Yes      | Environment mode         |
 
 ### Optional Variables
 
 #### Logging
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `LOG_LEVEL` | `info` | Log verbosity level |
-| `LOG_FORMAT` | `json` | Log output format |
+| Variable     | Default | Description         |
+| ------------ | ------- | ------------------- |
+| `LOG_LEVEL`  | `info`  | Log verbosity level |
+| `LOG_FORMAT` | `json`  | Log output format   |
 
 #### Cache
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `CACHE_MAX_SIZE` | `10485760` | Max cache size in bytes |
-| `CACHE_DEFAULT_TTL` | `300000` | Cache TTL in milliseconds |
-| `CACHE_MAX_ENTRIES` | `1000` | Max cache entries |
-| `CACHE_ENABLE_WARMING` | `true` | Enable cache warming |
+| Variable               | Default    | Description               |
+| ---------------------- | ---------- | ------------------------- |
+| `CACHE_MAX_SIZE`       | `10485760` | Max cache size in bytes   |
+| `CACHE_DEFAULT_TTL`    | `300000`   | Cache TTL in milliseconds |
+| `CACHE_MAX_ENTRIES`    | `1000`     | Max cache entries         |
+| `CACHE_ENABLE_WARMING` | `true`     | Enable cache warming      |
 
 #### Performance
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `MAX_CONCURRENT_REQUESTS` | `100` | Max concurrent requests |
-| `REQUEST_TIMEOUT` | `30000` | Request timeout in ms |
-| `ENABLE_METRICS` | `true` | Enable metrics collection |
-| `ENABLE_HOT_RELOAD` | `false` | Enable config hot-reload |
+| Variable                  | Default | Description               |
+| ------------------------- | ------- | ------------------------- |
+| `MAX_CONCURRENT_REQUESTS` | `100`   | Max concurrent requests   |
+| `REQUEST_TIMEOUT`         | `30000` | Request timeout in ms     |
+| `ENABLE_METRICS`          | `true`  | Enable metrics collection |
+| `ENABLE_HOT_RELOAD`       | `false` | Enable config hot-reload  |
 
 #### Resources (Coolify-specific)
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `CPU_LIMIT` | `1.0` | Max CPU cores |
-| `MEMORY_LIMIT` | `512M` | Max memory |
-| `CPU_RESERVATION` | `0.5` | Reserved CPU |
-| `MEMORY_RESERVATION` | `256M` | Reserved memory |
+| Variable             | Default | Description     |
+| -------------------- | ------- | --------------- |
+| `CPU_LIMIT`          | `1.0`   | Max CPU cores   |
+| `MEMORY_LIMIT`       | `512M`  | Max memory      |
+| `CPU_RESERVATION`    | `0.5`   | Reserved CPU    |
+| `MEMORY_RESERVATION` | `256M`  | Reserved memory |
 
 ### Environment Setup in Coolify
 
@@ -155,23 +155,23 @@ This comprehensive checklist ensures successful deployment of the MCP RepairShop
 
 ### Coolify Health Check Settings
 
-| Setting | Value | Description |
-|---------|-------|-------------|
-| Type | HTTP | Protocol for health checks |
-| Endpoint | `/health` | Health check endpoint |
-| Interval | `30s` | Time between checks |
-| Timeout | `10s` | Response timeout |
-| Retries | `3` | Failed attempts before restart |
-| Start Period | `15s` | Initial grace period |
+| Setting      | Value     | Description                    |
+| ------------ | --------- | ------------------------------ |
+| Type         | HTTP      | Protocol for health checks     |
+| Endpoint     | `/health` | Health check endpoint          |
+| Interval     | `30s`     | Time between checks            |
+| Timeout      | `10s`     | Response timeout               |
+| Retries      | `3`       | Failed attempts before restart |
+| Start Period | `15s`     | Initial grace period           |
 
 ### Available Health Endpoints
 
-| Endpoint | Purpose | Response |
-|----------|---------|----------|
-| `/health` | Full health check | 200 if healthy, 503 if unhealthy |
-| `/ready` | Readiness check | 200 if ready to accept traffic |
-| `/live` | Liveness check | 200 if process is running |
-| `/metrics` | Prometheus metrics | Prometheus format metrics |
+| Endpoint   | Purpose            | Response                         |
+| ---------- | ------------------ | -------------------------------- |
+| `/health`  | Full health check  | 200 if healthy, 503 if unhealthy |
+| `/ready`   | Readiness check    | 200 if ready to accept traffic   |
+| `/live`    | Liveness check     | 200 if process is running        |
+| `/metrics` | Prometheus metrics | Prometheus format metrics        |
 
 ### Health Check Response Example
 
@@ -206,12 +206,12 @@ This comprehensive checklist ensures successful deployment of the MCP RepairShop
 
 ### Minimum Requirements
 
-| Resource | Minimum | Recommended | Description |
-|----------|---------|-------------|-------------|
-| CPU | 0.5 cores | 1.0 core | Processing power |
-| Memory | 256 MB | 512 MB | RAM allocation |
-| Storage | 100 MB | 200 MB | Disk space for logs/data |
-| Network | 10 Mbps | 100 Mbps | Bandwidth |
+| Resource | Minimum   | Recommended | Description              |
+| -------- | --------- | ----------- | ------------------------ |
+| CPU      | 0.5 cores | 1.0 core    | Processing power         |
+| Memory   | 256 MB    | 512 MB      | RAM allocation           |
+| Storage  | 100 MB    | 200 MB      | Disk space for logs/data |
+| Network  | 10 Mbps   | 100 Mbps    | Bandwidth                |
 
 ### Recommended Configuration
 
@@ -351,11 +351,13 @@ curl http://<coolify-ip>:<port>/metrics
 ### Container Fails to Start
 
 **Symptoms:**
+
 - Container exits immediately
 - Health check fails repeatedly
 - No logs generated
 
 **Solutions:**
+
 1. Check logs for startup errors
 2. Verify environment variables are set
 3. Ensure port is not already in use
@@ -374,11 +376,13 @@ docker build -t mcp-repairshopr-test .
 ### Health Check Fails
 
 **Symptoms:**
+
 - Health check returns 503
 - Container restarts repeatedly
 - Health endpoint not responding
 
 **Solutions:**
+
 1. Verify server started successfully
 2. Check if `/health` endpoint is accessible
 3. Verify memory and CPU usage
@@ -396,11 +400,13 @@ coolify status <resource-id>
 ### High Memory Usage
 
 **Symptoms:**
+
 - Container killed by OOM
 - Slow response times
 - Swap usage high
 
 **Solutions:**
+
 1. Reduce `CACHE_MAX_SIZE` in environment
 2. Lower `MAX_CONCURRENT_REQUESTS`
 3. Increase memory limit in resource config
@@ -418,11 +424,13 @@ CACHE_MAX_ENTRIES=500
 ### High CPU Usage
 
 **Symptoms:**
+
 - CPU usage consistently at 100%
 - Slow response times
 - Process throttling
 
 **Solutions:**
+
 1. Reduce `MAX_CONCURRENT_REQUESTS`
 2. Increase CPU limit
 3. Check for infinite loops in logs
@@ -439,11 +447,13 @@ MAX_CONCURRENT_REQUESTS=50
 ### Network Issues
 
 **Symptoms:**
+
 - Cannot connect to server
 - Timeouts on requests
 - Port not accessible
 
 **Solutions:**
+
 1. Verify port mapping in Coolify
 2. Check firewall rules
 3. Ensure network mode is correct
@@ -498,13 +508,13 @@ coolify exec <resource-id> netstat -tulpn
 
 ### Regular Tasks
 
-| Task | Frequency | Notes |
-|------|-----------|-------|
-| Check logs | Daily | Review for errors |
-| Monitor metrics | Daily | Track performance |
-| Update dependencies | Weekly | Security patches |
-| Review resource usage | Weekly | Adjust limits |
-| Backup configuration | Monthly | Document changes |
+| Task                  | Frequency | Notes             |
+| --------------------- | --------- | ----------------- |
+| Check logs            | Daily     | Review for errors |
+| Monitor metrics       | Daily     | Track performance |
+| Update dependencies   | Weekly    | Security patches  |
+| Review resource usage | Weekly    | Adjust limits     |
+| Backup configuration  | Monthly   | Document changes  |
 
 ### Updates and Rollbacks
 
@@ -522,10 +532,10 @@ coolify exec <resource-id> netstat -tulpn
 
 1. Navigate to resource
 2. Click "Actions" > "Rollback"
-2. Select previous version
-3. Confirm rollback
-4. Verify functionality
-5. Investigate issue
+3. Select previous version
+4. Confirm rollback
+5. Verify functionality
+6. Investigate issue
 
 ### Backup and Recovery
 
@@ -575,12 +585,12 @@ coolify rollback <resource-id>
 
 ### Key Files
 
-| File | Location | Purpose |
-|------|----------|---------|
-| docker-compose.coolify.yml | `mcp-server/deploy/` | Container configuration |
-| Dockerfile | `mcp-server/deploy/` | Image build instructions |
-| .env.example | `mcp-server/deploy/` | Environment template |
-| production.json | `mcp-server/deploy/config/` | Production config |
+| File                       | Location                    | Purpose                  |
+| -------------------------- | --------------------------- | ------------------------ |
+| docker-compose.coolify.yml | `mcp-server/deploy/`        | Container configuration  |
+| Dockerfile                 | `mcp-server/deploy/`        | Image build instructions |
+| .env.example               | `mcp-server/deploy/`        | Environment template     |
+| production.json            | `mcp-server/deploy/config/` | Production config        |
 
 ### Support Resources
 

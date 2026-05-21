@@ -8,38 +8,28 @@
 
 #### Get Customer Assets
 
-
 Returns a paginated list of Assets
-
 
 Required permission: Assets - List/Search
 Single-Customer Users can only access own assets.
 
-
-
 **Endpoint:** `GET /customer_assets`
-
 
 **Required Permission:** Required permission: Assets - List/Search
 
-
 **Query Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| snmp_enabled | boolean | No | Any assets with SNMP enabled |
-| customer_id | integer | No | Any assets attached to a Customer ID |
-| asset_type_id | integer | No | Any assets attached to an Asset Type ID |
-| query | string | No | Search query |
-| page | integer | No | Returns provided page of results, each 'page' contains 25 results |
-
+| Parameter     | Type    | Required | Description                                                       |
+| ------------- | ------- | -------- | ----------------------------------------------------------------- |
+| snmp_enabled  | boolean | No       | Any assets with SNMP enabled                                      |
+| customer_id   | integer | No       | Any assets attached to a Customer ID                              |
+| asset_type_id | integer | No       | Any assets attached to an Asset Type ID                           |
+| query         | string  | No       | Search query                                                      |
+| page          | integer | No       | Returns provided page of results, each 'page' contains 25 results |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -142,43 +132,31 @@ successful
 }
 ```
 
-
 #### Create Customer Asset
 
-
 Creates an Asset
-
 
 Required permission: Assets - Create
 Single-Customer Users can only access own assets.
 
-
-
 **Endpoint:** `POST /customer_assets`
-
 
 **Required Permission:** Required permission: Assets - Create
 
-
 **Request Body:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| asset_type_name | string | No |  |
-| asset_type_id | integer | No |  |
-| properties | object | No |  |
-| name | string | Yes |  |
-| customer_id | integer | No |  |
-| asset_serial | string | No |  |
-
-
+| Parameter       | Type    | Required | Description |
+| --------------- | ------- | -------- | ----------- |
+| asset_type_name | string  | No       |             |
+| asset_type_id   | integer | No       |             |
+| properties      | object  | No       |             |
+| name            | string  | Yes      |             |
+| customer_id     | integer | No       |             |
+| asset_serial    | string  | No       |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -279,12 +257,9 @@ successful
 }
 ```
 
-
 **Response: 422**
 
-
 Invalid request
-
 
 ```json
 {
@@ -299,37 +274,26 @@ Invalid request
 }
 ```
 
-
 #### Get Customer Asset by ID
 
-
 Retrieves an Asset by ID
-
 
 Required permission: Assets - View Details
 Single-Customer Users can only access own assets.
 
-
-
 **Endpoint:** `GET /customer_assets/{id}`
-
 
 **Required Permission:** Required permission: Assets - View Details
 
-
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -351,57 +315,41 @@ successful
 }
 ```
 
-
 **Response: 404**
-
 
 Invalid request
 
-
 #### Update Customer Asset
 
-
 Updates an existing Asset by ID
-
 
 Required permission: Assets - Edit
 Single-Customer Users can only access own assets.
 
-
-
 **Endpoint:** `PUT /customer_assets/{id}`
-
 
 **Required Permission:** Required permission: Assets - Edit
 
-
 **Path Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| id | integer | Yes |  |
-
+| Parameter | Type    | Required | Description |
+| --------- | ------- | -------- | ----------- |
+| id        | integer | Yes      |             |
 
 **Request Body:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| asset_type_name | string | No |  |
-| asset_type_id | integer | No |  |
-| properties | object | No |  |
-| name | string | Yes |  |
-| customer_id | integer | No |  |
-| asset_serial | string | No |  |
-
-
+| Parameter       | Type    | Required | Description |
+| --------------- | ------- | -------- | ----------- |
+| asset_type_name | string  | No       |             |
+| asset_type_id   | integer | No       |             |
+| properties      | object  | No       |             |
+| name            | string  | Yes      |             |
+| customer_id     | integer | No       |             |
+| asset_serial    | string  | No       |             |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -423,19 +371,13 @@ successful
 }
 ```
 
-
 **Response: 422**
 
-
 Invalid request
-
 
 ```json
 {
   "success": false,
-  "message": [
-    "Asset type can't be blank"
-  ]
+  "message": ["Asset type can't be blank"]
 }
 ```
-

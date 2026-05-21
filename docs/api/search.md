@@ -8,11 +8,10 @@
 
 #### Get Searchs
 
-
 Search all the things
 
-
 Additional permissions required depending on search results type:
+
 - Customer, Contact, Asset: "Customers - List/Search"
 - Lead: Leads - List/Search
 - Invoice: Invoices - List/Search
@@ -23,27 +22,19 @@ Additional permissions required depending on search results type:
 - Report: Reports - View
 - Wiki: Documentation - Allow Usage
 
-
-
 **Endpoint:** `GET /search`
-
 
 **Required Permission:** Additional permissions required depending on search results type:
 
-
 **Query Parameters:**
 
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| query | integer | No | Search query |
-
+| Parameter | Type    | Required | Description  |
+| --------- | ------- | -------- | ------------ |
+| query     | integer | No       | Search query |
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -79,4 +70,3 @@ successful
   "error": null
 }
 ```
-

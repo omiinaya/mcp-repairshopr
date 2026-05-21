@@ -8,18 +8,13 @@
 
 #### Get Settings
 
-
 Returns a list of Account Settings
-
 
 **Endpoint:** `GET /settings`
 
-
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -45,20 +40,8 @@ successful
     "ticket_types": [],
     "ticket_type_fields": [],
     "ticket_type_field_answers": [],
-    "problem_types": [
-      "Virus",
-      "TuneUp",
-      "Hardware",
-      "Software",
-      "Other"
-    ],
-    "priorities": [
-      "",
-      "0 Urgent",
-      "1 High",
-      "2 Normal",
-      "3 Low"
-    ]
+    "problem_types": ["Virus", "TuneUp", "Hardware", "Software", "Other"],
+    "priorities": ["", "0 Urgent", "1 High", "2 Normal", "3 Low"]
   },
   "business_hours_enabled": true,
   "business_hours": [
@@ -110,21 +93,15 @@ successful
 }
 ```
 
-
 #### Get Tabs
-
 
 Returns Tabs Settings
 
-
 **Endpoint:** `GET /settings/tabs`
-
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -158,21 +135,15 @@ successful
 }
 ```
 
-
 #### Get Printings
-
 
 Returns Printing Settings
 
-
 **Endpoint:** `GET /settings/printing`
-
 
 **Response: 200**
 
-
 successful
-
 
 ```json
 {
@@ -180,4 +151,3 @@ successful
   "registers": []
 }
 ```
-
