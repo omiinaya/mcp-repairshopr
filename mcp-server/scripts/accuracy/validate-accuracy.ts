@@ -122,8 +122,10 @@ function runJestTests(testPattern: string): {
   exitCode: number;
 } {
   try {
+    // Validate test pattern: only alphanumeric, path separators, wildcards, and hyphens
+    const safe = testPattern.replace(/[^a-zA-Z0-9_\/\-.*]/g, '');
     const stdout = execSync(
-      `npx jest ${testPattern} --verbose --json --no-coverage`,
+      `npx jest ${safe} --verbose --json --no-coverage`,  // nosem: sanitized pattern
       { encoding: 'utf-8', cwd: path.join(__dirname, '../..') }
     );
     return { stdout, exitCode: 0 };

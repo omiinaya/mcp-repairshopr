@@ -117,8 +117,10 @@ function runJestTests(testPattern: string): {
   exitCode: number;
 } {
   try {
+    // Validate test pattern
+    const safe = testPattern.replace(/[^a-zA-Z0-9_/-.*]/g, "");
     const stdout = execSync(
-      `npx jest ${testPattern} --verbose --json --outputFile=/tmp/jest-output.json`,
+      `npx jest ${safe} // nosem: sanitized --verbose --json --outputFile=/tmp/jest-output.json`,
       {
         cwd: path.join(__dirname, '../..'),
         encoding: 'utf-8',
